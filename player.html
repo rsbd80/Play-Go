@@ -91,7 +91,7 @@ video::-webkit-media-controls{display:none!important}
 </head>
 <body>
 <div class="topbar">
-<a class="brand" href="https://playongo.pages.dev/"><div class="brand-text"><div class="pg">Play On <i>Go</i></div><div class="tag">LIVE TV</div></div></a>
+<a class="brand" href="https://playongo.pages.dev/"><div class="brand-text"><div class="pg">PlayOn <i>Go</i></div><div class="tag">LIVE TV</div></div></a>
 <div class="divider"></div>
 <div style="min-width:0;flex:1"><div id="chName">PlayOn Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
@@ -138,7 +138,7 @@ let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 let currentName = '';
-try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - Play On Go'; } }catch(e){}
+try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - PlayOn Go'; } }catch(e){}
 function dbg(msg){ document.getElementById('debugText').textContent = msg; console.log('[PlayOnGo]', msg); }
 dbg('URL: ' + (streamSource ? streamSource.slice(0,120) : 'EMPTY - কোনো URL আসে নাই!'));
 const startMuted = urlParams.get('mute') === '1';
@@ -153,7 +153,7 @@ let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) 
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
 function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
-function brandBlock(){ return `<div class="brand-name"><b>Play On</b> <i>Go</i></div>`; }
+function brandBlock(){ return `<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
@@ -249,9 +249,7 @@ if(!streamSource){
   async function lockLandscape(){ try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
   function unlockLandscape(){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
-  // 12 সেকেন্ডে না চললে অটো Proxy ট্রাই
   setTimeout(()=>{ if(!everPlayed && !triedProxy){ dbg('⏰ 12s এ চলে নাই, Proxy দিয়ে ট্রাই করছি...'); triedProxy=true; loadStream(PROXY + encodeURIComponent(streamSource), true); } },12000);
-  // 25 সেকেন্ডেও না চললে এরর দেখাও
   setTimeout(()=>{ if(!everPlayed){ showNoStreamState({message:'25 সেকেন্ডেও স্ট্রিম আসে নাই। চ্যানেলটা হয়তো এখন ডাউন। অন্য চ্যানেল ট্রাই করো।'}); } },25000);
   loadStream(streamSource, false);
 }
