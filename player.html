@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>PlayOn Go - Player</title>
+<title>Play Go - Player</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -11,10 +11,12 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font)}
 body{padding:0}
+/* ✅ হেডার - Back বাটন বাদ */
 .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(10,10,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
 .topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:180px;height:100px;background:radial-gradient(circle,rgba(34,211,238,.25),transparent 70%);filter:blur(10px);pointer-events:none}
 .topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:180px;height:100px;background:radial-gradient(circle,rgba(167,139,250,.28),transparent 70%);filter:blur(10px);pointer-events:none}
-.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;text-decoration:none}
+.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0}
+.brand .play-ico{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;box-shadow:0 4px 16px rgba(167,139,250,.5)}
 .brand-text{line-height:1}
 .brand-text .pg{font-size:17px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important}
 .brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
@@ -55,18 +57,16 @@ video::-webkit-media-controls{display:none!important}
 .state-content .glyph{font-size:34px;color:var(--alert);margin-bottom:14px}
 .state-content .glyph.warn{color:var(--warn)}
 .state-content p.title{font-size:13px;letter-spacing:1px;font-weight:600}
-.state-content p.sub{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:320px;overflow-wrap:anywhere;word-break:break-all}
+.state-content p.sub{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:280px;overflow-wrap:anywhere}
 .state-content .brand-name{display:block;margin-top:18px}
-.retry-btn{margin-top:16px;padding:10px 22px;font-weight:700;font-size:12px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:20px;cursor:pointer}
-.retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
+.retry-btn{margin-top:16px;padding:8px 20px;font-weight:600;font-size:11px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:18px;cursor:pointer}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:10px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;width:42px;height:42px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(5px)}
 #seek{flex:1;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.3);border-radius:4px;outline:none}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--grad-b);cursor:pointer}
 #time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap}
-#debug{margin:10px 14px 0;background:#111;padding:10px;border-radius:10px;font-family:monospace;font-size:10px;color:#888;word-break:break-all;line-height:1.6}
-#debug b{color:#7CFC00}
+/* ✅ সাজেশন - ছোট + ১ লাইনে স্ক্রল + লেখা সাদা */
 .suggest{margin:12px 0 0}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;margin:0 14px 8px}
 .suggest-head h3{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px;color:#fff!important}
@@ -90,10 +90,11 @@ video::-webkit-media-controls{display:none!important}
 </style>
 </head>
 <body>
+<!-- ✅ হেডার - Back বাটন বাদ -->
 <div class="topbar">
-<a class="brand" href="https://playongo.pages.dev/"><div class="brand-text"><div class="pg">PlayOn <i>Go</i></div><div class="tag">LIVE TV</div></div></a>
+<div class="brand"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">Play <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
 <div class="divider"></div>
-<div style="min-width:0;flex:1"><div id="chName">PlayOn Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
+<div style="min-width:0;flex:1"><div id="chName">Play Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
 
@@ -103,7 +104,7 @@ video::-webkit-media-controls{display:none!important}
 <div class="tv-wrap"><div class="tv-glow"></div>
 <svg class="tv-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path class="tv-body" d="M22 12 32 20 42 12"/><clipPath id="screenClip"><rect x="12" y="20" width="40" height="26" rx="4"/></clipPath><g class="screen-bars" clip-path="url(#screenClip)"><rect x="12" y="20" width="8" height="26"/><rect x="20" y="20" width="8" height="26"/><rect x="28" y="20" width="8" height="26"/><rect x="36" y="20" width="8" height="26"/><rect x="44" y="20" width="8" height="26"/></g><rect class="tv-body" x="12" y="20" width="40" height="26" rx="4"/><line class="tv-body" x1="24" y1="46" x2="24" y2="50"/><line class="tv-body" x1="40" y1="46" x2="40" y2="50"/><line class="tv-body" x1="20" y1="50" x2="44" y2="50"/></svg>
 </div>
-<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>
+<div class="brand-name"><b>Play</b> <i>Go</i></div>
 <div class="dots"><span></span><span></span><span></span></div>
 <div class="status-line" id="status-line">LOADING</div>
 </div>
@@ -112,10 +113,8 @@ video::-webkit-media-controls{display:none!important}
 <div id="controls"><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button></div>
 </div>
 
-<div id="debug">🔍 <b>Debug:</b> <span id="debugText">Starting...</span></div>
-
 <div class="suggest">
-<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="https://playongo.pages.dev/">সব দেখো →</a></div>
+<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="index.html">সব দেখো →</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -127,20 +126,17 @@ video::-webkit-media-controls{display:none!important}
 <div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div>
 </div>
 </div>
-<div class="ad-note">তুমি দেখছো <b id="chName2">PlayOn Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
+<div class="ad-note">তুমি দেখছো <b id="chName2">Play Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
 
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 
 <script>
-const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 let currentName = '';
-try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - PlayOn Go'; } }catch(e){}
-function dbg(msg){ document.getElementById('debugText').textContent = msg; console.log('[PlayOnGo]', msg); }
-dbg('URL: ' + (streamSource ? streamSource.slice(0,120) : 'EMPTY - কোনো URL আসে নাই!'));
+try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - Play Go'; } }catch(e){}
 const startMuted = urlParams.get('mute') === '1';
 const loaderEl = document.getElementById('loader');
 const statusEl = document.getElementById('status-line');
@@ -153,7 +149,7 @@ let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) 
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
 function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
-function brandBlock(){ return `<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>`; }
+function brandBlock(){ return `<div class="brand-name"><b>Play</b> <i>Go</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
@@ -161,29 +157,17 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
 wrapper.addEventListener('click',showControls); wrapper.addEventListener('touchstart',showControls,{passive:true}); wrapper.addEventListener('mousemove',showControls);
-function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
-const SUGGEST_PLAYLISTS = [
-  "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
-  "https://raw.githubusercontent.com/sm-monirulislam/SonyLiv_Event_Playlist/refs/heads/main/sonyLiv.m3u",
-  "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
-  "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u",
-  "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
-  "https://iptv-org.github.io/iptv/countries/bd.m3u"
-];
+function cleanName(name){
+  return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim();
+}
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const popularNames = ['T Sports','BTV','NTV','Channel i','Somoy','Jamuna','Maasranga','Star Jalsha','Zee Bangla','Sony','Star Plus','Colors','Gazi TV','DBC','Independent','ATN Bangla'];
   try{
-    let list=[];
-    for(let plUrl of SUGGEST_PLAYLISTS){
-      try{
-        const res = await fetch(PROXY + encodeURIComponent(plUrl));
-        const text = await res.text();
-        const lines = text.split("\n"); let cur=null;
-        for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General"}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
-        if(list.length>=30) break;
-      }catch(e){}
-    }
+    const res = await fetch("/proxy?url=" + encodeURIComponent("https://iptv-org.github.io/iptv/countries/bd.m3u"));
+    const text = await res.text();
+    const lines = text.split("\n"); let list=[]; let cur=null;
+    for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General"}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url) list.push(cur); cur=null; } }
     let filtered = list.filter(c=>c.url !== streamSource && c.name.toLowerCase() !== currentName.toLowerCase());
     filtered.sort((a,b)=>{
       const ai = popularNames.findIndex(n=>a.name.toLowerCase().includes(n.toLowerCase()));
@@ -195,63 +179,57 @@ async function loadSuggestions(){
     });
     const show = filtered.slice(0,20);
     if(show.length===0) throw new Error('empty');
-    grid.innerHTML = show.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>`).join("");
-  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="https://playongo.pages.dev/" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
+    grid.innerHTML = show.map(c=>`
+      <div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}')">
+        <img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'">
+        <p>${cleanName(c.name)}</p>
+      </div>
+    `).join("");
+  }catch(e){
+    grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`;
+  }
 }
-function openSuggest(urlEnc, nameEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}`; }
+function openSuggest(urlEnc, nameEnc){
+  const url = decodeURIComponent(urlEnc);
+  window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}`;
+}
 loadSuggestions();
 if(!streamSource){
-  dbg('❌ ERROR: player.html?url= খালি! index.html থেকে URL আসে নাই');
-  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='https://playongo.pages.dev/'">হোমে যাও</button>${brandBlock()}</div>`);
+  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">Add ?url=YOUR_STREAM_LINK to this page's address.</p>${brandBlock()}</div>`);
 } else {
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
   video.muted = startMuted; video.autoplay = true; video.controls = false;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
-  let hls=null, everPlayed=false, triedProxy=false, retryCount=0;
-  function doPlay(){ dbg('▶ Play চেষ্টা করছে...'); video.play().then(()=>{ dbg('✅ Playing!'); hideLoader(); everPlayed=true; requestWakeLock(); }).catch(e=>{ dbg('⚠️ Play blocked: '+e.message+' - স্ক্রিনে ট্যাপ করো'); }); }
-  function loadStream(url, viaProxy){
-    dbg((viaProxy?'🔁 Proxy দিয়ে':'📡 Direct')+' লোড হচ্ছে...');
+  let hls=null, everPlayed=false, retryCount=0; const maxRetries=6;
+  function doPlay(){ video.play().then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(()=>{}); }
+  function loadStream(url){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
     video.removeAttribute('src'); video.load();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
-        hls = new Hls({ maxBufferLength:30, maxMaxBufferLength:60, enableWorker:true, lowLatencyMode:true, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3 });
+        hls = new Hls({ maxBufferLength:30, maxMaxBufferLength:60, enableWorker:true, lowLatencyMode:true, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:4, fragLoadingMaxRetry:4 });
         hls.loadSource(url); hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ dbg('✅ Manifest পাইছি, Play করছি...'); doPlay(); });
-        hls.on(Hls.Events.ERROR, (e,data)=>{
-          dbg('❌ HLS Error: '+data.type+' / '+data.details);
-          if(!data.fatal) return;
-          if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
-            if(!triedProxy){ triedProxy=true; loadStream(PROXY + encodeURIComponent(streamSource), true); }
-            else { hls.startLoad(); }
-          } else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); }
-          else {
-            if(!triedProxy){ triedProxy=true; loadStream(PROXY + encodeURIComponent(streamSource), true); }
-            else showNoStreamState({message:'HLS Error: '+data.details});
-          }
-        });
-      } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
-      else { showNoStreamState({message:'Browser HLS support নেই'}); }
-    } else if(url.includes('.mpd')){ showNoStreamState({message:'DASH লিংক সাপোর্ট করে না'}); }
-    else { video.src=url; doPlay(); }
+        hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
+        hls.on(Hls.Events.ERROR, (e,data)=>{ if(!data.fatal) return; if(data.type===Hls.ErrorTypes.NETWORK_ERROR){ hls.startLoad(); } else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); } else { tryReconnect(url); } });
+      } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); } else { showNoStreamState({message:'Browser HLS support নেই'}); }
+    } else if(url.includes('.mpd')){ showNoStreamState({message:'DASH লিংক এই প্লেয়ারে সাপোর্ট করে না, M3U8 লিংক ইউজ করো'}); } else { video.src=url; doPlay(); }
   }
-  function showNoStreamState(err){ releaseWakeLock(); dbg('❌ FAILED: '+(err&&err.message?err.message:'Unknown')); showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">এই চ্যানেলটা এখন চলছে না</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">🔄 Retry</button><br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button><br><button class="retry-btn2" onclick="location.href='https://playongo.pages.dev/'">🏠 হোমে যাও</button>${brandBlock()}</div>`); }
-  window.tryProxyManually = function(){ triedProxy=true; showLoader(); loadStream(PROXY + encodeURIComponent(streamSource), true); };
-  video.addEventListener('playing',()=>{ dbg('✅ Playing!'); hideLoader(); everPlayed=true; retryCount=0; requestWakeLock(); });
-  video.addEventListener('waiting',()=>{ dbg('⏳ Buffering...'); if(!video.paused) showLoader(); });
+  function tryReconnect(baseUrl){ if(retryCount>=maxRetries){ showNoStreamState({message:'The source could not be reached.'}); return; } retryCount++; statusEl.textContent='RECONNECTING ('+retryCount+'/'+maxRetries+')'; showLoader(); const sep = baseUrl.includes('?')?'&':'?'; const retryUrl = baseUrl + sep + '_rs=' + Date.now(); setTimeout(()=>loadStream(retryUrl), Math.min(1000*retryCount,4000)); }
+  function showNoStreamState(err){ releaseWakeLock(); showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">No streaming — this link won't play</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">Retry</button>${brandBlock()}</div>`); }
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; retryCount=0; requestWakeLock(); });
+  video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
-  video.addEventListener('error',()=>{ dbg('❌ Video Error: '+ (video.error?video.error.message:'unknown')); if(!everPlayed && !triedProxy){ triedProxy=true; loadStream(PROXY + encodeURIComponent(streamSource), true); } });
+  video.addEventListener('error',()=>{ if(!everPlayed) tryReconnect(streamSource); });
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.play(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(document.fullscreenElement){ document.exitFullscreen(); } else { wrapper.requestFullscreen().catch(()=>{}); } showControls(); });
   async function lockLandscape(){ try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
   function unlockLandscape(){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
-  setTimeout(()=>{ if(!everPlayed && !triedProxy){ dbg('⏰ 12s এ চলে নাই, Proxy দিয়ে ট্রাই করছি...'); triedProxy=true; loadStream(PROXY + encodeURIComponent(streamSource), true); } },12000);
-  setTimeout(()=>{ if(!everPlayed){ showNoStreamState({message:'25 সেকেন্ডেও স্ট্রিম আসে নাই। চ্যানেলটা হয়তো এখন ডাউন। অন্য চ্যানেল ট্রাই করো।'}); } },25000);
-  loadStream(streamSource, false);
+  setTimeout(()=>{ if(!everPlayed && video.readyState===0){ tryReconnect(streamSource); } },25000);
+  loadStream(streamSource);
 }
 </script>
 </body>
