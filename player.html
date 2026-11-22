@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Play Go - Player</title>
+<title>PlayOn Go - Player</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -11,12 +11,11 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font)}
 body{padding:0}
-/* ✅ হেডার - Back বাটন বাদ */
 .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(10,10,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
 .topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:180px;height:100px;background:radial-gradient(circle,rgba(34,211,238,.25),transparent 70%);filter:blur(10px);pointer-events:none}
 .topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:180px;height:100px;background:radial-gradient(circle,rgba(167,139,250,.28),transparent 70%);filter:blur(10px);pointer-events:none}
-.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0}
-.brand .play-ico{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;box-shadow:0 4px 16px rgba(167,139,250,.5)}
+/* ✅ আগের ডিজাইন - শুধু লোগো আইকন বাদ, লেখা থাকবে */
+.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;text-decoration:none}
 .brand-text{line-height:1}
 .brand-text .pg{font-size:17px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important}
 .brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
@@ -66,7 +65,6 @@ video::-webkit-media-controls{display:none!important}
 #seek{flex:1;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.3);border-radius:4px;outline:none}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--grad-b);cursor:pointer}
 #time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap}
-/* ✅ সাজেশন - ছোট + ১ লাইনে স্ক্রল + লেখা সাদা */
 .suggest{margin:12px 0 0}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;margin:0 14px 8px}
 .suggest-head h3{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px;color:#fff!important}
@@ -90,11 +88,11 @@ video::-webkit-media-controls{display:none!important}
 </style>
 </head>
 <body>
-<!-- ✅ হেডার - Back বাটন বাদ -->
+<!-- ✅ আগের ডিজাইন - শুধু ▶ লোগো আইকন বাদ, PlayOn Go লেখা + Divider + চ্যানেল নাম + LIVE সব আগের মতো -->
 <div class="topbar">
-<div class="brand"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">Play <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
+<a class="brand" href="https://playongo.pages.dev/"><div class="brand-text"><div class="pg">PlayOn <i>Go</i></div><div class="tag">LIVE TV</div></div></a>
 <div class="divider"></div>
-<div style="min-width:0;flex:1"><div id="chName">Play Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
+<div style="min-width:0;flex:1"><div id="chName">PlayOn Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
 
@@ -104,7 +102,7 @@ video::-webkit-media-controls{display:none!important}
 <div class="tv-wrap"><div class="tv-glow"></div>
 <svg class="tv-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path class="tv-body" d="M22 12 32 20 42 12"/><clipPath id="screenClip"><rect x="12" y="20" width="40" height="26" rx="4"/></clipPath><g class="screen-bars" clip-path="url(#screenClip)"><rect x="12" y="20" width="8" height="26"/><rect x="20" y="20" width="8" height="26"/><rect x="28" y="20" width="8" height="26"/><rect x="36" y="20" width="8" height="26"/><rect x="44" y="20" width="8" height="26"/></g><rect class="tv-body" x="12" y="20" width="40" height="26" rx="4"/><line class="tv-body" x1="24" y1="46" x2="24" y2="50"/><line class="tv-body" x1="40" y1="46" x2="40" y2="50"/><line class="tv-body" x1="20" y1="50" x2="44" y2="50"/></svg>
 </div>
-<div class="brand-name"><b>Play</b> <i>Go</i></div>
+<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>
 <div class="dots"><span></span><span></span><span></span></div>
 <div class="status-line" id="status-line">LOADING</div>
 </div>
@@ -114,7 +112,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 
 <div class="suggest">
-<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="index.html">সব দেখো →</a></div>
+<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="https://playongo.pages.dev/">সব দেখো →</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -126,17 +124,18 @@ video::-webkit-media-controls{display:none!important}
 <div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div>
 </div>
 </div>
-<div class="ad-note">তুমি দেখছো <b id="chName2">Play Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
+<div class="ad-note">তুমি দেখছো <b id="chName2">PlayOn Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
 
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 
 <script>
+const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 let currentName = '';
-try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - Play Go'; } }catch(e){}
+try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - PlayOn Go'; } }catch(e){}
 const startMuted = urlParams.get('mute') === '1';
 const loaderEl = document.getElementById('loader');
 const statusEl = document.getElementById('status-line');
@@ -149,7 +148,7 @@ let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) 
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
 function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
-function brandBlock(){ return `<div class="brand-name"><b>Play</b> <i>Go</i></div>`; }
+function brandBlock(){ return `<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
@@ -160,14 +159,28 @@ wrapper.addEventListener('click',showControls); wrapper.addEventListener('touchs
 function cleanName(name){
   return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim();
 }
+const SUGGEST_PLAYLISTS = [
+  "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
+  "https://raw.githubusercontent.com/sm-monirulislam/SonyLiv_Event_Playlist/refs/heads/main/sonyLiv.m3u",
+  "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
+  "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u",
+  "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
+  "https://iptv-org.github.io/iptv/countries/bd.m3u"
+];
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const popularNames = ['T Sports','BTV','NTV','Channel i','Somoy','Jamuna','Maasranga','Star Jalsha','Zee Bangla','Sony','Star Plus','Colors','Gazi TV','DBC','Independent','ATN Bangla'];
   try{
-    const res = await fetch("/proxy?url=" + encodeURIComponent("https://iptv-org.github.io/iptv/countries/bd.m3u"));
-    const text = await res.text();
-    const lines = text.split("\n"); let list=[]; let cur=null;
-    for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General"}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url) list.push(cur); cur=null; } }
+    let list=[];
+    for(let plUrl of SUGGEST_PLAYLISTS){
+      try{
+        const res = await fetch(PROXY + encodeURIComponent(plUrl));
+        const text = await res.text();
+        const lines = text.split("\n"); let cur=null;
+        for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General"}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
+        if(list.length>=30) break;
+      }catch(e){}
+    }
     let filtered = list.filter(c=>c.url !== streamSource && c.name.toLowerCase() !== currentName.toLowerCase());
     filtered.sort((a,b)=>{
       const ai = popularNames.findIndex(n=>a.name.toLowerCase().includes(n.toLowerCase()));
@@ -186,7 +199,7 @@ async function loadSuggestions(){
       </div>
     `).join("");
   }catch(e){
-    grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`;
+    grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="https://playongo.pages.dev/" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`;
   }
 }
 function openSuggest(urlEnc, nameEnc){
