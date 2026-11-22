@@ -1,189 +1,270 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PlayOn Go - Live TV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>PlayOn Go - Player</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Segoe UI',sans-serif;padding-bottom:80px}
-header{position:sticky;top:0;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:16px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
-header::before{content:"";position:absolute;top:-60px;left:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%);filter:blur(10px);pointer-events:none}
-header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.30),transparent 70%);filter:blur(10px);pointer-events:none}
-.header-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
-.logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
-.logo .play-ico{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#22d3ee 0%,#a78bfa 50%,#ff5d8f 100%);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;box-shadow:0 6px 22px rgba(167,139,250,.55),inset 0 1px 0 rgba(255,255,255,.4);animation:logoFloat 2.8s ease-in-out infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-2px) rotate(-2deg)}}
-.logo-text{line-height:1}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:23px;font-weight:900;letter-spacing:.3px;color:#fff}
-.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 3s linear infinite}
-@keyframes shine{to{background-position:300% center}}
-.logo-text .tag{font-size:9px;letter-spacing:3.5px;color:#9a9ab5;font-weight:700;margin-top:2px}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:6px 10px;border-radius:20px}
-.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Poppins',sans-serif}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(10,10,20,.95);border-bottom:1px solid rgba(255,255,255,.08)}
+.brand{text-decoration:none;flex-shrink:0}
+.brand .pg{font-size:17px;font-weight:900;color:#fff}
+.brand .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .tag{font-size:8px;letter-spacing:2.5px;color:#9a9ab5;font-weight:700;margin-top:2px}
+.divider{width:1px;height:32px;background:rgba(255,255,255,.12);flex-shrink:0}
+#chName{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chSub b{color:#7CFC00}
+.live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:6px 10px;border-radius:20px;flex-shrink:0}
+.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-.search-wrap{position:relative;margin-top:14px;z-index:2}
-.search-wrap .s-ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:16px;z-index:2}
-#search{width:100%;padding:14px 16px 14px 42px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1d1d2e,#14141f);color:#fff;font-size:14px;font-family:'Hind Siliguri',sans-serif;outline:none;transition:.25s;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 20px rgba(0,0,0,.3)}
-#search::placeholder{color:#7a7a92}
-#search:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.22),0 10px 28px rgba(167,139,250,.18);background:#1a1a2b}
-#cats{display:flex;gap:8px;overflow-x:auto;padding:14px 16px;white-space:nowrap;scrollbar-width:none}
-#cats::-webkit-scrollbar{display:none}
-.cat{padding:9px 17px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;transition:.2s}
-.cat.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#000;font-weight:800;border:none;box-shadow:0 4px 16px rgba(167,139,250,.4)}
-#count{padding:0 16px;font-size:12px;color:#888}
-#count b{color:#fff}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px}
-@media(min-width:600px){#grid{grid-template-columns:repeat(5,1fr)}}
-@media(min-width:1000px){#grid{grid-template-columns:repeat(7,1fr)}}
-.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:.2s}
-.card:hover{border-color:#a78bfa;transform:translateY(-2px);box-shadow:0 8px 20px rgba(167,139,250,.15)}
-.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}
-.card p{font-size:11px;margin-top:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
-.card small{font-size:9px;color:#22d3ee}
-#loading{text-align:center;padding:40px 20px 20px;color:#aaa}
-.loader-ring{position:relative;width:90px;height:90px;display:flex;align-items:center;justify-content:center;margin:0 auto}
-.loader-ring::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);animation:spinRing 1.1s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
-.loader-ring::after{content:"";position:absolute;inset:13px;border-radius:50%;background:#12121e;box-shadow:0 0 30px rgba(167,139,250,.35)}
-@keyframes spinRing{to{transform:rotate(360deg)}}
-.loader-emoji{position:relative;z-index:2;font-size:32px;animation:pop 1.2s ease-in-out infinite}
-@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
-.loader-brand{font-family:'Poppins',sans-serif;font-size:20px;font-weight:900;letter-spacing:1px;margin-top:16px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 2s linear infinite}
-.loader-brand b{color:#fff;-webkit-text-fill-color:#fff}
-.loader-status{font-family:monospace;font-size:10px;letter-spacing:3px;color:#888;margin-top:8px}
-.load-bar{width:190px;height:5px;background:rgba(255,255,255,.12);border-radius:10px;overflow:hidden;margin:16px auto 0}
-.load-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);border-radius:10px;animation:slideBar 1.1s ease-in-out infinite}
-@keyframes slideBar{0%{transform:translateX(-100%)}100%{transform:translateX(480%)}}
-.loader-text{font-size:13px;color:#c8c8dd;margin-top:12px}
-.loader-text b{color:#fff}
-.skeleton-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px}
-.skel{height:96px;border-radius:14px;background:#15151f;position:relative;overflow:hidden}
-.skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 1.2s infinite}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-#status{position:fixed;bottom:0;left:0;right:0;background:#111;padding:8px;text-align:center;font-size:11px;color:#7CFC00;border-top:1px solid #222}
-.telegram-float{position:fixed;right:16px;bottom:44px;z-index:999;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 8px 24px rgba(42,171,238,.5);animation:floatBtn 2.5s ease-in-out infinite}
-.telegram-float svg{width:28px;height:28px;fill:#fff;transform:translateX(-1px)}
-.telegram-float::before{content:"";position:absolute;inset:0;border-radius:50%;background:#2AABEE;animation:telePulse 1.8s ease-out infinite;z-index:-1}
-@keyframes telePulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
-@keyframes floatBtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.telegram-float:active{transform:scale(.92)}
+#player-wrapper{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden}
+#player-wrapper:fullscreen{width:100vw;height:100vh;aspect-ratio:auto}
+#player{position:absolute;inset:0;width:100%!important;height:100%!important}
+#player video{width:100%!important;height:100%!important;object-fit:contain!important;background:#000}
+video::-webkit-media-controls{display:none!important}
+#loader{position:absolute;inset:0;background:#0a0a12;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;text-align:center;padding:20px}
+#loader.hide-now{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:1px}
+.brand-name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:flex;gap:6px;margin:14px 0}.dots span{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:dp 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dp{0%,80%,100%{transform:scale(.6);opacity:.35}40%{transform:scale(1);opacity:1}}
+.status-line{font-family:monospace;font-size:10px;letter-spacing:2.5px;color:#888}
+#controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:10px;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);opacity:0;transition:opacity .3s}
+#player-wrapper.show-controls #controls{opacity:1}
+#controls button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;width:42px;height:42px;border-radius:50%;font-size:16px;cursor:pointer}
+#seek{flex:1;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.3);border-radius:4px;outline:none}
+#seek::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#a78bfa}
+#time-label{font-family:monospace;font-size:11px;white-space:nowrap}
+#debug{margin:10px 14px 0;background:#111;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;color:#ccc;word-break:break-all;line-height:1.7;border:1px solid #222}
+#debug b{color:#7CFC00}
+#debug .err{color:#ff5d5d}
+#debug .ok{color:#7CFC00}
+.btn{padding:11px 20px;font-weight:700;font-size:12px;border:none;border-radius:20px;cursor:pointer;margin:6px 4px}
+.btn-grad{color:#000;background:linear-gradient(90deg,#22d3ee,#a78bfa)}
+.btn-ghost{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
+.suggest{margin:12px 0 0}
+.suggest-head{display:flex;justify-content:space-between;margin:0 14px 8px}
+.suggest-head h3{font-size:13px;font-weight:800}
+.suggest-head a{font-size:11px;color:#a78bfa;text-decoration:none;font-weight:700}
+.suggest-grid{display:flex;gap:9px;overflow-x:auto;padding:0 14px 6px;scrollbar-width:none}
+.suggest-grid::-webkit-scrollbar{display:none}
+.sug-card{flex:0 0 72px;background:#15151f;border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:8px 4px 7px;text-align:center;cursor:pointer}
+.sug-card img{width:38px;height:38px;object-fit:contain;background:#fff;border-radius:10px;padding:3px}
+.sug-card p{font-size:11px;font-weight:600;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ad-wrap{margin:12px 14px 0;background:#111118;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 10px 12px}
+.ad-label{font-size:9px;letter-spacing:2.5px;color:#777;text-align:center;margin-bottom:10px;font-family:monospace}
+.ad-box{border-radius:10px;overflow:hidden;background:#0a0a12;display:flex;justify-content:center}
+.ad-note{text-align:center;font-size:11px;color:#666;margin:12px 0 20px}
+.ad-note b{color:#a78bfa}
 </style>
 </head>
 <body>
-<header>
-<div class="header-top">
-<a class="logo" href="https://playongo.pages.dev/">
-<div class="play-ico">▶</div>
-<div class="logo-text"><div class="name">PlayOn <i>Go</i></div><div class="tag">LIVE TV • BANGLADESH</div></div>
-</a>
+<div class="topbar">
+<a class="brand" href="https://playongo.pages.dev/"><div class="pg">PlayOn <i>Go</i></div><div class="tag">LIVE TV</div></a>
+<div class="divider"></div>
+<div style="min-width:0;flex:1"><div id="chName">PlayOn Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
-<div class="search-wrap">
-<span class="s-ico">🔍</span>
-<input id="search" placeholder="চ্যানেল খুঁজো...">
+
+<div id="player-wrapper">
+<div id="loader">
+<div class="brand-name"><b>PlayOn</b> <i>Go</i></div>
+<div class="dots"><span></span><span></span><span></span></div>
+<div class="status-line" id="status-line">LOADING...</div>
+<div id="loaderBtns" style="margin-top:16px;display:none"></div>
 </div>
-</header>
-<div id="cats"></div>
-<div id="count"></div>
-<div id="grid">
-  <div id="loading" style="grid-column:1/-1">
-    <div class="loader-ring"><div class="loader-emoji">▶</div></div>
-    <div class="loader-brand"><b>PlayOn</b> Go</div>
-    <div class="loader-status">LOADING CHANNELS...</div>
-    <div class="load-bar"><i></i></div>
-    <div class="loader-text">চ্যানেল লোড হচ্ছে... <b>একটু অপেক্ষা করো</b></div>
-  </div>
-  <div class="skeleton-grid" style="grid-column:1/-1">
-    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
-    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
-    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
-  </div>
+<div id="player"></div>
+<div id="controls"><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button></div>
 </div>
-<div id="status">PlayOn Go: Loading...</div>
-<a class="telegram-float" href="https://t.me/rslivetv" target="_blank" aria-label="Telegram">
-<svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg>
-</a>
+
+<div id="debug">
+<div>🔍 <b>DEBUG LOG:</b></div>
+<div id="debugText">Starting...</div>
+<div style="margin-top:10px">
+<button class="btn btn-grad" onclick="testStream()">🧪 Test Stream চালাও</button>
+<button class="btn btn-ghost" onclick="location.reload()">🔄 Reload</button>
+<button class="btn btn-ghost" onclick="location.href='https://playongo.pages.dev/'">🏠 Home</button>
+</div>
+</div>
+
+<div class="suggest">
+<div class="suggest-head"><h3>🔥 তুমি আরো দেখতে পারো</h3><a href="https://playongo.pages.dev/">সব দেখো →</a></div>
+<div class="suggest-grid" id="suggestGrid"><div style="color:#888;font-size:12px;padding:10px">লোড হচ্ছে...</div></div>
+</div>
+
+<div class="ad-wrap">
+<div class="ad-label">ADVERTISEMENT</div>
+<div class="ad-box"><div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div></div>
+</div>
+<div class="ad-note">তুমি দেখছো <b id="chName2">PlayOn Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
+
+<script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 <script>
-const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
-const PLAYLISTS = [
-  { name: "Tapmad", url: "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u" },
-  { name: "SonyLiv", url: "https://raw.githubusercontent.com/sm-monirulislam/SonyLiv_Event_Playlist/refs/heads/main/sonyLiv.m3u" },
-  { name: "Toffee", url: "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u" },
-  { name: "AynaOTT", url: "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u" },
-  { name: "JagoBD", url: "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u" },
-  { name: "Bangladesh", url: "https://iptv-org.github.io/iptv/countries/bd.m3u" },
-  { name: "India", url: "https://iptv-org.github.io/iptv/countries/in.m3u" },
-  { name: "Sports", url: "https://iptv-org.github.io/iptv/categories/sports.m3u" }
+const urlParams = new URLSearchParams(window.location.search);
+let streamSource = urlParams.get('url') || '';
+try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
+const chNameParam = urlParams.get('name') || '';
+let currentName = '';
+try{ if(chNameParam){ const d = decodeURIComponent(chNameParam); currentName=d; document.getElementById('chName').textContent=d; document.getElementById('chName2').textContent=d; document.title=d+' - PlayOn Go'; } }catch(e){}
+
+// ✅ ৪ টা Proxy - একটা ফেল করলে পরেরটা
+function getProxies(url){
+  const e = encodeURIComponent(url);
+  return [
+    {name:'Direct', url: url},
+    {name:'Lovable Proxy', url: 'https://stream-through-spark.lovable.app/api/proxy?u=' + e},
+    {name:'CorsProxy.io', url: 'https://corsproxy.io/?url=' + e},
+    {name:'AllOrigins', url: 'https://api.allorigins.win/raw?url=' + e},
+    {name:'Codetabs', url: 'https://api.codetabs.com/v1/proxy?quest=' + e},
+  ];
+}
+const PROXY_FOR_LIST = "https://stream-through-spark.lovable.app/api/proxy?u=";
+
+let logEl = document.getElementById('debugText');
+let step = 0;
+function log(msg, type){
+  step++;
+  let cls = type==='err' ? 'err' : (type==='ok' ? 'ok' : '');
+  logEl.innerHTML += `<div><span style="color:#555">${step}.</span> <span class="${cls}">${msg}</span></div>`;
+  console.log('[PlayOnGo]', msg);
+}
+log('Page লোড হইছে ✅');
+log('URL: ' + (streamSource ? streamSource.slice(0,150) : '<span class="err">❌ খালি! index থেকে আসে নাই</span>'));
+log('HLS.js আছে? ' + (window.Hls ? '✅ হ্যাঁ' : '❌ না - CDN ব্লক'));
+log('Browser: ' + navigator.userAgent.slice(0,80));
+
+const loaderEl = document.getElementById('loader');
+const statusEl = document.getElementById('status-line');
+const wrapper = document.getElementById('player-wrapper');
+const playBtn = document.getElementById('playBtn');
+const fsBtn = document.getElementById('fsBtn');
+function showLoader(){ loaderEl.classList.remove('hide-now'); document.getElementById('loaderBtns').style.display='none'; }
+function hideLoader(){ loaderEl.classList.add('hide-now'); }
+
+let hideCtrlTimer=null;
+function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
+wrapper.addEventListener('click',showControls); wrapper.addEventListener('touchstart',showControls,{passive:true});
+
+function cleanName(n){ return n.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
+
+// ===== SUGGESTIONS =====
+const SUGGEST_PLAYLISTS = [
+  "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
+  "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
+  "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
-let allChannels = [];
-let activeCat = "All";
-async function loadOne(url){
-  const proxyUrl = PROXY + encodeURIComponent(url);
-  try{ const res = await fetch(proxyUrl); const text = await res.text(); return parseM3U(text); }catch(e){ return []; }
+async function loadSuggestions(){
+  const grid = document.getElementById('suggestGrid');
+  try{
+    let list=[];
+    for(let plUrl of SUGGEST_PLAYLISTS){
+      try{
+        const res = await fetch(PROXY_FOR_LIST + encodeURIComponent(plUrl));
+        const text = await res.text();
+        const lines = text.split("\n"); let cur=null;
+        for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const lm=line.match(/tvg-logo="([^"]+)"/); cur={name,logo:lm?lm[1]:""}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url) list.push(cur); cur=null; } }
+        if(list.length>=20) break;
+      }catch(e){}
+    }
+    if(list.length===0) throw new Error('empty');
+    grid.innerHTML = list.slice(0,20).map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>`).join("");
+  }catch(e){ grid.innerHTML = `<div style="color:#888;font-size:12px;padding:10px">সাজেশন লোড হয় নাই</div>`; }
 }
-function parseM3U(text){
-  const lines = text.split("\n"); const out=[]; let cur=null;
-  for(let line of lines){
-    line=line.trim();
-    if(line.startsWith("#EXTINF")){
-      const name=line.split(",").pop().trim();
-      const logoMatch=line.match(/tvg-logo="([^"]+)"/);
-      const groupMatch=line.match(/group-title="([^"]+)"/);
-      cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General"};
-    } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url) out.push(cur); cur=null; }
+function openSuggest(u,n){ window.location.href = `player.html?url=${encodeURIComponent(decodeURIComponent(u))}&name=${n}`; }
+loadSuggestions();
+
+// ===== PLAYER CORE - MULTI PROXY =====
+let video=null, hls=null, everPlayed=false, currentTry=0, proxies=[];
+function createVideo(){
+  if(video) return video;
+  video = document.createElement('video');
+  video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+  video.muted=false; video.autoplay=true; video.controls=false;
+  video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
+  document.getElementById('player').appendChild(video);
+  video.addEventListener('playing',()=>{ log('✅ PLAYING! ভিডিও চলছে!', 'ok'); hideLoader(); everPlayed=true; });
+  video.addEventListener('waiting',()=>{ log('⏳ Buffering...'); });
+  video.addEventListener('pause',()=>{ playBtn.textContent='▶'; });
+  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; });
+  video.addEventListener('error',()=>{ log('❌ Video error: '+(video.error?video.error.message+' (code '+video.error.code+')':'unknown'),'err'); tryNext(); });
+  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused) video.play(); else video.pause(); showControls(); });
+  fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(document.fullscreenElement) document.exitFullscreen(); else wrapper.requestFullscreen().catch(()=>{}); showControls(); });
+  return video;
+}
+function tryNext(){
+  if(currentTry >= proxies.length-1){
+    log('❌ সব Proxy ফেল করছে। চ্যানেলটা ডাউন হতে পারে।','err');
+    showFail();
+    return;
   }
-  return out;
+  currentTry++;
+  loadWithProxy(currentTry);
 }
-async function loadAll(){
-  document.getElementById("status").textContent = "⏳ চ্যানেল লোড হচ্ছে...";
-  for(let p of PLAYLISTS){
-    const list = await loadOne(p.url);
-    for(let ch of list){ ch.source = p.name; if(!allChannels.find(x=>x.url===ch.url)) allChannels.push(ch); }
-    document.getElementById("status").textContent = `✅ ${allChannels.length} টা চ্যানেল লোড হইছে... (${p.name})`;
-    render();
+function loadWithProxy(idx){
+  const p = proxies[idx];
+  log(`🔄 চেষ্টা ${idx+1}/${proxies.length}: <b>${p.name}</b>`);
+  statusEl.textContent = 'TRYING: ' + p.name.toUpperCase();
+  showLoader();
+  if(hls){ try{hls.destroy();}catch(e){} hls=null; }
+  video.removeAttribute('src'); video.load();
+  if(p.url.includes('.m3u8') || p.url.includes('m3u8') || p.url.includes('%2Fm3u8') || p.url.includes('m3u8')){
+    if(window.Hls && Hls.isSupported()){
+      hls = new Hls({ maxBufferLength:30, maxMaxBufferLength:60, enableWorker:true, lowLatencyMode:false });
+      hls.loadSource(p.url); hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ log('✅ Manifest পাইছি ('+p.name+')','ok'); video.play().catch(e=>log('⚠️ Play blocked, স্ক্রিনে ট্যাপ করো: '+e.message)); });
+      hls.on(Hls.Events.ERROR, (e,data)=>{
+        if(!data.fatal) return;
+        log(`❌ HLS Fatal (${p.name}): ${data.details}`,'err');
+        tryNext();
+      });
+      // 8 সেকেন্ডে manifest না আসলে পরেরটা
+      setTimeout(()=>{ if(!everPlayed && currentTry===idx && hls){ log(`⏰ ${p.name} - 8s এ Manifest আসে নাই, পরেরটা ট্রাই...`); tryNext(); } },8000);
+    } else if(video.canPlayType('application/vnd.apple.mpegurl')){
+      log('🍎 Safari Native HLS');
+      video.src = p.url; video.play().catch(()=>{});
+      setTimeout(()=>{ if(!everPlayed && currentTry===idx) tryNext(); },8000);
+    } else {
+      log('❌ এই Browser HLS সাপোর্ট করে না','err'); showFail();
+    }
+  } else {
+    video.src = p.url; video.play().catch(()=>{});
+    setTimeout(()=>{ if(!everPlayed && currentTry===idx) tryNext(); },8000);
   }
-  document.getElementById("status").textContent = `✅ মোট ${allChannels.length} টা চ্যানেল - PlayOn Go`;
-  if(allChannels.length===0){
-    document.getElementById("grid").innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#ff5d5d">❌ চ্যানেল লোড হয় নাই<br><br>Proxy লিংকটা ঠিক আছে কিনা চেক করো।</div>`;
-  }
 }
-function getCats(){ return ["All", "Tapmad", "SonyLiv", "Toffee", "AynaOTT", "JagoBD", "Sports", "News", "General", "Entertainment", "Movies", "Kids", "Music", "Bangladesh", "India"]; }
-function render(){
-  const q = document.getElementById("search").value.toLowerCase();
-  let filtered = allChannels.filter(c=>{
-    const matchSearch = !q || c.name.toLowerCase().includes(q);
-    let matchCat = true;
-    if(activeCat==="All") matchCat = true;
-    else if(["Tapmad","SonyLiv","Toffee","AynaOTT","JagoBD"].includes(activeCat)) matchCat = c.source===activeCat;
-    else if(activeCat==="Sports") matchCat = c.group.toLowerCase().includes("sport");
-    else if(activeCat==="News") matchCat = c.group.toLowerCase().includes("news");
-    else if(activeCat==="Movies") matchCat = c.group.toLowerCase().includes("movie");
-    else if(activeCat==="Kids") matchCat = c.group.toLowerCase().includes("kid") || c.group.toLowerCase().includes("children");
-    else if(activeCat==="Music") matchCat = c.group.toLowerCase().includes("music");
-    else if(activeCat==="Entertainment") matchCat = c.group.toLowerCase().includes("entertainment") || c.group.toLowerCase().includes("general");
-    else if(activeCat==="Bangladesh") matchCat = c.name.toLowerCase().includes("bangla") || c.name.toLowerCase().includes("btv") || c.name.toLowerCase().includes("t sports") || c.name.toLowerCase().includes("channel i") || c.name.toLowerCase().includes("somoy") || c.name.toLowerCase().includes("jamuna") || c.name.toLowerCase().includes("ntv") || c.name.toLowerCase().includes("maasranga");
-    else if(activeCat==="India") matchCat = c.name.toLowerCase().includes("star") || c.name.toLowerCase().includes("sony") || c.name.toLowerCase().includes("zee") || c.name.toLowerCase().includes("colors");
-    else matchCat = c.group.toLowerCase().includes(activeCat.toLowerCase());
-    return matchSearch && matchCat;
-  });
-  document.getElementById("count").textContent = `${filtered.length} টা চ্যানেল দেখাচ্ছে`;
-  document.getElementById("cats").innerHTML = getCats().map(c=>`<div class="cat ${c===activeCat?'active':''}" onclick="setCat('${c}')">${c}</div>`).join("");
-  document.getElementById("grid").innerHTML = filtered.slice(0,500).map(c=>`
-    <div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}')">
-      <img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'">
-      <p>${c.name}</p>
-      <small>${c.group}</small>
-    </div>
-  `).join("");
+function showFail(){
+  statusEl.textContent = 'FAILED';
+  document.getElementById('loaderBtns').style.display='block';
+  document.getElementById('loaderBtns').innerHTML = `
+    <div style="color:#ff5d5d;font-size:13px;font-weight:700;margin-bottom:8px">❌ এই চ্যানেলটা এখন চলছে না</div>
+    <div style="color:#888;font-size:11px;margin-bottom:12px">সব Proxy ট্রাই করা হইছে</div>
+    <button class="btn btn-grad" onclick="testStream()">🧪 Test Stream দিয়ে প্লেয়ার চেক করো</button><br>
+    <button class="btn btn-ghost" onclick="location.reload()">🔄 আবার চেষ্টা করো</button>
+    <button class="btn btn-ghost" onclick="location.href='https://playongo.pages.dev/'">🏠 অন্য চ্যানেল দেখো</button>
+  `;
 }
-function setCat(c){ activeCat=c; render(); }
-function openCh(urlEnc, nameEnc){
-  const url = decodeURIComponent(urlEnc);
-  window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}`;
+function startPlayer(url){
+  proxies = getProxies(url);
+  currentTry = 0; everPlayed=false;
+  createVideo();
+  loadWithProxy(0);
 }
-document.getElementById("search").addEventListener("input", render);
-loadAll();
+function testStream(){
+  log('🧪 Test Stream চালাচ্ছি - এটা চললে প্লেয়ার ঠিক আছে, চ্যানেলের দোষ','ok');
+  document.getElementById('chName').textContent = 'Test Stream - Big Buck Bunny';
+  startPlayer('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
+}
+window.testStream = testStream;
+if(!streamSource){
+  log('❌ player.html?url= খালি!','err');
+  showFail();
+} else {
+  startPlayer(streamSource);
+}
 </script>
 </body>
 </html>
