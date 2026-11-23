@@ -6,10 +6,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{overflow-x:hidden;overscroll-behavior:none;width:100%}
-body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Segoe UI',sans-serif;padding-bottom:80px;position:relative;touch-action:pan-y}
+html{overflow-x:hidden;overflow-y:auto}
+body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Segoe UI',sans-serif;padding-bottom:80px;overflow-x:hidden}
 .sticky{position:sticky;top:0;z-index:100}
-/* ===== হেডার ব্যাকগ্রাউন্ড - তুমি যেটা দিছো ঠিক ওইটা ===== */
 header{position:relative;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:16px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
 header::before{content:"";position:absolute;top:-60px;left:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%);filter:blur(10px);pointer-events:none}
 header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.30),transparent 70%);filter:blur(10px);pointer-events:none}
@@ -30,24 +29,25 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 #search{width:100%;padding:14px 16px 14px 42px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1d1d2e,#14141f);color:#fff;font-size:14px;font-family:'Hind Siliguri',sans-serif;outline:none;transition:.25s;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 20px rgba(0,0,0,.3)}
 #search::placeholder{color:#7a7a92}
 #search:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.22),0 10px 28px rgba(167,139,250,.18);background:#1a1a2b}
-#cats{display:flex;gap:8px;overflow-x:auto;padding:14px 16px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);overscroll-behavior-x:contain;touch-action:pan-x;-webkit-overflow-scrolling:touch}
+#cats{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:14px 16px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);-webkit-overflow-scrolling:touch}
 #cats::-webkit-scrollbar{display:none}
 .cat{padding:9px 17px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;transition:.2s}
 .cat.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#000;font-weight:800;border:none;box-shadow:0 4px 16px rgba(167,139,250,.4)}
 #count{padding:10px 16px 0;font-size:12px;color:#888}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px;touch-action:pan-y;overscroll-behavior-y:contain}
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px}
 @media(min-width:600px){#grid{grid-template-columns:repeat(5,1fr)}}
 @media(min-width:1000px){#grid{grid-template-columns:repeat(6,1fr)}}
-.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:.2s;touch-action:manipulation}
+.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .card:hover{border-color:#a78bfa;transform:translateY(-2px);box-shadow:0 8px 20px rgba(167,139,250,.15)}
-.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}
+.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0}
 .card p{font-size:11px;margin-top:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
 .card small{font-size:9px;color:#22d3ee}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12.5px;font-weight:700;padding:9px;text-align:center}
 #featured{display:none;margin:14px 16px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:14px;padding:14px;cursor:pointer}
-#status{position:fixed;bottom:0;left:0;right:0;background:#111;padding:8px;text-align:center;font-size:11px;color:#7CFC00;border-top:1px solid #222;z-index:200}
-/* ===== Telegram - শুধু আসল লোগো, প্লেন ইমোজি নাই, লাল ডট নাই ===== */
-.tele{position:fixed;right:16px;bottom:44px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;text-decoration:none;box-shadow:0 8px 24px rgba(42,171,238,.5);animation:floatBtn 2.5s ease-in-out infinite}
+/* ===== নিচের বার - সবুজ বাদ, ডার্ক মোডের সাথে মিলানো ===== */
+#status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:11px 12px;text-align:center;font-size:12px;font-weight:600;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
+#status b{background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tele{position:fixed;right:16px;bottom:48px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;text-decoration:none;box-shadow:0 8px 24px rgba(42,171,238,.5);animation:floatBtn 2.5s ease-in-out infinite}
 .tele svg{width:28px;height:28px;fill:#fff;transform:translateX(-1px)}
 .tele::before{content:"";position:absolute;inset:0;border-radius:50%;background:#2AABEE;animation:telePulse 1.8s ease-out infinite;z-index:-1}
 @keyframes telePulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
@@ -102,7 +102,7 @@ if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display
 let all=[]; let cat="All";
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
-async function loadAll(){for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").textContent=`✅ ${all.length} টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").textContent=CFG.statusText.replace('{count}',all.length)}
+async function loadAll(){for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){return ["All","Tapmad","SonyLiv","Toffee","AynaOTT","JagoBD","Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]}
 function render(){let q=document.getElementById("search").value.toLowerCase();let f=all.filter(c=>{let s=!q||c.name.toLowerCase().includes(q);let m=true;if(cat==="All")m=true;else if(["Tapmad","SonyLiv","Toffee","AynaOTT","JagoBD"].includes(cat))m=c.source===cat;else if(cat==="Sports")m=c.group.toLowerCase().includes("sport");else if(cat==="News")m=c.group.toLowerCase().includes("news");else if(cat==="Movies")m=c.group.toLowerCase().includes("movie");else if(cat==="Kids")m=c.group.toLowerCase().includes("kid");else if(cat==="Music")m=c.group.toLowerCase().includes("music");else if(cat==="Entertainment")m=c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");else if(cat==="Bangladesh")m=c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");else if(cat==="India")m=c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");else m=c.group.toLowerCase().includes(cat.toLowerCase());return s&&m});document.getElementById("count").textContent=f.length+" টা চ্যানেল দেখাচ্ছে";document.getElementById("cats").innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')">${c}</div>`).join("");document.getElementById("grid").innerHTML=f.slice(0,500).map(c=>`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`).join("")}
 function setCat(c){cat=c;render()}
