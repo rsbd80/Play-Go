@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WFG156QL5T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WFG156QL5T');
+</script>
+<!-- Google Analytics End -->
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>RsLive Go - Live TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 html{overflow-x:hidden;overflow-y:auto}
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Segoe UI',sans-serif;padding-bottom:80px;overflow-x:hidden}
 .sticky{position:sticky;top:0;z-index:100}
@@ -26,7 +36,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
 .search-wrap{position:relative;margin-top:14px;z-index:2}
 .search-wrap .s-ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:16px;z-index:2}
-#search{width:100%;padding:14px 16px 14px 42px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1d1d2e,#14141f);color:#fff;font-size:14px;font-family:'Hind Siliguri',sans-serif;outline:none;transition:.25s;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 20px rgba(0,0,0,.3)}
+#search{width:100%;padding:14px 16px 14px 42px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1d1d2e,#14141f);color:#fff;font-size:14px;font-family:'Hind Siliguri',sans-serif;outline:none;transition:.25s;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 20px rgba(0,0,0,.3);user-select:text;-webkit-user-select:text}
 #search::placeholder{color:#7a7a92}
 #search:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.22),0 10px 28px rgba(167,139,250,.18);background:#1a1a2b}
 #cats{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:14px 16px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);-webkit-overflow-scrolling:touch}
@@ -39,7 +49,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 @media(min-width:1000px){#grid{grid-template-columns:repeat(6,1fr)}}
 .card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .card:hover{border-color:#a78bfa;transform:translateY(-2px);box-shadow:0 8px 20px rgba(167,139,250,.15)}
-.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0}
+.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0;pointer-events:none}
 .card p{font-size:11px;margin-top:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
 .card small{font-size:9px;color:#22d3ee}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12.5px;font-weight:700;padding:9px;text-align:center}
@@ -52,9 +62,11 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 @keyframes telePulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
 @keyframes floatBtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .tele:active{transform:scale(.92)}
+#blockScreen{display:none;position:fixed;inset:0;background:#07070f;z-index:99999;align-items:center;justify-content:center;text-align:center;padding:30px}
 </style>
 </head>
 <body>
+<div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">DevTools বন্ধ করে আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div id="noticeBar"></div>
 <div class="sticky">
 <header>
@@ -67,7 +79,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 </div>
 <div class="search-wrap">
 <span class="s-ico">🔍</span>
-<input id="search" placeholder="চ্যানেল খুঁজো...">
+<input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off">
 </div>
 </header>
 <div id="cats"></div>
@@ -88,7 +100,6 @@ const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'h
 {name:'Bangladesh',url:'https://iptv-org.github.io/iptv/countries/bd.m3u',useProxy:false},
 {name:'India',url:'https://iptv-org.github.io/iptv/countries/in.m3u',useProxy:false},
 ]};
-// === FIX 1: পুরানো localStorage থাকলে বাদ দাও, নতুন ভার্সন ছাড়া নিবো না ===
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version !== CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
@@ -103,12 +114,46 @@ let all=[]; let cat="All";
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
 async function loadAll(){for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
-// === FIX 2: SonyLiv হার্ডকোড বাদ, ক্যাটাগরি এখন প্লেলিস্ট থেকে অটো আসবে ===
 function getCats(){let sources = [...new Set(CFG.playlists.map(p=>p.name))]; return ["All", ...sources, "Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"];}
 function render(){let q=document.getElementById("search").value.toLowerCase();let f=all.filter(c=>{let s=!q||c.name.toLowerCase().includes(q);let m=true;if(cat==="All")m=true;else if(CFG.playlists.find(p=>p.name===cat))m=c.source===cat;else if(cat==="Sports")m=c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");else if(cat==="News")m=c.group.toLowerCase().includes("news");else if(cat==="Movies")m=c.group.toLowerCase().includes("movie");else if(cat==="Kids")m=c.group.toLowerCase().includes("kid");else if(cat==="Music")m=c.group.toLowerCase().includes("music");else if(cat==="Entertainment")m=c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");else if(cat==="Bangladesh")m=c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");else if(cat==="India")m=c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");else m=c.group.toLowerCase().includes(cat.toLowerCase());return s&&m});document.getElementById("count").textContent=f.length+" টা চ্যানেল দেখাচ্ছে";document.getElementById("cats").innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')">${c}</div>`).join("");document.getElementById("grid").innerHTML=f.slice(0,500).map(c=>`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`).join("")}
 function setCat(c){cat=c;render()}
 function openCh(u,n,s,g){window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}`}
 document.getElementById("search").addEventListener("input",render);loadAll();
+</script>
+<script>
+// ===== RsLive Go HARD SECURITY =====
+(function(){
+  // 1. Iframe চুরি বন্ধ
+  if(window.top !== window.self){ try{ window.top.location = window.self.location; }catch(e){ document.body.innerHTML=''; } }
+  // 2. Right Click / Long Press / Copy / Cut / Paste / Drag বন্ধ
+  document.addEventListener('contextmenu', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('copy', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('cut', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('dragstart', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('selectstart', e=>{ if(e.target.id!=='search') e.preventDefault(); });
+  // 3. Keyboard Shortcut বন্ধ - F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I/J/C, Ctrl+P
+  document.addEventListener('keydown', e=>{
+    let k = e.key.toUpperCase();
+    if(e.key==='F12' || (e.ctrlKey && ['U','S','P','C','A'].includes(k)) || (e.ctrlKey && e.shiftKey && ['I','J','C','K'].includes(k)) || (e.metaKey && ['U','S','I'].includes(k))){
+      e.preventDefault(); e.stopPropagation(); return false;
+    }
+  }, true);
+  // 4. DevTools Detect - খুললেই Block Screen
+  function block(){ let b=document.getElementById('blockScreen'); if(b){ b.style.display='flex'; } document.body.style.overflow='hidden'; }
+  setInterval(()=>{
+    let w = window.outerWidth - window.innerWidth > 160;
+    let h = window.outerHeight - window.innerHeight > 160;
+    if(w || h) block();
+  }, 800);
+  // Debugger Trap
+  setInterval(()=>{ (function(){ return false; })['constructor']('debugger')['call'](); }, 1500);
+  // 5. Console Warning + Clear
+  console.clear();
+  setInterval(()=>console.clear(), 2000);
+  console.log('%cSTOP! %cRsLive Go Protected - এখানে কিছু পেস্ট করবা না!', 'color:red;font-size:28px;font-weight:bold', 'color:#fff;font-size:14px');
+  // 6. View-Source / Inspect via URL বন্ধ
+  if(location.href.includes('view-source:') || location.href.includes('javascript:')){ location.href='https://rslivego.pages.dev'; }
+})();
 </script>
 </body>
 </html>
