@@ -70,13 +70,14 @@ video::-webkit-media-controls{display:none!important}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
 #time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
 .suggest{margin:16px 0 0;width:100%;overflow:hidden}
-.suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 10px;width:100%;box-sizing:border-box}
-.suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px}
+.suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px;width:100%;box-sizing:border-box}
+.suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap}
 .suggest-head h3 span{width:28px;height:28px;flex-shrink:0;background:rgba(255,138,0,.15);border:1px solid rgba(255,138,0,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
-.suggest-head h3::after{content:"";flex:1;height:1px;min-width:12px;background:linear-gradient(90deg, rgba(167,139,250,.6), transparent);margin-left:4px}
-.suggest-head a{font-size:12px;color:#fff!important;text-decoration:none;font-weight:700;flex-shrink:0;white-space:nowrap;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:8px 8px 8px 13px;border-radius:30px;backdrop-filter:blur(8px)}
-.suggest-head a i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#fff;color:#000;font-size:11px;display:flex;align-items:center;justify-content:center}
-.suggest-head a:active{transform:scale(.94);background:rgba(255,255,255,.15)}
+.suggest-head a{font-size:14px;font-weight:800;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:7px;height:32px;padding:0 2px;background:none!important;background-color:transparent!important;border:none!important;box-shadow:none!important;color:#fff!important;line-height:1;white-space:nowrap;text-decoration:none}
+.suggest-head a .arrow-ico{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee 0%,#a78bfa 50%,#ff5d8f 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.5);animation:arrowNudge 1.8s ease-in-out infinite}
+.suggest-head a .arrow-ico svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+@keyframes arrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-3px)}}
+.suggest-head a:active{transform:scale(.94);opacity:.8}
 .suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:2px 14px 8px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .suggest-grid::-webkit-scrollbar{display:none}
 .sug-card{flex:0 0 74px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.11);border-radius:16px;padding:9px 4px 8px;text-align:center;cursor:pointer;box-shadow:0 5px 14px rgba(0,0,0,.30);transition:.2s}
@@ -117,7 +118,7 @@ video::-webkit-media-controls{display:none!important}
 <div id="controls"><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button></div>
 </div>
 <div class="suggest">
-<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="index.html">সব দেখো <i>→</i></a></div>
+<div class="suggest-head"><h3><span>🔥</span> তুমি আরো দেখতে পারো</h3><a href="index.html">সব দেখো <span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -139,7 +140,6 @@ try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 const srcParam = urlParams.get('src') || '';
 const groupParam = urlParams.get('group') || '';
-// ✅ Toffee = শুরু থেকেই Proxy, SonyLiv সহ বাকি সব = শুরুতে Direct, না চললে Proxy
 const PROXY_FIRST = ['toffee'];
 const PROXY_FALLBACK = ['toffee', 'sonyliv'];
 const isToffee = PROXY_FIRST.includes(srcParam.toLowerCase()) || PROXY_FIRST.some(n => streamSource.toLowerCase().includes(n));
@@ -174,7 +174,6 @@ function makeProxyUrl(original){
   if(original.startsWith(PROXY)) return original;
   return PROXY + encodeURIComponent(original);
 }
-// ✅ SonyLiv এর জন্য ProxyLoader - Direct না চললে তখনই Proxy দিয়ে সব segment আনবে
 class ProxyLoader extends Hls.DefaultConfig.loader {
   load(context, config, callbacks){
     if(context && context.url && !context.url.startsWith(PROXY)){
@@ -247,7 +246,6 @@ if(!streamSource){
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
           if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
-            // ✅ SonyLiv: Direct না চললে Proxy, Proxy না চললে Direct
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
             else { hls.startLoad(); }
@@ -281,7 +279,6 @@ if(!streamSource){
   async function lockLandscape(){ try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
   function unlockLandscape(){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
-  // ✅ প্রথম কোডের মত: Toffee ছাড়া সব Direct দিয়ে শুরু
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
 }
 </script>
