@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
 <title>RsLive Go - Player</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -10,7 +11,7 @@
 :root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--grad-c:#fb923c;--warn:#ffb84d;--alert:#ff5d5d;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
-body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f}
+body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
 .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
 .topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.30),transparent 70%);filter:blur(10px);pointer-events:none}
 .topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.32),transparent 70%);filter:blur(10px);pointer-events:none}
@@ -78,14 +79,15 @@ video::-webkit-media-controls{display:none!important}
 .suggest-head a .arrow-ico svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 @keyframes arrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 .suggest-head a:active{transform:scale(.94);opacity:.8}
-.suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:2px 14px 8px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:4px 14px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:stretch}
 .suggest-grid::-webkit-scrollbar{display:none}
-.sug-card{flex:0 0 74px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.11);border-radius:16px;padding:9px 4px 8px;text-align:center;cursor:pointer;box-shadow:0 5px 14px rgba(0,0,0,.30);transition:.2s}
-.sug-card:hover{border-color:#a78bfa;transform:translateY(-3px);box-shadow:0 10px 22px rgba(167,139,250,.30)}
+.sug-card{flex:0 0 86px;width:86px;height:104px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 6px 8px;text-align:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0}
+.sug-card:hover{border-color:#a78bfa;transform:translateY(-3px);box-shadow:0 12px 24px rgba(167,139,250,.30)}
 .sug-card:active{transform:scale(.93);border-color:#a78bfa}
-.sug-card img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:11px;padding:3px;box-shadow:0 3px 10px rgba(0,0,0,.35)}
-.sug-card p{font-size:11px;font-weight:600;margin-top:7px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff!important;font-family:'Hind Siliguri',sans-serif}
-.sug-skel{flex:0 0 74px;height:72px;border-radius:16px;background:#15151f;position:relative;overflow:hidden}
+.sug-card img{width:44px;height:44px;min-height:44px;object-fit:contain;background:#fff;border-radius:12px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.35);pointer-events:none;flex-shrink:0}
+.sug-card p{font-size:11.5px;font-weight:600;margin-top:8px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff!important;font-family:'Hind Siliguri',sans-serif}
+.sug-card small{display:block;font-size:8.5px;color:#22d3ee;letter-spacing:1px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sug-skel{flex:0 0 86px;width:86px;height:104px;border-radius:18px;background:#15151f;position:relative;overflow:hidden;flex-shrink:0}
 .sug-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .ad-wrap{margin:14px 14px 0;background:linear-gradient(180deg,#14141f,#111118);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 12px 14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.30)}
@@ -94,9 +96,11 @@ video::-webkit-media-controls{display:none!important}
 #container-cdeccdd75d3e2e6916a42ce9653cfb08{width:100%!important;max-width:100%!important}
 .ad-note{text-align:center;font-size:11px;color:#666;margin:14px 0 22px}
 .ad-note b{color:#a78bfa}
+#blockScreen{display:none;position:fixed;inset:0;background:#07070f;z-index:99999;align-items:center;justify-content:center;text-align:center;padding:30px}
 </style>
 </head>
 <body>
+<div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">DevTools বন্ধ করে আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div class="topbar">
 <div class="brand"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
 <div class="divider"></div>
@@ -132,7 +136,6 @@ video::-webkit-media-controls{display:none!important}
 <div class="ad-note">তুমি দেখছো <b id="chName2">RsLive Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 <script>
-// ✅ প্রথম কোডের মতই - সব Direct দিয়ে চলবে, শুধু Toffee Proxy দিয়ে
 const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
@@ -218,7 +221,7 @@ async function loadSuggestions(){
     let others = shuffle(filtered.filter(c => getCategory(c.name, c.group) !== myCat));
     const show = [...related, ...others].slice(0,20);
     if(show.length===0) throw new Error('empty');
-    grid.innerHTML = show.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>`).join("");
+    grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div>`).join("");
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
@@ -281,6 +284,32 @@ if(!streamSource){
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
 }
+</script>
+<script>
+// ===== RsLive Go HARD SECURITY =====
+(function(){
+  if(window.top !== window.self){ try{ window.top.location = window.self.location; }catch(e){ document.body.innerHTML=''; } }
+  document.addEventListener('contextmenu', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('copy', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('cut', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('dragstart', e=>{ e.preventDefault(); return false; });
+  document.addEventListener('keydown', e=>{
+    let k = e.key.toUpperCase();
+    if(e.key==='F12' || (e.ctrlKey && ['U','S','P','C','A'].includes(k)) || (e.ctrlKey && e.shiftKey && ['I','J','C','K'].includes(k)) || (e.metaKey && ['U','S','I'].includes(k))){
+      e.preventDefault(); e.stopPropagation(); return false;
+    }
+  }, true);
+  function block(){ let b=document.getElementById('blockScreen'); if(b){ b.style.display='flex'; } document.body.style.overflow='hidden'; }
+  setInterval(()=>{
+    let w = window.outerWidth - window.innerWidth > 160;
+    let h = window.outerHeight - window.innerHeight > 160;
+    if(w || h) block();
+  }, 800);
+  setInterval(()=>{ (function(){ return false; })['constructor']('debugger')['call'](); }, 1500);
+  console.clear();
+  setInterval(()=>console.clear(), 2000);
+  console.log('%cSTOP! %cRsLive Go Protected', 'color:red;font-size:28px;font-weight:bold', 'color:#fff;font-size:14px');
+})();
 </script>
 </body>
 </html>
