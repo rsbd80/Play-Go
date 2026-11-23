@@ -12,6 +12,8 @@
 <!-- Google Analytics End -->
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#07070f">
+<link rel="manifest" href="/manifest.json">
 <title>RsLive Go - Live TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -63,6 +65,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 @keyframes floatBtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .tele:active{transform:scale(.92)}
 #blockScreen{display:none;position:fixed;inset:0;background:#07070f;z-index:99999;align-items:center;justify-content:center;text-align:center;padding:30px}
+#installBar{display:none;position:fixed;left:12px;right:12px;bottom:38px;z-index:998;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;border-radius:16px;padding:12px 14px;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 </style>
 </head>
 <body>
@@ -89,17 +92,18 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 <div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/rslivetv" target="_blank" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
+
+<!-- Install App Banner -->
+<div id="installBar">
+  <div style="font-size:24px">📲</div>
+  <div style="flex:1;line-height:1.2"><b style="font-size:14px">RsLive Go App ইন্সটল করো</b><br><span style="font-size:11px;opacity:.8">হোম স্ক্রিন থেকে ১ ক্লিকে খুলবে, ফুল স্ক্রিনে চলবে</span></div>
+  <button id="installBtn" style="background:#000;color:#fff;border:none;padding:9px 14px;border-radius:10px;font-weight:800;font-size:12px;white-space:nowrap">Install</button>
+  <span id="closeInstall" style="font-size:18px;cursor:pointer;padding:0 2px">✕</span>
+</div>
+
 <script>
-const CONFIG_VERSION = 'v3-no-sony';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/rslivetv',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
-{name:'Tapmad',url:'https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u',useProxy:false},
-{name:'Sports',url:'https://raw.githubusercontent.com/jannatulbusra000/Sports-Playlist/refs/heads/main/sports.m3u',useProxy:true},
-{name:'Toffee',url:'https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u',useProxy:true},
-{name:'AynaOTT',url:'https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u',useProxy:false},
-{name:'JagoBD',url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u',useProxy:false},
-{name:'Bangladesh',url:'https://iptv-org.github.io/iptv/countries/bd.m3u',useProxy:false},
-{name:'India',url:'https://iptv-org.github.io/iptv/countries/in.m3u',useProxy:false},
-]};
+const CONFIG_VERSION = 'v4-pwa-secure';
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/rslivetv',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version !== CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
@@ -111,9 +115,20 @@ if(!CFG.showTele) document.getElementById('teleBtn').style.display='none';
 if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
 if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
 let all=[]; let cat="All";
+async function getPlaylistsFromSW(){
+  try{
+    await navigator.serviceWorker.ready;
+    let r = await fetch('/api/playlists');
+    let data = await r.json();
+    if(data && data.length) return data;
+  }catch(e){}
+  return CFG.playlists;
+}
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
-async function loadAll(){for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
+async function loadAll(){
+  CFG.playlists = await getPlaylistsFromSW();
+  for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){let sources = [...new Set(CFG.playlists.map(p=>p.name))]; return ["All", ...sources, "Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"];}
 function render(){let q=document.getElementById("search").value.toLowerCase();let f=all.filter(c=>{let s=!q||c.name.toLowerCase().includes(q);let m=true;if(cat==="All")m=true;else if(CFG.playlists.find(p=>p.name===cat))m=c.source===cat;else if(cat==="Sports")m=c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");else if(cat==="News")m=c.group.toLowerCase().includes("news");else if(cat==="Movies")m=c.group.toLowerCase().includes("movie");else if(cat==="Kids")m=c.group.toLowerCase().includes("kid");else if(cat==="Music")m=c.group.toLowerCase().includes("music");else if(cat==="Entertainment")m=c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");else if(cat==="Bangladesh")m=c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");else if(cat==="India")m=c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");else m=c.group.toLowerCase().includes(cat.toLowerCase());return s&&m});document.getElementById("count").textContent=f.length+" টা চ্যানেল দেখাচ্ছে";document.getElementById("cats").innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')">${c}</div>`).join("");document.getElementById("grid").innerHTML=f.slice(0,500).map(c=>`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`).join("")}
 function setCat(c){cat=c;render()}
@@ -123,37 +138,65 @@ document.getElementById("search").addEventListener("input",render);loadAll();
 <script>
 // ===== RsLive Go HARD SECURITY =====
 (function(){
-  // 1. Iframe চুরি বন্ধ
   if(window.top !== window.self){ try{ window.top.location = window.self.location; }catch(e){ document.body.innerHTML=''; } }
-  // 2. Right Click / Long Press / Copy / Cut / Paste / Drag বন্ধ
   document.addEventListener('contextmenu', e=>{ e.preventDefault(); return false; });
   document.addEventListener('copy', e=>{ e.preventDefault(); return false; });
   document.addEventListener('cut', e=>{ e.preventDefault(); return false; });
   document.addEventListener('dragstart', e=>{ e.preventDefault(); return false; });
   document.addEventListener('selectstart', e=>{ if(e.target.id!=='search') e.preventDefault(); });
-  // 3. Keyboard Shortcut বন্ধ - F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I/J/C, Ctrl+P
   document.addEventListener('keydown', e=>{
     let k = e.key.toUpperCase();
     if(e.key==='F12' || (e.ctrlKey && ['U','S','P','C','A'].includes(k)) || (e.ctrlKey && e.shiftKey && ['I','J','C','K'].includes(k)) || (e.metaKey && ['U','S','I'].includes(k))){
       e.preventDefault(); e.stopPropagation(); return false;
     }
   }, true);
-  // 4. DevTools Detect - খুললেই Block Screen
   function block(){ let b=document.getElementById('blockScreen'); if(b){ b.style.display='flex'; } document.body.style.overflow='hidden'; }
   setInterval(()=>{
     let w = window.outerWidth - window.innerWidth > 160;
     let h = window.outerHeight - window.innerHeight > 160;
     if(w || h) block();
   }, 800);
-  // Debugger Trap
   setInterval(()=>{ (function(){ return false; })['constructor']('debugger')['call'](); }, 1500);
-  // 5. Console Warning + Clear
   console.clear();
   setInterval(()=>console.clear(), 2000);
-  console.log('%cSTOP! %cRsLive Go Protected - এখানে কিছু পেস্ট করবা না!', 'color:red;font-size:28px;font-weight:bold', 'color:#fff;font-size:14px');
-  // 6. View-Source / Inspect via URL বন্ধ
-  if(location.href.includes('view-source:') || location.href.includes('javascript:')){ location.href='https://rslivego.pages.dev'; }
+  console.log('%cSTOP! %cRsLive Go Protected', 'color:red;font-size:28px;font-weight:bold', 'color:#fff;font-size:14px');
 })();
+</script>
+<script>
+// ===== PWA Install System =====
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  if(!window.matchMedia('(display-mode: standalone)').matches){
+    let bar = document.getElementById('installBar');
+    if(bar && !localStorage.getItem('rslive_install_closed')){
+      bar.style.display = 'flex';
+    }
+  }
+});
+document.getElementById('installBtn')?.addEventListener('click', async ()=>{
+  if(!deferredPrompt){
+    alert('ব্রাউজারের Menu (⋮) -> Add to Home Screen এ চাপ দাও');
+    return;
+  }
+  deferredPrompt.prompt();
+  let choice = await deferredPrompt.userChoice;
+  if(choice.outcome === 'accepted'){
+    document.getElementById('installBar').style.display = 'none';
+  }
+  deferredPrompt = null;
+});
+document.getElementById('closeInstall')?.addEventListener('click', ()=>{
+  document.getElementById('installBar').style.display = 'none';
+  localStorage.setItem('rslive_install_closed','1');
+});
+window.addEventListener('appinstalled', ()=>{
+  document.getElementById('installBar').style.display = 'none';
+});
 </script>
 </body>
 </html>
