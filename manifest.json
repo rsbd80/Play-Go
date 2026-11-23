@@ -9,19 +9,19 @@
   "theme_color": "#07070f",
   "icons": [
     {
-      "src": "https://i.postimg.cc/XJXpgTTc/Rs-Live-Go-512x512.png",
+      "src": "https://i.postimg.cc/bJQ17GyN/20261123-224246.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://i.postimg.cc/PJwQr6Qk/Rs-Live-Go-192x192.png",
+      "src": "https://i.postimg.cc/7Zs99T6B/20261123-224133.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://i.postimg.cc/XJXpgTTc/Rs-Live-Go-512x512.png",
+      "src": "https://i.postimg.cc/bJQ17GyN/20261123-224246.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
