@@ -1,0 +1,47 @@
+{
+  "name": "RS Live TV",
+  "short_name": "RS Live Tv",
+  "description": "Watch Live Sports, Movies & Entertainment Free",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#06060c",
+  "lang": "bn",
+  "dir": "ltr",
+  "categories": ["entertainment", "video", "sports"],
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/8ckTrycz/rs-live-tv-logo-cropped-90-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.postimg.cc/qRj9WpBr/rs-live-tv-logo-cropped-90-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.postimg.cc/qRj9WpBr/rs-live-tv-logo-cropped-90-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Live TV",
+      "short_name": "TV",
+      "url": "/",
+      "icons": [
+        {
+          "src": "https://i.postimg.cc/8ckTrycz/rs-live-tv-logo-cropped-90-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
