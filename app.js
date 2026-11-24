@@ -51,17 +51,19 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important;padding:12px!important}
-.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
+.card{background:#0a0a12;border:1px solid #1e1e28;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-.sports-yt-card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0;width:100%}
-.sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#1a1a2e;position:relative;overflow:hidden}
+/* ✅ DARK MODE CARD */
+.sports-yt-card{background:#0a0a12;border:1px solid #1e1e28;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0;width:100%}
+.sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#000;position:relative;overflow:hidden}
 .sports-yt-thumb .poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.92) 100%)}
-.sports-yt-thumb .live-tag{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.5px;z-index:4;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(4px)}
+/* ✅ Countdown - আরো ছোট, একদম উপরে, লোগো ঢাকবে না */
+.sports-yt-thumb .live-tag{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:7px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.4px;z-index:4;white-space:nowrap;box-shadow:0 1px 6px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.30);backdrop-filter:blur(4px);max-width:90%;overflow:hidden;text-overflow:ellipsis}
 .sports-yt-thumb .live-tag.countdown{background:rgba(0,0,0,.62)!important;color:#fff!important}
-.sports-yt-thumb .live-tag.live-now{background:#ff2d55!important;color:#fff!important;border-color:rgba(255,255,255,.4)}
+.sports-yt-thumb .live-tag.live-now{background:#ff2d55!important;color:#fff!important;border-color:rgba(255,255,255,.4);font-size:7.5px;padding:3px 8px}
 .sports-yt-thumb .vs-box{position:absolute;inset:0;display:flex;align-items:center;gap:4px;justify-content:center;padding:26px 6px 26px}
 .sports-yt-thumb .team{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .sports-yt-thumb .team img{width:42px;height:42px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.5)}
@@ -193,8 +195,6 @@ function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats 
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
-
-// ===== 🏆 LIVE SPORTS - Countdown + 1 Click Fullscreen =====
 let sportsData = [];
 async function loadSports(){
   try{
@@ -250,7 +250,7 @@ function renderSportsGrid(){
     let sIdx = sportsData.indexOf(m);
     let poster = info.poster || info.thumbnail || info.image || info.banner || info.posterUrl || info.thumb || m.poster || m.thumbnail || m.image || '';
     let posterTag = poster ? `<img class="poster-img" loading="lazy" src="${poster}" onerror="this.style.display='none'">` : '';
-    let fallbackBg = !poster ? `background:linear-gradient(135deg,#1e1b4b,#0e7490 50%,#be185d)` : '';
+    let fallbackBg = !poster ? `background:linear-gradient(135deg,#0a0a12,#111)` : '';
     let ts = !isLive ? parseStartTime(info, m) : null;
     let badge = '';
     if(isLive) badge = `<span class="live-tag live-now">● LIVE</span>`;
