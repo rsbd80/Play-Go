@@ -55,18 +55,20 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ✅ YouTube Poster Card - নাম সহ পুরা Poster 16:9 */
+/* ✅ FIX - LIVE Center, নাম ছোট, Overlap নাই */
 .sports-yt-card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0;width:100%}
 .sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#1a1a2e;position:relative;overflow:hidden}
 .sports-yt-thumb .poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.92) 100%)}
-.sports-yt-thumb .vs-box{position:absolute;inset:0;display:flex;align-items:center;gap:6px;justify-content:center;padding:28px 8px 36px}
+.sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.92) 100%)}
+/* ✅ LIVE - VS এর উপরে, একদম সেন্টারে */
+.sports-yt-thumb .live-tag{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:.5px;z-index:4;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.sports-yt-thumb .vs-box{position:absolute;inset:0;display:flex;align-items:center;gap:4px;justify-content:center;padding:26px 6px 26px}
 .sports-yt-thumb .team{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sports-yt-thumb .team img{width:46px;height:46px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.5)}
-.sports-yt-thumb .team-name{font-size:11px;font-weight:800;color:#fff;margin-top:5px;text-align:center;line-height:1.25;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:26px;width:100%;text-shadow:0 2px 6px rgba(0,0,0,.9)}
-.sports-yt-thumb .vs-txt{flex-shrink:0;color:#fff;font-size:12px;font-weight:900;padding-top:10px;text-shadow:0 2px 6px rgba(0,0,0,.9);background:rgba(0,0,0,.45);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.sports-yt-thumb .live-tag{position:absolute;top:6px;left:6px;font-size:8px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.5px;z-index:3}
-.sports-yt-thumb .poster-title{position:absolute;left:8px;right:8px;bottom:7px;z-index:3;text-align:center;font-size:12px;font-weight:700;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 2px 6px rgba(0,0,0,.9)}
+.sports-yt-thumb .team img{width:42px;height:42px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.sports-yt-thumb .team-name{font-size:10px;font-weight:700;color:#fff;margin-top:4px;text-align:center;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:24px;max-height:24px;width:100%;text-shadow:0 2px 6px rgba(0,0,0,.9)}
+.sports-yt-thumb .vs-txt{flex-shrink:0;color:#fff;font-size:10px;font-weight:900;background:rgba(0,0,0,.5);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+/* ✅ ম্যাচ নাম - আরো ছোট, ১ লাইন, Center */
+.sports-yt-thumb .poster-title{position:absolute;left:6px;right:6px;bottom:5px;z-index:3;text-align:center;font-size:10px;font-weight:600;color:#e8e8e8;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(0,0,0,.9)}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -193,7 +195,7 @@ function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&s
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 
-// ===== 🏆 LIVE SPORTS - 1 CLICK PLAY + YouTube Poster =====
+// ===== 🏆 LIVE SPORTS - Countdown + 1 Click Fullscreen =====
 let sportsData = [];
 async function loadSports(){
   try{
@@ -204,6 +206,41 @@ async function loadSports(){
     if(cat === "🏆 Live Sports") renderGrid(true);
   }catch(e){ console.log('Sports load fail', e); }
 }
+// ✅ Countdown - startTime থেকে হিসাব
+function parseStartTime(info, m){
+  let s = info.startTime || info.start_time || info.startDate || info.date || info.time || m.startTime || m.start_time || m.date || '';
+  if(!s) return null;
+  s = String(s).trim();
+  // শুধু টাইম থাকলে (7:30 PM) - আজকের তারিখ ধরে নাও
+  if(/^\d{1,2}:\d{2}/.test(s) && !/[a-zA-Z]{3,}/.test(s.replace(/AM|PM|am|pm/g,'')) && s.length<=8){
+    let d = new Date(); let parts = s.match(/(\d+):(\d+)\s*(AM|PM|am|pm)?/); if(parts){ let hh=parseInt(parts[1]); let mm=parseInt(parts[2]); let ap=(parts[3]||'').toUpperCase(); if(ap==='PM'&&hh<12) hh+=12; if(ap==='AM'&&hh===12) hh=0; d.setHours(hh,mm,0,0); if(d.getTime()<Date.now()-3600000) d.setDate(d.getDate()+1); return d.getTime(); }
+  }
+  let t = Date.parse(s);
+  if(!isNaN(t)) return t;
+  // 25 Nov, 7:30 PM টাইপ
+  let t2 = Date.parse(s + ' ' + new Date().getFullYear());
+  if(!isNaN(t2)) return t2;
+  return null;
+}
+function formatCountdown(ms){
+  if(ms<=0) return 'Starting...';
+  let sec = Math.floor(ms/1000);
+  let d = Math.floor(sec/86400); sec%=86400;
+  let h = Math.floor(sec/3600); sec%=3600;
+  let m = Math.floor(sec/60); let s = sec%60;
+  let pad = n => String(n).padStart(2,'0');
+  if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
+  return pad(h)+':'+pad(m)+':'+pad(s);
+}
+function updateCountdowns(){
+  document.querySelectorAll('.countdown-el').forEach(el=>{
+    let ts = parseInt(el.dataset.ts||'0'); if(!ts) return;
+    let diff = ts - Date.now();
+    if(diff<=0){ el.textContent = '⏰ Starting...'; return; }
+    el.textContent = '⏰ ' + formatCountdown(diff);
+  });
+}
+setInterval(updateCountdowns, 1000);
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
   gridEl.classList.add("sports-mode");
@@ -215,17 +252,22 @@ function renderSportsGrid(){
     let isLive = (m.status||'').toUpperCase() === 'LIVE';
     let info = m.eventInfo || {};
     let sIdx = sportsData.indexOf(m);
-    // ✅ Poster - JSON এ যেই নামেই থাকুক ধরবে, না থাকলে Flag দিয়ে বানাবে
     let poster = info.poster || info.thumbnail || info.image || info.banner || info.posterUrl || info.thumb || m.poster || m.thumbnail || m.image || '';
     let posterTag = poster ? `<img class="poster-img" loading="lazy" src="${poster}" onerror="this.style.display='none'">` : '';
-    // Poster না থাকলে Gradient Background হিসাবে 2 টিমের Flag দিয়ে YouTube Look
     let fallbackBg = !poster ? `background:linear-gradient(135deg,#1e1b4b,#0e7490 50%,#be185d)` : '';
+    let ts = !isLive ? parseStartTime(info, m) : null;
+    // ✅ LIVE হলে Center LIVE, Upcoming হলে Countdown
+    let badge = '';
+    if(isLive) badge = `<span class="live-tag" style="background:#ff2d55;color:#fff">● LIVE</span>`;
+    else if(ts) badge = `<span class="live-tag countdown-el" data-ts="${ts}" style="background:#ffb84d;color:#000">⏰ ${formatCountdown(ts-Date.now())}</span>`;
+    else if(info.startTime) badge = `<span class="live-tag" style="background:#ffb84d;color:#000">⏰ ${info.startTime}</span>`;
+    else badge = `<span class="live-tag" style="background:rgba(0,0,0,.6);color:#fff">UPCOMING</span>`;
     html += `
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
       <div class="sports-yt-thumb" style="${fallbackBg}">
         ${posterTag}
         <div class="poster-grad"></div>
-        <span class="live-tag" style="background:${isLive ? '#ff2d55' : '#ffb84d'};color:${isLive ? '#fff' : '#000'}">${isLive ? '● LIVE' : '⏰ ' + (info.startTime || '')}</span>
+        ${badge}
         <div class="vs-box">
           <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
           <div class="vs-txt">VS</div>
@@ -245,12 +287,13 @@ function openMatch(idx){
   let name = info.teamA + ' Vs ' + info.teamB;
   try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
   let first = m.streams[0];
-  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports`;
+  // ✅ fs=1 - Player খুললেই Direct Fullscreen
+  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports&fs=1`;
   if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
   window.location.href = link;
 }
 function playSports(u, kid, key, name){
-  let link = `player.html?url=${u}&name=${name}&src=sports&group=Sports`;
+  let link = `player.html?url=${u}&name=${name}&src=sports&group=Sports&fs=1`;
   if(kid && key) link += `&kid=${kid}&key=${key}`;
   window.location.href = link;
 }
