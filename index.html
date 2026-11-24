@@ -46,25 +46,24 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 #cats::-webkit-scrollbar{display:none}
 .cat{padding:9px 14px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background .1s;display:inline-flex;align-items:center;gap:6px}
 .cat .cat-count{font-size:11px;font-weight:700;background:rgba(255,255,255,.12);color:#ccc;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
-/* ✅ সিলেক্ট ক্যাটাগরি - একদম সিম্পল, কোনো লাইটিং / গ্রেডিয়েন্ট / গ্লো নাই */
 .cat.active{background:#2a2a3a;color:#fff;border:1px solid rgba(255,255,255,.28);box-shadow:none}
 .cat.active .cat-count{background:rgba(255,255,255,.18);color:#fff}
 #count{padding:10px 16px 0;font-size:12px;color:#888;flex-shrink:0;background:#07070f}
-#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:90px;scrollbar-width:thin;content-visibility:auto}
+#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:90px;scrollbar-width:thin}
 #scrollArea::-webkit-scrollbar{width:4px}
 #scrollArea::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px}
 @media(min-width:600px){#grid{grid-template-columns:repeat(5,1fr)}}
-.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;transition:transform .1s,border-color .1s;aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;content-visibility:auto;contain-intrinsic-size:120px}
-.card:hover{border-color:#555;transform:none}
-.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0;pointer-events:none;loading:lazy}
+.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;transition:border-color .1s;aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.card:hover{border-color:#555}
+.card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0;pointer-events:none}
 .card p{font-size:11px;margin-top:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
 .card small{font-size:9px;color:#22d3ee}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12.5px;font-weight:700;padding:9px;text-align:center;flex-shrink:0}
 #featured{display:none;margin:14px 16px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:14px;padding:14px;cursor:pointer}
 #status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:11px 12px;text-align:center;font-size:12px;font-weight:600;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
 #status b{background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tele{position:fixed;right:14px;bottom:88px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;text-decoration:none;box-shadow:0 8px 24px rgba(42,171,238,.5);animation:floatBtn 2.5s ease-in-out infinite}
+.tele{position:fixed;right:14px;bottom:110px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;text-decoration:none;box-shadow:0 8px 24px rgba(42,171,238,.5);animation:floatBtn 2.5s ease-in-out infinite}
 .tele svg{width:26px;height:26px;fill:#fff;transform:translateX(-1px)}
 .tele::before{content:"";position:absolute;inset:0;border-radius:50%;background:#2AABEE;animation:telePulse 1.8s ease-out infinite;z-index:-1}
 @keyframes telePulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
@@ -95,21 +94,19 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
   .logo-text .name{font-size:30px;white-space:nowrap}
   .logo-text .tag{font-size:10px;letter-spacing:4px}
   #search{padding:16px 16px 16px 46px;font-size:15px;border-radius:16px}
-  .desktop-wrap{display:flex;flex-direction:row;align-items:flex-start;max-width:1440px;margin:0 auto;gap:20px;padding:18px 28px 0}
+  .desktop-wrap{display:flex;flex-direction:row;align-items:flex-start;max-width:1440px;margin:0 auto;gap:20px;padding:18px 28px 40px}
   #mainCol{flex:1;min-width:0;order:1}
   #cats{order:2}
-  /* ✅ PC: ক্যাটাগরি - ন্যাচারাল ব্যাকগ্রাউন্ড, কোনো আলাদা বক্স নাই */
-  #cats{flex-direction:column;overflow-x:hidden;overflow-y:auto;width:270px;flex-shrink:0;position:sticky;top:120px;max-height:calc(100vh - 140px);padding:0;white-space:normal;border:none;background:transparent;box-shadow:none;backdrop-filter:none;border-radius:0}
+  #cats{flex-direction:column;overflow-x:hidden;overflow-y:auto;width:270px;flex-shrink:0;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent;box-shadow:none;backdrop-filter:none;border-radius:0}
   #cats::-webkit-scrollbar{display:block;width:5px}
   #cats::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
   .cat-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;letter-spacing:.5px;padding:2px 6px 12px;color:#fff}
   .cat-title span{font-size:11px;background:#2a2a3a;color:#ccc;padding:4px 10px;border-radius:20px;font-weight:700;border:1px solid rgba(255,255,255,.15)}
   .cat{width:100%;text-align:left;padding:12px 14px;border-radius:12px;font-size:14px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid transparent;transition:background .1s}
-  .cat:hover{background:rgba(255,255,255,.08);transform:none}
+  .cat:hover{background:rgba(255,255,255,.08)}
   .cat .cat-ico{width:36px;height:36px;flex-shrink:0;border-radius:11px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:17px}
   .cat .cat-name{flex:1;min-width:0}
   .cat .cat-count{font-size:12px;background:rgba(255,255,255,.10);padding:5px 10px;border-radius:20px;color:#ccc;font-weight:700;min-width:36px;text-align:center}
-  /* ✅ PC তেও সিলেক্ট - সিম্পল গাঢ়, কোনো লাইটিং / গ্রেডিয়েন্ট নাই */
   .cat.active{background:#2a2a3a;color:#fff;border:1px solid rgba(255,255,255,.30);box-shadow:none;transform:none}
   .cat.active .cat-ico{background:rgba(255,255,255,.10)}
   .cat.active .cat-count{background:rgba(255,255,255,.18);color:#fff}
@@ -123,7 +120,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
   .card p{font-size:13.5px;min-height:36px;font-weight:600}
   .card small{font-size:11px;margin-top:2px}
   #featured{margin:16px 0 0;border-radius:20px;padding:18px;background:linear-gradient(135deg,#2a1a4a,#1a1a2e);box-shadow:0 12px 30px rgba(167,139,250,.25)}
-  .tele{right:24px;bottom:72px;width:60px;height:60px}
+  .tele{right:24px;bottom:100px;width:60px;height:60px}
   .tele svg{width:30px;height:30px}
   #installBar{left:auto;right:24px;bottom:44px;width:370px}
 }
@@ -145,6 +142,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 <header>
 <div class="top-row">
 <div class="header-top">
+<!-- ✅ HEADER CLICK = FRESH HOME OPEN -->
 <div class="logo" onclick="goHome()" title="হোমে যাও">
 <div class="play-ico">▶</div>
 <div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div>
@@ -193,17 +191,12 @@ if(!CFG.showLive) document.getElementById('livePill').style.display='none';
 if(!CFG.showTele) document.getElementById('teleBtn').style.display='none';
 if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
 if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
+
+/* ✅ HEADER CLICK = নতুন করে OPEN হবে */
 function goHome(){
-  document.getElementById('search').value = '';
-  cat = 'All';
-  renderCats();
-  renderGrid();
-  document.getElementById('scrollArea').scrollTo({top:0});
-  window.scrollTo({top:0});
-  if(window.location.pathname.includes('player')){
-    window.location.href = 'https://rslivego.pages.dev';
-  }
+  window.location.href = window.location.origin + '/?t=' + Date.now();
 }
+
 let all=[]; let cat="All";
 let _catCache = null, _catCounts = {};
 async function getPlaylistsFromSW(){
@@ -252,7 +245,6 @@ function matchesCat(c,catName){
   if(catName==="India") return c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");
   return c.group.toLowerCase().includes(catName.toLowerCase());
 }
-/* ✅ FAST: ক্যাটাগরি শুধু একবার / ক্যাটাগরি বদলাইলে - গ্রিড আলাদা */
 function renderCats(){
   let isDesktop = window.innerWidth >= 900;
   let catsEl = document.getElementById("cats");
@@ -276,7 +268,6 @@ function renderGrid(){
 function setCat(c){
   if(cat===c) return;
   cat=c;
-  /* ✅ শুধু active ক্লাস বদলাও, পুরা লিস্ট আবার আঁকবা না - তাই ফাস্ট */
   document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); });
   renderGrid();
 }
