@@ -54,15 +54,12 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-#grid{display:grid;grid-template-columns:1fr;gap:8px;padding:10px 12px}
-/* ===== 1. SOKOL CHANNEL - YOUTUBE SIZE, ARAARI - LIVE SPORTS BAD DIYE ===== */
-.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:row;align-items:center;gap:12px;overflow:hidden;min-width:0;text-align:left}
-.card img{width:64px;height:48px;min-width:64px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0}
-.card .ch-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.card p{font-size:13.5px;font-weight:700;margin:0;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
-.card small{font-size:10px;color:#22d3ee;letter-spacing:.5px}
-.card .ch-play{width:34px;height:34px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
-/* ===== LIVE SPORTS - AGERTAI ===== */
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
+.card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+.card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
+.card small{font-size:8.5px;color:#22d3ee}
+/* ===== LIVE SPORTS - SUDHU EITA ADD ===== */
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -125,13 +122,13 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
-#grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:14px 0}
+#grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
-.card{border-radius:14px;padding:12px}
-.card img{width:72px;height:54px;border-radius:12px;padding:5px}
-.card p{font-size:13px}
+.card{border-radius:16px;padding:14px 8px}
+.card img{width:60px;height:60px;border-radius:12px;padding:6px}
+.card p{font-size:12px}
 }
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(2,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
+@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
@@ -164,6 +161,7 @@ function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
+// ===== LIVE SPORTS - SUDHU EITA ADD =====
 function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
 function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
@@ -209,7 +207,7 @@ function renderGrid(reset=true){
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
   let show=currentFiltered.slice(0,visibleCount); let html='';
-  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="ch-txt"><p>${c.name}</p><small>${c.group} • LIVE • HD</small></div><div class="ch-play">▶</div></div>`; }
+  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
   document.getElementById("grid").innerHTML=html;
   let wrap=document.getElementById("loadMoreWrap"); let btn=document.getElementById("loadMoreBtn");
   if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
@@ -220,6 +218,7 @@ function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats 
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
+// ===== LIVE SPORTS LOGIC - SUDHU EITA ADD =====
 let sportsData = [];
 async function loadSports(){
   try{
@@ -280,9 +279,7 @@ function renderSportsGrid(){
         </div>
         <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
       </div>
-      <div class="sports-bottom">
-        <div class="date">🕐 ${dateStr || ''}</div>
-      </div>
+      <div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div>
     </div>`;
   });
   gridEl.innerHTML = html;
