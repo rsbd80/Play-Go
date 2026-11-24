@@ -31,12 +31,15 @@ body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139
 .main-layout{width:100%;display:block}
 .player-col{width:100%}
 #player-wrapper{position:relative;width:calc(100% - 24px);margin:12px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);touch-action:manipulation}
-#player-wrapper:fullscreen{width:100vw;height:100vh;margin:0;aspect-ratio:auto;border-radius:0;border:none}
-#player{position:absolute;inset:0;width:100%!important;height:100%!important}
+#player-wrapper:fullscreen{width:100vw!important;height:100vh!important;margin:0;aspect-ratio:auto;border-radius:0;border:none;background:#000}
+#player{position:absolute;inset:0;width:100%!important;height:100%!important;background:#000}
 #player video{width:100%!important;height:100%!important;object-fit:contain!important;background:#000}
+#player-wrapper:fullscreen #player{width:100vw!important;height:100vh!important}
+#player-wrapper:fullscreen #player video{width:100vw!important;height:100vh!important;object-fit:contain!important}
 video::-webkit-media-controls{display:none!important}
 #loader{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,var(--bg-2) 0%,var(--bg-1) 70%);display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;pointer-events:none}
 #loader.hide-now{opacity:0!important;visibility:hidden!important}
+/* LOADER - AGERTA, TV ICON NAI */
 .tuner{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .brand-name{font-size:18px;font-weight:900;letter-spacing:1.5px;color:#fff;white-space:nowrap}
 .brand-name i{font-style:normal;background:linear-gradient(90deg,var(--grad-a),var(--grad-b),#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -54,7 +57,6 @@ video::-webkit-media-controls{display:none!important}
 #tapPlay .tp-btn svg{width:30px;height:30px;fill:#fff}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-/* ===== CONTROLS - SOB ICON EKI STYLE, SADA SVG ===== */
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -69,9 +71,12 @@ video::-webkit-media-controls{display:none!important}
 .suggest-head a{font-size:12px;font-weight:800;color:#a78bfa;text-decoration:none}
 .suggest-grid{display:flex;gap:8px;overflow-x:auto;padding:4px 14px 10px;scrollbar-width:none}
 .suggest-grid::-webkit-scrollbar{display:none}
-/* ===== SERVER - EKDOM HALKA HIGHLIGHT ===== */
 .srv-pill{flex:0 0 auto;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#ddd;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
 .srv-pill.active{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;box-shadow:none!important}
+/* SUGGESTED CHANNEL CARD */
+.sug-card{flex:0 0 auto;width:110px;background:#0d0d16;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer}
+.sug-card img{width:38px;height:38px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+.sug-card p{font-size:10px;margin-top:6px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:24px}
 .ad-wrap{margin:14px 14px 0;background:#14141f;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px}
 .ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:10px}
 .ad-box{border-radius:12px;overflow:hidden;display:flex;justify-content:center}
@@ -85,6 +90,9 @@ video::-webkit-media-controls{display:none!important}
   .suggest{width:330px;flex-shrink:0;margin:12px 0 0;background:#111118;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 0 8px;position:sticky;top:62px}
   .suggest-grid{flex-direction:column;overflow-x:hidden;overflow-y:auto;padding:0 10px 10px;gap:8px}
   .srv-pill{width:100%;text-align:center;padding:10px;border-radius:12px}
+  .sug-card{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:8px}
+  .sug-card img{width:40px;height:40px;flex-shrink:0}
+  .sug-card p{min-height:0}
   .ad-wrap{max-width:1400px;margin-left:auto;margin-right:auto}
 }
 </style>
@@ -100,7 +108,7 @@ video::-webkit-media-controls{display:none!important}
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
-<div id="loader"><div class="tuner"><div style="font-size:44px">📺</div><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
+<div id="loader"><div class="tuner"><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
 <div id="player"></div>
 <div id="tapPlay"><div class="tp-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Tap to Play</p><small>Browser blocked sound, tap to start</small></div>
 <div id="controls">
@@ -112,8 +120,8 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div class="suggest">
-<div class="suggest-head"><h3><span class="suggest-ico">🖥️</span><span id="suggestTitle">Available Servers</span></h3><a href="index.html">Home →</a></div>
-<div class="suggest-grid" id="suggestGrid"><div style="padding:20px;color:#888;font-size:12px">Loading servers...</div></div>
+<div class="suggest-head"><h3><span class="suggest-ico" id="suggestIco">🖥️</span><span id="suggestTitle">Available Servers</span></h3><a href="index.html">Home →</a></div>
+<div class="suggest-grid" id="suggestGrid"><div style="padding:20px;color:#888;font-size:12px">Loading...</div></div>
 </div>
 </div>
 <div class="ad-wrap"><div class="ad-label">ADVERTISEMENT</div><div class="ad-box"><div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div></div></div>
@@ -170,7 +178,6 @@ async function toggleFullscreen(){
   if(document.fullscreenElement){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} try{ await document.exitFullscreen(); }catch(e){} }
   else { try{ if(wrapper.requestFullscreen) await wrapper.requestFullscreen(); }catch(e){} try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
 }
-document.addEventListener('fullscreenchange',()=>{ const v=document.querySelector('#player video'); if(!v) return; v.style.objectFit = document.fullscreenElement ? 'fill' : 'contain'; });
 let lastTap=0,singleTapTimer=null,ignoreNextClick=false;
 function handleTap(e){
   if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#tapPlay')) return;
@@ -183,28 +190,43 @@ else { wrapper.addEventListener('click',(e)=>{ if(e.target.closest('button')||e.
 wrapper.addEventListener('mousemove',showControls);
 function makeProxyUrl(o){ if(!o) return o; if(o.startsWith(PROXY)) return o; return PROXY + encodeURIComponent(o); }
 class ProxyLoader extends Hls.DefaultConfig.loader { load(context,config,callbacks){ if(context&&context.url&&!context.url.startsWith(PROXY)){ context.url=makeProxyUrl(context.url); } super.load(context,config,callbacks); } }
-let serverList = []; let currentServerIdx = 0; let autoFailTimer = null;
+let serverList = []; let currentServerIdx = 0; let autoFailTimer = null; let isSportsMode=false;
 function buildServers(){
   try{
     let saved = JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
     if(saved && saved.streams && saved.streams.length && saved.name === currentName){
+      isSportsMode=true;
       serverList = saved.streams.map((s,i)=>({ label: s.channel_name || ('Server '+(i+1)), url: s.stream_url, kid: s.kid||'', key: s.key||'', type: 'sports', tag:'LIVE' }));
       let f = serverList.findIndex(s=>s.url===streamSource); if(f>=0) currentServerIdx=f;
       renderServers(); return;
     }
   }catch(e){}
+  // Normal playlist channel -> Suggested channels, Server 1/2/3 na
+  isSportsMode=false;
   serverList = [
     { label:'Server 1', url: streamSource, kid: drmKid, key: drmKey, type:'direct', tag:'DIRECT' },
     { label:'Server 2', url: streamSource, kid: drmKid, key: drmKey, type:'proxy', tag:'PROXY' },
     { label:'Server 3', url: streamSource, kid: drmKid, key: drmKey, type:'direct-retry', tag:'BACKUP' },
   ];
-  renderServers();
+  renderSuggested();
 }
 function renderServers(){
+  document.getElementById('suggestTitle').textContent='Available Servers';
+  document.getElementById('suggestIco').textContent='🖥️';
   const grid = document.getElementById('suggestGrid');
   if(!serverList.length){ grid.innerHTML = `<div style="padding:20px;color:#888;font-size:12px">No servers found</div>`; return; }
   grid.innerHTML = serverList.map((s,i)=>`<div class="srv-pill ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${s.label}</div>`).join('');
 }
+function renderSuggested(){
+  document.getElementById('suggestTitle').textContent='Suggested Channels';
+  document.getElementById('suggestIco').textContent='📺';
+  const grid = document.getElementById('suggestGrid');
+  let list=[];
+  try{ list = JSON.parse(localStorage.getItem('rslive_suggest')||'[]'); }catch(e){ list=[]; }
+  if(!list.length){ grid.innerHTML = `<div style="padding:20px;color:#888;font-size:12px">No suggested channels.<br>Go Home and pick a channel.</div>`; return; }
+  grid.innerHTML = list.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.source||'')}','${encodeURIComponent(c.group||'')}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p></div>`).join('');
+}
+window.openSuggest=function(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${s}&group=${g}`; };
 window.switchServer = function(idx,e){
   if(e) e.stopPropagation(); if(idx===currentServerIdx) return;
   if(autoFailTimer){ clearTimeout(autoFailTimer); autoFailTimer=null; }
@@ -216,6 +238,7 @@ window.switchServer = function(idx,e){
   else { loadStream(streamSource, false); }
 };
 function tryNextServer(){
+  if(!isSportsMode) return false;
   if(!serverList.length) return false;
   if(currentServerIdx >= serverList.length-1) return false;
   currentServerIdx++; let s = serverList[currentServerIdx];
@@ -227,6 +250,7 @@ function tryNextServer(){
 }
 function startAutoFailWatch(){
   if(autoFailTimer) clearTimeout(autoFailTimer);
+  if(!isSportsMode) return;
   if(!serverList.length || serverList.length<2) return;
   autoFailTimer = setTimeout(()=>{ if(!everPlayed){ if(tryNextServer()) startAutoFailWatch(); } }, 6000);
 }
