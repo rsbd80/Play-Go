@@ -31,7 +31,6 @@ body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139
 .live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:7px 11px;border-radius:20px;flex-shrink:0;position:relative;z-index:2;box-shadow:0 0 16px rgba(255,45,85,.25)}
 .live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-/* ✅ PC / Desktop Layout - বামে প্লেয়ার, ডানে চ্যানেল লিস্ট */
 .main-layout{width:100%;display:block}
 .player-col{width:100%}
 #player-wrapper{position:relative;width:calc(100% - 24px);margin:12px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(167,139,250,.12), 0 0 32px rgba(167,139,250,.12)}
@@ -83,7 +82,6 @@ video::-webkit-media-controls{display:none!important}
 .suggest-head a .arrow-ico svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 @keyframes arrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 .suggest-head a:active{transform:scale(.94);opacity:.8}
-/* মোবাইল: আড়াআড়ি স্ক্রল */
 .suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:4px 14px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:stretch}
 .suggest-grid::-webkit-scrollbar{display:none}
 .sug-card{flex:0 0 86px;width:86px;height:104px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 6px 8px;text-align:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0}
@@ -102,8 +100,6 @@ video::-webkit-media-controls{display:none!important}
 .ad-note{text-align:center;font-size:11px;color:#666;margin:14px 0 22px}
 .ad-note b{color:#a78bfa}
 #blockScreen{display:none;position:fixed;inset:0;background:#07070f;z-index:99999;align-items:center;justify-content:center;text-align:center;padding:30px}
-
-/* ===== PC / DESKTOP / LAPTOP - 900px এর উপরে ===== */
 @media(min-width:900px){
   .main-layout{display:flex;gap:16px;align-items:flex-start;padding:0 14px;max-width:1400px;margin:0 auto}
   .player-col{flex:1;min-width:0}
@@ -112,7 +108,6 @@ video::-webkit-media-controls{display:none!important}
   .suggest-head{padding:0 12px 12px}
   .suggest-head h3{font-size:13px}
   .suggest-head a{font-size:12px}
-  /* ✅ ডান পাশে লম্বা লিস্ট - বাম থেকে ডানে */
   .suggest-grid{display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;padding:0 10px 10px;scroll-snap-type:none;gap:8px;flex:1}
   .suggest-grid::-webkit-scrollbar{display:block;width:5px}
   .suggest-grid::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
@@ -126,10 +121,7 @@ video::-webkit-media-controls{display:none!important}
   .sug-skel{flex:none;width:100%;height:62px}
   .ad-wrap{max-width:1400px;margin-left:auto;margin-right:auto}
 }
-/* বড় মনিটর */
-@media(min-width:1300px){
-  .suggest{width:380px}
-}
+@media(min-width:1300px){ .suggest{width:380px} }
 </style>
 </head>
 <body>
@@ -160,7 +152,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 
 <div class="suggest">
-<div class="suggest-head"><h3><span>🔴</span> তুমি আরো দেখতে পারো</h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
+<div class="suggest-head"><h3><span>🔴</span> <span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -243,9 +235,16 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
+// ✅ STRICT SUGGESTION: শুধু একই প্লেলিস্ট / একই ক্যাটাগরি, অন্য কিছু না
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
+  const mySrc = (srcParam || '').toLowerCase();
+  const titleEl = document.getElementById('suggestTitle');
+  if(titleEl){
+    let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
+    titleEl.textContent = 'আরো ' + label + ' দেখো';
+  }
   try{
     let list=[];
     for(let plUrl of SUGGEST_PLAYLISTS){
@@ -256,13 +255,19 @@ async function loadSuggestions(){
         for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
       }catch(e){}
     }
+    // নিজের চ্যানেল বাদ
     let filtered = list.filter(c=>c.url !== streamSource && c.name.toLowerCase() !== currentName.toLowerCase());
-    let related = shuffle(filtered.filter(c => getCategory(c.name, c.group) === myCat));
-    let others = shuffle(filtered.filter(c => getCategory(c.name, c.group) !== myCat));
-    const show = [...related, ...others].slice(0,20);
+    // 1. একই প্লেলিস্ট + একই ক্যাটাগরি
+    let sameBoth = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) === myCat);
+    // 2. একই প্লেলিস্ট (ক্যাটাগরি আলাদা হলেও একই প্লেলিস্ট)
+    let samePlaylist = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) !== myCat);
+    // 3. একই ক্যাটাগরি (অন্য প্লেলিস্ট হলেও)
+    let sameCat = filtered.filter(c => c.src.toLowerCase() !== mySrc && getCategory(c.name, c.group) === myCat);
+    // ❌ others = বাদ - অন্য ক্যাটাগরি / অন্য প্লেলিস্ট কখনোই নিবো না
+    const show = [...shuffle(sameBoth), ...shuffle(samePlaylist), ...shuffle(sameCat)].slice(0,20);
     if(show.length===0) throw new Error('empty');
     grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div><div class="sug-play">▶</div></div>`).join("");
-  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">সাজেশন লোড হচ্ছে না - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
+  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
 loadSuggestions();
