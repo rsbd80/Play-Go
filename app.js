@@ -36,29 +36,28 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-/* ✅ SPORTS - 1 লাইনে 1 কার্ড */
-#grid.sports-mode{grid-template-columns:1fr!important;gap:14px!important;padding:14px!important}
 .card{background:#0a0a12;border:1px solid #1e1e28;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ===== PREMIUM SPORTS CARD - NO OVERLAP ===== */
-.sports-yt-card{background:#0b0b14;border:1px solid #1e1e28;border-radius:16px;overflow:hidden;cursor:pointer;width:100%;display:flex;flex-direction:column}
-.sports-yt-thumb{width:100%;aspect-ratio:16/8.2;background:#000;position:relative;overflow:hidden}
-.sports-yt-thumb .poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,0) 70%,rgba(11,11,20,.9) 100%)}
-.sports-yt-thumb .live-tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;z-index:4;white-space:nowrap;background:rgba(0,0,0,.65);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
-.sports-yt-thumb .live-tag.live-now{background:#ff2d55!important;border-color:rgba(255,255,255,.4)}
-.sports-body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px;background:#0b0b14}
-.sports-teams{display:flex;align-items:center;justify-content:space-between;gap:10px}
+/* ===== SPORTSPLAY STYLE CARD ===== */
+#grid.sports-mode{grid-template-columns:1fr!important;gap:12px!important;padding:12px!important}
+.sports-yt-card{background:#0d1117;border:1px solid #1f9d55;border-radius:14px;overflow:hidden;cursor:pointer;width:100%;position:relative}
+.sports-top{position:relative;background:#0d1117;padding:10px 12px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.sports-top .hot{position:absolute;top:0;left:0;background:#22c55e;color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:0 0 12px 0;z-index:2}
+.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:48px;padding-right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-teams{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px 14px;background:#0d1117}
 .sports-teams .team{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
 .sports-teams .team.right{flex-direction:row-reverse;text-align:right}
-.sports-teams .team img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px;object-fit:contain;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.sports-teams .team-name{font-size:14px;font-weight:700;line-height:1.3;color:#fff;word-break:break-word}
-.sports-teams .vs{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#1e1e28;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#aaa}
-.sports-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.07);padding-top:10px}
-.sports-meta .league{font-size:12px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;text-align:left}
-.sports-meta .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:8px 16px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.sports-teams .team img{width:52px;height:52px;border-radius:8px;background:#fff;padding:2px;object-fit:contain;flex-shrink:0}
+.sports-teams .team-name{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-teams .live-mid{flex-shrink:0;text-align:center;width:70px}
+.sports-teams .live-mid .live-ico{font-size:20px;color:#ff2d55;line-height:1}
+.sports-teams .live-mid .live-txt{font-size:13px;font-weight:700;color:#ff2d55;margin-top:2px}
+.sports-teams .live-mid .time-txt{font-size:11px;color:#ccc;margin-top:4px;white-space:nowrap}
+.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px;gap:10px}
+.sports-bottom .date{font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-bottom .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -237,34 +236,25 @@ function renderSportsGrid(){
     let isLive = (m.status||'').toUpperCase() === 'LIVE';
     let info = m.eventInfo || {};
     let sIdx = sportsData.indexOf(m);
-    let poster = info.poster || info.thumbnail || info.image || info.banner || info.posterUrl || info.thumb || m.poster || m.thumbnail || m.image || '';
-    let posterTag = poster ? `<img class="poster-img" loading="lazy" src="${poster}" onerror="this.style.display='none'">` : '';
-    let fallbackBg = !poster ? `background:#000` : '';
     let ts = !isLive ? parseStartTime(info, m) : null;
-    let badge = '';
-    if(isLive) badge = `<span class="live-tag live-now">● LIVE</span>`;
-    else if(ts) badge = `<span class="live-tag countdown countdown-el" data-ts="${ts}">⏰ ${formatCountdown(ts-Date.now())}</span>`;
-    else if(info.startTime) badge = `<span class="live-tag countdown">⏰ ${info.startTime}</span>`;
-    else badge = `<span class="live-tag countdown">UPCOMING</span>`;
-    let league = m.event_name || info.league || info.tournament || '';
+    let league = m.event_name || info.league || info.tournament || 'LIVE SPORTS';
     let dateStr = ts ? formatDateTime(ts) : (info.startTime||'');
     html += `
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
-      <div class="sports-yt-thumb" style="${fallbackBg}">
-        ${posterTag}
-        <div class="poster-grad"></div>
-        ${badge}
+      <div class="sports-top">
+        <div class="hot">HOT 🔥</div>
+        <div class="league">🏏 ${league}</div>
       </div>
-      <div class="sports-body">
-        <div class="sports-teams">
-          <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-          <div class="vs">VS</div>
-          <div class="team right"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
+      <div class="sports-teams">
+        <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
+        <div class="live-mid">
+          ${isLive ? `<div class="live-ico">((•))</div><div class="live-txt">Live</div>` : `<div class="time-txt countdown-el" data-ts="${ts||''}">⏰ ${ts ? formatCountdown(ts-Date.now()) : (info.startTime||'')}</div>`}
         </div>
-        <div class="sports-meta">
-          <div class="league">🏆 ${league}${dateStr ? ' • '+dateStr : ''}</div>
-          <div class="watch-btn">${isLive ? '▶ LIVE দেখো' : '▶ দেখো'}</div>
-        </div>
+        <div class="team right"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
+      </div>
+      <div class="sports-bottom">
+        <div class="date">${dateStr ? '🕐 '+dateStr : ''}</div>
+        <div class="watch-btn">${isLive ? '▶ LIVE দেখো' : '▶ দেখো'}</div>
       </div>
     </div>`;
   });
