@@ -53,12 +53,12 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-/* ===== SAME SIZE AS PLAYER - কার্ড 92x94, লোগো 48px - মনে রাখা সাইজ ===== */
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:8px 6px 6px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;min-width:0;height:94px;min-height:94px}
-.card img{width:48px;height:48px;min-height:48px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
-.card p{font-size:11px;font-weight:600;margin-top:5px;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
-.card small{display:none!important}
+/* ===== HOME CARD - BORO - Player er choto card er sathe milabe na ===== */
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:16px;padding:14px 6px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:152px}
+.card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
+.card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
+.card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -121,11 +121,11 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
-#grid{grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 0}
+#grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
-.card{border-radius:14px;padding:8px 6px 6px;height:94px;min-height:94px}
-.card img{width:48px;height:48px;border-radius:12px;padding:4px}
-.card p{font-size:11px}
+.card{border-radius:16px;padding:18px 10px;min-height:170px}
+.card img{width:88px;height:88px;border-radius:14px;padding:8px}
+.card p{font-size:13px}
 }
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
@@ -216,7 +216,9 @@ function renderGrid(reset=true){
     img.onerror=function(){ this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'; };
     let p=document.createElement('p');
     p.textContent=c.name;
-    d.appendChild(img); d.appendChild(p);
+    let sm=document.createElement('small');
+    sm.textContent=c.group;
+    d.appendChild(img); d.appendChild(p); d.appendChild(sm);
     d.addEventListener('click', function(){ openCh(c.url, c.name, c.source, c.group); });
     gridEl.appendChild(d);
   });
