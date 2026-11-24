@@ -9,13 +9,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--grad-c:#fb923c;--warn:#ffb84d;--alert:#ff5d5d;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
+:root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--grad-c:#fb923c;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
-.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden}
-.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
-.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10)}
+.brand{display:flex;align-items:center;gap:9px;flex-shrink:0;cursor:pointer}
+.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;color:#fff}
+.brand .play-ico svg{width:14px;height:14px;fill:#fff}
 .brand-text{line-height:1}
 .brand-text .pg{font-size:18px;font-weight:900;color:#fff;white-space:nowrap}
 .brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
@@ -49,12 +50,15 @@ video::-webkit-media-controls{display:none!important}
 .retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
 #tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);cursor:pointer;text-align:center;padding:20px}
 #tapPlay.show{display:flex}
-#tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff}
+#tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;color:#fff}
+#tapPlay .tp-btn svg{width:30px;height:30px;fill:#fff}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
+/* ===== CONTROLS - SOB ICON EKI STYLE, SADA SVG ===== */
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
-#controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#controls button svg{width:20px;height:20px;fill:#fff;stroke:#fff}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer}
 #time-label{font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
@@ -65,8 +69,9 @@ video::-webkit-media-controls{display:none!important}
 .suggest-head a{font-size:12px;font-weight:800;color:#a78bfa;text-decoration:none}
 .suggest-grid{display:flex;gap:8px;overflow-x:auto;padding:4px 14px 10px;scrollbar-width:none}
 .suggest-grid::-webkit-scrollbar{display:none}
-.srv-pill{flex:0 0 auto;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-.srv-pill.active{background:linear-gradient(90deg,#22d3ee,#a78bfa)!important;border-color:#fff!important;color:#fff!important}
+/* ===== SERVER - EKDOM HALKA HIGHLIGHT ===== */
+.srv-pill{flex:0 0 auto;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#ddd;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.srv-pill.active{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;box-shadow:none!important}
 .ad-wrap{margin:14px 14px 0;background:#14141f;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px}
 .ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:10px}
 .ad-box{border-radius:12px;overflow:hidden;display:flex;justify-content:center}
@@ -87,7 +92,7 @@ video::-webkit-media-controls{display:none!important}
 <body>
 <div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">Close DevTools and reload<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div class="topbar">
-<div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
+<div class="brand" onclick="goHome()"><div class="play-ico"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
 <div class="divider"></div>
 <div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
@@ -97,8 +102,13 @@ video::-webkit-media-controls{display:none!important}
 <div id="player-wrapper">
 <div id="loader"><div class="tuner"><div style="font-size:44px">📺</div><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
 <div id="player"></div>
-<div id="tapPlay"><div class="tp-btn">▶</div><p>Tap to Play</p><small>Browser blocked sound, tap to start</small></div>
-<div id="controls"><button id="muteBtn">🔊</button><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button></div>
+<div id="tapPlay"><div class="tp-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Tap to Play</p><small>Browser blocked sound, tap to start</small></div>
+<div id="controls">
+<button id="muteBtn" aria-label="Volume"><svg id="volOnIco" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg><svg id="volOffIco" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.59 3L21 7.41 19.59 6 16 9.59 12.41 6 11 7.41 14.59 11 11 14.59 12.41 16 16 12.41 19.59 16 21 14.59 17.41 11z"/></svg></button>
+<button id="playBtn" aria-label="Play/Pause"><svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg id="pauseIco" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+<input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span>
+<button id="fsBtn" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
+</div>
 </div>
 </div>
 <div class="suggest">
@@ -233,16 +243,25 @@ if(urlParams.get('up')==='1'){
   document.getElementById('player').appendChild(video);
   var hls=null, everPlayed=false, triedDirect=false, triedProxy=false;
   let shakaPlayer=null;
-  function updateMuteBtn(){ muteBtnEl.textContent = (video.muted||video.volume===0) ? '🔇' : '🔊'; }
-  updateMuteBtn();
+  function updateMuteBtn(){
+    let muted = (video.muted||video.volume===0);
+    document.getElementById('volOnIco').style.display = muted ? 'none' : 'block';
+    document.getElementById('volOffIco').style.display = muted ? 'block' : 'none';
+  }
+  function updatePlayBtn(){
+    let paused = video.paused;
+    document.getElementById('playIco').style.display = paused ? 'block' : 'none';
+    document.getElementById('pauseIco').style.display = paused ? 'none' : 'block';
+  }
+  updateMuteBtn(); updatePlayBtn();
   function doPlay(){
-    video.muted=false; video.volume=1; updateMuteBtn();
+    video.muted=false; video.volume=1; updateMuteBtn(); updatePlayBtn();
     video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); requestWakeLock(); }).catch(()=>{
-      video.muted=true; video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
-      updateMuteBtn();
+      video.muted=true; video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} updateMuteBtn(); updatePlayBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+      updateMuteBtn(); updatePlayBtn();
     });
   }
-  tapPlayEl.addEventListener('click',()=>{ video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{}); });
+  tapPlayEl.addEventListener('click',()=>{ video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); updatePlayBtn(); }).catch(()=>{}); });
   muteBtnEl.addEventListener('click',(e)=>{ e.stopPropagation(); video.muted=!video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls(); });
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
@@ -293,13 +312,13 @@ if(urlParams.get('up')==='1'){
   }
   window.tryProxyManually=function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually=function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); updatePlayBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
-  video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
-  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
+  video.addEventListener('pause',()=>{ updatePlayBtn(); releaseWakeLock(); });
+  video.addEventListener('play',()=>{ updatePlayBtn(); requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
   video.addEventListener('error',()=>{ if(!everPlayed && tryNextServer()) return; if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
-  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
+  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); updatePlayBtn(); } else { video.pause(); updatePlayBtn(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
 }
