@@ -34,38 +34,38 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 .cat{padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
-#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
+#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:140px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
 .card{background:#0a0a12;border:1px solid #1e1e28;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ===== SPORTSPLAY STYLE CARD ===== */
+/* ===== SPORTS CARD - NO OVERLAP FIX ===== */
 #grid.sports-mode{grid-template-columns:1fr!important;gap:12px!important;padding:12px!important}
-.sports-yt-card{background:#0d1117;border:1px solid #1f9d55;border-radius:14px;overflow:hidden;cursor:pointer;width:100%;position:relative}
-.sports-top{position:relative;background:#0d1117;padding:10px 12px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
-.sports-top .hot{position:absolute;top:0;left:0;background:#22c55e;color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:0 0 12px 0;z-index:2}
-.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:48px;padding-right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-teams{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px 14px;background:#0d1117}
-.sports-teams .team{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
-.sports-teams .team.right{flex-direction:row-reverse;text-align:right}
+.sports-yt-card{background:#0d1117;border:1px solid #1f9d55;border-radius:14px;overflow:hidden;cursor:pointer;width:100%}
+.sports-top{position:relative;background:#0d1117;padding:11px 12px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.sports-top .hot{position:absolute;top:0;left:0;background:#22c55e;color:#fff;font-size:10px;font-weight:800;padding:5px 11px;border-radius:0 0 12px 0;z-index:2}
+.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:56px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-teams{display:grid;grid-template-columns:1fr 62px 1fr;align-items:start;gap:6px;padding:16px 10px 12px;background:#0d1117}
+.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;text-align:center}
 .sports-teams .team img{width:52px;height:52px;border-radius:8px;background:#fff;padding:2px;object-fit:contain;flex-shrink:0}
-.sports-teams .team-name{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-teams .live-mid{flex-shrink:0;text-align:center;width:70px}
-.sports-teams .live-mid .live-ico{font-size:20px;color:#ff2d55;line-height:1}
-.sports-teams .live-mid .live-txt{font-size:13px;font-weight:700;color:#ff2d55;margin-top:2px}
-.sports-teams .live-mid .time-txt{font-size:11px;color:#ccc;margin-top:4px;white-space:nowrap}
-.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px;gap:10px}
-.sports-bottom .date{font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-bottom .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.3;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.sports-teams .live-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:10px;gap:2px}
+.sports-teams .live-mid .live-ico{font-size:19px;color:#ff2d55;line-height:1}
+.sports-teams .live-mid .live-txt{font-size:12px;font-weight:700;color:#ff2d55}
+.sports-teams .live-mid .vs-txt{font-size:13px;font-weight:800;color:#aaa}
+.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);gap:10px}
+.sports-bottom .date{font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.sports-bottom .countdown{font-size:11px;color:#ffcc00;font-weight:700;white-space:nowrap}
+.sports-bottom .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:8px 15px;border-radius:20px;white-space:nowrap;flex-shrink:0}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
 #featured{display:none;margin:12px 12px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
 #status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);padding:10px;text-align:center;font-size:11.5px;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
 #status b{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shineFlow 3s linear infinite}
-.tele{position:fixed;right:14px;bottom:110px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6)}
-.tele svg{width:26px;height:26px;fill:#fff}
+.tele{position:fixed;right:14px;bottom:58px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6)}
+.tele svg{width:24px;height:24px;fill:#fff}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:36px;z-index:998;background:#1a1a2e;border:1px solid rgba(167,139,250,.45);border-radius:100px;padding:4px 4px 4px 8px;align-items:center;gap:6px}
 #installBar .ib-ico{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:11px}
 #installBar .ib-txt{flex:1;text-align:center}
@@ -86,24 +86,25 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #mainCol{order:1}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
-#scrollArea{overflow:visible}
+#scrollArea{overflow:visible;padding-bottom:20px}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:16px!important}
 .card{border-radius:16px;padding:14px 8px}
 .card img{width:60px;height:60px;border-radius:12px;padding:6px}
 .card p{font-size:12px}
+.tele{bottom:20px}
 }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
+<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channel..." autocomplete="off"></div></div></header></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">Watch Now →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ Loading channels...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
-<div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
+<div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>Get RsLive Go App</b><span>Save to your phone in 1 click ✨</span></div><button class="ib-btn" id="installBtn">Install</button><span class="ib-close" id="closeInstall">✕</span></div>
 `;
 
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channel...',statusText:'✅ Total {count} Channels - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version!==CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
@@ -123,7 +124,7 @@ async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
-  for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
+  for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ Total <b>${all.length}</b> Channels Loaded...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
 function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
@@ -158,7 +159,7 @@ function matchesCat(c,catName){
 }
 function renderCats(){
   let isDesktop=window.innerWidth>=900; let catsEl=document.getElementById("cats"); if(!catsEl) return;
-  if(isDesktop){ catsEl.innerHTML=`<div style="font-family:Poppins;font-size:13px;font-weight:800;padding:2px 6px 12px">✨ ক্যাটাগরি <span style="font-size:11px;background:#2a2a3a;padding:4px 10px;border-radius:20px;float:right">${getCats().length} টা</span></div>`+getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
+  if(isDesktop){ catsEl.innerHTML=`<div style="font-family:Poppins;font-size:13px;font-weight:800;padding:2px 6px 12px">✨ Categories <span style="font-size:11px;background:#2a2a3a;padding:4px 10px;border-radius:20px;float:right">${getCats().length}</span></div>`+getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
   else { catsEl.innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
   catsEl.querySelectorAll('.cat').forEach(el=>{ el.onclick=()=>setCat(el.dataset.cat); });
 }
@@ -172,7 +173,7 @@ function renderGrid(reset=true){
   for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
   document.getElementById("grid").innerHTML=html;
   let wrap=document.getElementById("loadMoreWrap"); let btn=document.getElementById("loadMoreBtn");
-  if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
+  if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`Load More ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
   if(reset){ let sa=document.getElementById('scrollArea'); if(sa) sa.scrollTop=0; window.scrollTo({top:0}); }
 }
 function loadMore(){ visibleCount+=200; renderGrid(false); }
@@ -214,14 +215,14 @@ function formatCountdown(ms){
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
 function formatDateTime(ts){
-  try{ let d=new Date(ts); return d.toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return ''; }
+  try{ let d=new Date(ts); return d.toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return ''; }
 }
 function updateCountdowns(){
   document.querySelectorAll('.countdown-el').forEach(el=>{
     let ts = parseInt(el.dataset.ts||'0'); if(!ts) return;
     let diff = ts - Date.now();
-    if(diff<=0){ el.textContent = '⏰ Starting...'; return; }
-    el.textContent = '⏰ ' + formatCountdown(diff);
+    if(diff<=0){ el.textContent = 'Starting...'; return; }
+    el.textContent = 'Starts in ' + formatCountdown(diff);
   });
 }
 setInterval(updateCountdowns, 1000);
@@ -231,7 +232,7 @@ function renderSportsGrid(){
   let live = sportsData.filter(m => (m.status||'').toUpperCase() === 'LIVE');
   let up = sportsData.filter(m => (m.status||'').toUpperCase() !== 'LIVE');
   let html = '';
-  if(!sportsData.length) html = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ Sports ম্যাচ লোড হচ্ছে...</div>`;
+  if(!sportsData.length) html = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">Loading sports matches...</div>`;
   [...live, ...up].forEach((m) => {
     let isLive = (m.status||'').toUpperCase() === 'LIVE';
     let info = m.eventInfo || {};
@@ -243,18 +244,19 @@ function renderSportsGrid(){
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
       <div class="sports-top">
         <div class="hot">HOT 🔥</div>
-        <div class="league">🏏 ${league}</div>
+        <div class="league">${league}</div>
       </div>
       <div class="sports-teams">
         <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
         <div class="live-mid">
-          ${isLive ? `<div class="live-ico">((•))</div><div class="live-txt">Live</div>` : `<div class="time-txt countdown-el" data-ts="${ts||''}">⏰ ${ts ? formatCountdown(ts-Date.now()) : (info.startTime||'')}</div>`}
+          ${isLive ? `<div class="live-ico">((•))</div><div class="live-txt">Live</div>` : `<div class="vs-txt">VS</div>`}
         </div>
-        <div class="team right"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
+        <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
       </div>
       <div class="sports-bottom">
-        <div class="date">${dateStr ? '🕐 '+dateStr : ''}</div>
-        <div class="watch-btn">${isLive ? '▶ LIVE দেখো' : '▶ দেখো'}</div>
+        <div class="date">🕐 ${dateStr || ''}</div>
+        ${!isLive && ts ? `<div class="countdown countdown-el" data-ts="${ts}">Starts in ${formatCountdown(ts-Date.now())}</div>` : ''}
+        <div class="watch-btn">${isLive ? '▶ Watch Live' : '▶ Watch'}</div>
       </div>
     </div>`;
   });
@@ -290,6 +292,6 @@ loadSports();
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; if(!window.matchMedia('(display-mode: standalone)').matches){ let bar=document.getElementById('installBar'); if(bar && !localStorage.getItem('rslive_install_closed')){ bar.style.display='flex'; } } });
-document.getElementById('installBtn')?.addEventListener('click',async()=>{ if(!deferredPrompt){ alert('ব্রাউজারের Menu (⋮) -> Add to Home Screen এ চাপ দাও'); return; } deferredPrompt.prompt(); let choice=await deferredPrompt.userChoice; if(choice.outcome==='accepted'){ document.getElementById('installBar').style.display='none'; } deferredPrompt=null; });
+document.getElementById('installBtn')?.addEventListener('click',async()=>{ if(!deferredPrompt){ alert('Open Browser Menu (⋮) -> Add to Home Screen'); return; } deferredPrompt.prompt(); let choice=await deferredPrompt.userChoice; if(choice.outcome==='accepted'){ document.getElementById('installBar').style.display='none'; } deferredPrompt=null; });
 document.getElementById('closeInstall')?.addEventListener('click',()=>{ document.getElementById('installBar').style.display='none'; localStorage.setItem('rslive_install_closed','1'); });
 window.addEventListener('appinstalled',()=>{ document.getElementById('installBar').style.display='none'; });
