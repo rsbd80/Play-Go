@@ -40,24 +40,26 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ===== SPORTS CARD - NO OVERLAP FIX ===== */
-#grid.sports-mode{grid-template-columns:1fr!important;gap:12px!important;padding:12px!important}
-.sports-yt-card{background:#0d1117;border:1px solid #1f9d55;border-radius:14px;overflow:hidden;cursor:pointer;width:100%}
-.sports-top{position:relative;background:#0d1117;padding:11px 12px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
-.sports-top .hot{position:absolute;top:0;left:0;background:#22c55e;color:#fff;font-size:10px;font-weight:800;padding:5px 11px;border-radius:0 0 12px 0;z-index:2}
-.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:56px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-teams{display:grid;grid-template-columns:1fr 62px 1fr;align-items:start;gap:6px;padding:16px 10px 12px;background:#0d1117}
-.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;text-align:center}
-.sports-teams .team img{width:52px;height:52px;border-radius:8px;background:#fff;padding:2px;object-fit:contain;flex-shrink:0}
-.sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.3;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
-.sports-teams .live-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:10px;gap:2px}
-.sports-teams .live-mid .live-ico{font-size:19px;color:#ff2d55;line-height:1}
-.sports-teams .live-mid .live-txt{font-size:12px;font-weight:700;color:#ff2d55}
-.sports-teams .live-mid .vs-txt{font-size:13px;font-weight:800;color:#aaa}
-.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);gap:10px}
-.sports-bottom .date{font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.sports-bottom .countdown{font-size:11px;color:#ffcc00;font-weight:700;white-space:nowrap}
-.sports-bottom .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:8px 15px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+/* ===== SPORTS CARD - POSTER DESIGN ===== */
+#grid.sports-mode{grid-template-columns:1fr!important;gap:14px!important;padding:14px!important}
+.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.sports-top{position:relative;padding:18px 14px 6px;text-align:center;min-height:48px}
+.sports-top .badge-live{position:absolute;top:14px;left:14px;background:#e60023;color:#fff;font-size:13px;font-weight:800;padding:6px 14px 6px 10px;border-radius:20px;display:flex;align-items:center;gap:7px;z-index:2}
+.sports-top .badge-live i{width:11px;height:11px;background:#fff;border-radius:50%}
+.sports-top .badge-up{position:absolute;top:14px;left:14px;background:#f97316;color:#fff;font-size:13px;font-weight:800;padding:6px 14px;border-radius:20px;display:flex;align-items:center;gap:6px;z-index:2}
+.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:110px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.sports-teams{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:6px;padding:10px 14px 18px}
+.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0;text-align:center}
+.sports-teams .team img{width:92px;height:92px;border-radius:20px;background:#fff;padding:6px;object-fit:contain}
+.sports-teams .team-name{font-size:19px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:44px}
+.sports-teams .vs-wrap{display:flex;align-items:center;justify-content:center;position:relative}
+.sports-teams .vs-wrap .vs-txt{font-size:34px;font-weight:900;font-style:italic;color:#cbd5e1;text-shadow:2px 2px 0 rgba(0,0,0,.5)}
+.sports-teams .vs-wrap::before{content:"";position:absolute;width:2px;height:60px;background:linear-gradient(180deg,transparent,#64748b,transparent);transform:rotate(25deg);opacity:.6}
+.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-top:1px solid rgba(255,255,255,.10);gap:10px}
+.sports-bottom .date{font-size:15px;color:#9ca3af;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.sports-bottom .divider-v{width:1px;height:28px;background:rgba(255,255,255,.25);flex-shrink:0}
+.sports-bottom .watch-live{background:#2563eb;color:#fff;font-size:15px;font-weight:700;padding:10px 22px;border-radius:25px;white-space:nowrap;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.sports-bottom .notify-btn{background:#2a2a3a;color:#fff;font-size:15px;font-weight:700;padding:10px 22px;border-radius:25px;white-space:nowrap;display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.15);flex-shrink:0}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -100,7 +102,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">Watch Now →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ Loading channels...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
-<div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>Get RsLive Go App</b><span>Save to your phone in 1 click ✨</span></div><button class="ib-btn" id="installBtn">Install</button><span class="ib-close" id="closeInstall">✕</span></div>
+<div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>Get RsLive Go App</b><span>Save to your phone in 1 click</span></div><button class="ib-btn" id="installBtn">Install</button><span class="ib-close" id="closeInstall">✕</span></div>
 `;
 
 const CONFIG_VERSION='v4-pwa-secure';
@@ -204,28 +206,6 @@ function parseStartTime(info, m){
   if(!isNaN(t2)) return t2;
   return null;
 }
-function formatCountdown(ms){
-  if(ms<=0) return 'Starting...';
-  let sec = Math.floor(ms/1000);
-  let d = Math.floor(sec/86400); sec%=86400;
-  let h = Math.floor(sec/3600); sec%=3600;
-  let m = Math.floor(sec/60); let s = sec%60;
-  let pad = n => String(n).padStart(2,'0');
-  if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
-  return pad(h)+':'+pad(m)+':'+pad(s);
-}
-function formatDateTime(ts){
-  try{ let d=new Date(ts); return d.toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return ''; }
-}
-function updateCountdowns(){
-  document.querySelectorAll('.countdown-el').forEach(el=>{
-    let ts = parseInt(el.dataset.ts||'0'); if(!ts) return;
-    let diff = ts - Date.now();
-    if(diff<=0){ el.textContent = 'Starting...'; return; }
-    el.textContent = 'Starts in ' + formatCountdown(diff);
-  });
-}
-setInterval(updateCountdowns, 1000);
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
   gridEl.classList.add("sports-mode");
@@ -239,24 +219,24 @@ function renderSportsGrid(){
     let sIdx = sportsData.indexOf(m);
     let ts = !isLive ? parseStartTime(info, m) : null;
     let league = m.event_name || info.league || info.tournament || 'LIVE SPORTS';
-    let dateStr = ts ? formatDateTime(ts) : (info.startTime||'');
+    let dateStr = '';
+    if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
+    else if(info.startTime) dateStr = info.startTime;
     html += `
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
       <div class="sports-top">
-        <div class="hot">HOT 🔥</div>
+        ${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}
         <div class="league">${league}</div>
       </div>
       <div class="sports-teams">
         <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-        <div class="live-mid">
-          ${isLive ? `<div class="live-ico">((•))</div><div class="live-txt">Live</div>` : `<div class="vs-txt">VS</div>`}
-        </div>
+        <div class="vs-wrap"><div class="vs-txt">VS</div></div>
         <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
       </div>
       <div class="sports-bottom">
         <div class="date">🕐 ${dateStr || ''}</div>
-        ${!isLive && ts ? `<div class="countdown countdown-el" data-ts="${ts}">Starts in ${formatCountdown(ts-Date.now())}</div>` : ''}
-        <div class="watch-btn">${isLive ? '▶ Watch Live' : '▶ Watch'}</div>
+        <div class="divider-v"></div>
+        ${isLive ? `<div class="watch-live">▶ Watch Live</div>` : `<div class="notify-btn">🔔 Notify Me</div>`}
       </div>
     </div>`;
   });
@@ -292,6 +272,6 @@ loadSports();
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; if(!window.matchMedia('(display-mode: standalone)').matches){ let bar=document.getElementById('installBar'); if(bar && !localStorage.getItem('rslive_install_closed')){ bar.style.display='flex'; } } });
-document.getElementById('installBtn')?.addEventListener('click',async()=>{ if(!deferredPrompt){ alert('Open Browser Menu (⋮) -> Add to Home Screen'); return; } deferredPrompt.prompt(); let choice=await deferredPrompt.userChoice; if(choice.outcome==='accepted'){ document.getElementById('installBar').style.display='none'; } deferredPrompt=null; });
+document.getElementById('installBtn')?.addEventListener('click',async()=>{ if(!deferredPrompt){ alert('Open Browser Menu -> Add to Home Screen'); return; } deferredPrompt.prompt(); let choice=await deferredPrompt.userChoice; if(choice.outcome==='accepted'){ document.getElementById('installBar').style.display='none'; } deferredPrompt=null; });
 document.getElementById('closeInstall')?.addEventListener('click',()=>{ document.getElementById('installBar').style.display='none'; localStorage.setItem('rslive_install_closed','1'); });
 window.addEventListener('appinstalled',()=>{ document.getElementById('installBar').style.display='none'; });
