@@ -54,11 +54,16 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
-.card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
-.card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
-.card small{font-size:8.5px;color:#22d3ee}
+#grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
+/* ✅ YouTube Thumbnail Card - লম্বা বক্স না, চওড়া Thumbnail */
+.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;overflow:hidden;min-width:0;transition:transform .2s,border-color .2s}
+.card:active{transform:scale(.97)}
+.card .thumb{width:100%;aspect-ratio:16/9;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.card .thumb img{width:100%;height:100%;object-fit:contain;padding:14px}
+.card .thumb .live-badge{position:absolute;top:6px;left:6px;background:#ff2d55;color:#fff;font-size:8px;font-weight:800;padding:3px 6px;border-radius:6px;letter-spacing:.5px}
+.card .thumb .grp-badge{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;font-size:8px;font-weight:700;padding:3px 6px;border-radius:6px}
+.card p{font-size:12.5px;font-weight:600;margin:8px 10px 2px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.card small{font-size:10px;color:#22d3ee;margin:0 10px 10px;display:block}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -90,12 +95,10 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
-#grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
-.card{border-radius:16px;padding:14px 8px}
-.card img{width:60px;height:60px;border-radius:12px;padding:6px}
-.card p{font-size:12px}
+#grid{grid-template-columns:repeat(4,1fr);gap:16px;padding:14px 0}
+.card p{font-size:13px}
 }
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} }
+@media(min-width:1300px){ #grid{grid-template-columns:repeat(5,1fr)} }
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
@@ -171,7 +174,7 @@ function renderGrid(reset=true){
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
   let show=currentFiltered.slice(0,visibleCount); let html='';
-  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
+  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><div class="thumb"><span class="live-badge">● LIVE</span><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><span class="grp-badge">${c.group}</span></div><p>${c.name}</p><small>${c.source} • Tap to Watch</small></div>`; }
   document.getElementById("grid").innerHTML=html;
   let wrap=document.getElementById("loadMoreWrap"); let btn=document.getElementById("loadMoreBtn");
   if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
@@ -199,20 +202,22 @@ function renderSportsGrid(){
   let up = sportsData.filter(m => (m.status||'').toUpperCase() !== 'LIVE');
   let html = '';
   if(!sportsData.length) html = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ Sports ম্যাচ লোড হচ্ছে...</div>`;
-  [...live, ...up].forEach((m, idx) => {
+  [...live, ...up].forEach((m) => {
     let isLive = (m.status||'').toUpperCase() === 'LIVE';
     let info = m.eventInfo || {};
     let sIdx = sportsData.indexOf(m);
     html += `
-    <div class="card" style="aspect-ratio:auto;padding:12px 6px;border-color:${isLive ? '#ff2d55' : '#262633'}" onclick="openMatch(${sIdx})">
-      <div style="font-size:9px;font-weight:800;color:${isLive ? '#ff2d55' : '#ffb84d'};margin-bottom:6px">${isLive ? '● LIVE' : '⏰ ' + (info.startTime || '')}</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%">
-        <div style="flex:1;text-align:center"><img src="${info.teamAFlag||''}" style="width:38px;height:38px;border-radius:50%;background:#fff;padding:2px" onerror="this.style.display='none'"><p style="min-height:26px">${info.teamA||''}</p></div>
-        <b style="font-size:11px;color:#a78bfa">VS</b>
-        <div style="flex:1;text-align:center"><img src="${info.teamBFlag||''}" style="width:38px;height:38px;border-radius:50%;background:#fff;padding:2px" onerror="this.style.display='none'"><p style="min-height:26px">${info.teamB||''}</p></div>
+    <div class="card" onclick="openMatch(${sIdx})">
+      <div class="thumb" style="background:#1a1a2e">
+        <div style="display:flex;align-items:center;gap:10px;width:100%;justify-content:center;padding:10px">
+          <div style="text-align:center;flex:1"><img src="${info.teamAFlag||''}" style="width:48px;height:48px;border-radius:50%;background:#fff;padding:2px;object-fit:cover" onerror="this.style.display='none'"><div style="font-size:11px;font-weight:700;margin-top:4px;color:#fff">${info.teamA||''}</div></div>
+          <b style="font-size:12px;color:#a78bfa">VS</b>
+          <div style="text-align:center;flex:1"><img src="${info.teamBFlag||''}" style="width:48px;height:48px;border-radius:50%;background:#fff;padding:2px;object-fit:cover" onerror="this.style.display='none'"><div style="font-size:11px;font-weight:700;margin-top:4px;color:#fff">${info.teamB||''}</div></div>
+        </div>
+        <span class="live-badge" style="background:${isLive ? '#ff2d55' : '#ffb84d'};color:${isLive ? '#fff' : '#000'}">${isLive ? '● LIVE' : '⏰ ' + (info.startTime || '')}</span>
       </div>
-      <p style="font-size:10px;color:#aaa;margin-top:4px">${m.event_name||''}</p>
-      <small style="color:${isLive ? '#ff2d55' : '#22d3ee'}">${m.Category||'Sports'} • ${m.streams ? m.streams.length : 0} টা লিংক</small>
+      <p>${m.event_name||''}</p>
+      <small>${m.Category||'Sports'} • ${m.streams ? m.streams.length : 0} টা লিংক • Tap to Watch</small>
     </div>`;
   });
   document.getElementById("grid").innerHTML = html;
@@ -227,7 +232,7 @@ function openMatch(idx){
     if(!url) return '';
     let kid = s.kid || '';
     let key = s.key || '';
-    return `<button onclick="playSports('${encodeURIComponent(url)}','${kid}','${key}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')" style="width:100%;padding:12px;margin:6px 0;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:#1d1d2e;color:#fff;font-weight:700;text-align:left;cursor:pointer">▶ ${s.channel_name} ${kid ? '🔒 DRM' : '📺'}</button>`;
+    return `<button onclick="playSports('${encodeURIComponent(url)}','${kid}','${key}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')" style="width:100%;padding:13px;margin:6px 0;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:#1d1d2e;color:#fff;font-weight:700;text-align:left;cursor:pointer">▶ ${s.channel_name} <span style="float:right;font-size:10px;background:#2a2a3a;padding:4px 8px;border-radius:20px;color:#22d3ee">HD • PLAY</span></button>`;
   }).join('');
   let old = document.getElementById('sportsModal'); if(old) old.remove();
   let box = document.createElement('div');
@@ -242,7 +247,6 @@ function playSports(u, kid, key, name){
   if(kid && key) link += `&kid=${kid}&key=${key}`;
   window.location.href = link;
 }
-
 loadAll();
 loadSports();
 (function(){
