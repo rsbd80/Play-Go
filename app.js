@@ -1,4 +1,4 @@
-// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
+// KICK-OUT LOCK
 (function(){
   function kick(){
     try{ window.top.location.href = 'about:blank'; }catch(e){}
@@ -20,7 +20,6 @@
   if(window.top !== window.self){ kick(); throw new Error('Blocked'); }
 })();
 
-// --- UI বানানো ---
 document.getElementById('app').innerHTML = `
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
@@ -54,11 +53,12 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
-.card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
-.card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
-.card small{font-size:8.5px;color:#22d3ee}
+/* ===== FIX - 3 KOLAM, BORO ICON ===== */
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:16px;padding:14px 6px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:152px}
+.card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
+.card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
+.card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -123,9 +123,9 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #scrollArea{overflow:visible}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
-.card{border-radius:16px;padding:14px 8px}
-.card img{width:60px;height:60px;border-radius:12px;padding:6px}
-.card p{font-size:12px}
+.card{border-radius:16px;padding:18px 10px;min-height:170px}
+.card img{width:88px;height:88px;border-radius:14px;padding:8px}
+.card p{font-size:13px}
 }
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
@@ -137,7 +137,6 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
 <div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
-
 const CONFIG_VERSION='v4-pwa-secure';
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
@@ -265,19 +264,7 @@ function renderSportsGrid(){
     let dateStr = '';
     if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
-    html += `
-    <div class="sports-yt-card" onclick="openMatch(${sIdx})">
-      <div class="sports-top"><div class="league">${league}</div></div>
-      <div class="sports-teams">
-        <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-        <div class="vs-wrap">
-          ${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}
-          <div class="vs-txt">VS</div>
-        </div>
-        <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
-      </div>
-      <div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div>
-    </div>`;
+    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league">${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
@@ -305,20 +292,7 @@ function showUpModal(idx){
   let ts=parseStartTime(info,m);
   let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
   let on=isNotified(name);
-  document.getElementById('upModalContent').innerHTML=`
-    <div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div>
-    <div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${league}</div>
-    <div class="up-teams">
-      <div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div>
-      <div class="up-vs">VS</div>
-      <div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div>
-    </div>
-    <div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div>
-    <div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div>
-    <div class="up-start">🕐 ${dateStr}</div>
-    <button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button>
-    <div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>
-  `;
+  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${league}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
   document.getElementById('upModal').classList.add('show');
   if(_upTimer) clearInterval(_upTimer);
   if(ts){
