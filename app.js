@@ -36,14 +36,12 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 .logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1;color:#fff}
-/* ✅ FIX - আগে এখানে animation ছিল না, তাই Color আটকে থাকতো */
 .logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
 @keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
 .logo-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
 .live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
 .live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-/* ✅ FIX - Header এর পিছনের Color Glow এখন ঘুরবে, আটকে থাকবে না */
 header::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
 header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
@@ -129,9 +127,10 @@ function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
-function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
-function catIcon(c){ if(c==='All') return '🏠'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
+function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
+function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
+  if(c==='🏆 Live Sports') return sportsData.length;
   if(!all.length) return 0; let n=0;
   if(c==='All') n=all.length;
   else if(CFG.playlists.find(p=>p.name===c)) n=all.filter(x=>x.source===c).length;
@@ -148,6 +147,7 @@ function catCount(c){
 }
 function matchesCat(c,catName){
   if(catName==="All") return true;
+  if(catName==="🏆 Live Sports") return false;
   if(CFG.playlists.find(p=>p.name===catName)) return c.source===catName;
   if(catName==="Sports") return c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");
   if(catName==="News") return c.group.toLowerCase().includes("news");
@@ -167,6 +167,7 @@ function renderCats(){
 }
 function renderGrid(reset=true){
   if(reset) visibleCount=200;
+  if(cat==="🏆 Live Sports"){ renderSportsGrid(); return; }
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
   let show=currentFiltered.slice(0,visibleCount); let html='';
@@ -181,7 +182,69 @@ function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats 
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
+
+// ===== 🏆 LIVE SPORTS - Sports_data.json =====
+let sportsData = [];
+async function loadSports(){
+  try{
+    let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json');
+    let j = await r.json();
+    sportsData = j.matches || [];
+    _catCache = null; renderCats();
+    if(cat === "🏆 Live Sports") renderGrid(true);
+  }catch(e){ console.log('Sports load fail', e); }
+}
+function renderSportsGrid(){
+  let live = sportsData.filter(m => (m.status||'').toUpperCase() === 'LIVE');
+  let up = sportsData.filter(m => (m.status||'').toUpperCase() !== 'LIVE');
+  let html = '';
+  if(!sportsData.length) html = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ Sports ম্যাচ লোড হচ্ছে...</div>`;
+  [...live, ...up].forEach((m, idx) => {
+    let isLive = (m.status||'').toUpperCase() === 'LIVE';
+    let info = m.eventInfo || {};
+    let sIdx = sportsData.indexOf(m);
+    html += `
+    <div class="card" style="aspect-ratio:auto;padding:12px 6px;border-color:${isLive ? '#ff2d55' : '#262633'}" onclick="openMatch(${sIdx})">
+      <div style="font-size:9px;font-weight:800;color:${isLive ? '#ff2d55' : '#ffb84d'};margin-bottom:6px">${isLive ? '● LIVE' : '⏰ ' + (info.startTime || '')}</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%">
+        <div style="flex:1;text-align:center"><img src="${info.teamAFlag||''}" style="width:38px;height:38px;border-radius:50%;background:#fff;padding:2px" onerror="this.style.display='none'"><p style="min-height:26px">${info.teamA||''}</p></div>
+        <b style="font-size:11px;color:#a78bfa">VS</b>
+        <div style="flex:1;text-align:center"><img src="${info.teamBFlag||''}" style="width:38px;height:38px;border-radius:50%;background:#fff;padding:2px" onerror="this.style.display='none'"><p style="min-height:26px">${info.teamB||''}</p></div>
+      </div>
+      <p style="font-size:10px;color:#aaa;margin-top:4px">${m.event_name||''}</p>
+      <small style="color:${isLive ? '#ff2d55' : '#22d3ee'}">${m.Category||'Sports'} • ${m.streams ? m.streams.length : 0} টা লিংক</small>
+    </div>`;
+  });
+  document.getElementById("grid").innerHTML = html;
+  document.getElementById("loadMoreWrap").style.display = 'none';
+}
+function openMatch(idx){
+  let m = sportsData[idx];
+  if(!m) return;
+  let info = m.eventInfo || {};
+  let list = (m.streams || []).map((s) => {
+    let url = s.stream_url || '';
+    if(!url) return '';
+    let kid = s.kid || '';
+    let key = s.key || '';
+    return `<button onclick="playSports('${encodeURIComponent(url)}','${kid}','${key}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')" style="width:100%;padding:12px;margin:6px 0;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:#1d1d2e;color:#fff;font-weight:700;text-align:left;cursor:pointer">▶ ${s.channel_name} ${kid ? '🔒 DRM' : '📺'}</button>`;
+  }).join('');
+  let old = document.getElementById('sportsModal'); if(old) old.remove();
+  let box = document.createElement('div');
+  box.id = 'sportsModal';
+  box.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:12px';
+  box.innerHTML = `<div style="width:100%;max-width:480px;background:#15151f;border-radius:16px;padding:16px;max-height:80vh;overflow-y:auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>${info.teamA} Vs ${info.teamB}</b><span onclick="document.getElementById('sportsModal').remove()" style="cursor:pointer;font-size:20px">✕</span></div><p style="font-size:12px;color:#aaa;margin:6px 0">${m.event_name||''} • ${m.status||''}</p>${list || '<p style="color:#aaa">কোনো লিংক পাওয়া যায় নাই</p>'}</div>`;
+  box.onclick = (e) => { if(e.target === box) box.remove(); };
+  document.body.appendChild(box);
+}
+function playSports(u, kid, key, name){
+  let link = `player.html?url=${u}&name=${name}`;
+  if(kid && key) link += `&kid=${kid}&key=${key}`;
+  window.location.href = link;
+}
+
 loadAll();
+loadSports();
 (function(){
   function kill(){ try{ document.documentElement.innerHTML=''; }catch(e){} }
   document.addEventListener('contextmenu',e=>{ e.preventDefault(); return false; });
