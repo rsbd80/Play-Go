@@ -53,12 +53,12 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-/* ===== FIX - 3 KOLAM, BORO ICON ===== */
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:16px;padding:14px 6px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:152px}
-.card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
-.card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
-.card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
+/* ===== SAME SIZE AS PLAYER - কার্ড 92x94, লোগো 48px - মনে রাখা সাইজ ===== */
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:8px 6px 6px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;min-width:0;height:94px;min-height:94px}
+.card img{width:48px;height:48px;min-height:48px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
+.card p{font-size:11px;font-weight:600;margin-top:5px;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
+.card small{display:none!important}
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -78,7 +78,7 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
 #upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
 #upModal.show{display:flex}
-.up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6);margin:auto;text-align:center}
 @keyframes upPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 .up-close{position:absolute;right:14px;top:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;z-index:2}
 .up-teams{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:6px;padding:8px 0 12px;text-align:center}
@@ -121,11 +121,11 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
-#grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
+#grid{grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 0}
 #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
-.card{border-radius:16px;padding:18px 10px;min-height:170px}
-.card img{width:88px;height:88px;border-radius:14px;padding:8px}
-.card p{font-size:13px}
+.card{border-radius:14px;padding:8px 6px 6px;height:94px;min-height:94px}
+.card img{width:48px;height:48px;border-radius:12px;padding:4px}
+.card p{font-size:11px}
 }
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
@@ -197,22 +197,40 @@ function renderCats(){
   else { catsEl.innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
   catsEl.querySelectorAll('.cat').forEach(el=>{ el.onclick=()=>setCat(el.dataset.cat); });
 }
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function renderGrid(reset=true){
   if(reset) visibleCount=200;
   if(cat==="🏆 Live Sports"){ renderSportsGrid(); return; }
   document.getElementById("grid").classList.remove("sports-mode");
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
-  let show=currentFiltered.slice(0,visibleCount); let html='';
-  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
-  document.getElementById("grid").innerHTML=html;
+  let show=currentFiltered.slice(0,visibleCount);
+  let gridEl=document.getElementById("grid");
+  gridEl.innerHTML='';
+  show.forEach(function(c){
+    let d=document.createElement('div');
+    d.className='card';
+    let img=document.createElement('img');
+    img.loading='lazy';
+    img.src=c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
+    img.onerror=function(){ this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'; };
+    let p=document.createElement('p');
+    p.textContent=c.name;
+    d.appendChild(img); d.appendChild(p);
+    d.addEventListener('click', function(){ openCh(c.url, c.name, c.source, c.group); });
+    gridEl.appendChild(d);
+  });
   let wrap=document.getElementById("loadMoreWrap"); let btn=document.getElementById("loadMoreBtn");
   if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
   if(reset){ let sa=document.getElementById('scrollArea'); if(sa) sa.scrollTop=0; window.scrollTo({top:0}); }
 }
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
-function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
+function openCh(u,n,s,g){
+  try{ localStorage.removeItem('rslive_sports_match'); }catch(e){}
+  if(!u || String(u).indexOf('encodeURIComponent')!==-1) return;
+  window.location.href='player.html?url=' + encodeURIComponent(u) + '&name=' + encodeURIComponent(n||'') + '&src=' + encodeURIComponent(s||'') + '&group=' + encodeURIComponent(g||'');
+}
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 let sportsData = [];
@@ -264,7 +282,7 @@ function renderSportsGrid(){
     let dateStr = '';
     if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league">${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
+    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league">${escapeHtml(league)}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${escapeHtml(info.teamA||'')}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${escapeHtml(info.teamB||'')}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${escapeHtml(dateStr || '')}</div></div></div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
@@ -292,7 +310,7 @@ function showUpModal(idx){
   let ts=parseStartTime(info,m);
   let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
   let on=isNotified(name);
-  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${league}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
+  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${escapeHtml(league)}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${escapeHtml(info.teamA||'')}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${escapeHtml(info.teamB||'')}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${escapeHtml(dateStr)}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
   document.getElementById('upModal').classList.add('show');
   if(_upTimer) clearInterval(_upTimer);
   if(ts){
@@ -325,8 +343,8 @@ function openMatch(idx){
   let name = info.teamA + ' Vs ' + info.teamB;
   try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
   let first = m.streams[0];
-  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports&fs=1`;
-  if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
+  let link = 'player.html?url=' + encodeURIComponent(first.stream_url) + '&name=' + encodeURIComponent(name) + '&src=sports&group=Sports&fs=1';
+  if(first.kid && first.key) link += '&kid=' + encodeURIComponent(first.kid) + '&key=' + encodeURIComponent(first.key);
   window.location.href = link;
 }
 loadAll();
