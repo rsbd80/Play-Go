@@ -54,6 +54,79 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif}
+#app{width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* ===== ✅ HEADER COLOR EFFECT FIX - এখন আর আটকে থাকবে না, সবসময় ঘুরবে ===== */
+
+/* 1. Header এর পিছনের Glow - বাম-ডান ঘুরবে */
+header, .topbar, .header, .app-header, #app > div:first-child{
+  position:relative;
+  overflow:hidden;
+}
+header::before, .topbar::before, .header::before{
+  content:"";
+  position:absolute;
+  top:-60px; left:-30px;
+  width:220px; height:120px;
+  background:radial-gradient(circle, rgba(34,211,238,.45), transparent 70%);
+  filter:blur(12px);
+  pointer-events:none;
+  animation: glowMove 4s ease-in-out infinite alternate !important;
+}
+header::after, .topbar::after, .header::after{
+  content:"";
+  position:absolute;
+  top:-60px; right:-30px;
+  width:220px; height:120px;
+  background:radial-gradient(circle, rgba(167,139,250,.45), transparent 70%);
+  filter:blur(12px);
+  pointer-events:none;
+  animation: glowMove2 4s ease-in-out infinite alternate !important;
+}
+@keyframes glowMove{
+  0%{ transform:translateX(0) scale(1); opacity:.6 }
+  100%{ transform:translateX(60px) scale(1.2); opacity:1 }
+}
+@keyframes glowMove2{
+  0%{ transform:translateX(0) scale(1.2); opacity:1 }
+  100%{ transform:translateX(-60px) scale(1); opacity:.6 }
+}
+
+/* 2. RsLive Go লেখার Color - Flow করবে, আটকাবে না */
+.brand-text .pg i,
+.logo span:last-child,
+.brand span:last-child,
+h1 span, .site-name span,
+[class*="brand"] i, [class*="logo"] i{
+  background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee) !important;
+  background-size:300% auto !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+  animation: shineFlow 3s linear infinite !important;
+}
+@keyframes shineFlow{
+  0%{ background-position:0% center }
+  100%{ background-position:300% center }
+}
+
+/* 3. Logo Icon টাও হালকা ভাসবে */
+.brand .play-ico, .logo-icon, [class*="play-ico"]{
+  animation: logoFloat 3s ease-in-out infinite !important;
+}
+@keyframes logoFloat{
+  0%,100%{ transform:translateY(0) }
+  50%{ transform:translateY(-3px) }
+}
+
+/* 4. Header এর নিচে Rainbow Line টাও চলবে */
+header::after{
+  /* উপরের glow এর সাথে conflict না হয়, তাই border-bottom আলাদা */
+}
+.topbar, header, .header{
+  border-bottom:1px solid rgba(255,255,255,.10) !important;
+}
 </style>
 </head>
 <body>
