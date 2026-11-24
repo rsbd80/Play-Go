@@ -1,75 +1,64 @@
 // KICK-OUT LOCK
 (function(){
-  function kick(){
-    try{ window.top.location.href = 'about:blank'; }catch(e){}
-    try{ window.parent.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.replace('about:blank'); }catch(e){}
-    try{ window.close(); }catch(e){}
-    document.documentElement.innerHTML = '';
-    setInterval(function(){ try{ window.top.location.href = 'about:blank'; }catch(e){} try{ window.location.href = 'about:blank'; }catch(e){} document.documentElement.innerHTML = ''; }, 100);
-  }
-  var h = window.location.hostname || '';
-  var p = window.location.protocol || '';
-  if(p === 'blob:' || p === 'data:' || p === 'file:' || p === 'about:' || h === '' || h === 'null'){ kick(); throw new Error('Blocked'); }
-  if(h !== 'rslivego.pages.dev' && h !== 'www.rslivego.pages.dev' && h !== 'localhost' && h !== '127.0.0.1'){ kick(); throw new Error('Blocked'); }
-  if(window.top !== window.self){ kick(); throw new Error('Blocked'); }
+  function kick(){ try{window.top.location.href='about:blank'}catch(e){} try{window.location.href='about:blank'}catch(e){} document.documentElement.innerHTML=''; }
+  var h=window.location.hostname||'', p=window.location.protocol||'';
+  if(p==='blob:'||p==='data:'||p==='file:'||p==='about:'||h===''||h==='null'){kick();throw new Error('Blocked')}
+  if(h!=='rslivego.pages.dev'&&h!=='www.rslivego.pages.dev'&&h!=='localhost'&&h!=='127.0.0.1'){kick();throw new Error('Blocked')}
+  if(window.top!==window.self){kick();throw new Error('Blocked')}
 })();
 
 document.getElementById('app').innerHTML = `
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
-html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100%;overscroll-behavior-x:none}
-body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
+html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100%}
+body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
-.sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
+.sticky{flex-shrink:0;z-index:100}
 header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
 .search-wrap{position:relative;margin-top:12px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1;color:#fff}
+.logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px}
+.logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1}
 .logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
 @keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
 .logo-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
 .live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
-.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
+.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-header::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
-header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
-@keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
-@keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
 .search-wrap .s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
 #search{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#1d1d2e;color:#fff;font-size:13.5px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text}
-#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+#cats{display:flex;gap:7px;overflow-x:auto;padding:12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
 #cats::-webkit-scrollbar{display:none}
 .cat{padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important;padding:12px!important}
+/* ✅ SPORTS - 1 লাইনে 1 কার্ড */
+#grid.sports-mode{grid-template-columns:1fr!important;gap:14px!important;padding:14px!important}
 .card{background:#0a0a12;border:1px solid #1e1e28;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ✅ DARK MODE CARD */
-.sports-yt-card{background:#0a0a12;border:1px solid #1e1e28;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0;width:100%}
-.sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#000;position:relative;overflow:hidden}
+/* ===== PREMIUM SPORTS CARD - NO OVERLAP ===== */
+.sports-yt-card{background:#0b0b14;border:1px solid #1e1e28;border-radius:16px;overflow:hidden;cursor:pointer;width:100%;display:flex;flex-direction:column}
+.sports-yt-thumb{width:100%;aspect-ratio:16/8.2;background:#000;position:relative;overflow:hidden}
 .sports-yt-thumb .poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.92) 100%)}
-/* ✅ Countdown - আরো ছোট, একদম উপরে, লোগো ঢাকবে না */
-.sports-yt-thumb .live-tag{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:7px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.4px;z-index:4;white-space:nowrap;box-shadow:0 1px 6px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.30);backdrop-filter:blur(4px);max-width:90%;overflow:hidden;text-overflow:ellipsis}
-.sports-yt-thumb .live-tag.countdown{background:rgba(0,0,0,.62)!important;color:#fff!important}
-.sports-yt-thumb .live-tag.live-now{background:#ff2d55!important;color:#fff!important;border-color:rgba(255,255,255,.4);font-size:7.5px;padding:3px 8px}
-.sports-yt-thumb .vs-box{position:absolute;inset:0;display:flex;align-items:center;gap:4px;justify-content:center;padding:26px 6px 26px}
-.sports-yt-thumb .team{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sports-yt-thumb .team img{width:42px;height:42px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.5)}
-.sports-yt-thumb .team-name{font-size:10px;font-weight:700;color:#fff;margin-top:4px;text-align:center;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:24px;max-height:24px;width:100%;text-shadow:0 2px 6px rgba(0,0,0,.9)}
-.sports-yt-thumb .vs-txt{flex-shrink:0;color:#fff;font-size:10px;font-weight:900;background:rgba(0,0,0,.5);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.sports-yt-thumb .poster-title{position:absolute;left:6px;right:6px;bottom:5px;z-index:3;text-align:center;font-size:10px;font-weight:600;color:#e8e8e8;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(0,0,0,.9)}
+.sports-yt-thumb .poster-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,0) 70%,rgba(11,11,20,.9) 100%)}
+.sports-yt-thumb .live-tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;z-index:4;white-space:nowrap;background:rgba(0,0,0,.65);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+.sports-yt-thumb .live-tag.live-now{background:#ff2d55!important;border-color:rgba(255,255,255,.4)}
+.sports-body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px;background:#0b0b14}
+.sports-teams{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sports-teams .team{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.sports-teams .team.right{flex-direction:row-reverse;text-align:right}
+.sports-teams .team img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px;object-fit:contain;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.sports-teams .team-name{font-size:14px;font-weight:700;line-height:1.3;color:#fff;word-break:break-word}
+.sports-teams .vs{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#1e1e28;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#aaa}
+.sports-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.07);padding-top:10px}
+.sports-meta .league{font-size:12px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;text-align:left}
+.sports-meta .watch-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:8px 16px;border-radius:20px;white-space:nowrap;flex-shrink:0}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -78,8 +67,6 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 #status b{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shineFlow 3s linear infinite}
 .tele{position:fixed;right:14px;bottom:110px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6)}
 .tele svg{width:26px;height:26px;fill:#fff}
-.tele::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;background:#2AABEE;z-index:-1;animation:telePulse 2s infinite}
-@keyframes telePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:36px;z-index:998;background:#1a1a2e;border:1px solid rgba(167,139,250,.45);border-radius:100px;padding:4px 4px 4px 8px;align-items:center;gap:6px}
 #installBar .ib-ico{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:11px}
 #installBar .ib-txt{flex:1;text-align:center}
@@ -102,12 +89,11 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
-#grid.sports-mode{grid-template-columns:repeat(3,1fr)!important;gap:14px!important}
+#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:16px!important}
 .card{border-radius:16px;padding:14px 8px}
 .card img{width:60px;height:60px;border-radius:12px;padding:6px}
 .card p{font-size:12px}
 }
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(4,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
@@ -228,6 +214,9 @@ function formatCountdown(ms){
   if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
+function formatDateTime(ts){
+  try{ let d=new Date(ts); return d.toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return ''; }
+}
 function updateCountdowns(){
   document.querySelectorAll('.countdown-el').forEach(el=>{
     let ts = parseInt(el.dataset.ts||'0'); if(!ts) return;
@@ -250,25 +239,32 @@ function renderSportsGrid(){
     let sIdx = sportsData.indexOf(m);
     let poster = info.poster || info.thumbnail || info.image || info.banner || info.posterUrl || info.thumb || m.poster || m.thumbnail || m.image || '';
     let posterTag = poster ? `<img class="poster-img" loading="lazy" src="${poster}" onerror="this.style.display='none'">` : '';
-    let fallbackBg = !poster ? `background:linear-gradient(135deg,#0a0a12,#111)` : '';
+    let fallbackBg = !poster ? `background:#000` : '';
     let ts = !isLive ? parseStartTime(info, m) : null;
     let badge = '';
     if(isLive) badge = `<span class="live-tag live-now">● LIVE</span>`;
     else if(ts) badge = `<span class="live-tag countdown countdown-el" data-ts="${ts}">⏰ ${formatCountdown(ts-Date.now())}</span>`;
     else if(info.startTime) badge = `<span class="live-tag countdown">⏰ ${info.startTime}</span>`;
     else badge = `<span class="live-tag countdown">UPCOMING</span>`;
+    let league = m.event_name || info.league || info.tournament || '';
+    let dateStr = ts ? formatDateTime(ts) : (info.startTime||'');
     html += `
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
       <div class="sports-yt-thumb" style="${fallbackBg}">
         ${posterTag}
         <div class="poster-grad"></div>
         ${badge}
-        <div class="vs-box">
+      </div>
+      <div class="sports-body">
+        <div class="sports-teams">
           <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-          <div class="vs-txt">VS</div>
-          <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
+          <div class="vs">VS</div>
+          <div class="team right"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
         </div>
-        <div class="poster-title">${m.event_name||''}</div>
+        <div class="sports-meta">
+          <div class="league">🏆 ${league}${dateStr ? ' • '+dateStr : ''}</div>
+          <div class="watch-btn">${isLive ? '▶ LIVE দেখো' : '▶ দেখো'}</div>
+        </div>
       </div>
     </div>`;
   });
@@ -284,11 +280,6 @@ function openMatch(idx){
   let first = m.streams[0];
   let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports&fs=1`;
   if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
-  window.location.href = link;
-}
-function playSports(u, kid, key, name){
-  let link = `player.html?url=${u}&name=${name}&src=sports&group=Sports&fs=1`;
-  if(kid && key) link += `&kid=${kid}&key=${key}`;
   window.location.href = link;
 }
 loadAll();
