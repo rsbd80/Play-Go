@@ -1,4 +1,4 @@
-// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
+// KICK-OUT LOCK
 (function(){
   function kick(){
     try{ window.top.location.href = 'about:blank'; }catch(e){}
@@ -7,11 +7,7 @@
     try{ window.location.replace('about:blank'); }catch(e){}
     try{ window.close(); }catch(e){}
     document.documentElement.innerHTML = '';
-    setInterval(function(){
-      try{ window.top.location.href = 'about:blank'; }catch(e){}
-      try{ window.location.href = 'about:blank'; }catch(e){}
-      document.documentElement.innerHTML = '';
-    }, 100);
+    setInterval(function(){ try{ window.top.location.href = 'about:blank'; }catch(e){} try{ window.location.href = 'about:blank'; }catch(e){} document.documentElement.innerHTML = ''; }, 100);
   }
   var h = window.location.hostname || '';
   var p = window.location.protocol || '';
@@ -20,7 +16,6 @@
   if(window.top !== window.self){ kick(); throw new Error('Blocked'); }
 })();
 
-// --- UI বানানো ---
 document.getElementById('app').innerHTML = `
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
@@ -55,19 +50,20 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-/* ✅ আগের কার্ড - যেমন ছিল তেমনই, হাত দেই নাই */
+#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important;padding:12px!important}
 .card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ✅ শুধু নতুন Sports কার্ড - YouTube Thumbnail Style */
-.sports-yt-card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0}
-.sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#1a1a2e;display:flex;align-items:center;justify-content:center;position:relative;padding:10px}
-.sports-yt-thumb .vs-box{display:flex;align-items:center;gap:12px;width:100%;justify-content:center}
-.sports-yt-thumb img{width:52px;height:52px;border-radius:50%;background:#fff;padding:2px;object-fit:cover}
-.sports-yt-thumb .team-name{font-size:11px;font-weight:700;color:#fff;margin-top:4px;text-align:center;line-height:1.2}
-.sports-yt-thumb .live-tag{position:absolute;top:6px;left:6px;font-size:8px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.5px}
-.sports-yt-card p{font-size:12.5px;font-weight:600;margin:8px 10px 2px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;text-align:left}
+.sports-yt-card{background:#15151f;border:1px solid #262633;border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;min-width:0;width:100%}
+.sports-yt-thumb{width:100%;aspect-ratio:16/9;background:#1a1a2e;display:flex;align-items:center;justify-content:center;position:relative;padding:28px 8px 10px;overflow:hidden}
+.sports-yt-thumb .vs-box{display:flex;align-items:flex-start;gap:6px;width:100%;justify-content:center}
+.sports-yt-thumb .team{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.sports-yt-thumb img{width:46px;height:46px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;flex-shrink:0}
+.sports-yt-thumb .team-name{font-size:10.5px;font-weight:700;color:#fff;margin-top:5px;text-align:center;line-height:1.25;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:26px;width:100%}
+.sports-yt-thumb .vs-txt{flex-shrink:0;color:#a78bfa;font-size:11px;font-weight:800;padding-top:14px}
+.sports-yt-thumb .live-tag{position:absolute;top:6px;left:6px;font-size:8px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.5px;z-index:2}
+.sports-yt-card .match-title{font-size:12.5px;font-weight:600;margin:8px 10px 2px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;text-align:left}
 .sports-yt-card small{font-size:10px;color:#22d3ee;margin:0 10px 10px;display:block;text-align:left}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
@@ -101,11 +97,12 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
+#grid.sports-mode{grid-template-columns:repeat(3,1fr)!important;gap:14px!important}
 .card{border-radius:16px;padding:14px 8px}
 .card img{width:60px;height:60px;border-radius:12px;padding:6px}
 .card p{font-size:12px}
 }
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} }
+@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(4,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
@@ -178,6 +175,7 @@ function renderCats(){
 function renderGrid(reset=true){
   if(reset) visibleCount=200;
   if(cat==="🏆 Live Sports"){ renderSportsGrid(); return; }
+  document.getElementById("grid").classList.remove("sports-mode");
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
   let show=currentFiltered.slice(0,visibleCount); let html='';
@@ -193,7 +191,7 @@ function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&s
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 
-// ===== 🏆 LIVE SPORTS - Sports_data.json - শুধু নতুন Playlist =====
+// ===== 🏆 LIVE SPORTS =====
 let sportsData = [];
 async function loadSports(){
   try{
@@ -205,6 +203,8 @@ async function loadSports(){
   }catch(e){ console.log('Sports load fail', e); }
 }
 function renderSportsGrid(){
+  let gridEl = document.getElementById("grid");
+  gridEl.classList.add("sports-mode");
   let live = sportsData.filter(m => (m.status||'').toUpperCase() === 'LIVE');
   let up = sportsData.filter(m => (m.status||'').toUpperCase() !== 'LIVE');
   let html = '';
@@ -218,16 +218,16 @@ function renderSportsGrid(){
       <div class="sports-yt-thumb">
         <span class="live-tag" style="background:${isLive ? '#ff2d55' : '#ffb84d'};color:${isLive ? '#fff' : '#000'}">${isLive ? '● LIVE' : '⏰ ' + (info.startTime || '')}</span>
         <div class="vs-box">
-          <div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-          <b style="color:#a78bfa;font-size:12px">VS</b>
-          <div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
+          <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
+          <div class="vs-txt">VS</div>
+          <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
         </div>
       </div>
-      <p>${m.event_name||''}</p>
+      <p class="match-title">${m.event_name||''}</p>
       <small>${m.Category||'Sports'} • ${m.streams ? m.streams.length : 0} টা লিংক • Tap to Watch</small>
     </div>`;
   });
-  document.getElementById("grid").innerHTML = html;
+  gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
 }
 function openMatch(idx){
@@ -250,7 +250,7 @@ function openMatch(idx){
   document.body.appendChild(box);
 }
 function playSports(u, kid, key, name){
-  let link = `player.html?url=${u}&name=${name}`;
+  let link = `player.html?url=${u}&name=${name}&src=sports&group=Sports`;
   if(kid && key) link += `&kid=${kid}&key=${key}`;
   window.location.href = link;
 }
