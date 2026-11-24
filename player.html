@@ -12,23 +12,24 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
-.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
-.topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.30),transparent 70%);filter:blur(10px);pointer-events:none}
-.topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.32),transparent 70%);filter:blur(10px);pointer-events:none}
-.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
+/* HEADER = INDEX HEADER SAME */
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 12px;background:rgba(10,10,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none}
+.topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none}
+.brand{display:flex;align-items:center;gap:10px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
 .brand:active{transform:scale(.96)}
-.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.brand .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .brand-text{line-height:1}
-.brand-text .pg{font-size:18px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 10px rgba(167,139,250,.35);white-space:nowrap}
-.brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite}
-@keyframes shine{to{background-position:200% center}}
-.brand-text .tag{font-size:8px;letter-spacing:2.8px;color:#9a9ab5;font-weight:700;margin-top:3px}
+.brand-text .pg{font-size:21px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important;font-family:'Poppins',sans-serif;white-space:nowrap;text-shadow:0 2px 10px rgba(167,139,250,.35)}
+.brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
+@keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
+.brand-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
 .divider{width:1px;height:34px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.25),transparent);flex-shrink:0;position:relative;z-index:2}
 #chName{font-weight:700;font-size:14.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
 #chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2;margin-top:1px}
 #chSub b{color:#7CFC00}
-.live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:7px 11px;border-radius:20px;flex-shrink:0;position:relative;z-index:2;box-shadow:0 0 16px rgba(255,45,85,.25)}
+.live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px;flex-shrink:0;position:relative;z-index:2}
 .live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
 .main-layout{width:100%;display:block}
@@ -138,7 +139,7 @@ video::-webkit-media-controls{display:none!important}
 <body>
 <div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">DevTools বন্ধ করে আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div class="topbar">
-<div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
+<div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV • BANGLADESH</div></div></div>
 <div class="divider"></div>
 <div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
@@ -328,14 +329,10 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
-// ===== LIVE SPORTS SERVER =====
-let serverList=[]; let currentServerIdx=0;
-let _loadStreamFn=null;
-function isSportsMatch(){
+/* SHUDHU LIVE SPORTS = EXTRA SERVER, BAKI SOB = SAME CATEGORY SUGGESTED */
+let serverList=[]; let currentServerIdx=0; let _loadStreamFn=null;
+function isLiveSportsMatch(){
   if((srcParam||'').toLowerCase()==='sports') return true;
-  if((currentGroup||'').toLowerCase().includes('sport')) return true;
-  if((currentName||'').toLowerCase().includes(' vs ')) return true;
-  if((currentName||'').includes(' VS ')) return true;
   try{
     let saved=JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
     if(saved && saved.streams && saved.streams.length && saved.name===currentName) return true;
@@ -343,7 +340,7 @@ function isSportsMatch(){
   return false;
 }
 function buildServers(){
-  if(!isSportsMatch()){ loadSuggestions(); return; }
+  if(!isLiveSportsMatch()){ loadSuggestions(); return; }
   try{
     let saved=JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
     if(saved && saved.streams && saved.streams.length && saved.name===currentName){
@@ -367,8 +364,7 @@ function buildServers(){
 window.switchServer=function(idx,e){
   if(e) e.stopPropagation(); if(idx===currentServerIdx) return;
   currentServerIdx=idx; let s=serverList[idx]; if(!s) return;
-  streamSource=s.url; buildServers();
-  showLoader();
+  streamSource=s.url; buildServers(); showLoader();
   if(_loadStreamFn){
     if(s.type==='proxy') _loadStreamFn(makeProxyUrl(streamSource), true);
     else _loadStreamFn(streamSource, false);
