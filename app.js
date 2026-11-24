@@ -13,7 +13,7 @@ if (window.top !== window.self) {
     throw new Error('Blocked');
   }
   // তোমার ডোমেইন ছাড়া অন্য কোথাও চলবে না - এখানে তোমার ডোমেইন বসাও
-  var ALLOWED = ['localhost', '127.0.0.1', 'rslivego.com', 'www.rslivego.com'];
+  var ALLOWED = ['localhost', '127.0.0.1', 'rslivego.pages.dev', 'www.rslivego.com'];
   var h = window.location.hostname || '';
   if (h !== '' && ALLOWED.indexOf(h) === -1) {
     try { document.documentElement.innerHTML = '<body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif">Blocked</body>'; } catch(e){}
