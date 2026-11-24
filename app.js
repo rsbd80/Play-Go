@@ -59,7 +59,6 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ===== LIVE SPORTS - SUDHU EITA ADD ===== */
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -161,7 +160,6 @@ function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
-// ===== LIVE SPORTS - SUDHU EITA ADD =====
 function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
 function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
@@ -218,7 +216,6 @@ function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats 
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
-// ===== LIVE SPORTS LOGIC - SUDHU EITA ADD =====
 let sportsData = [];
 async function loadSports(){
   try{
