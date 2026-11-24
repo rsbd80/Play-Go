@@ -1,10 +1,10 @@
-/* RsLive Go - Secure SW + PWA */
-const CACHE_NAME = 'rslive-v5-pwa';
+/* RsLive Go - Secure SW + PWA - CLEAN v6 */
+const CACHE_NAME = 'rslive-v6-pwa';
 const CORE_ASSETS = ['/', '/index.html', '/player.html', '/app.js', '/manifest.json'];
 
 const _P = [
   { n: 'Tapmad', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9UYXBtYWRfQXV0b19VcGRhdGVfUGxheWxpc3QvcmVmcy9oZWFkcy9tYWluL3RhcG1hZF9zbS5tM3U=', p: 0 },
-  { n: 'SonyLiv', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NyaGFkeS9Tb255TGl2L3JlZnMvaGVhZHMvbWFpbi9zb255bGl2X3BsYXlsaXN0Lm0zdQ==', p: 1 },
+  { n: 'Sports', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2phbm5hdHVsYnVzcmEwMDAvU3BvcnRzLVBsYXlsaXN0L3JlZnMvaGVhZHMvbWFpbi9zcG9ydHMubTN1', p: 1 },
   { n: 'Toffee', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9Ub2ZmZWUtQXV0by1VcGRhdGUvcmVmcy9oZWFkcy9tYWluL3RvZmZlZV9wbGF5bGlzdC5tM3U=', p: 1 },
   { n: 'AynaOTT', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9BeW5hT1RUX0F1dG9fVXBkYXRlX1BsYXlsaXN0L3JlZnMvaGVhZHMvbWFpbi9heW5hb3R0Lm0zdQ==', p: 0 },
   { n: 'JagoBD', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9qYWdvX2JkX2F1dG9fdXBkYXRlX3BsYXlsaXN0LS9yZWZzL2hlYWRzL21haW4vamFnb19iZF9tYWluLm0zdQ==', p: 0 },
