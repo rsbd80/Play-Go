@@ -92,7 +92,11 @@ video::-webkit-media-controls{display:none!important}
 .suggest-head a:active{transform:scale(.94);opacity:.8}
 .suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:4px 14px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:stretch}
 .suggest-grid::-webkit-scrollbar{display:none}
-/* ===== CHANNEL CARD SYSTEM - SUDHU EKHANE UPDATE ===== */
+/* ===== SPORTS SERVER BUTTON - SUDHU EKHANE UPDATE ===== */
+.srv-pill{flex:0 0 auto;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#ddd;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.srv-pill.active{background:linear-gradient(90deg,#22d3ee,#a78bfa)!important;border-color:transparent!important;color:#fff!important}
+.srv-pill.extra{border-style:dashed;border-color:rgba(34,211,238,.55);color:#a5f3fc}
+/* ===== CHANNEL CARD - BAKI SOB AGERTAI ===== */
 .sug-card{flex:0 0 148px;width:148px;scroll-snap-align:start;background:#111118;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:12px 8px 10px;text-align:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0}
 .sug-card:active{transform:scale(.95);border-color:#a78bfa}
 .sug-card img{width:78px;height:58px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;display:block;margin:0 auto;flex-shrink:0}
@@ -162,7 +166,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 
 <div class="suggest">
-<div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
+<div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html" id="seeAllLink"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -227,7 +231,6 @@ async function toggleFullscreen(){
   setTimeout(()=>{ isFullscreenBusy = false; }, 600);
   const v = getVideoEl();
   if(!v) return;
-  // iPhone / iOS : Safari শুধু video কে fullscreen দেয়, div কে দেয় না
   if(IS_IOS){
     if(document.webkitFullscreenElement || document.fullscreenElement || v.webkitDisplayingFullscreen){
       try{ if(document.exitFullscreen) await document.exitFullscreen(); }catch(e){}
@@ -241,7 +244,6 @@ async function toggleFullscreen(){
     }
     return;
   }
-  // Android / PC : আগের মতো div fullscreen
   if(document.fullscreenElement){
     try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
     try{ await document.exitFullscreen(); }catch(e){}
@@ -326,22 +328,86 @@ function getCategory(name, group){
   return 'general';
 }
 function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
-// ===== NOTUN PLAYLIST - SUDHU EKHANE, BAKI SOB AGERTAI =====
+// ===== NOTUN PLAYLIST =====
 const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
   "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u",
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
+// ===== SPORTS HOLE CHANNEL NA, SUDHU SERVER + EXTRA SERVER =====
+let serverList = []; let currentServerIdx = 0; let isSportsMode = false;
+function isSportsChannel(){
+  let c = getCategory(currentName, currentGroup);
+  if(c === 'sports') return true;
+  if((srcParam||'').toLowerCase() === 'sports') return true;
+  if((currentGroup||'').toLowerCase().includes('sport')) return true;
+  return false;
+}
+function buildServers(){
+  // 1) Sports_data.json er match hole - orignal server gulo
+  try{
+    let saved = JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
+    if(saved && saved.streams && saved.streams.length && saved.name === currentName){
+      isSportsMode = true;
+      serverList = saved.streams.map((s,i)=>({ label: s.channel_name || ('Server '+(i+1)), url: s.stream_url, kid: s.kid||'', key: s.key||'', type: 'sports', tag:'LIVE', isExtra:false }));
+      let f = serverList.findIndex(s=>s.url===streamSource); if(f>=0) currentServerIdx=f;
+      addExtraServers();
+      renderServers(); return;
+    }
+  }catch(e){}
+  // 2) Playlist er Sports channel hole - STAR SPORTS / T SPORTS etc - kono channel na, sudhu Extra Server
+  if(isSportsChannel()){
+    isSportsMode = true;
+    serverList = [{ label:'Server 1', url: streamSource, kid:'', key:'', type:'direct', tag:'DIRECT', isExtra:false }];
+    currentServerIdx = 0;
+    addExtraServers();
+    renderServers(); return;
+  }
+  // 3) Baki sob - agertai, Suggested channel
+  isSportsMode = false;
+  renderSuggested();
+}
+function addExtraServers(){
+  // Extra Server - eki link, alada alada way te - kono channel na
+  let base = streamSource;
+  let extras = [
+    { label:'Extra Server 1 • Proxy', url: base, kid:'', key:'', type:'proxy', tag:'PROXY', isExtra:true },
+    { label:'Extra Server 2 • Direct', url: base, kid:'', key:'', type:'direct', tag:'DIRECT', isExtra:true },
+    { label:'Extra Server 3 • Backup', url: base, kid:'', key:'', type:'direct-retry', tag:'BACKUP', isExtra:true },
+  ];
+  // Ager theke thakle duplicate hobe na
+  extras.forEach(e=>{
+    if(!serverList.find(s=>s.label===e.label)) serverList.push(e);
+  });
+}
+function renderServers(){
+  document.getElementById('suggestTitle').textContent='Available Servers';
+  document.getElementById('suggestIco').textContent='🖥️';
+  document.getElementById('seeAllLink').innerHTML='<span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> Home';
+  const grid = document.getElementById('suggestGrid');
+  if(!serverList.length){ grid.innerHTML = `<div style="padding:20px;color:#888;font-size:12px">No servers found</div>`; return; }
+  grid.innerHTML = serverList.map((s,i)=>`<div class="srv-pill ${i===currentServerIdx?'active':''} ${s.isExtra?'extra':''}" onclick="switchServer(${i},event)">${s.label}</div>`).join('');
+}
+window.switchServer = function(idx,e){
+  if(e) e.stopPropagation(); if(idx===currentServerIdx) return;
+  currentServerIdx = idx; let s = serverList[idx]; if(!s) return;
+  streamSource = s.url;
+  triedProxy=false; triedDirect=false; everPlayed=false;
+  renderServers(); showLoader();
+  if(s.type==='proxy'){ loadStream(makeProxyUrl(streamSource), true); }
+  else { loadStream(streamSource, false); }
+};
+function renderSuggested(){
+  document.getElementById('suggestTitle').textContent='আরো '+ (getCategory(currentName,currentGroup)==='sports'?'Sports':getCategory(currentName,currentGroup)==='news'?'News':getCategory(currentName,currentGroup)==='movies'?'Movies':getCategory(currentName,currentGroup)==='kids'?'Kids':getCategory(currentName,currentGroup)==='music'?'Music':getCategory(currentName,currentGroup)==='bangla'?'Bangla':getCategory(currentName,currentGroup)==='entertainment'?'Entertainment':'একই ক্যাটাগরি') +' দেখো';
+  document.getElementById('suggestIco').textContent='🔴';
+  document.getElementById('seeAllLink').innerHTML='<span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো';
+  loadSuggestions();
+}
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
-  const titleEl = document.getElementById('suggestTitle');
-  if(titleEl){
-    let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
-    titleEl.textContent = 'আরো ' + label + ' দেখো';
-  }
   try{
     let list=[];
     for(let plUrl of SUGGEST_PLAYLISTS){
@@ -358,12 +424,11 @@ async function loadSuggestions(){
     let sameCat = filtered.filter(c => c.src.toLowerCase() !== mySrc && getCategory(c.name, c.group) === myCat);
     const show = [...shuffle(sameBoth), ...shuffle(samePlaylist), ...shuffle(sameCat)].slice(0,20);
     if(show.length===0) throw new Error('empty');
-    // ===== NOTUN CARD HTML - SUDHU EKHANE =====
     grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div>`).join("");
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
-loadSuggestions();
+buildServers();
 if(!streamSource){
   showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
 } else {
