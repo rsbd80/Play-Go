@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFG156QL5T"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-WFG156QL5T');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WFG156QL5T');</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#07070f">
-<link rel="manifest" href="/manifest.json">
-<title>RsLive Go - Live TV</title>
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#07070f">
+<link rel="manifest" href="/manifest.json"><title>RsLive Go - Live TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 html,body{height:100%;overflow:hidden}
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri','Segoe UI',sans-serif;display:flex;flex-direction:column}
 .sticky{flex-shrink:0;position:relative;z-index:100}
-header{position:relative;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:16px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
+header{position:relative;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:16px;border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
 header::before{content:"";position:absolute;top:-60px;left:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%);filter:blur(10px);pointer-events:none}
 header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.30),transparent 70%);filter:blur(10px);pointer-events:none}
 .top-row{display:flex;flex-direction:column;gap:0;position:relative;z-index:2}
@@ -48,7 +40,8 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 .cat .cat-count{font-size:11px;font-weight:700;background:rgba(255,255,255,.12);color:#ccc;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
 .cat.active{background:#2a2a3a;color:#fff;border:1px solid rgba(255,255,255,.28);box-shadow:none}
 .cat.active .cat-count{background:rgba(255,255,255,.18);color:#fff}
-#count{padding:10px 16px 0;font-size:12px;color:#888;flex-shrink:0;background:#07070f}
+/* ✅ #count পুরা উঠিয়ে দেওয়া - কোনো লেখা থাকবে না */
+#count{display:none!important}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:90px;scrollbar-width:thin}
 #scrollArea::-webkit-scrollbar{width:4px}
 #scrollArea::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
@@ -59,6 +52,9 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 .card img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex-shrink:0;pointer-events:none}
 .card p{font-size:11px;margin-top:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
 .card small{font-size:9px;color:#22d3ee}
+#loadMoreWrap{text-align:center;padding:6px 16px 18px;display:none}
+#loadMoreBtn{width:100%;max-width:320px;padding:13px;border:none;border-radius:14px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
+#loadMoreBtn:active{transform:scale(.97)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12.5px;font-weight:700;padding:9px;text-align:center;flex-shrink:0}
 #featured{display:none;margin:14px 16px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:14px;padding:14px;cursor:pointer}
 #status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding:11px 12px;text-align:center;font-size:12px;font-weight:600;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
@@ -110,10 +106,10 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
   .cat.active{background:#2a2a3a;color:#fff;border:1px solid rgba(255,255,255,.30);box-shadow:none;transform:none}
   .cat.active .cat-ico{background:rgba(255,255,255,.10)}
   .cat.active .cat-count{background:rgba(255,255,255,.18);color:#fff}
-  #count{padding:4px 4px 0;font-size:14px;color:#b8b8d0;background:transparent}
-  #count b{color:#fff}
+  #count{display:none!important}
   #scrollArea{overflow:visible;padding-bottom:30px}
   #grid{grid-template-columns:repeat(5,1fr);gap:16px;padding:16px 0}
+  #loadMoreWrap{padding:10px 0 20px}
   .card{border-radius:20px;padding:18px 10px;background:linear-gradient(180deg, #1b1b2b, #12121c);border:1px solid rgba(255,255,255,.09);box-shadow:0 8px 24px rgba(0,0,0,.35);position:relative;overflow:hidden;transition:border-color .1s}
   .card:hover{transform:none;border-color:#555;box-shadow:0 8px 24px rgba(0,0,0,.35)}
   .card img{width:76px;height:76px;border-radius:16px;padding:7px;box-shadow:0 6px 16px rgba(0,0,0,.35)}
@@ -142,7 +138,6 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 <header>
 <div class="top-row">
 <div class="header-top">
-<!-- ✅ HEADER CLICK = FRESH HOME OPEN -->
 <div class="logo" onclick="goHome()" title="হোমে যাও">
 <div class="play-ico">▶</div>
 <div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div>
@@ -160,10 +155,11 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 <div class="desktop-wrap">
 <div id="cats"></div>
 <div id="mainCol">
-<div id="count"></div>
+<!-- ✅ #count div পুরা বাদ - এখন কার্ড উপরে উঠে যাবে -->
 <div id="scrollArea">
 <div id="featured" onclick="if(window._f) openCh(encodeURIComponent(window._f),encodeURIComponent(window._fn),'Featured','Featured')"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div>
 <div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div>
+<div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div>
 </div>
 </div>
 </div>
@@ -191,21 +187,13 @@ if(!CFG.showLive) document.getElementById('livePill').style.display='none';
 if(!CFG.showTele) document.getElementById('teleBtn').style.display='none';
 if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
 if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
-
-/* ✅ HEADER CLICK = নতুন করে OPEN হবে */
-function goHome(){
-  window.location.href = window.location.origin + '/?t=' + Date.now();
-}
-
+function goHome(){ window.location.href = window.location.origin + '/?t=' + Date.now(); }
 let all=[]; let cat="All";
 let _catCache = null, _catCounts = {};
+let visibleCount = 200;
+let currentFiltered = [];
 async function getPlaylistsFromSW(){
-  try{
-    await navigator.serviceWorker.ready;
-    let r = await fetch('/api/playlists');
-    let data = await r.json();
-    if(data && data.length) return data;
-  }catch(e){}
+  try{ await navigator.serviceWorker.ready; let r = await fetch('/api/playlists'); let data = await r.json(); if(data && data.length) return data; }catch(e){}
   return CFG.playlists;
 }
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
@@ -255,25 +243,32 @@ function renderCats(){
   }
   catsEl.querySelectorAll('.cat').forEach(el=>{ el.onclick = ()=> setCat(el.dataset.cat); });
 }
-function renderGrid(){
+function renderGrid(reset=true){
+  if(reset) visibleCount = 200;
   let q=document.getElementById("search").value.toLowerCase();
-  let f=[];
-  for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; f.push(c); if(f.length>=200) break; }
-  document.getElementById("count").innerHTML=`<b>${f.length}</b> টা চ্যানেল দেখাচ্ছে • <span style="color:#ccc">${cat}</span>`;
+  currentFiltered=[];
+  for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
+  // ✅ #count লেখা বাদ - কিছু সেট করবো না
+  let show = currentFiltered.slice(0, visibleCount);
   let html='';
-  for(let i=0;i<f.length;i++){ let c=f[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
+  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
   document.getElementById("grid").innerHTML=html;
-  let sa=document.getElementById('scrollArea'); if(sa) sa.scrollTop=0; window.scrollTo({top:0});
+  let wrap=document.getElementById("loadMoreWrap");
+  let btn=document.getElementById("loadMoreBtn");
+  if(currentFiltered.length > visibleCount){ wrap.style.display='block'; btn.textContent = `আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; }
+  else { wrap.style.display='none'; }
+  if(reset){ let sa=document.getElementById('scrollArea'); if(sa) sa.scrollTop=0; window.scrollTo({top:0}); }
 }
+function loadMore(){ visibleCount += 200; renderGrid(false); }
 function setCat(c){
   if(cat===c) return;
   cat=c;
   document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); });
-  renderGrid();
+  renderGrid(true);
 }
 function openCh(u,n,s,g){window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}`}
 let _searchT=null;
-document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(renderGrid, 80); });
+document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true), 80); });
 let _rszT=null;
 window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats, 150); });
 loadAll();
@@ -293,50 +288,18 @@ loadAll();
     }
   }, true);
   function block(){ let b=document.getElementById('blockScreen'); if(b){ b.style.display='flex'; } document.body.style.overflow='hidden'; }
-  setInterval(()=>{
-    let w = window.outerWidth - window.innerWidth > 160;
-    let h = window.outerHeight - window.innerHeight > 160;
-    if(w || h) block();
-  }, 800);
+  setInterval(()=>{ let w = window.outerWidth - window.innerWidth > 160; let h = window.outerHeight - window.innerHeight > 160; if(w || h) block(); }, 800);
   setInterval(()=>{ (function(){ return false; })['constructor']('debugger')['call'](); }, 1500);
-  console.clear();
-  setInterval(()=>console.clear(), 2000);
+  console.clear(); setInterval(()=>console.clear(), 2000);
 })();
 </script>
 <script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e)=>{
-  e.preventDefault();
-  deferredPrompt = e;
-  if(!window.matchMedia('(display-mode: standalone)').matches){
-    let bar = document.getElementById('installBar');
-    if(bar && !localStorage.getItem('rslive_install_closed')){
-      bar.style.display = 'flex';
-    }
-  }
-});
-document.getElementById('installBtn')?.addEventListener('click', async ()=>{
-  if(!deferredPrompt){
-    alert('ব্রাউজারের Menu (⋮) -> Add to Home Screen এ চাপ দাও');
-    return;
-  }
-  deferredPrompt.prompt();
-  let choice = await deferredPrompt.userChoice;
-  if(choice.outcome === 'accepted'){
-    document.getElementById('installBar').style.display = 'none';
-  }
-  deferredPrompt = null;
-});
-document.getElementById('closeInstall')?.addEventListener('click', ()=>{
-  document.getElementById('installBar').style.display = 'none';
-  localStorage.setItem('rslive_install_closed','1');
-});
-window.addEventListener('appinstalled', ()=>{
-  document.getElementById('installBar').style.display = 'none';
-});
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt = e; if(!window.matchMedia('(display-mode: standalone)').matches){ let bar = document.getElementById('installBar'); if(bar && !localStorage.getItem('rslive_install_closed')){ bar.style.display = 'flex'; } } });
+document.getElementById('installBtn')?.addEventListener('click', async ()=>{ if(!deferredPrompt){ alert('ব্রাউজারের Menu (⋮) -> Add to Home Screen এ চাপ দাও'); return; } deferredPrompt.prompt(); let choice = await deferredPrompt.userChoice; if(choice.outcome === 'accepted'){ document.getElementById('installBar').style.display = 'none'; } deferredPrompt = null; });
+document.getElementById('closeInstall')?.addEventListener('click', ()=>{ document.getElementById('installBar').style.display = 'none'; localStorage.setItem('rslive_install_closed','1'); });
+window.addEventListener('appinstalled', ()=>{ document.getElementById('installBar').style.display = 'none'; });
 </script>
 </body>
 </html>
