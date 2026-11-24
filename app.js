@@ -36,12 +36,10 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:12px 12p
 .cat.active{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:140px;max-width:100vw}
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px}
-/* ===== CHANNEL CARD - EKDOM CHIKON / SLIM ===== */
 .card{background:#0d0d16;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:9px 4px 8px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:86px}
 .card img{width:34px;height:34px;object-fit:contain;background:#fff;border-radius:7px;padding:2px}
 .card p{font-size:10px;margin-top:5px;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:24px;word-break:break-word}
 .card small{font-size:8px;color:#8b8ba0;margin-top:1px}
-/* ===== SPORTS CARD - SLIM ===== */
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
 .sports-top{padding:7px 12px 0;text-align:center}
@@ -51,13 +49,15 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:12px 12p
 .sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
 .sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
 .sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.sports-teams .vs-wrap .badge-live{background:#e60023;color:#fff;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.sports-teams .vs-wrap .badge-live i{width:6px;height:6px;background:#fff;border-radius:50%}
-.sports-teams .vs-wrap .badge-up{background:#f97316;color:#fff;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+/* ===== LIVE BADGE - SUNDOR + HALKA GLOW ANIMATION ===== */
+.sports-teams .vs-wrap .badge-live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;font-size:9px;font-weight:900;letter-spacing:1px;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap;animation:liveGlow 1.8s ease-in-out infinite}
+.sports-teams .vs-wrap .badge-live i{width:6px;height:6px;background:#fff;border-radius:50%;animation:liveDot 1.2s infinite}
+@keyframes liveGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,45,85,.45)}50%{box-shadow:0 0 12px 2px rgba(255,45,85,.35)}}
+@keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.sports-teams .vs-wrap .badge-up{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.45);color:#fdba74;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
 .sports-teams .vs-wrap .vs-txt{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
 .sports-bottom{display:flex;align-items:center;justify-content:center;padding:7px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
 .sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
-.sports-bottom .watch-live{background:#2563eb;color:#fff;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:20px;white-space:nowrap}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:11px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -73,7 +73,6 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:12px 12p
 #installBar .ib-txt span{font-size:10px;color:#b8b8d0;display:block}
 #installBar .ib-btn{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;border:none;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
 #installBar .ib-close{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
-/* ===== UPCOMING POPUP - CENTER ===== */
 #upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
 #upModal.show{display:flex}
 .up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -195,7 +194,17 @@ function renderGrid(reset=true){
 }
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
-function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
+function openCh(u,n,s,g){
+  // Player e Suggested Channel dekhanor jonno same group er channel save kore rakhi
+  try{
+    let cur = all.find(x=>encodeURIComponent(x.url)===u);
+    let related = all.filter(x=>x.group=== (cur?cur.group:'') && encodeURIComponent(x.url)!==u).slice(0,24);
+    if(!related.length) related = all.filter(x=>encodeURIComponent(x.url)!==u).slice(0,24);
+    localStorage.setItem('rslive_suggest', JSON.stringify(related));
+    localStorage.removeItem('rslive_sports_match');
+  }catch(e){}
+  window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}`
+}
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 let sportsData = [];
@@ -267,7 +276,6 @@ function renderSportsGrid(){
       </div>
       <div class="sports-bottom">
         <div class="date">🕐 ${dateStr || ''}</div>
-        ${isLive ? `<div class="watch-live">▶ Watch Live</div>` : ``}
       </div>
     </div>`;
   });
@@ -341,7 +349,7 @@ function openMatch(idx){
   if(!m.streams || !m.streams.length) return;
   let info = m.eventInfo || {};
   let name = info.teamA + ' Vs ' + info.teamB;
-  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
+  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); localStorage.removeItem('rslive_suggest'); }catch(e){}
   let first = m.streams[0];
   let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports&fs=1`;
   if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
