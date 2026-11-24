@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--grad-c:#fb923c;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
+:root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
@@ -31,21 +31,24 @@ body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139
 .main-layout{width:100%;display:block}
 .player-col{width:100%}
 #player-wrapper{position:relative;width:calc(100% - 24px);margin:12px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);touch-action:manipulation}
-#player-wrapper:fullscreen{width:100vw!important;height:100vh!important;margin:0;aspect-ratio:auto;border-radius:0;border:none;background:#000}
 #player{position:absolute;inset:0;width:100%!important;height:100%!important;background:#000}
 #player video{width:100%!important;height:100%!important;object-fit:contain!important;background:#000}
-#player-wrapper:fullscreen #player{width:100vw!important;height:100vh!important}
-#player-wrapper:fullscreen #player video{width:100vw!important;height:100vh!important;object-fit:contain!important}
+/* ===== FULLSCREEN - PURO SCREEN VORBE ===== */
+#player-wrapper:fullscreen{width:100vw!important;height:100vh!important;height:100dvh!important;max-width:100vw!important;max-height:100vh!important;max-height:100dvh!important;margin:0!important;padding:0!important;aspect-ratio:auto!important;border-radius:0!important;border:none!important;background:#000!important}
+#player-wrapper:fullscreen #player{width:100vw!important;height:100vh!important;height:100dvh!important}
+#player-wrapper:fullscreen #player video{width:100vw!important;height:100vh!important;height:100dvh!important;object-fit:fill!important}
+#player-wrapper:-webkit-full-screen{width:100vw!important;height:100vh!important;margin:0!important;border-radius:0!important;border:none!important}
+#player-wrapper:-webkit-full-screen #player video{object-fit:fill!important}
 video::-webkit-media-controls{display:none!important}
 #loader{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,var(--bg-2) 0%,var(--bg-1) 70%);display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;pointer-events:none}
 #loader.hide-now{opacity:0!important;visibility:hidden!important}
-/* LOADER - AGERTA, TV ICON NAI */
 .tuner{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
-.brand-name{font-size:18px;font-weight:900;letter-spacing:1.5px;color:#fff;white-space:nowrap}
+.loader-tv{width:72px;height:72px;filter:drop-shadow(0 0 18px rgba(34,211,238,.45))}
+.brand-name{font-size:20px;font-weight:900;letter-spacing:2px;color:#fff;white-space:nowrap}
 .brand-name i{font-style:normal;background:linear-gradient(90deg,var(--grad-a),var(--grad-b),#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent}
 .dots{display:flex;gap:6px}.dots span{width:6px;height:6px;border-radius:50%;background:var(--grad-b);animation:dot-pulse 1.2s infinite}
 @keyframes dot-pulse{0%,80%,100%{transform:scale(.6);opacity:.35}40%{transform:scale(1);opacity:1}}
-.status-line{font-family:var(--mono);font-size:9.5px;letter-spacing:2.8px;color:var(--text-dim)}
+.status-line{font-family:var(--mono);font-size:9.5px;letter-spacing:3px;color:var(--text-dim)}
 .state-content{text-align:center;color:var(--text);padding:0 24px;display:flex;flex-direction:column;align-items:center}
 .state-content p.title{font-size:13px;font-weight:600}
 .state-content p.sub{font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:280px}
@@ -64,19 +67,22 @@ video::-webkit-media-controls{display:none!important}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer}
 #time-label{font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
-.suggest{margin:16px 0 0;width:100%;overflow:hidden}
+/* ===== SUGGEST - SCREENSHOT ER MOTO ===== */
+.suggest{margin:18px 0 0;width:100%;overflow:hidden}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px}
-.suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
-.suggest-head h3 .suggest-ico{width:28px;height:28px;background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
-.suggest-head a{font-size:12px;font-weight:800;color:#a78bfa;text-decoration:none}
-.suggest-grid{display:flex;gap:8px;overflow-x:auto;padding:4px 14px 10px;scrollbar-width:none}
+.suggest-head h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff;font-family:'Hind Siliguri',sans-serif}
+.suggest-head h3 .suggest-ico{width:32px;height:32px;background:rgba(255,45,85,.15);border:1px solid rgba(255,45,85,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.suggest-head a{font-size:14px;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.suggest-head a .go-ico{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px}
+.suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:4px 12px 10px;scrollbar-width:none}
 .suggest-grid::-webkit-scrollbar{display:none}
 .srv-pill{flex:0 0 auto;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#ddd;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
 .srv-pill.active{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;box-shadow:none!important}
-/* SUGGESTED CHANNEL CARD */
-.sug-card{flex:0 0 auto;width:110px;background:#0d0d16;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer}
-.sug-card img{width:38px;height:38px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
-.sug-card p{font-size:10px;margin-top:6px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:24px}
+/* SUGGESTED CARD - BORO, SCREENSHOT STYLE */
+.sug-card{flex:0 0 auto;width:148px;background:#111118;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:12px 8px 10px;text-align:center;cursor:pointer;overflow:hidden}
+.sug-card img{width:78px;height:58px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;display:block;margin:0 auto}
+.sug-card p{font-size:12.5px;font-weight:700;margin-top:8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;color:#fff;word-break:break-word}
+.sug-card .live-hd{font-size:10px;font-weight:700;color:#22d3ee;letter-spacing:1px;margin-top:3px}
 .ad-wrap{margin:14px 14px 0;background:#14141f;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px}
 .ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:10px}
 .ad-box{border-radius:12px;overflow:hidden;display:flex;justify-content:center}
@@ -87,12 +93,13 @@ video::-webkit-media-controls{display:none!important}
   .main-layout{display:flex;gap:16px;align-items:flex-start;padding:0 14px;max-width:1400px;margin:0 auto}
   .player-col{flex:1;min-width:0}
   #player-wrapper{width:100%;margin:12px 0 0}
-  .suggest{width:330px;flex-shrink:0;margin:12px 0 0;background:#111118;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 0 8px;position:sticky;top:62px}
+  .suggest{width:340px;flex-shrink:0;margin:12px 0 0;background:#111118;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 0 8px;position:sticky;top:62px}
   .suggest-grid{flex-direction:column;overflow-x:hidden;overflow-y:auto;padding:0 10px 10px;gap:8px}
   .srv-pill{width:100%;text-align:center;padding:10px;border-radius:12px}
-  .sug-card{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:8px}
-  .sug-card img{width:40px;height:40px;flex-shrink:0}
-  .sug-card p{min-height:0}
+  .sug-card{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:10px}
+  .sug-card img{width:72px;height:52px;flex-shrink:0;margin:0}
+  .sug-card p{min-height:0;font-size:13px}
+  .sug-card .live-hd{display:none}
   .ad-wrap{max-width:1400px;margin-left:auto;margin-right:auto}
 }
 </style>
@@ -108,7 +115,7 @@ video::-webkit-media-controls{display:none!important}
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
-<div id="loader"><div class="tuner"><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
+<div id="loader"><div class="tuner"><svg class="loader-tv" viewBox="0 0 64 64"><rect x="6" y="14" width="52" height="34" rx="6" fill="none" stroke="#fff" stroke-width="2.5"/><rect x="11" y="19" width="30" height="24" rx="2" fill="#22d3ee" opacity=".9"/><rect x="23" y="19" width="9" height="24" fill="#a78bfa"/><rect x="32" y="19" width="9" height="24" fill="#f472b6"/><line x1="22" y1="14" x2="14" y2="4" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="14" x2="50" y2="4" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="50" cy="26" r="2" fill="#fff"/><circle cx="50" cy="34" r="2" fill="#fff"/><line x1="24" y1="52" x2="40" y2="52" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg><div class="brand-name">RSLIVE <i>GO</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
 <div id="player"></div>
 <div id="tapPlay"><div class="tp-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Tap to Play</p><small>Browser blocked sound, tap to start</small></div>
 <div id="controls">
@@ -120,7 +127,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div class="suggest">
-<div class="suggest-head"><h3><span class="suggest-ico" id="suggestIco">🖥️</span><span id="suggestTitle">Available Servers</span></h3><a href="index.html">Home →</a></div>
+<div class="suggest-head"><h3><span class="suggest-ico" id="suggestIco">🔴</span><span id="suggestTitle">আরো দেখো</span></h3><a href="index.html" id="seeAllLink">সব দেখো <span class="go-ico">→</span></a></div>
 <div class="suggest-grid" id="suggestGrid"><div style="padding:20px;color:#888;font-size:12px">Loading...</div></div>
 </div>
 </div>
@@ -158,7 +165,7 @@ let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) 
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
 function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
-function brandBlock(){ return `<div class="brand-name"><b>RsLive</b> <i>Go</i></div>`; }
+function brandBlock(){ return `<div class="brand-name">RSLIVE <i>GO</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){} }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
@@ -178,6 +185,11 @@ async function toggleFullscreen(){
   if(document.fullscreenElement){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} try{ await document.exitFullscreen(); }catch(e){} }
   else { try{ if(wrapper.requestFullscreen) await wrapper.requestFullscreen(); }catch(e){} try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
 }
+document.addEventListener('fullscreenchange',()=>{
+  const v=document.querySelector('#player video'); if(!v) return;
+  // Fullscreen e fill, normal e contain
+  v.style.objectFit = document.fullscreenElement ? 'fill' : 'contain';
+});
 let lastTap=0,singleTapTimer=null,ignoreNextClick=false;
 function handleTap(e){
   if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#tapPlay')) return;
@@ -191,6 +203,18 @@ wrapper.addEventListener('mousemove',showControls);
 function makeProxyUrl(o){ if(!o) return o; if(o.startsWith(PROXY)) return o; return PROXY + encodeURIComponent(o); }
 class ProxyLoader extends Hls.DefaultConfig.loader { load(context,config,callbacks){ if(context&&context.url&&!context.url.startsWith(PROXY)){ context.url=makeProxyUrl(context.url); } super.load(context,config,callbacks); } }
 let serverList = []; let currentServerIdx = 0; let autoFailTimer = null; let isSportsMode=false;
+function groupLabel(){
+  let g=(currentGroup||'').toLowerCase();
+  if(g.includes('bangla')||g.includes('bangladesh')||g.includes('general')) return 'Bangla';
+  if(g.includes('news')) return 'News';
+  if(g.includes('sport')||g.includes('cricket')||g.includes('football')) return 'Sports';
+  if(g.includes('movie')) return 'Movies';
+  if(g.includes('kids')||g.includes('kid')) return 'Kids';
+  if(g.includes('music')) return 'Music';
+  if(g.includes('entertainment')) return 'Entertainment';
+  if(currentGroup) return currentGroup;
+  return 'Bangla';
+}
 function buildServers(){
   try{
     let saved = JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
@@ -201,7 +225,6 @@ function buildServers(){
       renderServers(); return;
     }
   }catch(e){}
-  // Normal playlist channel -> Suggested channels, Server 1/2/3 na
   isSportsMode=false;
   serverList = [
     { label:'Server 1', url: streamSource, kid: drmKid, key: drmKey, type:'direct', tag:'DIRECT' },
@@ -213,18 +236,21 @@ function buildServers(){
 function renderServers(){
   document.getElementById('suggestTitle').textContent='Available Servers';
   document.getElementById('suggestIco').textContent='🖥️';
+  document.getElementById('seeAllLink').innerHTML='Home <span class="go-ico">→</span>';
   const grid = document.getElementById('suggestGrid');
   if(!serverList.length){ grid.innerHTML = `<div style="padding:20px;color:#888;font-size:12px">No servers found</div>`; return; }
   grid.innerHTML = serverList.map((s,i)=>`<div class="srv-pill ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${s.label}</div>`).join('');
 }
 function renderSuggested(){
-  document.getElementById('suggestTitle').textContent='Suggested Channels';
-  document.getElementById('suggestIco').textContent='📺';
+  // Screenshot style heading: Aro Bangla Dekho
+  document.getElementById('suggestTitle').textContent='আরো '+groupLabel()+' দেখো';
+  document.getElementById('suggestIco').textContent='🔴';
+  document.getElementById('seeAllLink').innerHTML='সব দেখো <span class="go-ico">→</span>';
   const grid = document.getElementById('suggestGrid');
   let list=[];
   try{ list = JSON.parse(localStorage.getItem('rslive_suggest')||'[]'); }catch(e){ list=[]; }
   if(!list.length){ grid.innerHTML = `<div style="padding:20px;color:#888;font-size:12px">No suggested channels.<br>Go Home and pick a channel.</div>`; return; }
-  grid.innerHTML = list.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.source||'')}','${encodeURIComponent(c.group||'')}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p></div>`).join('');
+  grid.innerHTML = list.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.source||'')}','${encodeURIComponent(c.group||'')}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><div class="live-hd">LIVE • HD</div></div>`).join('');
 }
 window.openSuggest=function(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${s}&group=${g}`; };
 window.switchServer = function(idx,e){
