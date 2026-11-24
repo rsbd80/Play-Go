@@ -58,14 +58,11 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 #featured{display:none;margin:12px 12px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
 #status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);padding:10px;text-align:center;font-size:11.5px;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
 #status b{background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tele{position:fixed;right:12px;bottom:100px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6);animation:teleFloat 2.5s ease-in-out infinite}
-.tele svg{width:24px;height:24px;fill:#fff;animation:telePop 2.5s ease-in-out infinite}
+.tele{position:fixed;right:14px;bottom:110px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6)}
+.tele svg{width:26px;height:26px;fill:#fff}
 .tele::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;background:#2AABEE;z-index:-1;animation:telePulse 2s infinite}
-.tele::after{content:'Join Us';position:absolute;right:56px;top:50%;transform:translateY(-50%);background:#fff;color:#000;font-size:11px;font-weight:800;padding:5px 10px;border-radius:20px;white-space:nowrap;animation:telePopUp 2.5s ease-in-out infinite}
-@keyframes teleFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.05)}}
-@keyframes telePop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.15) rotate(-10deg)}}
-@keyframes telePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.8);opacity:0}}
-@keyframes telePopUp{0%,100%{opacity:0;transform:translateY(-50%) translateX(10px) scale(.8)}20%,80%{opacity:1;transform:translateY(-50%) translateX(0) scale(1)}}
+.tele::after{content:'Join Us';position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+@keyframes telePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:36px;z-index:998;background:#1a1a2e;border:1px solid rgba(167,139,250,.45);border-radius:100px;padding:4px 4px 4px 8px;align-items:center;gap:6px}
 #installBar .ib-ico{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:11px}
 #installBar .ib-txt{flex:1;text-align:center}
@@ -98,12 +95,12 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
-<a class="tele" id="teleBtn" href="https://t.me/rslivetv" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
+<a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
 <div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
 `;
 
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/rslivetv',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version!==CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
