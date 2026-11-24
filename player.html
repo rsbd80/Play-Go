@@ -4,7 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>RS Player Pro</title>
+<title>RsLive Go - Player</title>
+<script>
+// ✅ KICK-OUT LOCK - Viewer / Iframe / অন্য সাইটে খুললেই বের করে দিবে
+(function(){
+  function kick(){
+    try{ window.top.location.href='about:blank'; }catch(e){}
+    try{ window.parent.location.href='about:blank'; }catch(e){}
+    try{ window.location.href='about:blank'; }catch(e){}
+    try{ window.location.replace('about:blank'); }catch(e){}
+    try{ window.close(); }catch(e){}
+    try{ document.documentElement.innerHTML=''; }catch(e){}
+    try{ document.write(''); }catch(e){}
+    setInterval(function(){ try{ window.top.location.href='about:blank'; }catch(e){} try{ window.location.href='about:blank'; }catch(e){} document.documentElement.innerHTML=''; },100);
+  }
+  var h=(window.location.hostname||'').toLowerCase();
+  var p=(window.location.protocol||'').toLowerCase();
+  var ref=(document.referrer||'').toLowerCase();
+  if(p==='blob:'||p==='data:'||p==='file:'||p==='about:'||h===''||h==='null'){kick();throw new Error('Blocked');}
+  if(h!=='rslivego.pages.dev'&&h!=='www.rslivego.pages.dev'&&h!=='localhost'&&h!=='127.0.0.1'){kick();throw new Error('Blocked');}
+  if(window.top!==window.self){kick();throw new Error('Blocked');}
+  if(ref.indexOf('codebeautify')!==-1||ref.indexOf('html-viewer')!==-1||ref.indexOf('htmlviewer')!==-1||ref.indexOf('htmlpreview')!==-1||ref.indexOf('online-tool')!==-1||ref.indexOf('html-online')!==-1||ref.indexOf('codepen')!==-1||ref.indexOf('jsfiddle')!==-1||ref.indexOf('w3schools')!==-1){kick();throw new Error('Blocked');}
+  var u=window.location.href.toLowerCase();
+  if(u.indexOf('codebeautify')!==-1||u.indexOf('html-viewer')!==-1||u.indexOf('htmlpreview')!==-1){kick();throw new Error('Blocked');}
+})();
+</script>
 <script src="https://content.jwplatform.com/libraries/IDzF9Zmk.js"></script>
 <script>
 jwplayer.key = "Khpp2dHxlBJHC8MCmLnBuV2jK/DwDnJMniwF6EO9HC/riJ712ZmbHg==";
@@ -76,10 +100,16 @@ video::-webkit-media-controls{display:none!important;}
 #player-wrapper:-webkit-full-screen{width:100vw;height:100vh;background:#000;}
 #player-wrapper:fullscreen #player,#player-wrapper:-webkit-full-screen #player{width:100%!important;height:100%!important;}
 #hardBlockScreen{display:none;position:fixed;inset:0;background:#06060c;z-index:99999999;align-items:center;justify-content:center;text-align:center;padding:30px;}
+/* ✅ PC + MOBILE - ছোট স্ক্রিনে Loader ছোট হবে */
+@media(max-width:600px){
+  .tv-wrap{width:64px;height:64px}
+  .tv-icon{width:50px;height:50px}
+  .brand-name{font-size:13px}
+}
 </style>
 </head>
 <body>
-<div id="hardBlockScreen"><div><div style="font-size:60px">🔒</div><h2 style="color:#fff;margin:14px 0 8px;font-size:22px;font-weight:900">Security Alert</h2><p style="color:#999;font-size:14px;line-height:1.6">DevTools / Inspect বন্ধ করে<br>আবার ঢুকো<br>RS Live TV Protected</p><button onclick="location.reload()" style="margin-top:18px;padding:12px 28px;border:none;border-radius:12px;background:linear-gradient(135deg,#22d3ee,#a78bfa);font-weight:800;cursor:pointer">🔄 Reload</button></div></div>
+<div id="hardBlockScreen"><div><div style="font-size:60px">🔒</div><h2 style="color:#fff;margin:14px 0 8px;font-size:22px;font-weight:900">Security Alert</h2><p style="color:#999;font-size:14px;line-height:1.6">DevTools / Inspect বন্ধ করে<br>আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:18px;padding:12px 28px;border:none;border-radius:12px;background:linear-gradient(135deg,#22d3ee,#a78bfa);font-weight:800;cursor:pointer">🔄 Reload</button></div></div>
 <div id="player-wrapper">
 <div id="loader">
     <div class="tuner">
@@ -101,7 +131,7 @@ video::-webkit-media-controls{display:none!important;}
                 <line class="tv-body" x1="20" y1="50" x2="44" y2="50"/>
             </svg>
         </div>
-        <div class="brand-name"><b>RS LIVE</b> TV</div>
+        <div class="brand-name"><b>RsLive</b> Go</div>
         <div class="dots"><span></span><span></span><span></span></div>
         <div class="status-line" id="status-line">LOADING</div>
     </div>
@@ -126,7 +156,7 @@ let statusTimer = setInterval(() => {
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
 function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML = html; showLoader(); }
-function brandBlock(){ return `<div class="brand-name"><b>RS LIVE</b> TV</div>`; }
+function brandBlock(){ return `<div class="brand-name"><b>RsLive</b> Go</div>`; }
 let wakeLock = null;
 let wakeLockWanted = false;
 async function requestWakeLock(){
@@ -255,6 +285,8 @@ function hardBlock(){
   try{ if(window.jwplayer){ var p = jwplayer('player'); if(p && p.stop) p.stop(); } }catch(e){}
   try{ var v = document.querySelector('#player video'); if(v){ v.pause(); v.removeAttribute('src'); v.load(); } }catch(e){}
 }
+// ✅ Iframe এ খুললে Kick-Out - শুধু Block না, সরাসরি বের করে দিবে
+if(window.top !== window.self){ try{ window.top.location.href='about:blank'; }catch(e){} try{ window.location.href='about:blank'; }catch(e){} document.documentElement.innerHTML=''; return; }
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; }, true);
 document.addEventListener('copy', function(e){ e.preventDefault(); return false; }, true);
 document.addEventListener('cut', function(e){ e.preventDefault(); return false; }, true);
