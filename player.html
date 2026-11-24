@@ -73,13 +73,12 @@ video::-webkit-media-controls{display:none!important}
 @keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-/* ✅ FIX 1 - Server Bar এখন Loader + TapPlay এর উপরেও থাকবে */
-#serverBar{position:absolute;top:0;left:0;right:0;z-index:130;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
+/* ✅ Server Bar - Loading / TapPlay সবার উপরে */
+#serverBar{position:absolute;top:0;left:0;right:0;z-index:200;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
 #serverBar::-webkit-scrollbar{display:none}
 #serverBar.show{display:flex}
 .srv-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);white-space:nowrap}
 .srv-btn.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(167,139,250,.5)}
-.srv-btn.trying{border-color:#ffb84d;color:#ffb84d}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -200,6 +199,7 @@ let drmKey = urlParams.get('key') || '';
 const chNameParam = urlParams.get('name') || '';
 const srcParam = urlParams.get('src') || '';
 const groupParam = urlParams.get('group') || '';
+const autoFS = urlParams.get('fs') === '1';
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -264,6 +264,25 @@ async function toggleFullscreen(){
     try{ if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){}
   }
 }
+// ✅ Direct Fullscreen - Player খুললেই
+async function tryAutoFullscreen(){
+  if(!autoFS) return;
+  if(document.fullscreenElement) return;
+  try{
+    if(wrapper.requestFullscreen) await wrapper.requestFullscreen();
+    else if(wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+    try{ if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){}
+  }catch(e){}
+  // ব্রাউজার ব্লক করলে ১ম Tap এই ফুলস্ক্রিন হবে
+  let once = ()=>{
+    toggleFullscreen();
+    document.removeEventListener('touchend', once);
+    document.removeEventListener('click', once);
+  };
+  document.addEventListener('touchend', once, {once:true});
+  document.addEventListener('click', once, {once:true});
+}
+if(autoFS){ setTimeout(tryAutoFullscreen, 300); }
 document.addEventListener('fullscreenchange', ()=>{
   if(document.fullscreenElement){
     const v = document.querySelector('#player video');
@@ -408,7 +427,6 @@ if(!streamSource){
       return `<button class="srv-btn ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${label}</button>`;
     }).join('');
   }
-  // ✅ FIX 2 - Auto Failover: 1 টা না চললে নিজে নিজে পরেরটায়
   function tryNextServer(){
     if(!serverList.length) return false;
     if(currentServerIdx >= serverList.length-1) return false;
@@ -440,13 +458,12 @@ if(!streamSource){
     loadStream(streamSource, false);
   };
   renderServers();
-  // ✅ 6 সেকেন্ডে না চললে Auto Next Server - স্ক্রিনশটের CONNECTING আটকে থাকবে না
   function startAutoFailWatch(){
     if(autoFailTimer) clearTimeout(autoFailTimer);
     if(!serverList.length || serverList.length<2) return;
     autoFailTimer = setTimeout(()=>{
       if(!everPlayed){
-        if(!tryNextServer()){ /* সব শেষ */ }
+        if(!tryNextServer()){ }
         else { startAutoFailWatch(); }
       }
     }, 6000);
@@ -459,15 +476,15 @@ if(!streamSource){
   updateMuteBtn();
   function doPlay(){
     video.muted = false; video.volume = 1; updateMuteBtn();
-    video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
+    video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); if(autoFS) tryAutoFullscreen(); }).catch(e=>{
       autoplayBlocked = true;
       video.muted = true;
-      video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+      video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} updateMuteBtn(); requestWakeLock(); if(autoFS) tryAutoFullscreen(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
       updateMuteBtn();
     });
   }
   tapPlayEl.addEventListener('click', ()=>{
-    video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{});
+    video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); if(autoFS) tryAutoFullscreen(); }).catch(()=>{});
   });
   muteBtnEl.addEventListener('click', (e)=>{
     e.stopPropagation(); video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
@@ -487,7 +504,6 @@ if(!streamSource){
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
           if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
-            // ✅ আগে Next Server, তারপর Proxy
             if(!everPlayed && tryNextServer()) return;
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
@@ -529,7 +545,6 @@ if(!streamSource){
     }
   }
   function showNoStreamState(err){
-    // ✅ সব সার্ভার শেষ না হলে Error দেখাবে না, Next এ যাবে
     if(!everPlayed && tryNextServer()) return;
     releaseWakeLock();
     tapPlayEl.classList.remove('show');
@@ -539,7 +554,7 @@ if(!streamSource){
   }
   window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); if(autoFS) tryAutoFullscreen(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
