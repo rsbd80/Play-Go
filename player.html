@@ -6,7 +6,6 @@
 <meta name="referrer" content="no-referrer">
 <title>RsLive Go - Player</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<!-- ✅ ADDED - শুধু DRM / DASH লিংকের জন্য, ডিজাইনে কোনো চেঞ্জ নাই -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -188,7 +187,6 @@ const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
-// ✅ ADDED - Sports JSON থেকে আসা DRM kid/key - ডিজাইনে কোনো চেঞ্জ নাই
 const drmKid = urlParams.get('kid') || '';
 const drmKey = urlParams.get('key') || '';
 const chNameParam = urlParams.get('name') || '';
@@ -225,8 +223,6 @@ async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await 
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
-
-// ===== FULLSCREEN + ROTATE - iPhone 11 FIX =====
 let isFullscreenBusy = false;
 function getVideoEl(){ return document.querySelector('#player video'); }
 async function toggleFullscreen(){
@@ -275,8 +271,6 @@ document.addEventListener('webkitfullscreenchange', ()=>{
   if(document.webkitFullscreenElement) v.style.objectFit = 'fill';
   else v.style.objectFit = 'contain';
 });
-
-// ===== SINGLE / DOUBLE TAP - CLEAN FIX =====
 let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
@@ -305,7 +299,6 @@ if(IS_TOUCH){
   wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
 }
 wrapper.addEventListener('mousemove', showControls);
-
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(original){
   if(!original) return original;
@@ -343,9 +336,33 @@ async function loadSuggestions(){
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
+  const isSportsPlay = (mySrc === 'sports' || drmKid) && currentName.includes('Vs');
   if(titleEl){
-    let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
-    titleEl.textContent = 'আরো ' + label + ' দেখো';
+    if(isSportsPlay){ titleEl.textContent = 'আরো Live Sports দেখো'; }
+    else {
+      let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
+      titleEl.textContent = 'আরো ' + label + ' দেখো';
+    }
+  }
+  if(isSportsPlay){
+    try{
+      let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json');
+      let j = await r.json();
+      let matches = j.matches || [];
+      let html = '';
+      matches.forEach((m)=>{
+        let info = m.eventInfo || {};
+        (m.streams || []).forEach((s)=>{
+          if(!s.stream_url) return;
+          if(s.stream_url === streamSource) return;
+          let nm = info.teamA + ' Vs ' + info.teamB + ' - ' + (s.channel_name||'');
+          html += `<div class="sug-card" title="${nm}" onclick="openSportsSuggest('${encodeURIComponent(s.stream_url)}','${s.kid||''}','${s.key||''}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')"><img src="${info.teamAFlag || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${info.teamA} Vs ${info.teamB}</p><small>${s.channel_name} • LIVE • HD</small></div><div class="sug-play">▶</div></div>`;
+        });
+      });
+      if(!html) throw new Error('empty');
+      grid.innerHTML = html;
+      return;
+    }catch(e){}
   }
   try{
     let list=[];
@@ -367,6 +384,11 @@ async function loadSuggestions(){
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
+function openSportsSuggest(urlEnc, kid, key, nameEnc){
+  let link = `player.html?url=${urlEnc}&name=${nameEnc}&src=sports&group=Sports`;
+  if(kid && key) link += `&kid=${kid}&key=${key}`;
+  window.location.href = link;
+}
 loadSuggestions();
 if(!streamSource){
   showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
@@ -425,13 +447,11 @@ if(!streamSource){
         });
       } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
       else { showNoStreamState({message:'Browser HLS support নেই'}); }
-    // ✅ ADDED - .mpd + kid/key লিংক এখন চলবে, আগে এখানে "DASH সাপোর্ট করে না" ছিল
     } else if(url.includes('.mpd') || url.includes('dash')){
       loadDash(url);
     }
     else { video.src=url; doPlay(); }
   }
-  // ✅ ADDED - DASH / DRM Player - আগের HLS কোডে হাত দেই নাই
   let shakaPlayer = null;
   async function loadDash(url){
     try{
