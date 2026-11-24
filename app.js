@@ -63,8 +63,7 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .sports-yt-thumb .team-name{font-size:10.5px;font-weight:700;color:#fff;margin-top:5px;text-align:center;line-height:1.25;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:26px;width:100%}
 .sports-yt-thumb .vs-txt{flex-shrink:0;color:#a78bfa;font-size:11px;font-weight:800;padding-top:14px}
 .sports-yt-thumb .live-tag{position:absolute;top:6px;left:6px;font-size:8px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.5px;z-index:2}
-.sports-yt-card .match-title{font-size:12.5px;font-weight:600;margin:8px 10px 2px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;text-align:left}
-.sports-yt-card small{font-size:10px;color:#22d3ee;margin:0 10px 10px;display:block;text-align:left}
+.sports-yt-card .match-title{font-size:12.5px;font-weight:600;margin:8px 10px 10px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;text-align:center}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -191,7 +190,7 @@ function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&s
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 
-// ===== 🏆 LIVE SPORTS =====
+// ===== 🏆 LIVE SPORTS - 1 CLICK PLAY =====
 let sportsData = [];
 async function loadSports(){
   try{
@@ -224,30 +223,23 @@ function renderSportsGrid(){
         </div>
       </div>
       <p class="match-title">${m.event_name||''}</p>
-      <small>${m.Category||'Sports'} • ${m.streams ? m.streams.length : 0} টা লিংক • Tap to Watch</small>
     </div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
 }
+// ✅ 1 CLICK = সরাসরি Play, আর Modal / লিস্ট আসবে না
 function openMatch(idx){
   let m = sportsData[idx];
-  if(!m) return;
+  if(!m || !m.streams || !m.streams.length) return;
   let info = m.eventInfo || {};
-  let list = (m.streams || []).map((s) => {
-    let url = s.stream_url || '';
-    if(!url) return '';
-    let kid = s.kid || '';
-    let key = s.key || '';
-    return `<button onclick="playSports('${encodeURIComponent(url)}','${kid}','${key}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')" style="width:100%;padding:13px;margin:6px 0;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:#1d1d2e;color:#fff;font-weight:700;text-align:left;cursor:pointer">▶ ${s.channel_name} <span style="float:right;font-size:10px;background:#2a2a3a;padding:4px 8px;border-radius:20px;color:#22d3ee">HD • PLAY</span></button>`;
-  }).join('');
-  let old = document.getElementById('sportsModal'); if(old) old.remove();
-  let box = document.createElement('div');
-  box.id = 'sportsModal';
-  box.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:12px';
-  box.innerHTML = `<div style="width:100%;max-width:480px;background:#15151f;border-radius:16px;padding:16px;max-height:80vh;overflow-y:auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>${info.teamA} Vs ${info.teamB}</b><span onclick="document.getElementById('sportsModal').remove()" style="cursor:pointer;font-size:20px">✕</span></div><p style="font-size:12px;color:#aaa;margin:6px 0">${m.event_name||''} • ${m.status||''}</p>${list || '<p style="color:#aaa">কোনো লিংক পাওয়া যায় নাই</p>'}</div>`;
-  box.onclick = (e) => { if(e.target === box) box.remove(); };
-  document.body.appendChild(box);
+  let name = info.teamA + ' Vs ' + info.teamB;
+  // ✅ সব সার্ভার Player এ পাঠানোর জন্য localStorage এ সেভ
+  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
+  let first = m.streams[0];
+  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports`;
+  if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
+  window.location.href = link;
 }
 function playSports(u, kid, key, name){
   let link = `player.html?url=${u}&name=${name}&src=sports&group=Sports`;
