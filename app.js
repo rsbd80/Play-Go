@@ -40,26 +40,22 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-/* ===== SPORTS CARD - POSTER DESIGN ===== */
-#grid.sports-mode{grid-template-columns:1fr!important;gap:14px!important;padding:14px!important}
-.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.sports-top{position:relative;padding:18px 14px 6px;text-align:center;min-height:48px}
-.sports-top .badge-live{position:absolute;top:14px;left:14px;background:#e60023;color:#fff;font-size:13px;font-weight:800;padding:6px 14px 6px 10px;border-radius:20px;display:flex;align-items:center;gap:7px;z-index:2}
-.sports-top .badge-live i{width:11px;height:11px;background:#fff;border-radius:50%}
-.sports-top .badge-up{position:absolute;top:14px;left:14px;background:#f97316;color:#fff;font-size:13px;font-weight:800;padding:6px 14px;border-radius:20px;display:flex;align-items:center;gap:6px;z-index:2}
-.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.5px;color:#e5e7eb;text-transform:uppercase;line-height:1.4;padding-left:110px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
-.sports-teams{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:6px;padding:10px 14px 18px}
-.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0;text-align:center}
-.sports-teams .team img{width:92px;height:92px;border-radius:20px;background:#fff;padding:6px;object-fit:contain}
-.sports-teams .team-name{font-size:19px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:44px}
-.sports-teams .vs-wrap{display:flex;align-items:center;justify-content:center;position:relative}
-.sports-teams .vs-wrap .vs-txt{font-size:34px;font-weight:900;font-style:italic;color:#cbd5e1;text-shadow:2px 2px 0 rgba(0,0,0,.5)}
-.sports-teams .vs-wrap::before{content:"";position:absolute;width:2px;height:60px;background:linear-gradient(180deg,transparent,#64748b,transparent);transform:rotate(25deg);opacity:.6}
-.sports-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-top:1px solid rgba(255,255,255,.10);gap:10px}
-.sports-bottom .date{font-size:15px;color:#9ca3af;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.sports-bottom .divider-v{width:1px;height:28px;background:rgba(255,255,255,.25);flex-shrink:0}
-.sports-bottom .watch-live{background:#2563eb;color:#fff;font-size:15px;font-weight:700;padding:10px 22px;border-radius:25px;white-space:nowrap;display:flex;align-items:center;gap:7px;flex-shrink:0}
-.sports-bottom .notify-btn{background:#2a2a3a;color:#fff;font-size:15px;font-weight:700;padding:10px 22px;border-radius:25px;white-space:nowrap;display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.15);flex-shrink:0}
+#grid.sports-mode{grid-template-columns:1fr!important;gap:10px!important;padding:12px!important}
+.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;cursor:pointer;width:100%}
+.sports-top{padding:9px 12px 2px;text-align:center}
+.sports-top .league{font-size:10px;font-weight:700;letter-spacing:.5px;color:#9ca3af;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-teams{display:grid;grid-template-columns:1fr 78px 1fr;align-items:center;gap:4px;padding:6px 12px 8px}
+.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;text-align:center}
+.sports-teams .team img{width:52px;height:52px;border-radius:12px;background:#fff;padding:4px;object-fit:contain}
+.sports-teams .team-name{font-size:13px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:30px}
+.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.sports-teams .vs-wrap .badge-live{background:#e60023;color:#fff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.sports-teams .vs-wrap .badge-live i{width:7px;height:7px;background:#fff;border-radius:50%}
+.sports-teams .vs-wrap .badge-up{background:#f97316;color:#fff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.sports-teams .vs-wrap .vs-txt{font-size:20px;font-weight:900;font-style:italic;color:#cbd5e1}
+.sports-bottom{display:flex;align-items:center;justify-content:center;padding:9px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
+.sports-bottom .date{font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sports-bottom .watch-live{background:#2563eb;color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:20px;white-space:nowrap}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -75,6 +71,21 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 #installBar .ib-txt span{font-size:10px;color:#b8b8d0;display:block}
 #installBar .ib-btn{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;border:none;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
 #installBar .ib-close{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+#upModal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:flex-end;justify-content:center}
+#upModal.show{display:flex}
+.up-sheet{width:100%;max-width:480px;background:#111118;border-radius:22px 22px 0 0;border:1px solid rgba(255,255,255,.15);padding:8px 16px 22px;animation:upSlide .25s ease;position:relative}
+@keyframes upSlide{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.up-grab{width:44px;height:4px;background:rgba(255,255,255,.25);border-radius:10px;margin:4px auto 14px}
+.up-close{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+.up-teams{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:6px;padding:8px 0 12px;text-align:center}
+.up-teams img{width:54px;height:54px;background:#fff;border-radius:12px;padding:4px;object-fit:contain;margin:0 auto}
+.up-teams .up-name{font-size:13px;font-weight:700;margin-top:6px;line-height:1.2;min-height:30px}
+.up-vs{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
+.up-count{font-size:22px;font-weight:900;text-align:center;color:#fb923c;letter-spacing:1px}
+.up-start{font-size:12px;color:#9ca3af;text-align:center;margin-top:4px}
+.up-notify{width:100%;margin-top:16px;padding:13px;border:none;border-radius:14px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+.up-notify.done{background:#1f9d55}
+.up-note{font-size:11px;color:#888;text-align:center;margin-top:10px;line-height:1.5}
 .desktop-wrap{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 #mainCol{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden}
 @media(min-width:900px){
@@ -90,11 +101,13 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible;padding-bottom:20px}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
-#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:16px!important}
+#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
 .card{border-radius:16px;padding:14px 8px}
 .card img{width:60px;height:60px;border-radius:12px;padding:6px}
 .card p{font-size:12px}
 .tele{bottom:20px}
+#upModal{align-items:center;padding:20px}
+.up-sheet{border-radius:22px}
 }
 </style>
 <div id="noticeBar"></div>
@@ -103,6 +116,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
 <div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>Get RsLive Go App</b><span>Save to your phone in 1 click</span></div><button class="ib-btn" id="installBtn">Install</button><span class="ib-close" id="closeInstall">✕</span></div>
+<div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-grab"></div><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
 
 const CONFIG_VERSION='v4-pwa-secure';
@@ -191,6 +205,7 @@ async function loadSports(){
     sportsData = j.matches || [];
     _catCache = null; renderCats();
     if(cat === "🏆 Live Sports") renderGrid(true);
+    checkNotifyMatches();
   }catch(e){ console.log('Sports load fail', e); }
 }
 function parseStartTime(info, m){
@@ -205,6 +220,13 @@ function parseStartTime(info, m){
   let t2 = Date.parse(s + ' ' + new Date().getFullYear());
   if(!isNaN(t2)) return t2;
   return null;
+}
+function formatCountdown(ms){
+  if(ms<=0) return 'Starting...';
+  let sec=Math.floor(ms/1000); let d=Math.floor(sec/86400); sec%=86400; let h=Math.floor(sec/3600); sec%=3600; let m=Math.floor(sec/60); let s=sec%60;
+  let pad=n=>String(n).padStart(2,'0');
+  if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
+  return pad(h)+':'+pad(m)+':'+pad(s);
 }
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
@@ -224,28 +246,89 @@ function renderSportsGrid(){
     else if(info.startTime) dateStr = info.startTime;
     html += `
     <div class="sports-yt-card" onclick="openMatch(${sIdx})">
-      <div class="sports-top">
-        ${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}
-        <div class="league">${league}</div>
-      </div>
+      <div class="sports-top"><div class="league">${league}</div></div>
       <div class="sports-teams">
         <div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div>
-        <div class="vs-wrap"><div class="vs-txt">VS</div></div>
+        <div class="vs-wrap">
+          ${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}
+          <div class="vs-txt">VS</div>
+        </div>
         <div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div>
       </div>
       <div class="sports-bottom">
         <div class="date">🕐 ${dateStr || ''}</div>
-        <div class="divider-v"></div>
-        ${isLive ? `<div class="watch-live">▶ Watch Live</div>` : `<div class="notify-btn">🔔 Notify Me</div>`}
+        ${isLive ? `<div class="watch-live">▶ Watch Live</div>` : ``}
       </div>
     </div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
 }
+let _upTimer=null; let _upCurrentIdx=-1;
+function closeUpModal(){ let m=document.getElementById('upModal'); if(m) m.classList.remove('show'); if(_upTimer){clearInterval(_upTimer);_upTimer=null;} _upCurrentIdx=-1; }
+function getNotifyList(){ try{ return JSON.parse(localStorage.getItem('rslive_notify')||'[]'); }catch(e){ return []; } }
+function isNotified(name){ return getNotifyList().includes(name); }
+async function setNotify(idx){
+  let m=sportsData[idx]; if(!m) return;
+  let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
+  if('Notification' in window && Notification.permission==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
+  let list=getNotifyList();
+  if(list.includes(name)){ list=list.filter(x=>x!==name); localStorage.setItem('rslive_notify',JSON.stringify(list)); }
+  else { list.push(name); localStorage.setItem('rslive_notify',JSON.stringify(list)); }
+  showUpModal(idx);
+  let btn=document.getElementById('upNotifyBtn');
+  if(btn){ let on=isNotified(name); btn.textContent=on?'✅ Notify On - Tap to Off':'🔔 Notify Me'; btn.classList.toggle('done',on); }
+}
+function showUpModal(idx){
+  let m=sportsData[idx]; if(!m) return;
+  _upCurrentIdx=idx;
+  let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
+  let league=m.event_name||info.league||'LIVE SPORTS';
+  let ts=parseStartTime(info,m);
+  let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
+  let on=isNotified(name);
+  document.getElementById('upModalContent').innerHTML=`
+    <div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div>
+    <div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${league}</div>
+    <div class="up-teams">
+      <div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div>
+      <div class="up-vs">VS</div>
+      <div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div>
+    </div>
+    <div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div>
+    <div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div>
+    <div class="up-start">🕐 ${dateStr}</div>
+    <button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button>
+    <div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>
+  `;
+  document.getElementById('upModal').classList.add('show');
+  if(_upTimer) clearInterval(_upTimer);
+  if(ts){
+    _upTimer=setInterval(()=>{
+      let el=document.getElementById('upCount'); if(!el){ clearInterval(_upTimer); return; }
+      let diff=ts-Date.now();
+      if(diff<=0){ el.textContent='Starting...'; clearInterval(_upTimer); setTimeout(()=>{ closeUpModal(); loadSports(); },1500); return; }
+      el.textContent=formatCountdown(diff);
+    },1000);
+  }
+}
+function checkNotifyMatches(){
+  let list=getNotifyList(); if(!list.length) return;
+  sportsData.forEach(m=>{
+    let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
+    if(list.includes(name) && (m.status||'').toUpperCase()==='LIVE'){
+      if('Notification' in window && Notification.permission==='granted'){
+        try{ new Notification('RsLive Go - Match Started!',{body:name+' is now LIVE. Tap to watch.'}); }catch(e){}
+      }
+    }
+  });
+}
 function openMatch(idx){
   let m = sportsData[idx];
-  if(!m || !m.streams || !m.streams.length) return;
+  if(!m) return;
+  let isLive = (m.status||'').toUpperCase() === 'LIVE';
+  if(!isLive){ showUpModal(idx); return; }
+  if(!m.streams || !m.streams.length) return;
   let info = m.eventInfo || {};
   let name = info.teamA + ' Vs ' + info.teamB;
   try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
