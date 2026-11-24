@@ -1,10 +1,10 @@
 /* RsLive Go - Secure SW + PWA */
-const CACHE_NAME = 'rslive-v3-pwa';
-const CORE_ASSETS = ['/', '/index.html', '/player.html', '/manifest.json'];
+const CACHE_NAME = 'rslive-v5-pwa';
+const CORE_ASSETS = ['/', '/index.html', '/player.html', '/app.js', '/manifest.json'];
 
 const _P = [
   { n: 'Tapmad', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9UYXBtYWRfQXV0b19VcGRhdGVfUGxheWxpc3QvcmVmcy9oZWFkcy9tYWluL3RhcG1hZF9zbS5tM3U=', p: 0 },
-  { n: 'Sports', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2phbm5hdHVsYnVzcmEwMDAvU3BvcnRzLVBsYXlsaXN0L3JlZnMvaGVhZHMvbWFpbi9zcG9ydHMubTN1', p: 1 },
+  { n: 'SonyLiv', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NyaGFkeS9Tb255TGl2L3JlZnMvaGVhZHMvbWFpbi9zb255bGl2X3BsYXlsaXN0Lm0zdQ==', p: 1 },
   { n: 'Toffee', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9Ub2ZmZWUtQXV0by1VcGRhdGUvcmVmcy9oZWFkcy9tYWluL3RvZmZlZV9wbGF5bGlzdC5tM3U=', p: 1 },
   { n: 'AynaOTT', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9BeW5hT1RUX0F1dG9fVXBkYXRlX1BsYXlsaXN0L3JlZnMvaGVhZHMvbWFpbi9heW5hb3R0Lm0zdQ==', p: 0 },
   { n: 'JagoBD', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9qYWdvX2JkX2F1dG9fdXBkYXRlX3BsYXlsaXN0LS9yZWZzL2hlYWRzL21haW4vamFnb19iZF9tYWluLm0zdQ==', p: 0 },
@@ -25,11 +25,11 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if(url.pathname.endsWith('/api/playlists')){
     const data = _P.map(x => ({ name: x.n, url: _d(x.u), useProxy: x.p===1 }));
-    event.respondWith(new Response(JSON.stringify(data), { headers: {'Content-Type':'application/json'} }));
+    event.respondWith(new Response(JSON.stringify(data), { headers: {'Content-Type':'application/json', 'Cache-Control':'no-store'} }));
     return;
   }
   if(req.method !== 'GET') return;
-  if(url.pathname.endsWith('.m3u8') || url.pathname.endsWith('.ts') || url.pathname.includes('/api/')) return;
+  if(url.pathname.endsWith('.m3u8') || url.pathname.endsWith('.ts') || url.pathname.endsWith('.m3u') || url.pathname.includes('/api/')) return;
   event.respondWith(
     fetch(req).then(res => {
       if(res && res.status===200 && res.type==='basic'){
