@@ -73,12 +73,13 @@ video::-webkit-media-controls{display:none!important}
 @keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-/* ✅ Server Bar - ভিডিওর ভিতরে উপরে, বাম থেকে ডানে */
-#serverBar{position:absolute;top:0;left:0;right:0;z-index:60;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
+/* ✅ FIX 1 - Server Bar এখন Loader + TapPlay এর উপরেও থাকবে */
+#serverBar{position:absolute;top:0;left:0;right:0;z-index:130;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
 #serverBar::-webkit-scrollbar{display:none}
 #serverBar.show{display:flex}
 .srv-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);white-space:nowrap}
 .srv-btn.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(167,139,250,.5)}
+.srv-btn.trying{border-color:#ffb84d;color:#ffb84d}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -339,7 +340,6 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
-// ✅ Sports হলে Suggest ফাঁকা না, পুরা Hide
 const isSportsPage = (srcParam||'').toLowerCase()==='sports' || currentName.includes('Vs');
 if(isSportsPage){
   let sb=document.getElementById('suggestBox');
@@ -387,9 +387,10 @@ if(!streamSource){
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
   let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, autoplayBlocked=false;
-  // ✅ Server List - localStorage থেকে
   let serverList = [];
   let currentServerIdx = 0;
+  let autoFailTimer = null;
+  let failCount = 0;
   try{
     let savedMatch = JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
     if(savedMatch && savedMatch.streams && savedMatch.streams.length && savedMatch.name === currentName){
@@ -407,23 +408,49 @@ if(!streamSource){
       return `<button class="srv-btn ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${label}</button>`;
     }).join('');
   }
+  // ✅ FIX 2 - Auto Failover: 1 টা না চললে নিজে নিজে পরেরটায়
+  function tryNextServer(){
+    if(!serverList.length) return false;
+    if(currentServerIdx >= serverList.length-1) return false;
+    currentServerIdx++;
+    let s = serverList[currentServerIdx];
+    streamSource = s.stream_url;
+    drmKid = s.kid || '';
+    drmKey = s.key || '';
+    triedProxy = false; triedDirect = false; everPlayed = false; failCount = 0;
+    renderServers();
+    if(statusEl) statusEl.textContent = 'TRYING SERVER ' + (currentServerIdx+1);
+    showLoader();
+    loadStream(streamSource, false);
+    return true;
+  }
   window.switchServer = function(idx, e){
     if(e) e.stopPropagation();
     if(idx===currentServerIdx) return;
+    if(autoFailTimer){ clearTimeout(autoFailTimer); autoFailTimer=null; }
     currentServerIdx = idx;
     let s = serverList[idx];
     if(!s) return;
     streamSource = s.stream_url;
     drmKid = s.kid || '';
     drmKey = s.key || '';
-    triedProxy = false; triedDirect = false; everPlayed = false;
+    triedProxy = false; triedDirect = false; everPlayed = false; failCount = 0;
     renderServers();
     showLoader();
-    // HLS হলে Proxy logic, DASH হলে সরাসরি
-    if(streamSource.includes('.mpd')){ loadStream(streamSource, false); }
-    else { loadStream(streamSource, false); }
+    loadStream(streamSource, false);
   };
   renderServers();
+  // ✅ 6 সেকেন্ডে না চললে Auto Next Server - স্ক্রিনশটের CONNECTING আটকে থাকবে না
+  function startAutoFailWatch(){
+    if(autoFailTimer) clearTimeout(autoFailTimer);
+    if(!serverList.length || serverList.length<2) return;
+    autoFailTimer = setTimeout(()=>{
+      if(!everPlayed){
+        if(!tryNextServer()){ /* সব শেষ */ }
+        else { startAutoFailWatch(); }
+      }
+    }, 6000);
+  }
   function updateMuteBtn(){
     let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
     if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
@@ -432,10 +459,10 @@ if(!streamSource){
   updateMuteBtn();
   function doPlay(){
     video.muted = false; video.volume = 1; updateMuteBtn();
-    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
+    video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
       autoplayBlocked = true;
       video.muted = true;
-      video.play().then(()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+      video.play().then(()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
       updateMuteBtn();
     });
   }
@@ -449,9 +476,10 @@ if(!streamSource){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
     if(shakaPlayer){ try{ shakaPlayer.destroy(); }catch(e){} shakaPlayer=null; }
     video.removeAttribute('src'); video.load();
+    startAutoFailWatch();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
-        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:4, fragLoadingMaxRetry:4, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
+        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:2, fragLoadingMaxRetry:2, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
         if(viaProxy){ hlsConfig.loader = ProxyLoader; }
         hls = new Hls(hlsConfig);
         hls.loadSource(url); hls.attachMedia(video);
@@ -459,11 +487,14 @@ if(!streamSource){
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
           if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
+            // ✅ আগে Next Server, তারপর Proxy
+            if(!everPlayed && tryNextServer()) return;
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
             else { hls.startLoad(); }
           } else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); }
           else {
+            if(!everPlayed && tryNextServer()) return;
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
             else showNoStreamState({message:'HLS Error: '+data.details});
@@ -483,15 +514,23 @@ if(!streamSource){
       shaka.polyfill.installAll();
       if(!shaka.Player.isBrowserSupported()){ showNoStreamState({message:'Browser DASH support নেই'}); return; }
       shakaPlayer = new shaka.Player(video);
-      shakaPlayer.addEventListener('error', (e)=>{ showNoStreamState({message: (e.detail && e.detail.message) || 'DRM / DASH Error'}); });
+      shakaPlayer.addEventListener('error', (e)=>{
+        if(!everPlayed && tryNextServer()) return;
+        showNoStreamState({message: (e.detail && e.detail.message) || 'DRM / DASH Error'});
+      });
       if(drmKid && drmKey){
         shakaPlayer.configure({ drm: { clearKeys: { [drmKid]: drmKey } } });
       }
       await shakaPlayer.load(url);
       doPlay();
-    }catch(e){ showNoStreamState({message: e.message || 'DASH Load Failed'}); }
+    }catch(e){
+      if(!everPlayed && tryNextServer()) return;
+      showNoStreamState({message: e.message || 'DASH Load Failed'});
+    }
   }
   function showNoStreamState(err){
+    // ✅ সব সার্ভার শেষ না হলে Error দেখাবে না, Next এ যাবে
+    if(!everPlayed && tryNextServer()) return;
     releaseWakeLock();
     tapPlayEl.classList.remove('show');
     const proxyBtn = `<br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button>`;
@@ -500,16 +539,15 @@ if(!streamSource){
   }
   window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
-  video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
+  video.addEventListener('error',()=>{ if(!everPlayed && tryNextServer()) return; if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
-  setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy && !streamSource.includes('.mpd')){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
 }
 </script>
 <script>
