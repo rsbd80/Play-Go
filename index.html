@@ -77,45 +77,70 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 #installBar .ib-btn:active{transform:scale(.94)}
 #installBar .ib-close{width:22px;height:22px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.12);color:#ddd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer}
 
-/* ===== 🖥️ PC / LAPTOP / TV / DESKTOP MODE ===== */
+/* ===== 🖥️ PC / LAPTOP / TV - GORGEOUS DESKTOP LAYOUT ===== */
+/* বামে চ্যানেল, ডানে ক্যাটাগরি */
 .desktop-wrap{display:contents}
+.cat-title{display:none}
 @media(min-width:900px){
-  body{display:block;overflow-y:auto}
+  body{display:block;overflow-y:auto;background:radial-gradient(800px 400px at 10% -100px, rgba(34,211,238,.14), transparent 60%), radial-gradient(800px 400px at 90% 0%, rgba(167,139,250,.16), transparent 60%), #07070f}
   .sticky{position:sticky;top:0}
-  header{max-width:1400px;margin:0 auto;padding:18px 24px}
-  .header-top{max-width:1400px;margin:0 auto}
-  .logo .play-ico{width:44px;height:44px;font-size:18px}
-  .logo-text .name{font-size:28px}
-  .search-wrap{max-width:800px;margin:16px auto 0}
-  #search{padding:16px 16px 16px 46px;font-size:15px}
-  /* বামে ক্যাটাগরি সাইডবার + ডানে কন্টেন্ট */
-  .desktop-wrap{display:flex;align-items:flex-start;max-width:1400px;margin:0 auto;gap:18px;padding:0 24px}
-  #cats{flex-direction:column;overflow-x:hidden;overflow-y:auto;width:210px;flex-shrink:0;position:sticky;top:152px;max-height:calc(100vh - 170px);padding:14px 0;white-space:normal;border-bottom:none;background:transparent}
+  header{max-width:1440px;margin:0 auto;padding:20px 28px 18px;border-radius:0 0 24px 24px;border:1px solid rgba(255,255,255,.08);border-top:none;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .logo .play-ico{width:48px;height:48px;font-size:19px;border-radius:15px}
+  .logo-text .name{font-size:30px}
+  .logo-text .tag{font-size:10px;letter-spacing:4px}
+  .live-pill{padding:9px 14px;font-size:11px}
+  .search-wrap{max-width:720px;margin:16px auto 0}
+  #search{padding:17px 16px 17px 48px;font-size:15px;border-radius:18px}
+
+  /* ✅ বামে কন্টেন্ট, ডানে সাইডবার */
+  .desktop-wrap{display:flex;align-items:flex-start;max-width:1440px;margin:0 auto;gap:20px;padding:18px 28px 0;flex-direction:row}
+  #mainCol{flex:1;min-width:0;order:1}
+  #cats{order:2}
+
+  /* ডান সাইডবার - গর্জিয়াস */
+  #cats{flex-direction:column;overflow-x:hidden;overflow-y:auto;width:260px;flex-shrink:0;position:sticky;top:168px;max-height:calc(100vh - 190px);padding:16px;white-space:normal;border:none;background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.10);border-radius:22px;backdrop-filter:blur(12px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
   #cats::-webkit-scrollbar{display:block;width:5px}
-  #cats::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
-  .cat{width:100%;text-align:left;padding:12px 16px;border-radius:14px;font-size:14px;display:flex;align-items:center;gap:8px}
-  .cat.active{transform:translateX(4px)}
-  #mainCol{flex:1;min-width:0}
-  #count{padding:16px 0 0;font-size:14px}
-  #scrollArea{overflow:visible;padding-bottom:40px}
-  #grid{grid-template-columns:repeat(6,1fr);gap:14px;padding:14px 0}
-  .card{border-radius:18px;padding:16px 8px}
-  .card img{width:72px;height:72px;border-radius:14px;padding:6px}
-  .card p{font-size:13px;min-height:34px}
-  .card small{font-size:11px}
-  #featured{margin:14px 0 0}
-  .tele{right:22px;bottom:70px;width:58px;height:58px}
+  #cats::-webkit-scrollbar-thumb{background:linear-gradient(#22d3ee,#a78bfa);border-radius:10px}
+  .cat-title{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;letter-spacing:.5px;padding:2px 6px 12px;color:#fff}
+  .cat-title span{font-size:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#000;padding:3px 9px;border-radius:20px;font-weight:800}
+  .cat{width:100%;text-align:left;padding:13px 14px;border-radius:15px;font-size:14px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid transparent}
+  .cat:hover{background:rgba(255,255,255,.09);transform:translateX(-3px);border-color:rgba(167,139,250,.35)}
+  .cat .cat-ico{width:36px;height:36px;flex-shrink:0;border-radius:11px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:17px}
+  .cat .cat-name{flex:1;min-width:0}
+  .cat .cat-count{font-size:11px;background:rgba(255,255,255,.10);padding:4px 9px;border-radius:20px;color:#c8c8dd;font-weight:700}
+  .cat.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#000;box-shadow:0 10px 28px rgba(167,139,250,.45);transform:translateX(-4px)}
+  .cat.active .cat-ico{background:rgba(0,0,0,.15)}
+  .cat.active .cat-count{background:rgba(0,0,0,.18);color:#000}
+
+  /* বামে চ্যানেল গ্রিড - গর্জিয়াস */
+  #count{padding:4px 4px 0;font-size:14px;color:#b8b8d0}
+  #count b{color:#fff;background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #scrollArea{overflow:visible;padding-bottom:30px}
+  #grid{grid-template-columns:repeat(5,1fr);gap:16px;padding:16px 0}
+  .card{border-radius:20px;padding:18px 10px;background:linear-gradient(180deg, #1b1b2b, #12121c);border:1px solid rgba(255,255,255,.09);box-shadow:0 8px 24px rgba(0,0,0,.35);position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);opacity:0;transition:.3s}
+  .card:hover{transform:translateY(-6px) scale(1.02);border-color:rgba(167,139,250,.6);box-shadow:0 18px 40px rgba(167,139,250,.30)}
+  .card:hover::before{opacity:1}
+  .card img{width:76px;height:76px;border-radius:16px;padding:7px;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+  .card p{font-size:13.5px;min-height:36px;font-weight:600}
+  .card small{font-size:11px;margin-top:2px}
+  .card::after{content:"▶";position:absolute;right:10px;top:10px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;opacity:0;transform:scale(.6);transition:.25s;box-shadow:0 4px 12px rgba(167,139,250,.5)}
+  .card:hover::after{opacity:1;transform:scale(1)}
+  #featured{margin:16px 0 0;border-radius:20px;padding:18px;background:linear-gradient(135deg,#2a1a4a,#1a1a2e);box-shadow:0 12px 30px rgba(167,139,250,.25)}
+  .tele{right:24px;bottom:72px;width:60px;height:60px}
   .tele svg{width:30px;height:30px}
-  #installBar{left:auto;right:24px;bottom:44px;width:360px}
+  #installBar{left:auto;right:24px;bottom:44px;width:370px}
 }
-/* ===== 📺 বড় TV / মনিটর ===== */
-@media(min-width:1400px){
-  .desktop-wrap{max-width:1600px}
-  header{max-width:1600px}
-  #cats{width:240px}
-  #grid{grid-template-columns:repeat(8,1fr);gap:16px}
-  .card img{width:84px;height:84px}
+@media(min-width:1300px){
+  .desktop-wrap{max-width:1560px}
+  header{max-width:1560px}
+  #cats{width:280px}
+  #grid{grid-template-columns:repeat(6,1fr);gap:18px}
+  .card img{width:88px;height:88px}
   .card p{font-size:14px}
+}
+@media(min-width:1700px){
+  #grid{grid-template-columns:repeat(7,1fr)}
 }
 </style>
 </head>
@@ -139,7 +164,6 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 </div>
 
 <div class="desktop-wrap">
-<div id="cats"></div>
 <div id="mainCol">
 <div id="count"></div>
 <div id="scrollArea">
@@ -147,6 +171,7 @@ header::after{content:"";position:absolute;top:-60px;right:-20px;width:220px;hei
 <div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div>
 </div>
 </div>
+<div id="cats"></div>
 </div>
 
 <div id="status">Loading...</div>
@@ -198,11 +223,36 @@ async function loadAll(){
   CFG.playlists = await getPlaylistsFromSW();
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;render()}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){let sources = [...new Set(CFG.playlists.map(p=>p.name))]; return ["All", ...sources, "Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"];}
-function catIcon(c){ if(c==='All') return '🏠 '; if(c==='Sports') return '🏆 '; if(c==='News') return '📰 '; if(c==='Entertainment') return '🎭 '; if(c==='Movies') return '🎬 '; if(c==='Kids') return '🧒 '; if(c==='Music') return '🎵 '; if(c==='Bangladesh') return '🇧🇩 '; if(c==='India') return '🇮🇳 '; return '📺 '; }
-function render(){let q=document.getElementById("search").value.toLowerCase();let f=all.filter(c=>{let s=!q||c.name.toLowerCase().includes(q);let m=true;if(cat==="All")m=true;else if(CFG.playlists.find(p=>p.name===cat))m=c.source===cat;else if(cat==="Sports")m=c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");else if(cat==="News")m=c.group.toLowerCase().includes("news");else if(cat==="Movies")m=c.group.toLowerCase().includes("movie");else if(cat==="Kids")m=c.group.toLowerCase().includes("kid");else if(cat==="Music")m=c.group.toLowerCase().includes("music");else if(cat==="Entertainment")m=c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");else if(cat==="Bangladesh")m=c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");else if(cat==="India")m=c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");else m=c.group.toLowerCase().includes(cat.toLowerCase());return s&&m});document.getElementById("count").textContent=f.length+" টা চ্যানেল দেখাচ্ছে";document.getElementById("cats").innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')">${catIcon(c)}${c}</div>`).join("");document.getElementById("grid").innerHTML=f.slice(0,500).map(c=>`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`).join("")}
+function catIcon(c){ if(c==='All') return '🏠'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
+function catCount(c){
+  if(c==='All') return all.length;
+  if(CFG.playlists.find(p=>p.name===c)) return all.filter(x=>x.source===c).length;
+  if(c==='Sports') return all.filter(x=>x.group.toLowerCase().includes('sport')||x.group.toLowerCase().includes('cricket')||x.group.toLowerCase().includes('football')).length;
+  if(c==='News') return all.filter(x=>x.group.toLowerCase().includes('news')).length;
+  if(c==='Movies') return all.filter(x=>x.group.toLowerCase().includes('movie')).length;
+  if(c==='Kids') return all.filter(x=>x.group.toLowerCase().includes('kid')).length;
+  if(c==='Music') return all.filter(x=>x.group.toLowerCase().includes('music')).length;
+  if(c==='Bangladesh') return all.filter(x=>x.name.toLowerCase().includes('bangla')||x.name.toLowerCase().includes('btv')).length;
+  if(c==='India') return all.filter(x=>x.name.toLowerCase().includes('star')||x.name.toLowerCase().includes('sony')||x.name.toLowerCase().includes('zee')).length;
+  return all.filter(x=>x.group.toLowerCase().includes(c.toLowerCase())).length;
+}
+function render(){
+  let q=document.getElementById("search").value.toLowerCase();
+  let f=all.filter(c=>{let s=!q||c.name.toLowerCase().includes(q);let m=true;if(cat==="All")m=true;else if(CFG.playlists.find(p=>p.name===cat))m=c.source===cat;else if(cat==="Sports")m=c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");else if(cat==="News")m=c.group.toLowerCase().includes("news");else if(cat==="Movies")m=c.group.toLowerCase().includes("movie");else if(cat==="Kids")m=c.group.toLowerCase().includes("kid");else if(cat==="Music")m=c.group.toLowerCase().includes("music");else if(cat==="Entertainment")m=c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");else if(cat==="Bangladesh")m=c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");else if(cat==="India")m=c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");else m=c.group.toLowerCase().includes(cat.toLowerCase());return s&&m});
+  document.getElementById("count").innerHTML=`<b>${f.length}</b> টা চ্যানেল দেখাচ্ছে • <span style="color:#22d3ee">${cat}</span>`;
+  let isDesktop = window.innerWidth >= 900;
+  if(isDesktop){
+    document.getElementById("cats").innerHTML = `<div class="cat-title">✨ ক্যাটাগরি <span>${getCats().length}</span></div>` + getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')"><span class="cat-ico">${catIcon(c)}</span><span class="cat-name">${c}</span><span class="cat-count">${catCount(c)}</span></div>`).join("");
+  } else {
+    document.getElementById("cats").innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" onclick="setCat('${c}')">${catIcon(c)} ${c}</div>`).join("");
+  }
+  document.getElementById("grid").innerHTML=f.slice(0,500).map(c=>`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`).join("");
+}
 function setCat(c){cat=c;render()}
 function openCh(u,n,s,g){window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}`}
-document.getElementById("search").addEventListener("input",render);loadAll();
+document.getElementById("search").addEventListener("input",render);
+window.addEventListener("resize",render);
+loadAll();
 </script>
 <script>
 (function(){
