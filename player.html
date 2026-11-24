@@ -67,13 +67,12 @@ video::-webkit-media-controls{display:none!important}
 .state-content .brand-name{display:block;margin-top:18px}
 .retry-btn{margin-top:16px;padding:10px 22px;font-weight:700;font-size:12px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(167,139,250,.4)}
 .retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
-#tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);cursor:pointer;text-align:center;padding:20px}
+#tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);cursor:pointer;text-align:center;padding:52px 20px 20px}
 #tapPlay.show{display:flex}
 #tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 10px 30px rgba(167,139,250,.6);animation:tpPulse 1.6s infinite}
 @keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-/* ✅ Server Bar - Loading / TapPlay সবার উপরে */
 #serverBar{position:absolute;top:0;left:0;right:0;z-index:200;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
 #serverBar::-webkit-scrollbar{display:none}
 #serverBar.show{display:flex}
@@ -147,7 +146,6 @@ video::-webkit-media-controls{display:none!important}
 <div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
-
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
@@ -171,7 +169,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 </div>
-
 <div class="suggest" id="suggestBox">
 <div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
@@ -179,7 +176,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 </div>
-
 <div class="ad-wrap">
 <div class="ad-label">ADVERTISEMENT</div>
 <div class="ad-box">
@@ -264,7 +260,6 @@ async function toggleFullscreen(){
     try{ if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){}
   }
 }
-// ✅ Direct Fullscreen - Player খুললেই
 async function tryAutoFullscreen(){
   if(!autoFS) return;
   if(document.fullscreenElement) return;
@@ -273,7 +268,6 @@ async function tryAutoFullscreen(){
     else if(wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
     try{ if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){}
   }catch(e){}
-  // ব্রাউজার ব্লক করলে ১ম Tap এই ফুলস্ক্রিন হবে
   let once = ()=>{
     toggleFullscreen();
     document.removeEventListener('touchend', once);
@@ -554,7 +548,7 @@ if(!streamSource){
   }
   window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); if(autoFS) tryAutoFullscreen(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(autoFailTimer){clearTimeout(autoFailTimer);autoFailTimer=null;} tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
