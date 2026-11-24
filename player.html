@@ -42,7 +42,6 @@ body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139
 video::-webkit-media-controls{display:none!important}
 #loader{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,var(--bg-2) 0%,var(--bg-1) 70%);display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;transition:opacity .1s ease,visibility .1s ease;pointer-events:none}
 #loader.hide-now{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-/* ✅ FIX: লোডিং এর সবকিছু একদম সেন্টারে, টাইট করে একসাথে */
 .tuner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;width:100%;margin:0 auto;padding:0}
 .tv-wrap{position:relative;width:68px;height:68px;display:flex;align-items:center;justify-content:center;margin:0 auto;flex-shrink:0}
 .tv-glow{position:absolute;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.40),transparent 70%);animation:glow-pulse 2.4s ease-in-out infinite}
@@ -67,6 +66,15 @@ video::-webkit-media-controls{display:none!important}
 .state-content .brand-name{display:block;margin-top:18px}
 .retry-btn{margin-top:16px;padding:10px 22px;font-weight:700;font-size:12px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(167,139,250,.4)}
 .retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
+/* ✅ মোবাইলে Tap To Play - এটাই আসল ফিক্স */
+#tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);cursor:pointer;text-align:center;padding:20px}
+#tapPlay.show{display:flex}
+#tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 10px 30px rgba(167,139,250,.6);animation:tpPulse 1.6s infinite}
+@keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
+#tapPlay p{font-size:14px;font-weight:700;color:#fff}
+#tapPlay small{font-size:11px;color:#ccc}
+#muteBtn{position:absolute;top:10px;right:10px;z-index:110;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:16px;display:none;align-items:center;justify-content:center;cursor:pointer}
+#muteBtn.show{display:flex}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:10px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4)}
@@ -149,6 +157,9 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
+<!-- ✅ মোবাইল ফিক্স -->
+<div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>মোবাইলে সাউন্ড সহ চালাতে ট্যাপ লাগে</small></div>
+<div id="muteBtn">🔇</div>
 <div id="controls"><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button></div>
 </div>
 </div>
@@ -178,8 +189,9 @@ try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 const srcParam = urlParams.get('src') || '';
 const groupParam = urlParams.get('group') || '';
-const PROXY_FIRST = ['toffee'];
-const PROXY_FALLBACK = ['toffee', 'sonyliv'];
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const PROXY_FIRST = ['toffee','jago','ayna','tapmad'];
+const PROXY_FALLBACK = ['toffee','jago','ayna','tapmad','sonyliv','bongo'];
 const isToffee = PROXY_FIRST.includes(srcParam.toLowerCase()) || PROXY_FIRST.some(n => streamSource.toLowerCase().includes(n));
 const canUseProxy = PROXY_FALLBACK.includes(srcParam.toLowerCase()) || PROXY_FALLBACK.some(n => streamSource.toLowerCase().includes(n));
 let currentName = '';
@@ -192,6 +204,8 @@ const statusEl = document.getElementById('status-line');
 const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
+const tapPlayEl = document.getElementById('tapPlay');
+const muteBtnEl = document.getElementById('muteBtn');
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
 let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusIdx=(statusIdx+1)%statusMessages.length; statusEl.textContent=statusMessages[statusIdx]; },1800);
@@ -273,17 +287,37 @@ if(!streamSource){
 } else {
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
-  video.muted = startMuted; video.autoplay = true; video.controls = false;
+  video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
+  video.muted = true; video.autoplay = true; video.controls = false; video.preload = 'auto';
+  video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
-  let hls=null, everPlayed=false, triedDirect=false, triedProxy=false;
-  function doPlay(){ video.play().then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(e=>{}); }
+  let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, userTapped=false;
+  function updateMuteBtn(){
+    if(video.muted){ muteBtnEl.textContent='🔇'; muteBtnEl.classList.add('show'); }
+    else { muteBtnEl.textContent='🔊'; muteBtnEl.classList.add('show'); }
+  }
+  function doPlay(){
+    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
+      // ✅ মোবাইলে autoplay ব্লক হলে Tap বাটন দেখাও
+      if(IS_MOBILE) tapPlayEl.classList.add('show');
+    });
+  }
+  tapPlayEl.addEventListener('click', ()=>{
+    userTapped=true; video.muted=false; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{});
+  });
+  muteBtnEl.addEventListener('click', (e)=>{
+    e.stopPropagation(); video.muted = !video.muted; if(!video.muted) video.play().catch(()=>{}); updateMuteBtn();
+  });
+  // ✅ মোবাইলে যেকোনো ট্যাপে সাউন্ড অন
+  document.addEventListener('touchstart', ()=>{ if(IS_MOBILE && !userTapped){ userTapped=true; video.muted=false; video.play().catch(()=>{}); updateMuteBtn(); } }, {once:true, passive:true});
+  document.addEventListener('click', ()=>{ if(IS_MOBILE && !userTapped){ userTapped=true; video.muted=false; video.play().catch(()=>{}); updateMuteBtn(); } }, {once:true});
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
     video.removeAttribute('src'); video.load();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
-        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:true, lowLatencyMode:true, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3 };
+        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:4, fragLoadingMaxRetry:4, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
         if(viaProxy){ hlsConfig.loader = ProxyLoader; }
         hls = new Hls(hlsConfig);
         hls.loadSource(url); hls.attachMedia(video);
@@ -308,23 +342,27 @@ if(!streamSource){
   }
   function showNoStreamState(err){
     releaseWakeLock();
+    tapPlayEl.classList.remove('show');
     const proxyBtn = `<br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button>`;
     const directBtn = `<br><button class="retry-btn2" onclick="tryDirectManually()">📡 Direct দিয়ে চেষ্টা করো</button>`;
     showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">এই চ্যানেলটা এখন চলছে না</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">🔄 Retry</button>${proxyBtn}${directBtn}<br><button class="retry-btn2" onclick="location.href='index.html'">🏠 হোমে যাও</button>${brandBlock()}</div>`);
   }
   window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
-  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.play(); } else { video.pause(); } showControls(); });
+  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(document.fullscreenElement){ document.exitFullscreen(); } else { wrapper.requestFullscreen().catch(()=>{}); } showControls(); });
   async function lockLandscape(){ try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
   function unlockLandscape(){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
-  if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
+  // ✅ মোবাইলে সবসময় Proxy দিয়ে শুরু করো, PC তে Direct
+  if(IS_MOBILE || isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
+  // ✅ 6 সেকেন্ডে না চললে অটো Proxy Retry
+  setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
 }
 </script>
 <script>
