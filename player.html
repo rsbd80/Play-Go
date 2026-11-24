@@ -76,7 +76,6 @@ video::-webkit-media-controls{display:none!important}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 #controls button:active{transform:scale(.90)}
-#controls button.muted{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important}
 #controls .ctrl-ico{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
@@ -220,19 +219,38 @@ async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await 
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
-/* ✅ FIXED DOUBLE TAP - আগের click + touchend দুইটা বাদ, এখন ১টাই সিস্টেম */
+
+// ===== FULLSCREEN + ROTATE - CLEAN FIX =====
 let isFullscreenBusy = false;
-function toggleFullscreen(){
+async function toggleFullscreen(){
   if(isFullscreenBusy) return;
   isFullscreenBusy = true;
   setTimeout(()=>{ isFullscreenBusy = false; }, 600);
-  if(document.fullscreenElement){ document.exitFullscreen().catch(()=>{}); }
-  else {
-    // video কে না, wrapper কে fullscreen করো - নাহলে rotate এ বের হয়ে যায়
-    if(wrapper.requestFullscreen){ wrapper.requestFullscreen().catch(()=>{}); }
-    else if(wrapper.webkitRequestFullscreen){ wrapper.webkitRequestFullscreen(); }
+  if(document.fullscreenElement){
+    try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
+    try{ await document.exitFullscreen(); }catch(e){}
+  } else {
+    try{
+      if(wrapper.requestFullscreen) await wrapper.requestFullscreen();
+      else if(wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+    }catch(e){}
+    // ফুলস্ক্রিনে ঢোকার পরেই ল্যান্ডস্কেপ লক - আগে লক করলে বের হয়ে যাইতো
+    try{ if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){}
   }
 }
+document.addEventListener('fullscreenchange', ()=>{
+  if(document.fullscreenElement){
+    const v = document.querySelector('#player video');
+    if(v) v.style.objectFit = 'fill';
+  } else {
+    const v = document.querySelector('#player video');
+    if(v) v.style.objectFit = 'contain';
+    try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
+  }
+});
+
+// ===== SINGLE / DOUBLE TAP - CLEAN FIX =====
+// মোবাইলে শুধু touchend, PC তে শুধু click/dblclick - ২টা একসাথে না
 let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
@@ -241,7 +259,6 @@ function handleTap(e){
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
-    // ✅ ডাবল ট্যাপ
     clearTimeout(singleTapTimer); singleTapTimer = null; lastTap = 0;
     ignoreNextClick = true; setTimeout(()=>{ ignoreNextClick = false; }, 400);
     toggleFullscreen();
@@ -252,15 +269,17 @@ function handleTap(e){
   singleTapTimer = setTimeout(()=>{ lastTap = 0; showControls(); }, 300);
 }
 if(IS_TOUCH){
-  // ✅ মোবাইলে শুধু touchend - click আর ধরবে না, তাই ১ ট্যাপে ২ বার হবে না
   wrapper.addEventListener('touchend', handleTap, {passive:false});
-  wrapper.addEventListener('click', (e)=>{ if(ignoreNextClick){ e.stopPropagation(); e.preventDefault(); return; } if(e.target.closest('button')||e.target.closest('input')) return; /* click দিয়ে কিছু করবে না, touchend ই যথেষ্ট */ }, true);
+  wrapper.addEventListener('click', (e)=>{
+    if(ignoreNextClick){ e.stopPropagation(); e.preventDefault(); return; }
+    if(e.target.closest('button')||e.target.closest('input')) return;
+  }, true);
 } else {
-  // ✅ PC তে শুধু click + dblclick
   wrapper.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; showControls(); });
   wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
 }
 wrapper.addEventListener('mousemove', showControls);
+
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(original){
   if(!original) return original;
@@ -400,8 +419,6 @@ if(!streamSource){
   video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
-  /* ✅ Rotate বাগ ফিক্স - orientation lock আর জোর করে করবে না, ফোন নিজে rotate করবে */
-  document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ video.style.objectFit='fill'; } else { video.style.objectFit='contain'; } });
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
   setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
 }
