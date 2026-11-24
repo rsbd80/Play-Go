@@ -72,12 +72,12 @@ video::-webkit-media-controls{display:none!important}
 @keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-/* ✅ Volume + Play একসাথে, gap কম */
+/* ✅ সব বাটন একই কালার - Mute / Play / Pause কোনোটাই লাল হবে না */
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
-#controls button{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 #controls button:active{transform:scale(.90)}
-#controls button.muted{border-color:#ff5d5d;background:rgba(255,45,85,.25)}
+#controls button.muted{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important}
 #controls .ctrl-ico{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
@@ -158,7 +158,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 <div id="player"></div>
 <div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>এই ফোনে ব্রাউজার সাউন্ড ব্লক করছে</small></div>
-<!-- ✅ আগে Volume, তারপর Play - একদম পাশাপাশি -->
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
 <button id="playBtn">▶</button>
@@ -221,7 +220,29 @@ async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await 
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
-wrapper.addEventListener('click',showControls); wrapper.addEventListener('touchstart',showControls,{passive:true}); wrapper.addEventListener('mousemove',showControls);
+/* ✅ ডাবল ট্যাপ = ফুলস্ক্রিন, সিঙ্গেল ট্যাপ = কন্ট্রোল দেখাও */
+let lastTapTime = 0;
+let tapTimer = null;
+function toggleFullscreen(){
+  if(document.fullscreenElement){ document.exitFullscreen(); }
+  else { wrapper.requestFullscreen().catch(()=>{}); }
+}
+function handleVideoTap(e){
+  // বাটনে ট্যাপ হলে ডাবল ট্যাপ ধরবে না
+  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay')) return;
+  let now = Date.now();
+  if(now - lastTapTime < 350){
+    clearTimeout(tapTimer); tapTimer = null; lastTapTime = 0;
+    toggleFullscreen();
+    return;
+  }
+  lastTapTime = now;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(()=>{ showControls(); lastTapTime = 0; }, 350);
+}
+wrapper.addEventListener('click', handleVideoTap);
+wrapper.addEventListener('touchend', handleVideoTap, {passive:true});
+wrapper.addEventListener('mousemove', showControls);
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(original){
   if(!original) return original;
@@ -290,7 +311,6 @@ if(!streamSource){
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
   video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
-  /* ✅ আগের মতো - প্রথমে সাউন্ড সহ চেষ্টা করবে, Mute জোর করে না */
   video.muted = false; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
@@ -298,15 +318,14 @@ if(!streamSource){
   let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, autoplayBlocked=false;
   function updateMuteBtn(){
     let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
-    if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; muteBtnEl.classList.add('muted'); }
-    else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; muteBtnEl.classList.remove('muted'); }
+    if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
+    else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
+    /* ✅ কালার কখনো চেঞ্জ হবে না - শুধু আইকন চেঞ্জ হবে */
   }
   updateMuteBtn();
-  /* ✅ Smart Autoplay: সাউন্ড সহ চেষ্টা -> ব্লক হলে তখনই শুধু Mute + Tap */
   function doPlay(){
     video.muted = false; video.volume = 1; updateMuteBtn();
     video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
-      // শুধু ব্লক হলেই Mute করে আবার চেষ্টা করো
       autoplayBlocked = true;
       video.muted = true;
       video.play().then(()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
@@ -319,8 +338,9 @@ if(!streamSource){
   muteBtnEl.addEventListener('click', (e)=>{
     e.stopPropagation(); video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
   });
-  /* ✅ প্লেয়ারে যেকোনো ট্যাপে - যদি Mute হয়ে থাকে শুধু তখনই Unmute হবে, বারবার না */
   wrapper.addEventListener('click', ()=>{ if(autoplayBlocked && video.muted){ video.muted=false; video.volume=1; video.play().catch(()=>{}); updateMuteBtn(); autoplayBlocked=false; } }, {passive:true});
+  /* ✅ ভিডিওতে ডাবল ট্যাপ / ডাবল ক্লিক = ফুলস্ক্রিন */
+  video.addEventListener('dblclick', (e)=>{ e.stopPropagation(); toggleFullscreen(); });
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
     video.removeAttribute('src'); video.load();
@@ -365,11 +385,10 @@ if(!streamSource){
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
   video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
-  fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(document.fullscreenElement){ document.exitFullscreen(); } else { wrapper.requestFullscreen().catch(()=>{}); } showControls(); });
+  fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
   async function lockLandscape(){ try{ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape'); }catch(e){} }
   function unlockLandscape(){ try{ if(screen.orientation&&screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
   document.addEventListener('fullscreenchange',()=>{ if(document.fullscreenElement){ lockLandscape(); video.style.objectFit='fill'; } else { unlockLandscape(); video.style.objectFit='contain'; } });
-  /* ✅ মোবাইল + PC - সব ডিভাইসে একই নিয়ম: প্রথমে Direct, না চললে Proxy */
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
   setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
 }
