@@ -76,7 +76,9 @@ video::-webkit-media-controls{display:none!important}
 .suggest{margin:16px 0 0;width:100%;overflow:hidden}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px;width:100%;box-sizing:border-box}
 .suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap}
-.suggest-head h3 span{width:28px;height:28px;flex-shrink:0;background:rgba(255,138,0,.15);border:1px solid rgba(255,138,0,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+/* ✅ FIX: শুধু আইকন গোল হবে, টাইটেল না */
+.suggest-head h3 .suggest-ico{width:28px;height:28px;flex-shrink:0;background:rgba(255,138,0,.15);border:1px solid rgba(255,138,0,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.suggest-head h3 #suggestTitle{width:auto;height:auto;background:none!important;border:none!important;border-radius:0!important;box-shadow:none!important;display:inline;flex-shrink:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .suggest-head a{font-size:14px;font-weight:800;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:7px;height:32px;padding:0 2px;background:none!important;background-color:transparent!important;border:none!important;box-shadow:none!important;color:#fff!important;line-height:1;white-space:nowrap;text-decoration:none}
 .suggest-head a .arrow-ico{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee 0%,#a78bfa 50%,#ff5d8f 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.5);animation:arrowNudge 1.8s ease-in-out infinite}
 .suggest-head a .arrow-ico svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
@@ -127,7 +129,8 @@ video::-webkit-media-controls{display:none!important}
 <body>
 <div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">DevTools বন্ধ করে আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div class="topbar">
-<div class="brand" onclick="location.href='https://rslivego.pages.dev'"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
+<!-- ✅ লোগো ক্লিক = ফ্রেশ হোম -->
+<div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
 <div class="divider"></div>
 <div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
@@ -152,7 +155,8 @@ video::-webkit-media-controls{display:none!important}
 </div>
 
 <div class="suggest">
-<div class="suggest-head"><h3><span>🔴</span> <span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
+<!-- ✅ FIX: আইকন আলাদা ক্লাস, টাইটেল আলাদা -->
+<div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
@@ -168,6 +172,7 @@ video::-webkit-media-controls{display:none!important}
 <div class="ad-note">তুমি দেখছো <b id="chName2">RsLive Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 <script>
+function goHome(){ window.location.href = window.location.origin + '/?t=' + Date.now(); }
 const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
@@ -235,7 +240,6 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
-// ✅ STRICT SUGGESTION: শুধু একই প্লেলিস্ট / একই ক্যাটাগরি, অন্য কিছু না
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
@@ -255,15 +259,10 @@ async function loadSuggestions(){
         for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
       }catch(e){}
     }
-    // নিজের চ্যানেল বাদ
     let filtered = list.filter(c=>c.url !== streamSource && c.name.toLowerCase() !== currentName.toLowerCase());
-    // 1. একই প্লেলিস্ট + একই ক্যাটাগরি
     let sameBoth = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) === myCat);
-    // 2. একই প্লেলিস্ট (ক্যাটাগরি আলাদা হলেও একই প্লেলিস্ট)
     let samePlaylist = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) !== myCat);
-    // 3. একই ক্যাটাগরি (অন্য প্লেলিস্ট হলেও)
     let sameCat = filtered.filter(c => c.src.toLowerCase() !== mySrc && getCategory(c.name, c.group) === myCat);
-    // ❌ others = বাদ - অন্য ক্যাটাগরি / অন্য প্লেলিস্ট কখনোই নিবো না
     const show = [...shuffle(sameBoth), ...shuffle(samePlaylist), ...shuffle(sameCat)].slice(0,20);
     if(show.length===0) throw new Error('empty');
     grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div><div class="sug-play">▶</div></div>`).join("");
