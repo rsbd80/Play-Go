@@ -14,7 +14,7 @@ if (window.top !== window.self) {
 }
 // 2. যদি তোমার ডোমেইন ছাড়া অন্য কোথাও চলে = ব্ল্যাংক
 // নিচে তোমার ডোমেইনটা বসাও, যেমন: rslivego.com
-var ALLOWED = ['localhost', '127.0.0.1', 'rslivego.com', 'www.rslivego.com'];
+var ALLOWED = ['localhost', '127.0.0.1', 'rslivego.pages.dev', 'www.rslivego.com'];
 if (ALLOWED.indexOf(window.location.hostname) === -1 && window.location.hostname !== '') {
   // ফাঁকা জায়গায় / CodeBeautify তে চালালে hostname থাকে না বা অন্য থাকে, তাই ব্ল্যাংক
   document.documentElement.innerHTML = '<body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif">Blocked</body>';
