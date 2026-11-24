@@ -58,8 +58,14 @@ header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12p
 #featured{display:none;margin:12px 12px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
 #status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);padding:10px;text-align:center;font-size:11.5px;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
 #status b{background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tele{position:fixed;right:12px;bottom:100px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999}
-.tele svg{width:24px;height:24px;fill:#fff}
+.tele{position:fixed;right:12px;bottom:100px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6);animation:teleFloat 2.5s ease-in-out infinite}
+.tele svg{width:24px;height:24px;fill:#fff;animation:telePop 2.5s ease-in-out infinite}
+.tele::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;background:#2AABEE;z-index:-1;animation:telePulse 2s infinite}
+.tele::after{content:'Join Us';position:absolute;right:56px;top:50%;transform:translateY(-50%);background:#fff;color:#000;font-size:11px;font-weight:800;padding:5px 10px;border-radius:20px;white-space:nowrap;animation:telePopUp 2.5s ease-in-out infinite}
+@keyframes teleFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.05)}}
+@keyframes telePop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.15) rotate(-10deg)}}
+@keyframes telePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.8);opacity:0}}
+@keyframes telePopUp{0%,100%{opacity:0;transform:translateY(-50%) translateX(10px) scale(.8)}20%,80%{opacity:1;transform:translateY(-50%) translateX(0) scale(1)}}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:36px;z-index:998;background:#1a1a2e;border:1px solid rgba(167,139,250,.45);border-radius:100px;padding:4px 4px 4px 8px;align-items:center;gap:6px}
 #installBar .ib-ico{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:11px}
 #installBar .ib-txt{flex:1;text-align:center}
