@@ -73,6 +73,12 @@ video::-webkit-media-controls{display:none!important}
 @keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
+/* ✅ Server Bar - ভিডিওর ভিতরে উপরে, বাম থেকে ডানে */
+#serverBar{position:absolute;top:0;left:0;right:0;z-index:60;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
+#serverBar::-webkit-scrollbar{display:none}
+#serverBar.show{display:flex}
+.srv-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);white-space:nowrap}
+.srv-btn.active{background:linear-gradient(90deg,#22d3ee,#a78bfa);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(167,139,250,.5)}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -156,6 +162,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
+<div id="serverBar"></div>
 <div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>এই ফোনে ব্রাউজার সাউন্ড ব্লক করছে</small></div>
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
@@ -165,7 +172,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 
-<div class="suggest">
+<div class="suggest" id="suggestBox">
 <div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
@@ -187,8 +194,8 @@ const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
-const drmKid = urlParams.get('kid') || '';
-const drmKey = urlParams.get('key') || '';
+let drmKid = urlParams.get('kid') || '';
+let drmKey = urlParams.get('key') || '';
 const chNameParam = urlParams.get('name') || '';
 const srcParam = urlParams.get('src') || '';
 const groupParam = urlParams.get('group') || '';
@@ -210,6 +217,7 @@ const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
 const tapPlayEl = document.getElementById('tapPlay');
 const muteBtnEl = document.getElementById('muteBtn');
+const serverBarEl = document.getElementById('serverBar');
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
 let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusIdx=(statusIdx+1)%statusMessages.length; statusEl.textContent=statusMessages[statusIdx]; },1800);
@@ -275,7 +283,7 @@ let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay')) return;
+  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay') || e.target.closest('#serverBar')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
@@ -292,11 +300,11 @@ if(IS_TOUCH){
   wrapper.addEventListener('touchend', handleTap, {passive:false});
   wrapper.addEventListener('click', (e)=>{
     if(ignoreNextClick){ e.stopPropagation(); e.preventDefault(); return; }
-    if(e.target.closest('button')||e.target.closest('input')) return;
+    if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#serverBar')) return;
   }, true);
 } else {
-  wrapper.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; showControls(); });
-  wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
+  wrapper.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#serverBar')) return; showControls(); });
+  wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#serverBar')) return; e.preventDefault(); toggleFullscreen(); });
 }
 wrapper.addEventListener('mousemove', showControls);
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
@@ -331,38 +339,21 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
+// ✅ Sports হলে Suggest ফাঁকা না, পুরা Hide
+const isSportsPage = (srcParam||'').toLowerCase()==='sports' || currentName.includes('Vs');
+if(isSportsPage){
+  let sb=document.getElementById('suggestBox');
+  if(sb) sb.style.display='none';
+}
 async function loadSuggestions(){
+  if(isSportsPage) return;
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
-  const isSportsPlay = (mySrc === 'sports' || drmKid) && currentName.includes('Vs');
   if(titleEl){
-    if(isSportsPlay){ titleEl.textContent = 'আরো Live Sports দেখো'; }
-    else {
-      let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
-      titleEl.textContent = 'আরো ' + label + ' দেখো';
-    }
-  }
-  if(isSportsPlay){
-    try{
-      let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json');
-      let j = await r.json();
-      let matches = j.matches || [];
-      let html = '';
-      matches.forEach((m)=>{
-        let info = m.eventInfo || {};
-        (m.streams || []).forEach((s)=>{
-          if(!s.stream_url) return;
-          if(s.stream_url === streamSource) return;
-          let nm = info.teamA + ' Vs ' + info.teamB + ' - ' + (s.channel_name||'');
-          html += `<div class="sug-card" title="${nm}" onclick="openSportsSuggest('${encodeURIComponent(s.stream_url)}','${s.kid||''}','${s.key||''}','${encodeURIComponent(info.teamA+' Vs '+info.teamB)}')"><img src="${info.teamAFlag || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${info.teamA} Vs ${info.teamB}</p><small>${s.channel_name} • LIVE • HD</small></div><div class="sug-play">▶</div></div>`;
-        });
-      });
-      if(!html) throw new Error('empty');
-      grid.innerHTML = html;
-      return;
-    }catch(e){}
+    let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
+    titleEl.textContent = 'আরো ' + label + ' দেখো';
   }
   try{
     let list=[];
@@ -384,11 +375,6 @@ async function loadSuggestions(){
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
-function openSportsSuggest(urlEnc, kid, key, nameEnc){
-  let link = `player.html?url=${urlEnc}&name=${nameEnc}&src=sports&group=Sports`;
-  if(kid && key) link += `&kid=${kid}&key=${key}`;
-  window.location.href = link;
-}
 loadSuggestions();
 if(!streamSource){
   showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
@@ -401,6 +387,43 @@ if(!streamSource){
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
   let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, autoplayBlocked=false;
+  // ✅ Server List - localStorage থেকে
+  let serverList = [];
+  let currentServerIdx = 0;
+  try{
+    let savedMatch = JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
+    if(savedMatch && savedMatch.streams && savedMatch.streams.length && savedMatch.name === currentName){
+      serverList = savedMatch.streams;
+      let found = serverList.findIndex(s=>s.stream_url===streamSource);
+      if(found>=0) currentServerIdx = found;
+    }
+  }catch(e){}
+  function renderServers(){
+    if(!serverList.length || serverList.length<2){ serverBarEl.classList.remove('show'); return; }
+    serverBarEl.classList.add('show');
+    serverBarEl.innerHTML = serverList.map((s,i)=>{
+      let label = s.channel_name ? s.channel_name : ('Server '+(i+1));
+      if(label.length>18) label = label.slice(0,18);
+      return `<button class="srv-btn ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${label}</button>`;
+    }).join('');
+  }
+  window.switchServer = function(idx, e){
+    if(e) e.stopPropagation();
+    if(idx===currentServerIdx) return;
+    currentServerIdx = idx;
+    let s = serverList[idx];
+    if(!s) return;
+    streamSource = s.stream_url;
+    drmKid = s.kid || '';
+    drmKey = s.key || '';
+    triedProxy = false; triedDirect = false; everPlayed = false;
+    renderServers();
+    showLoader();
+    // HLS হলে Proxy logic, DASH হলে সরাসরি
+    if(streamSource.includes('.mpd')){ loadStream(streamSource, false); }
+    else { loadStream(streamSource, false); }
+  };
+  renderServers();
   function updateMuteBtn(){
     let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
     if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
@@ -424,6 +447,7 @@ if(!streamSource){
   });
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
+    if(shakaPlayer){ try{ shakaPlayer.destroy(); }catch(e){} shakaPlayer=null; }
     video.removeAttribute('src'); video.load();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
