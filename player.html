@@ -12,18 +12,19 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#000;font-family:'Poppins','Hind Siliguri',sans-serif;overflow-x:hidden}
 body{background:#07070f;-webkit-user-select:none;user-select:none}
-.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);border-bottom:1px solid rgba(255,255,255,.10)}
-.brand{display:flex;align-items:center;gap:9px;cursor:pointer}
-.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;color:#fff}
-.brand-text .pg{font-size:18px;font-weight:900;color:#fff;white-space:nowrap}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px;padding:12px 12px;background:rgba(10,10,20,.88);border-bottom:1px solid rgba(255,255,255,.10)}
+.brand{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0}
+.brand .play-ico{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.brand-text .pg{font-size:16px;font-weight:900;color:#fff;white-space:nowrap;line-height:1}
 .brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-.brand-text .tag{font-size:8px;letter-spacing:2.8px;color:#9a9ab5;font-weight:700;margin-top:3px}
-.divider{width:1px;height:34px;background:rgba(255,255,255,.25)}
-#chName{font-weight:700;font-size:14.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-text .tag{font-size:7px;letter-spacing:2.5px;color:#9a9ab5;font-weight:700;margin-top:2px}
+.divider{width:1px;height:32px;background:rgba(255,255,255,.25);flex-shrink:0}
+.top-info{flex:1;min-width:0}
+#chName{font-weight:700;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
 #chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 #chSub b{color:#7CFC00}
-.live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:10px;font-weight:800;padding:7px 11px;border-radius:20px;flex-shrink:0}
-.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:9px;font-weight:800;padding:6px 9px;border-radius:20px;flex-shrink:0}
+.live-pill i{width:6px;height:6px;background:#ff2d55;border-radius:50%}
 .main-layout{width:100%;display:block}
 .player-col{width:100%}
 #player-wrapper{position:relative;width:calc(100% - 24px);margin:12px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12)}
@@ -31,7 +32,7 @@ body{background:#07070f;-webkit-user-select:none;user-select:none}
 #player video{width:100%!important;height:100%!important;object-fit:contain!important;background:#000}
 video::-webkit-media-controls{display:none!important}
 body.fs-mode{background:#000;overflow:hidden}
-body.fs-mode .topbar, body.fs-mode .ad-wrap, body.fs-mode .ad-note, body.fs-mode .suggest{display:none!important}
+body.fs-mode .topbar, body.fs-mode .ad-wrap, body.fs-mode .ad-note, body.fs-mode .suggest, body.fs-mode #serverBarWrap{display:none!important}
 body.fs-mode .main-layout{padding:0;max-width:none;margin:0}
 body.fs-mode #player-wrapper{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;margin:0!important;aspect-ratio:auto!important;border-radius:0!important;border:none!important;z-index:500}
 @media (orientation:portrait){
@@ -41,6 +42,14 @@ body.fs-mode #exitFsBtn{display:flex!important}
 #exitFsBtn{display:none;position:fixed;top:14px;right:12px;z-index:900;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.4);font-size:15px;cursor:pointer;align-items:center;justify-content:center}
 #rotateHint{display:none;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:900;background:rgba(0,0,0,.7);color:#fff;font-size:11px;padding:8px 14px;border-radius:20px;white-space:nowrap;border:1px solid rgba(255,255,255,.3)}
 body.fs-mode #rotateHint{display:block}
+/* Server Bar - VIDEO ER NICHE, upor e na */
+#serverBarWrap{display:none;padding:10px 12px 0}
+#serverBarWrap.show{display:block}
+#serverBarWrap .srv-label{font-size:10px;letter-spacing:1.5px;color:#888;margin-bottom:8px}
+#serverBar{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;white-space:nowrap;padding-bottom:2px}
+#serverBar::-webkit-scrollbar{display:none}
+.srv-btn{flex-shrink:0;padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:#1a1a2a;color:#fff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.srv-btn.active{background:#fff!important;color:#000!important;border-color:#fff!important}
 #loader{position:absolute;inset:0;background:#0a0a12;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;pointer-events:none}
 #loader.hide-now{opacity:0!important;visibility:hidden!important}
 .tuner{display:flex;flex-direction:column;align-items:center;gap:10px}
@@ -59,11 +68,6 @@ body.fs-mode #rotateHint{display:block}
 #tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;color:#000}
 #tapPlay p{font-size:14px;font-weight:700;color:#fff}
 #tapPlay small{font-size:11px;color:#ccc}
-#serverBar{position:absolute;top:0;left:0;right:0;z-index:200;display:none;gap:6px;overflow-x:auto;padding:8px 10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);scrollbar-width:none;white-space:nowrap}
-#serverBar::-webkit-scrollbar{display:none}
-#serverBar.show{display:flex}
-.srv-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-.srv-btn.active{background:#fff!important;color:#000!important;border-color:#fff!important}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -106,32 +110,32 @@ body.fs-mode #rotateHint{display:block}
 <div class="topbar">
 <div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
 <div class="divider"></div>
-<div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
+<div class="top-info"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
 <button id="exitFsBtn" onclick="exitFsMode()">✕</button>
-<div id="rotateHint">📱 ফোন ঘুরিয়ে দেখো • Fullscreen চলছে</div>
+<div id="rotateHint">Rotate your phone • Fullscreen playing</div>
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
 <div id="loader"><div class="tuner"><div style="font-size:44px">📺</div><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div>
 <div id="player"></div>
-<div id="serverBar"></div>
-<div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>এই ফোনে ব্রাউজার সাউন্ড ব্লক করছে</small></div>
+<div id="tapPlay"><div class="tp-btn">▶</div><p>Tap to Play</p><small>Browser blocked sound, tap to start</small></div>
 <div id="controls">
 <button id="muteBtn">🔊</button>
 <button id="playBtn">▶</button>
 <input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button>
 </div>
 </div>
+<div id="serverBarWrap"><div class="srv-label">SELECT SERVER</div><div id="serverBar"></div></div>
 </div>
 <div class="suggest" id="suggestBox">
-<div class="suggest-head"><h3><span>🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html">সব দেখো →</a></div>
+<div class="suggest-head"><h3><span>🔴</span><span id="suggestTitle">You May Also Like</span></h3><a href="index.html">View All →</a></div>
 <div class="suggest-grid" id="suggestGrid"><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div></div>
 </div>
 </div>
 <div class="ad-wrap"><div class="ad-label">ADVERTISEMENT</div><div class="ad-box"><div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div></div></div>
-<div class="ad-note">তুমি দেখছো <b id="chName2">RsLive Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
+<div class="ad-note">You are watching <b id="chName2">RsLive Go</b> • Report any issue on Telegram</div>
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
 <script>
 function goHome(){ window.location.href = window.location.origin + '/?t=' + Date.now(); }
@@ -165,6 +169,7 @@ const fsBtn = document.getElementById('fsBtn');
 const tapPlayEl = document.getElementById('tapPlay');
 const muteBtnEl = document.getElementById('muteBtn');
 const serverBarEl = document.getElementById('serverBar');
+const serverBarWrap = document.getElementById('serverBarWrap');
 let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusEl.textContent = ['LOADING','CONNECTING','BUFFERING'][Math.floor(Math.random()*3)]; },1800);
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
@@ -195,7 +200,7 @@ if(autoFS){ enterFsMode(); }
 document.addEventListener('fullscreenchange', ()=>{ if(!document.fullscreenElement){ try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} } });
 let lastTap = 0, singleTapTimer = null;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay') || e.target.closest('#serverBar') || e.target.closest('#exitFsBtn')) return;
+  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay') || e.target.closest('#exitFsBtn')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){ clearTimeout(singleTapTimer); lastTap = 0; toggleFullscreen(); return; }
@@ -203,8 +208,8 @@ function handleTap(e){
   singleTapTimer = setTimeout(()=>{ lastTap = 0; showControls(); }, 300);
 }
 wrapper.addEventListener('touchend', handleTap, {passive:false});
-wrapper.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#serverBar')) return; showControls(); });
-wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#serverBar')) return; e.preventDefault(); toggleFullscreen(); });
+wrapper.addEventListener('click', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; showControls(); });
+wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
 wrapper.addEventListener('mousemove', showControls);
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(o){ if(!o) return o; if(o.startsWith(PROXY)) return o; return PROXY + encodeURIComponent(o); }
@@ -232,7 +237,7 @@ async function loadSuggestions(){
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
-  if(titleEl){ let label = myCat==='sports'?'Sports':myCat==='news'?'News':myCat==='movies'?'Movies':myCat==='kids'?'Kids':myCat==='music'?'Music':myCat==='bangla'?'Bangla':myCat==='entertainment'?'Entertainment':'একই ক্যাটাগরি'; titleEl.textContent = 'আরো ' + label + ' দেখো'; }
+  if(titleEl){ let label = myCat==='sports'?'Sports':myCat==='news'?'News':myCat==='movies'?'Movies':myCat==='kids'?'Kids':myCat==='music'?'Music':myCat==='bangla'?'Bangla':myCat==='entertainment'?'Entertainment':'Same Category'; titleEl.textContent = 'More ' + label; }
   try{
     let list=[];
     for(let plUrl of SUGGEST_PLAYLISTS){
@@ -248,12 +253,12 @@ async function loadSuggestions(){
     const show = [...shuffle(sameBoth), ...shuffle(samePlaylist), ...shuffle(sameCat)].slice(0,20);
     if(show.length===0) throw new Error('empty');
     grid.innerHTML = show.map(c=>`<div class="sug-card" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div><div class="sug-play">▶</div></div>`).join("");
-  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই</div>`; }
+  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">No more channels in this category</div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
 loadSuggestions();
 if(!streamSource){
-  showState(`<div class="state-content"><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
+  showState(`<div class="state-content"><p class="title">No stream URL supplied</p><p class="sub">Open from Home by clicking a channel</p><button class="retry-btn" onclick="location.href='index.html'">Go Home</button>${brandBlock()}</div>`);
 } else {
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
@@ -264,8 +269,8 @@ if(!streamSource){
   let serverList = []; let currentServerIdx = 0; let autoFailTimer = null;
   try{ let savedMatch = JSON.parse(localStorage.getItem('rslive_sports_match')||'null'); if(savedMatch && savedMatch.streams && savedMatch.streams.length && savedMatch.name === currentName){ serverList = savedMatch.streams; let found = serverList.findIndex(s=>s.stream_url===streamSource); if(found>=0) currentServerIdx = found; } }catch(e){}
   function renderServers(){
-    if(!serverList.length || serverList.length<2){ serverBarEl.classList.remove('show'); return; }
-    serverBarEl.classList.add('show');
+    if(!serverList.length || serverList.length<2){ serverBarWrap.classList.remove('show'); return; }
+    serverBarWrap.classList.add('show');
     serverBarEl.innerHTML = serverList.map((s,i)=>{ let label = s.channel_name ? s.channel_name : ('Server '+(i+1)); if(label.length>18) label = label.slice(0,18); return `<button class="srv-btn ${i===currentServerIdx?'active':''}" onclick="switchServer(${i},event)">${label}</button>`; }).join('');
   }
   function tryNextServer(){
@@ -330,7 +335,7 @@ if(!streamSource){
           }
         });
       } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
-      else { showNoStreamState({message:'Browser HLS support নেই'}); }
+      else { showNoStreamState({message:'Browser does not support HLS'}); }
     } else if(url.includes('.mpd') || url.includes('dash')){ loadDash(url); }
     else { video.src=url; doPlay(); }
   }
@@ -338,7 +343,7 @@ if(!streamSource){
     try{
       if(shakaPlayer){ try{ await shakaPlayer.destroy(); }catch(e){} shakaPlayer=null; }
       shaka.polyfill.installAll();
-      if(!shaka.Player.isBrowserSupported()){ showNoStreamState({message:'Browser DASH support নেই'}); return; }
+      if(!shaka.Player.isBrowserSupported()){ showNoStreamState({message:'Browser does not support DASH'}); return; }
       shakaPlayer = new shaka.Player(video);
       shakaPlayer.addEventListener('error', (e)=>{ if(!everPlayed && tryNextServer()) return; showNoStreamState({message: (e.detail && e.detail.message) || 'DRM / DASH Error'}); });
       if(drmKid && drmKey){ shakaPlayer.configure({ drm: { clearKeys: { [drmKid]: drmKey } } }); }
@@ -348,7 +353,7 @@ if(!streamSource){
   function showNoStreamState(err){
     if(!everPlayed && tryNextServer()) return;
     releaseWakeLock(); tapPlayEl.classList.remove('show');
-    showState(`<div class="state-content"><div style="font-size:34px">❌</div><p class="title">এই চ্যানেলটা এখন চলছে না</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">🔄 Retry</button><br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button><br><button class="retry-btn2" onclick="tryDirectManually()">📡 Direct দিয়ে চেষ্টা করো</button><br><button class="retry-btn2" onclick="location.href='index.html'">🏠 হোমে যাও</button>${brandBlock()}</div>`);
+    showState(`<div class="state-content"><div style="font-size:34px">❌</div><p class="title">This channel is not playing right now</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">Retry</button><br><button class="retry-btn2" onclick="tryProxyManually()">Try with Proxy</button><br><button class="retry-btn2" onclick="tryDirectManually()">Try Direct</button><br><button class="retry-btn2" onclick="location.href='index.html'">Go Home</button>${brandBlock()}</div>`);
   }
   window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
   window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
