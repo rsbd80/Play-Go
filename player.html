@@ -6,6 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <title>RsLive Go - Player</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg-1:#0a0a12;--bg-2:#14101f;--grad-a:#22d3ee;--grad-b:#a78bfa;--grad-c:#fb923c;--warn:#ffb84d;--alert:#ff5d5d;--text:#eef0f7;--text-dim:#7a7a92;--font:'Poppins','Hind Siliguri','Segoe UI',sans-serif;--mono:'JetBrains Mono','Courier New',monospace}
@@ -187,6 +188,10 @@ try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
 const chNameParam = urlParams.get('name') || '';
 const srcParam = urlParams.get('src') || '';
 const groupParam = urlParams.get('group') || '';
+const kidParam = urlParams.get('kid') || '';
+const keyParam = urlParams.get('key') || '';
+let currentKid = kidParam ? decodeURIComponent(kidParam) : '';
+let currentKey = keyParam ? decodeURIComponent(keyParam) : '';
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -200,7 +205,6 @@ const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
 const muteBtnEl = document.getElementById('muteBtn');
-// Loader এর আসল HTML টা মনে রাখো - FAILED দেখানোর পর আবার LOADING এ ফিরতে লাগবে
 const LOADER_HTML = loaderEl.innerHTML;
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
@@ -211,7 +215,6 @@ function startStatusTimer(){
 }
 startStatusTimer();
 function showLoader(){
-  // FAILED থেকে আবার LOADING এ ফিরলে Loader HTML ফিরিয়ে আনো
   if(!document.getElementById('status-line')){ loaderEl.innerHTML = LOADER_HTML; startStatusTimer(); }
   loaderEl.classList.remove('hide-now');
 }
@@ -364,6 +367,7 @@ async function fetchAllPlaylistChannels(){
 }
 // ===== VIDEO + PLAYER - সবসময় বানানো হবে, URL খালি হলেও =====
 let video = null, hls = null, everPlayed = false;
+let shakaPlayer = null;
 function ensureVideo(){
   if(video) return video;
   video = document.createElement('video');
@@ -407,6 +411,8 @@ function tryNextServerOrFail(){
     let failed = CURRENT_SERVER_IDX;
     CURRENT_SERVER_IDX++;
     streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
+    currentKid = SERVER_LIST[CURRENT_SERVER_IDX].kid || currentKid || '';
+    currentKey = SERVER_LIST[CURRENT_SERVER_IDX].key || currentKey || '';
     showLoader(); updateServerUI(CURRENT_SERVER_IDX, failed);
     loadStream(streamSource, false); return;
   }
@@ -417,7 +423,12 @@ function loadStream(url, viaProxy){
   ensureVideo();
   if(!url){ showNoStreamState(); return; }
   if(hls){ try{hls.destroy();}catch(e){} hls=null; }
+  if(shakaPlayer){ try{ shakaPlayer.destroy(); }catch(e){} shakaPlayer = null; }
   video.removeAttribute('src'); video.load();
+  if(url.includes('.mpd')){
+    loadDASH(url, viaProxy);
+    return;
+  }
   if(url.includes('.m3u8') || url.includes('m3u8')){
     if(window.Hls && Hls.isSupported()){
       const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
@@ -432,13 +443,43 @@ function loadStream(url, viaProxy){
       });
     } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
     else { showNoStreamState(); }
-  } else if(url.includes('.mpd')){ showNoStreamState(); }
-  else { video.src=url; doPlay(); }
+  } else { video.src=url; doPlay(); }
+}
+// ===== DRM - DASH (.mpd) + ClearKey =====
+async function loadDASH(url, viaProxy){
+  ensureVideo();
+  if(!window.shaka){ showNoStreamState(); return; }
+  if(shakaPlayer){ try{ await shakaPlayer.destroy(); }catch(e){} shakaPlayer = null; }
+  try{ shaka.Player.polyfill.installAll(); }catch(e){}
+  shakaPlayer = new shaka.Player(video);
+  if(currentKid && currentKey){
+    try{
+      shakaPlayer.configure({ drm: { clearKeys: { [currentKid]: currentKey } } });
+    }catch(e){}
+  }
+  if(viaProxy){
+    try{
+      shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request)=>{
+        if(request.uris && request.uris[0] && !request.uris[0].startsWith(PROXY)){
+          request.uris[0] = makeProxyUrl(request.uris[0]);
+        }
+      });
+    }catch(e){}
+  }
+  shakaPlayer.addEventListener('error', ()=>{ tryNextServerOrFail(); });
+  try{
+    await shakaPlayer.load(url);
+    doPlay();
+  }catch(e){
+    tryNextServerOrFail();
+  }
 }
 function playServer(idx){
   if(!SERVER_LIST[idx]) return;
   CURRENT_SERVER_IDX = idx;
   streamSource = SERVER_LIST[idx].url;
+  currentKid = SERVER_LIST[idx].kid || currentKid || '';
+  currentKey = SERVER_LIST[idx].key || currentKey || '';
   triedProxyForThisServer = false;
   updateServerUI(idx, -1);
   showLoader();
@@ -462,7 +503,7 @@ async function loadSuggestions(){
     try{ stored = JSON.parse(localStorage.getItem('rslive_sports_match')||'null'); }catch(e){}
     let jsonServers = [];
     if(stored && stored.streams && stored.streams.length && stored.name === currentName){
-      jsonServers = stored.streams.map((s)=>({ name: currentName, url: s.stream_url || s.url || '', logo:'', group:'Events', src:'Server' })).filter(x=>x.url);
+      jsonServers = stored.streams.map((s)=>({ name: currentName, url: s.stream_url || s.url || '', logo:'', group:'Events', src:'Server', kid: s.kid || '', key: s.key || '' })).filter(x=>x.url);
     }
     let playlistServers = [];
     try{
@@ -483,18 +524,23 @@ async function loadSuggestions(){
       seen.add(s.url); return true;
     });
     if(streamSource && !SERVER_LIST.find(s=>s.url===streamSource)){
-      SERVER_LIST.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam});
+      SERVER_LIST.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam, kid: currentKid || '', key: currentKey || ''});
     }
     CURRENT_SERVER_IDX = 0;
     triedProxyForThisServer = false;
+    if(SERVER_LIST.length && !currentKid && SERVER_LIST[0].kid){
+      currentKid = SERVER_LIST[0].kid || '';
+      currentKey = SERVER_LIST[0].key || '';
+    }
     if(!SERVER_LIST.length){
       grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই</div>`;
       return;
     }
     grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
-    // FIX: URL খালি আসলে - Playlist থেকে পাওয়া প্রথম Server টাই অটো চালাও
     if(!streamSource && SERVER_LIST.length){
       streamSource = SERVER_LIST[0].url;
+      currentKid = SERVER_LIST[0].kid || currentKid || '';
+      currentKey = SERVER_LIST[0].key || currentKey || '';
       CURRENT_SERVER_IDX = 0;
       triedProxyForThisServer = false;
       updateServerUI(0, -1);
