@@ -27,23 +27,23 @@ html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 .sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-/* ===== HEADER - Player এর সাথে ১০০% সেম ===== */
-header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:12px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+/* ===== HEADER - Player এর ১ম ছবির সাথে ১০০% সেম ===== */
+header{background:#0a0a14;backdrop-filter:blur(16px);padding:12px 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
 .search-wrap{position:relative;margin-top:12px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .play-ico{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.logo .play-ico{width:44px;height:44px;min-width:44px;border-radius:13px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 6px 20px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:20px;font-weight:900;line-height:1;color:#fff}
-.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
+.logo-text .name{font-family:'Poppins',sans-serif;font-size:26px;font-weight:900;line-height:1;color:#fff;letter-spacing:.2px}
+.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6,#fb923c,#38bdf8);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
 @keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
-.logo-text .tag{font-size:8px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
-.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
+.logo-text .tag{font-size:10px;letter-spacing:4px;color:#9a9ab5;font-weight:700;margin-top:3px}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.45);color:#ff6b81;font-size:11px;font-weight:800;padding:6px 11px;border-radius:20px}
+.live-pill i{width:8px;height:8px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-header::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
-header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
+header::before{content:"";position:absolute;top:-50px;left:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(56,189,248,.35),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
+header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.38),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
 @keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
 .search-wrap .s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
@@ -138,7 +138,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
+<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
@@ -146,7 +146,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
   {name:'Tapmad', url:'https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u', useProxy:false},
   {name:'AynaOTT', url:'https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u', useProxy:false},
   {name:'JagoBD', url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u', useProxy:false},
@@ -262,7 +262,6 @@ function formatCountdown(ms){
   if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
-// ===== বড় Emoji + কোন ম্যাচ - Match Type =====
 function getSportInfo(m){
   let txt = '';
   try{ txt = JSON.stringify(m||{}).toLowerCase(); }catch(e){ txt = ''; }
