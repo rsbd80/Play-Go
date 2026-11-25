@@ -61,26 +61,34 @@ video::-webkit-media-controls{display:none!important}
 .state-content p.title{font-size:13px;letter-spacing:1px;font-weight:600}
 .state-content p.sub{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:280px;overflow-wrap:anywhere}
 .state-content .brand-name{display:block;margin-top:18px}
-#controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
+/* ===== PREMIUM SMALL CONTROLS ===== */
+#controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:6px;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
-#controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-#controls button:active{transform:scale(.90)}
-#controls .ctrl-ico{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
-#seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
-#seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
-#time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
-/* ===== QUALITY SELECTOR ===== */
-#qualityBtn{width:auto!important;min-width:52px;padding:0 10px!important;border-radius:20px!important;font-size:11px!important;font-weight:800!important;letter-spacing:.3px}
-#qualityBtn.low{border-color:#22d3ee!important;color:#22d3ee!important}
-#qualityMenu{display:none;position:absolute;bottom:64px;right:12px;z-index:200;background:#16161f;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:6px;min-width:150px;box-shadow:0 12px 30px rgba(0,0,0,.6)}
+#controls button{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.18)!important;color:#fff!important;width:32px;height:32px;border-radius:50%;font-size:12px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#controls button:active{transform:scale(.92)}
+#controls .ctrl-ico{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+#controls .ctrl-txt{font-size:12px;line-height:1}
+#seek{flex:1;-webkit-appearance:none;height:3px;background:rgba(255,255,255,.25);border-radius:5px;outline:none;min-width:0}
+#seek::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid #a78bfa;cursor:pointer;box-shadow:0 1px 6px rgba(167,139,250,.6)}
+#time-label{font-family:var(--mono);font-size:9px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.15);border:1px solid rgba(255,45,85,.30);padding:3px 6px;border-radius:8px;letter-spacing:.5px}
+/* ===== QUALITY - PREMIUM SMALL ===== */
+#qualityBtn{width:auto!important;min-width:42px;height:32px!important;padding:0 8px!important;border-radius:16px!important;font-size:9.5px!important;font-weight:800!important;letter-spacing:.4px}
+#qualityBtn.low{border-color:rgba(34,211,238,.6)!important;color:#22d3ee!important;background:rgba(34,211,238,.12)!important}
+#qualityMenu{display:none;position:absolute;bottom:48px;right:10px;z-index:200;background:rgba(22,22,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:5px;min-width:138px;box-shadow:0 12px 30px rgba(0,0,0,.55)}
 #qualityMenu.show{display:block}
-#qualityMenu .qm-title{font-size:10px;letter-spacing:1px;color:#888;padding:6px 10px 4px;font-weight:700}
-#qualityMenu .qm-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:#fff}
-#qualityMenu .qm-opt:active{background:rgba(255,255,255,.12)}
-#qualityMenu .qm-opt.active{background:linear-gradient(90deg,rgba(34,211,238,.25),rgba(167,139,250,.25));border:1px solid rgba(167,139,250,.5)}
-#qualityMenu .qm-opt small{font-size:10px;color:#22d3ee;font-weight:700}
+#qualityMenu .qm-title{font-size:9px;letter-spacing:1px;color:#888;padding:5px 8px 3px;font-weight:700;display:flex;align-items:center;gap:5px}
+#qualityMenu .qm-opt{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;color:#fff}
+#qualityMenu .qm-opt:active{background:rgba(255,255,255,.10)}
+#qualityMenu .qm-opt.active{background:linear-gradient(90deg,rgba(34,211,238,.20),rgba(167,139,250,.20));border:1px solid rgba(167,139,250,.45)}
+#qualityMenu .qm-opt small{font-size:9px;color:#22d3ee;font-weight:700}
 #qualityMenu .qm-opt.active small{color:#fff}
-#lowNetHint{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:120;background:rgba(0,0,0,.7);border:1px solid rgba(255,184,77,.5);color:#ffb84d;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;white-space:nowrap}
+/* ===== LOW NETWORK - PREMIUM GLASS PILL ===== */
+#lowNetHint{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:120;align-items:center;gap:6px;background:rgba(10,10,18,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:10.5px;font-weight:600;padding:7px 12px;border-radius:100px;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12)}
+#lowNetHint.show{display:flex}
+#lowNetHint .ln-ico{width:18px;height:18px;min-width:18px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:9px}
+#lowNetHint b{color:#22d3ee;font-weight:800}
+#lowNetHint .ln-dot{width:5px;height:5px;border-radius:50%;background:#ffb84d;animation:lnBlink 1.2s infinite}
+@keyframes lnBlink{0%,100%{opacity:1}50%{opacity:.3}}
 .suggest{margin:16px 0 0;width:100%;overflow:hidden}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px;width:100%;box-sizing:border-box}
 .suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap}
@@ -165,12 +173,12 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
-<div id="lowNetHint">📶 নেট স্লো - 360p দিলে স্মুথ চলবে</div>
+<div id="lowNetHint"><span class="ln-ico">📶</span><span>নেট স্লো • <b>360p</b> দিলে স্মুথ চলবে</span><span class="ln-dot"></span></div>
 <div id="qualityMenu"></div>
 <div id="controls">
-<button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
-<button id="playBtn">▶</button>
-<input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="qualityBtn">AUTO</button><button id="fsBtn">⛶</button>
+<button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
+<button id="playBtn"><span class="ctrl-txt">▶</span></button>
+<input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="qualityBtn">AUTO</button><button id="fsBtn"><span class="ctrl-txt">⛶</span></button>
 </div>
 </div>
 </div>
@@ -408,11 +416,9 @@ async function sortServersBySpeed(list){
 }
 let video = null, hls = null, everPlayed = false;
 let shakaPlayer = null;
-// ===== QUALITY SYSTEM - Low Network এর জন্য =====
 let currentQuality = 'auto';
 let availableQualities = [];
 let waitingCount = 0;
-let waitingTimer = null;
 function qualityLabel(h){
   if(!h) return 'AUTO';
   if(h <= 360) return '360p';
@@ -425,7 +431,6 @@ function qualityLabel(h){
 function buildQualityMenu(){
   let opts = [];
   opts.push({id:'auto', label:'Auto', sub:'নেট অনুযায়ী'});
-  // HLS Levels থেকে
   if(hls && hls.levels && hls.levels.length){
     let seen = new Set();
     hls.levels.forEach((lv,i)=>{
@@ -433,12 +438,10 @@ function buildQualityMenu(){
       let lbl = qualityLabel(h);
       if(!seen.has(lbl)){ seen.add(lbl); opts.push({id:'hls-'+i, label:lbl, sub: h ? (Math.round((lv.bitrate||0)/1000)+' kbps') : '', level:i, height:h}); }
     });
-    // High থেকে Low সাজাও
     let fixed = opts.slice(0,1);
     let rest = opts.slice(1).sort((a,b)=> (b.height||0)-(a.height||0));
     opts = [...fixed, ...rest];
   }
-  // Shaka Variants থেকে
   else if(shakaPlayer){
     try{
       let tracks = shakaPlayer.getVariantTracks().filter(t=>t.active || t.type==='variant');
@@ -453,7 +456,6 @@ function buildQualityMenu(){
       opts = [...fixed, ...rest];
     }catch(e){}
   }
-  // কোনো Level না পাইলে Manual Fallback - Low Network এর জন্য কাজ করবে
   if(opts.length <= 1){
     opts = [
       {id:'auto', label:'Auto', sub:'নেট অনুযায়ী'},
@@ -464,7 +466,7 @@ function buildQualityMenu(){
     ];
   }
   availableQualities = opts;
-  qualityMenu.innerHTML = `<div class="qm-title">📶 QUALITY - লো নেটওয়ার্কে 360p দাও</div>` + opts.map(o=>{
+  qualityMenu.innerHTML = `<div class="qm-title">⚙️ QUALITY</div>` + opts.map(o=>{
     let active = (currentQuality==='auto' && o.id==='auto') || (currentQuality===o.label) || (currentQuality===o.id);
     return `<div class="qm-opt ${active?'active':''}" onclick="setQuality('${o.id}','${o.label}',${o.level!=null?o.level:-1},${o.trackId!=null?o.trackId:-1},${o.height||0})">${o.label} <small>${o.sub||''}</small></div>`;
   }).join('');
@@ -474,20 +476,16 @@ function setQuality(id, label, level, trackId, height){
   qualityBtn.textContent = (id==='auto') ? 'AUTO' : label;
   qualityBtn.classList.toggle('low', label==='360p' || label==='480p');
   qualityMenu.classList.remove('show');
-  // HLS - আসল Level বদলাও
   if(hls){
     if(id==='auto'){ hls.currentLevel = -1; hls.autoLevelEnabled = true; }
     else if(level >= 0){ hls.currentLevel = level; hls.autoLevelEnabled = false; }
     else {
-      // Fallback - Height অনুযায়ী কাছাকাছি Level খুঁজো
       let best = -1, bestDiff = 99999;
       hls.levels.forEach((lv,i)=>{ let d = Math.abs((lv.height||0)-height); if(d < bestDiff){ bestDiff=d; best=i; } });
       if(best>=0){ hls.currentLevel = best; hls.autoLevelEnabled = false; }
     }
-    // Low Quality তে Buffer ছোট করো যাতে আটকায় না
     try{ hls.config.maxBufferLength = (label==='360p'||label==='480p') ? 4 : 8; }catch(e){}
   }
-  // Shaka / DRM - Variant Track বদলাও
   if(shakaPlayer){
     try{
       if(id==='auto'){ shakaPlayer.configure({abr:{enabled:true}}); }
@@ -516,20 +514,19 @@ function ensureVideo(){
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:fill;background:#000';
   document.getElementById('player').appendChild(video);
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; waitingCount=0; if(lowNetHint) lowNetHint.style.display='none'; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; waitingCount=0; if(lowNetHint) lowNetHint.classList.remove('show'); if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{
     if(!video.paused){
       showLoader();
-      // বারবার আটকালে Low Network Hint দেখাও
       waitingCount++;
       if(waitingCount >= 2 && lowNetHint && currentQuality==='auto'){
-        lowNetHint.style.display='block';
-        setTimeout(()=>{ if(lowNetHint) lowNetHint.style.display='none'; }, 5000);
+        lowNetHint.classList.add('show');
+        setTimeout(()=>{ if(lowNetHint) lowNetHint.classList.remove('show'); }, 5000);
       }
     }
   });
-  video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
-  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
+  video.addEventListener('pause',()=>{ playBtn.querySelector('.ctrl-txt').textContent='▶'; releaseWakeLock(); });
+  video.addEventListener('play',()=>{ playBtn.querySelector('.ctrl-txt').textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
   video.addEventListener('error',()=>{});
   video.addEventListener('webkitbeginfullscreen', ()=>{ isIOSFullscreen=true; video.style.objectFit='fill'; });
