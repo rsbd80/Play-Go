@@ -19,17 +19,15 @@ body{background:#07070f;color:#eef0f7;font-family:'Poppins','Hind Siliguri',sans
 .brand .tag{font-size:8px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:1px}
 .search{margin:8px 0 2px}
 .search input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;color:#fff;outline:none;font-family:inherit;font-size:13px}
-.view{display:none;padding:8px 8px 0;width:100%}
+.view{display:none;padding:10px 8px 0;width:100%}
 .view.active{display:block}
 .sec-title{font-size:14px;font-weight:800;margin:6px 2px 10px}
-/* Channel Card - 3 কলাম, একটু বড়, Square 1x1, গোল লোগো, Category লেখা নাই */
 .grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:10px;width:100%}
 .card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.11);border-radius:16px;padding:12px 6px 10px;text-align:center;cursor:pointer;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;overflow:hidden}
 .card:active{transform:scale(.95);border-color:#a78bfa}
 .card img{width:54px;height:54px;object-fit:cover;background:#fff;border-radius:50%;padding:4px;border:2px solid rgba(167,139,250,.4);flex-shrink:0}
 .card p{font-size:12px;font-weight:600;margin-top:8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:30px;word-break:break-word}
 .live-badge{position:absolute;top:5px;right:5px;background:#ff2d55;color:#fff;font-size:7px;font-weight:800;padding:2px 6px;border-radius:20px}
-/* Upcoming / Live Match Card */
 .up-card{background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(167,139,250,.18),rgba(255,93,143,.14));border:1px solid rgba(167,139,250,.35);border-radius:18px;padding:12px;margin-bottom:12px;cursor:pointer}
 .up-card:active{transform:scale(.98)}
 .up-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -41,7 +39,6 @@ body{background:#07070f;color:#eef0f7;font-family:'Poppins','Hind Siliguri',sans
 .up-team p{font-size:12px;font-weight:700;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .up-vs{font-size:16px;font-weight:900;color:#a78bfa;background:rgba(255,255,255,.08);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .up-btn{margin-top:10px;width:100%;border:none;padding:10px;border-radius:12px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;font-weight:800;font-family:inherit;font-size:13px;cursor:pointer}
-/* Category */
 .cat-grid{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:10px;width:100%}
 .cat-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:12px 8px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
 .cat-card .cat-logo{width:60px;height:60px;border-radius:50%;background:#fff;padding:5px;display:flex;align-items:center;justify-content:center;border:3px solid rgba(167,139,250,.45);margin-bottom:8px}
@@ -52,10 +49,9 @@ body{background:#07070f;color:#eef0f7;font-family:'Poppins','Hind Siliguri',sans
 .back-btn{display:inline-flex;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px;cursor:pointer}
 .empty{text-align:center;color:#888;font-size:13px;padding:30px 10px;line-height:1.6}
 .skel{aspect-ratio:1/1;border-radius:16px;background:#15151f}
-/* ===== Bottom Nav - চিকন + বাটন অনুযায়ী আইকন ===== */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,10,20,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.10);padding:5px 6px calc(5px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .nav-btn{background:transparent;border:1px solid transparent;color:#8a8a9e;padding:6px 4px 5px;border-radius:12px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
-.nav-btn .nav-ico{width:20px;height:20px;line-height:1;display:flex;align-items:center;justify-content:center}
+.nav-btn .nav-ico{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
 .nav-btn .nav-ico svg{width:20px;height:20px}
 .nav-btn .nav-label{font-size:12px;font-weight:700;line-height:1}
 .nav-btn.active{color:#fff;background:linear-gradient(180deg,rgba(167,139,250,.22),rgba(34,211,238,.12));border-color:rgba(167,139,250,.45)}
@@ -71,25 +67,22 @@ body{background:#07070f;color:#eef0f7;font-family:'Poppins','Hind Siliguri',sans
   <div class="search"><input id="searchInput" placeholder="🔍 Search channel..."></div>
 </div>
 
-<!-- HOME - শুধু চ্যানেল কার্ড, উপরে Pill নাই -->
+<!-- HOME - নিচে কোনো লেখা নাই, ডাইরেক্ট কার্ড -->
 <div id="view-home" class="view active">
-  <div class="sec-title">📺 সব চ্যানেল</div>
   <div id="homeGrid" class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
 </div>
 
-<!-- EVENTS - Upcoming + সব খেলার আপডেট -->
+<!-- EVENTS - শুধু Match কার্ড, নিচে কোনো লেখা / Sports Channel নাই -->
 <div id="view-events" class="view">
-  <div class="sec-title">🔥 Upcoming Match</div>
   <div id="eventsList"></div>
 </div>
 
-<!-- CATEGORIES - শুধু Category -->
+<!-- CATEGORIES - নিচে কোনো লেখা নাই -->
 <div id="view-categories" class="view">
-  <div id="catListWrap"><div class="sec-title">🗂️ Categories</div><div id="catGrid" class="cat-grid"></div></div>
+  <div id="catListWrap"><div id="catGrid" class="cat-grid"></div></div>
   <div id="catDetailWrap" style="display:none"><div class="back-btn" onclick="backToCategories()">← সব Category</div><div class="sec-title" id="catDetailTitle">Category</div><div id="catDetailGrid" class="grid"></div></div>
 </div>
 
-<!-- Bottom Nav - বাটন অনুযায়ী আইকন সহ -->
 <nav class="bottom-nav">
   <button class="nav-btn" id="navEvents" onclick="switchTab('events')">
     <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 5h1"/><path d="M17 6h3a2 2 0 0 1-2 5h-1"/></svg></span>
