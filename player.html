@@ -221,7 +221,21 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
 
-// ===== FULLSCREEN + ROTATE - iPhone 11 FIX =====
+// ===== শুধু LIVE SPORTS চিনবে - Sports Category না =====
+// Live Sports = Events থেকে আসা, বা group এ Live Sports, বা নামে VS থাকা ম্যাচ
+// Sports Category = T Sports / Star Sports / Sony Sports - এইগুলা এইখানে ঢুকবে না
+function isLiveSports(){
+  const s = (srcParam||'').toLowerCase();
+  const g = (currentGroup||'').toLowerCase();
+  const n = (currentName||'').toLowerCase();
+  if(s === 'events' || s === 'live sports' || s === 'live-sports' || s.includes('event')) return true;
+  if(g === 'events' || g === 'live sports' || g.includes('live sport') || g.includes('live match')) return true;
+  if(/\s+vs\s+|\s+vs\.|\svs\s/.test(n)) return true;
+  return false;
+}
+let SERVER_LIST = [];
+let CURRENT_SERVER_IDX = 0;
+
 let isFullscreenBusy = false;
 function getVideoEl(){ return document.querySelector('#player video'); }
 async function toggleFullscreen(){
@@ -230,7 +244,6 @@ async function toggleFullscreen(){
   setTimeout(()=>{ isFullscreenBusy = false; }, 600);
   const v = getVideoEl();
   if(!v) return;
-  // iPhone / iOS : Safari শুধু video কে fullscreen দেয়, div কে দেয় না
   if(IS_IOS){
     if(document.webkitFullscreenElement || document.fullscreenElement || v.webkitDisplayingFullscreen){
       try{ if(document.exitFullscreen) await document.exitFullscreen(); }catch(e){}
@@ -244,7 +257,6 @@ async function toggleFullscreen(){
     }
     return;
   }
-  // Android / PC : আগের মতো div fullscreen
   if(document.fullscreenElement){
     try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
     try{ await document.exitFullscreen(); }catch(e){}
@@ -272,8 +284,6 @@ document.addEventListener('webkitfullscreenchange', ()=>{
   if(document.webkitFullscreenElement) v.style.objectFit = 'fill';
   else v.style.objectFit = 'contain';
 });
-
-// ===== SINGLE / DOUBLE TAP - CLEAN FIX =====
 let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
@@ -302,7 +312,6 @@ if(IS_TOUCH){
   wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
 }
 wrapper.addEventListener('mousemove', showControls);
-
 function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(original){
   if(!original) return original;
@@ -340,6 +349,33 @@ async function loadSuggestions(){
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
+  // ===== শুধু LIVE SPORTS হলে Extra Server, বাকি সব আগের মতো =====
+  if(isLiveSports()){
+    if(titleEl) titleEl.textContent = 'Extra Server দেখো';
+    try{
+      let list=[];
+      for(let plUrl of SUGGEST_PLAYLISTS){
+        try{
+          const res = await fetch(plUrl);
+          const text = await res.text();
+          const lines = text.split("\n"); let cur=null;
+          for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
+        }catch(e){}
+      }
+      const clean = (s)=> cleanName(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+      const myClean = clean(currentName);
+      let servers = list.filter(c => clean(c.name) === myClean);
+      let current = servers.find(s=>s.url===streamSource);
+      if(current){ servers = [current, ...servers.filter(s=>s.url!==streamSource)]; }
+      if(!servers.find(s=>s.url===streamSource)) servers.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam});
+      SERVER_LIST = servers;
+      CURRENT_SERVER_IDX = 0;
+      if(servers.length===0) throw new Error('empty');
+      grid.innerHTML = servers.map((c,i)=>`<div class="sug-card" id="server-${i}" style="${i===0?'border-color:#22d3ee;box-shadow:0 0 0 1px #22d3ee':''}" onclick="playServer(${i})"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>Server ${i+1}</p><small>${i===0?'▶ PLAYING':c.src||'LIVE'} • HD</small></div><div class="sug-play">${i===0?'●':'▶'}</div></div>`).join("");
+    }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
+    return;
+  }
+  // ===== Sports Category সহ বাকি সব - আগের মতোই =====
   if(titleEl){
     let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
     titleEl.textContent = 'আরো ' + label + ' দেখো';
@@ -364,6 +400,20 @@ async function loadSuggestions(){
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
+function playServer(idx){
+  if(!SERVER_LIST[idx]) return;
+  CURRENT_SERVER_IDX = idx;
+  streamSource = SERVER_LIST[idx].url;
+  document.querySelectorAll('[id^="server-"]').forEach((el,i)=>{
+    el.style.borderColor = i===idx ? '#22d3ee' : '';
+    el.style.boxShadow = i===idx ? '0 0 0 1px #22d3ee' : '';
+  });
+  showLoader();
+  triedProxy = false; triedDirect = false;
+  if(isToffee){ loadStream(makeProxyUrl(streamSource), true); }
+  else { loadStream(streamSource, false); }
+}
+window.playServer = playServer;
 loadSuggestions();
 if(!streamSource){
   showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
@@ -409,6 +459,24 @@ if(!streamSource){
         hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
+          // ===== শুধু LIVE SPORTS: এই Server ফেল -> পরের Server, সব ফেল -> Fail =====
+          if(isLiveSports() && SERVER_LIST.length > 1){
+            if(CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
+              CURRENT_SERVER_IDX++;
+              streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
+              showLoader();
+              document.querySelectorAll('[id^="server-"]').forEach((el,i)=>{
+                el.style.borderColor = i===CURRENT_SERVER_IDX ? '#22d3ee' : '';
+                el.style.boxShadow = i===CURRENT_SERVER_IDX ? '0 0 0 1px #22d3ee' : '';
+              });
+              triedProxy = false; triedDirect = false;
+              loadStream(streamSource, false);
+              return;
+            }
+            showNoStreamState({message:'সব সার্ভার চেক করা হইছে, কোনোটাই চলতেছে না'});
+            return;
+          }
+          // ===== Sports Category সহ বাকি সব - আগের মতো =====
           if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
@@ -472,4 +540,4 @@ if(!streamSource){
 })();
 </script>
 </body>
-  </html>
+</html>
