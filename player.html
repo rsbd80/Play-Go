@@ -69,6 +69,18 @@ video::-webkit-media-controls{display:none!important}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
 #time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
+/* ===== QUALITY SELECTOR ===== */
+#qualityBtn{width:auto!important;min-width:52px;padding:0 10px!important;border-radius:20px!important;font-size:11px!important;font-weight:800!important;letter-spacing:.3px}
+#qualityBtn.low{border-color:#22d3ee!important;color:#22d3ee!important}
+#qualityMenu{display:none;position:absolute;bottom:64px;right:12px;z-index:200;background:#16161f;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:6px;min-width:150px;box-shadow:0 12px 30px rgba(0,0,0,.6)}
+#qualityMenu.show{display:block}
+#qualityMenu .qm-title{font-size:10px;letter-spacing:1px;color:#888;padding:6px 10px 4px;font-weight:700}
+#qualityMenu .qm-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:#fff}
+#qualityMenu .qm-opt:active{background:rgba(255,255,255,.12)}
+#qualityMenu .qm-opt.active{background:linear-gradient(90deg,rgba(34,211,238,.25),rgba(167,139,250,.25));border:1px solid rgba(167,139,250,.5)}
+#qualityMenu .qm-opt small{font-size:10px;color:#22d3ee;font-weight:700}
+#qualityMenu .qm-opt.active small{color:#fff}
+#lowNetHint{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:120;background:rgba(0,0,0,.7);border:1px solid rgba(255,184,77,.5);color:#ffb84d;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;white-space:nowrap}
 .suggest{margin:16px 0 0;width:100%;overflow:hidden}
 .suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px;width:100%;box-sizing:border-box}
 .suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap}
@@ -153,10 +165,12 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
+<div id="lowNetHint">📶 নেট স্লো - 360p দিলে স্মুথ চলবে</div>
+<div id="qualityMenu"></div>
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
 <button id="playBtn">▶</button>
-<input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="fsBtn">⛶</button>
+<input type="range" id="seek" value="0" min="0" max="100"><span id="time-label">LIVE</span><button id="qualityBtn">AUTO</button><button id="fsBtn">⛶</button>
 </div>
 </div>
 </div>
@@ -198,6 +212,9 @@ const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
 const muteBtnEl = document.getElementById('muteBtn');
+const qualityBtn = document.getElementById('qualityBtn');
+const qualityMenu = document.getElementById('qualityMenu');
+const lowNetHint = document.getElementById('lowNetHint');
 const LOADER_HTML = loaderEl.innerHTML;
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
@@ -300,7 +317,7 @@ let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input')) return;
+  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#qualityMenu')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
@@ -391,6 +408,105 @@ async function sortServersBySpeed(list){
 }
 let video = null, hls = null, everPlayed = false;
 let shakaPlayer = null;
+// ===== QUALITY SYSTEM - Low Network এর জন্য =====
+let currentQuality = 'auto';
+let availableQualities = [];
+let waitingCount = 0;
+let waitingTimer = null;
+function qualityLabel(h){
+  if(!h) return 'AUTO';
+  if(h <= 360) return '360p';
+  if(h <= 480) return '480p';
+  if(h <= 540) return '540p';
+  if(h <= 720) return '720p';
+  if(h <= 1080) return '1080p';
+  return h + 'p';
+}
+function buildQualityMenu(){
+  let opts = [];
+  opts.push({id:'auto', label:'Auto', sub:'নেট অনুযায়ী'});
+  // HLS Levels থেকে
+  if(hls && hls.levels && hls.levels.length){
+    let seen = new Set();
+    hls.levels.forEach((lv,i)=>{
+      let h = lv.height || 0;
+      let lbl = qualityLabel(h);
+      if(!seen.has(lbl)){ seen.add(lbl); opts.push({id:'hls-'+i, label:lbl, sub: h ? (Math.round((lv.bitrate||0)/1000)+' kbps') : '', level:i, height:h}); }
+    });
+    // High থেকে Low সাজাও
+    let fixed = opts.slice(0,1);
+    let rest = opts.slice(1).sort((a,b)=> (b.height||0)-(a.height||0));
+    opts = [...fixed, ...rest];
+  }
+  // Shaka Variants থেকে
+  else if(shakaPlayer){
+    try{
+      let tracks = shakaPlayer.getVariantTracks().filter(t=>t.active || t.type==='variant');
+      let seen = new Set();
+      tracks.forEach(t=>{
+        let h = t.height || 0;
+        let lbl = qualityLabel(h);
+        if(!seen.has(lbl)){ seen.add(lbl); opts.push({id:'shaka-'+t.id, label:lbl, sub: Math.round((t.bandwidth||0)/1000)+' kbps', trackId:t.id, height:h}); }
+      });
+      let fixed = opts.slice(0,1);
+      let rest = opts.slice(1).sort((a,b)=> (b.height||0)-(a.height||0));
+      opts = [...fixed, ...rest];
+    }catch(e){}
+  }
+  // কোনো Level না পাইলে Manual Fallback - Low Network এর জন্য কাজ করবে
+  if(opts.length <= 1){
+    opts = [
+      {id:'auto', label:'Auto', sub:'নেট অনুযায়ী'},
+      {id:'low', label:'360p', sub:'লো নেটওয়ার্ক • স্মুথ', height:360},
+      {id:'med', label:'480p', sub:'মিডিয়াম নেটওয়ার্ক', height:480},
+      {id:'high', label:'720p', sub:'ভালো নেটওয়ার্ক', height:720},
+      {id:'fhd', label:'1080p', sub:'হাই কোয়ালিটি', height:1080},
+    ];
+  }
+  availableQualities = opts;
+  qualityMenu.innerHTML = `<div class="qm-title">📶 QUALITY - লো নেটওয়ার্কে 360p দাও</div>` + opts.map(o=>{
+    let active = (currentQuality==='auto' && o.id==='auto') || (currentQuality===o.label) || (currentQuality===o.id);
+    return `<div class="qm-opt ${active?'active':''}" onclick="setQuality('${o.id}','${o.label}',${o.level!=null?o.level:-1},${o.trackId!=null?o.trackId:-1},${o.height||0})">${o.label} <small>${o.sub||''}</small></div>`;
+  }).join('');
+}
+function setQuality(id, label, level, trackId, height){
+  currentQuality = (id==='auto') ? 'auto' : label;
+  qualityBtn.textContent = (id==='auto') ? 'AUTO' : label;
+  qualityBtn.classList.toggle('low', label==='360p' || label==='480p');
+  qualityMenu.classList.remove('show');
+  // HLS - আসল Level বদলাও
+  if(hls){
+    if(id==='auto'){ hls.currentLevel = -1; hls.autoLevelEnabled = true; }
+    else if(level >= 0){ hls.currentLevel = level; hls.autoLevelEnabled = false; }
+    else {
+      // Fallback - Height অনুযায়ী কাছাকাছি Level খুঁজো
+      let best = -1, bestDiff = 99999;
+      hls.levels.forEach((lv,i)=>{ let d = Math.abs((lv.height||0)-height); if(d < bestDiff){ bestDiff=d; best=i; } });
+      if(best>=0){ hls.currentLevel = best; hls.autoLevelEnabled = false; }
+    }
+    // Low Quality তে Buffer ছোট করো যাতে আটকায় না
+    try{ hls.config.maxBufferLength = (label==='360p'||label==='480p') ? 4 : 8; }catch(e){}
+  }
+  // Shaka / DRM - Variant Track বদলাও
+  if(shakaPlayer){
+    try{
+      if(id==='auto'){ shakaPlayer.configure({abr:{enabled:true}}); }
+      else {
+        shakaPlayer.configure({abr:{enabled:false}});
+        let tracks = shakaPlayer.getVariantTracks();
+        let target = null;
+        if(trackId >= 0) target = tracks.find(t=>t.id===trackId);
+        if(!target && height){ target = tracks.reduce((a,b)=> Math.abs((a.height||0)-height) < Math.abs((b.height||0)-height) ? a : b); }
+        if(target) shakaPlayer.selectVariantTrack(target, true);
+      }
+    }catch(e){}
+  }
+  buildQualityMenu();
+  showControls();
+}
+window.setQuality = setQuality;
+qualityBtn.addEventListener('click', (e)=>{ e.stopPropagation(); buildQualityMenu(); qualityMenu.classList.toggle('show'); showControls(); });
+document.addEventListener('click', (e)=>{ if(!e.target.closest('#qualityMenu') && !e.target.closest('#qualityBtn')) qualityMenu.classList.remove('show'); });
 function ensureVideo(){
   if(video) return video;
   video = document.createElement('video');
@@ -400,8 +516,18 @@ function ensureVideo(){
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:fill;background:#000';
   document.getElementById('player').appendChild(video);
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
-  video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; waitingCount=0; if(lowNetHint) lowNetHint.style.display='none'; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('waiting',()=>{
+    if(!video.paused){
+      showLoader();
+      // বারবার আটকালে Low Network Hint দেখাও
+      waitingCount++;
+      if(waitingCount >= 2 && lowNetHint && currentQuality==='auto'){
+        lowNetHint.style.display='block';
+        setTimeout(()=>{ if(lowNetHint) lowNetHint.style.display='none'; }, 5000);
+      }
+    }
+  });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
@@ -458,6 +584,7 @@ function loadStream(url, viaProxy){
   if(!url){ showNoStreamState(); return; }
   playSession++;
   let mySession = playSession;
+  currentQuality = 'auto'; if(qualityBtn){ qualityBtn.textContent='AUTO'; qualityBtn.classList.remove('low'); }
   if(hls){ try{hls.destroy();}catch(e){} hls=null; }
   if(shakaPlayer){ try{ shakaPlayer.destroy(); }catch(e){} shakaPlayer = null; }
   video.removeAttribute('src'); video.load();
@@ -474,11 +601,12 @@ function loadStream(url, viaProxy){
   }
   if(url.includes('.m3u8') || url.includes('m3u8')){
     if(window.Hls && Hls.isSupported()){
-      const hlsConfig = { maxBufferLength:8, maxMaxBufferLength:16, maxBufferSize: 8*1000*1000, enableWorker:true, lowLatencyMode:true, backBufferLength:0, manifestLoadingMaxRetry:0, levelLoadingMaxRetry:1, fragLoadingMaxRetry:1, manifestLoadingRetryDelay:300, levelLoadingRetryDelay:300, fragLoadingRetryDelay:300, manifestLoadingTimeOut:4000, levelLoadingTimeOut:4000, fragLoadingTimeOut:4000, startLevel:-1, autoStartLoad:true };
+      const hlsConfig = { maxBufferLength:8, maxMaxBufferLength:16, maxBufferSize: 8*1000*1000, enableWorker:true, lowLatencyMode:true, backBufferLength:0, manifestLoadingMaxRetry:0, levelLoadingMaxRetry:1, fragLoadingMaxRetry:1, manifestLoadingRetryDelay:300, levelLoadingRetryDelay:300, fragLoadingRetryDelay:300, manifestLoadingTimeOut:4000, levelLoadingTimeOut:4000, fragLoadingTimeOut:4000, startLevel:-1, autoStartLoad:true, abrEwmaDefaultEstimate: 2000000, abrEwmaFastLive: 3, abrEwmaSlowLive: 9 };
       if(viaProxy){ hlsConfig.loader = ProxyLoader; }
       hls = new Hls(hlsConfig);
       hls.loadSource(url); hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
+      hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); buildQualityMenu(); });
+      hls.on(Hls.Events.LEVEL_SWITCHED, ()=>{ buildQualityMenu(); });
       hls.on(Hls.Events.ERROR, (e,data)=>{
         if(mySession !== playSession) return;
         if(!data.fatal) return;
@@ -499,6 +627,7 @@ async function loadDASH(url, viaProxy, mySession){
   try{
     shakaPlayer.configure({
       drm: (currentKid && currentKey) ? { clearKeys: { [currentKid]: currentKey } } : {},
+      abr: { enabled: true, defaultBandwidthEstimate: 2000000, switchInterval: 4, bandwidthUpgradeTarget: 0.85, bandwidthDowngradeTarget: 0.95 },
       streaming: { bufferingGoal: 4, rebufferingGoal: 1, bufferBehind: 2, safeSeekOffset: 2, retryParameters: { timeout: 4000, maxAttempts: 1, baseDelay: 200, backoffFactor: 1, fuzzFactor: 0 }, smallGapLimit: 0.5, jumpLargeGaps: true },
       manifest: { retryParameters: { timeout: 4000, maxAttempts: 1, baseDelay: 200, backoffFactor: 1, fuzzFactor: 0 } }
     });
@@ -513,9 +642,10 @@ async function loadDASH(url, viaProxy, mySession){
     }catch(e){}
   }
   shakaPlayer.addEventListener('error', ()=>{ if(mySession === playSession) tryNextServerOrFail(); });
+  shakaPlayer.addEventListener('adaptation', ()=>{ buildQualityMenu(); });
   try{
     await shakaPlayer.load(url);
-    if(mySession === playSession) doPlay();
+    if(mySession === playSession){ doPlay(); buildQualityMenu(); }
   }catch(e){
     if(mySession === playSession) tryNextServerOrFail();
   }
