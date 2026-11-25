@@ -53,7 +53,6 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-/* ===== FIX - 3 KOLAM, BORO ICON ===== */
 #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px}
 .card{background:#15151f;border:1px solid #262633;border-radius:16px;padding:14px 6px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:152px}
 .card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
@@ -315,6 +314,7 @@ function checkNotifyMatches(){
     }
   });
 }
+// ===== LIVE SPORTS - সব Server Player এ পাঠাবে, Sports Category না =====
 function openMatch(idx){
   let m = sportsData[idx];
   if(!m) return;
@@ -323,9 +323,10 @@ function openMatch(idx){
   if(!m.streams || !m.streams.length) return;
   let info = m.eventInfo || {};
   let name = info.teamA + ' Vs ' + info.teamB;
-  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams })); }catch(e){}
+  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams, savedAt: Date.now() })); }catch(e){}
   let first = m.streams[0];
-  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=sports&group=Sports&fs=1`;
+  // src=Events + group=Events - Player বুঝবে এইটা Live Sports, Sports Category না
+  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1`;
   if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
   window.location.href = link;
 }
