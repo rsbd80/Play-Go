@@ -27,17 +27,18 @@ html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 .sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+/* ===== HEADER - Player এর সাথে ১০০% সেম ===== */
+header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:12px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
 .search-wrap{position:relative;margin-top:12px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.logo .play-ico{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1;color:#fff}
+.logo-text .name{font-family:'Poppins',sans-serif;font-size:20px;font-weight:900;line-height:1;color:#fff}
 .logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
 @keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
-.logo-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
+.logo-text .tag{font-size:8px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
 .live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
 .live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
@@ -293,7 +294,6 @@ function getSportInfo(m){
   if(has('volleyball')){ emoji='🏐'; cls='football'; type='VOLLEYBALL MATCH'; return {emoji, cls, type}; }
   if(has('nfl','american football')){ emoji='🏈'; cls='football'; type='NFL • AMERICAN FOOTBALL'; return {emoji, cls, type}; }
   if(has('rugby')){ emoji='🏉'; cls='football'; type='RUGBY MATCH'; return {emoji, cls, type}; }
-  // CRICKET - এখানেই Test / ODI / T20 চিনবে
   if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')){
     emoji='🏏'; cls='cricket';
     if(has('test')) type='TEST SERIES • TEST MATCH';
@@ -308,13 +308,11 @@ function getSportInfo(m){
     else if(has('asia cup')) type='ASIA CUP • CRICKET';
     else if(has('world cup')) type='WORLD CUP • CRICKET';
     else {
-      // দেশ বনাম দেশ হলে ডিফল্ট Test ধরে নাও না - Series লেখো
       let teamA = (info.teamA||'').toLowerCase(); let teamB = (info.teamB||'').toLowerCase();
       let cc = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
       if(cc.includes(teamA) && cc.includes(teamB)) type='INTERNATIONAL SERIES • CRICKET';
       else type='CRICKET MATCH';
     }
-    // JSON এ আসল Tournament / League থাকলে সেটাই দেখাও - সবচেয়ে সঠিক
     let realLeague = info.tournament || info.league || info.series || '';
     if(realLeague && realLeague.toLowerCase() !== (m.event_name||'').toLowerCase()){
       type = realLeague.toUpperCase() + ' • ' + type.split(' • ')[1];
