@@ -45,7 +45,6 @@ header::before{content:"";position:absolute;top:-50px;left:-20px;width:220px;hei
 header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.38),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
 @keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
-/* ===== SEARCH - Header আর Category এর মাঝখানে Center ===== */
 .search-bar-wrap{display:flex;justify-content:center;padding:12px 16px 4px;background:#07070f}
 .search-wrap{position:relative;width:100%;max-width:520px}
 .search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.8}
@@ -65,31 +64,27 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;hei
 .card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
 .card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
 .card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
-#grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
-.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%;position:relative}
-.sports-top{padding:8px 12px 0;text-align:center}
-.sports-top .league{font-size:12.5px;font-weight:800;letter-spacing:.3px;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
-.sports-top .league .sport-emoji{font-size:20px;margin-right:6px;vertical-align:-2px}
-.sports-top .match-type{font-size:10px;font-weight:700;letter-spacing:.6px;color:#22d3ee;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-.sports-top .match-type.cricket{color:#86efac}
-.sports-top .match-type.football{color:#67e8f9}
-.sports-top .match-type.basketball{color:#fdba74}
-.sports-top .match-type.hockey{color:#93c5fd}
-.sports-top .match-type.tennis{color:#fde047}
-.sports-top .match-type.wwe{color:#fda4af}
-.sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:5px 12px 6px}
-.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}
-.sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
-.sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
-.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.sports-teams .vs-wrap .badge-live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;font-size:9px;font-weight:900;letter-spacing:1px;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap;animation:liveGlow 1.8s ease-in-out infinite}
-.sports-teams .vs-wrap .badge-live i{width:6px;height:6px;background:#fff;border-radius:50%;animation:liveDot 1.2s infinite}
-@keyframes liveGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,45,85,.45)}50%{box-shadow:0 0 12px 2px rgba(255,45,85,.35)}}
-@keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.sports-teams .vs-wrap .badge-up{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.45);color:#fdba74;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
-.sports-teams .vs-wrap .vs-txt{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
-.sports-bottom{display:flex;align-items:center;justify-content:center;padding:7px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
-.sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
+/* ===== NEW SPORTS CARD - PREMIUM ===== */
+#grid.sports-mode{grid-template-columns:1fr!important;gap:12px!important;padding:12px!important}
+.sports-yt-card{background:#12121e;border:1px solid rgba(255,255,255,.10);border-radius:16px;overflow:hidden;cursor:pointer;width:100%;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.sports-yt-card:active{transform:scale(.98)}
+.sports-cover{position:relative;width:100%;aspect-ratio:16/8.5;overflow:hidden;background:#000}
+.sports-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.sports-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,transparent 40%,rgba(0,0,0,.75) 100%)}
+.sports-badge{position:absolute;top:10px;left:10px;z-index:2;font-size:10px;font-weight:900;letter-spacing:.5px;padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.sports-badge.live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;box-shadow:0 4px 14px rgba(255,45,85,.5)}
+.sports-badge.up{background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);color:#fdba74}
+.sports-match-no{position:absolute;top:10px;right:10px;z-index:2;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);color:#fff;font-size:10px;font-weight:800;padding:5px 10px;border-radius:20px}
+.sports-cover-time{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px}
+.sports-body{padding:12px 12px 12px}
+.sports-league{font-size:12px;font-weight:800;color:#fff;text-align:center;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.sports-type{font-size:9.5px;font-weight:800;letter-spacing:1px;color:#86efac;text-align:center;margin-top:5px;text-transform:uppercase}
+.sports-teams{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:6px;padding:12px 0 2px}
+.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;text-align:center}
+.sports-teams .team-name{font-size:13.5px;font-weight:800;color:#fff;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sports-teams .team-sub{font-size:10px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.sports-teams .vs-circle{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;font-style:italic;color:#fff;box-shadow:0 4px 14px rgba(167,139,250,.5)}
 #upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
 #upModal.show{display:flex}
 .up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -396,6 +391,7 @@ function getSportInfo(m){
   if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return {emoji:'🏏', cls:'cricket', type:'WBBL • WOMEN T20 MATCH'};
   return {emoji:'🏆', cls:'football', type:'LIVE SPORTS'};
 }
+// ===== NEW CARD DESIGN =====
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
   gridEl.classList.add("sports-mode");
@@ -408,13 +404,38 @@ function renderSportsGrid(){
     let info = m.eventInfo || {};
     let sIdx = sportsData.indexOf(m);
     let ts = !isLive ? parseStartTime(info, m) : null;
-    let league = m.event_name || info.league || info.tournament || 'LIVE SPORTS';
     let dateStr = '';
-    if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
+    if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
     let sp = getSportInfo(m);
-    let cover = m.cover_image ? `<div style="width:100%;height:110px;overflow:hidden"><img src="${m.cover_image}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'"></div>` : '';
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})">${cover}<div class="sports-top"><div class="league"><span class="sport-emoji">${sp.emoji}</span>${league}</div><div class="match-type ${sp.cls}">${sp.type}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
+    let fullTitle = m.title || m.event_name || '';
+    let matchNo = '';
+    let mm = fullTitle.match(/(\d+)(st|nd|rd|th)\s+Match/i) || fullTitle.match(/Match\s+(\d+)/i);
+    if(mm) matchNo = 'MATCH ' + (mm[1]||'');
+    else if(fullTitle.toLowerCase().includes('test')) matchNo = fullTitle.match(/(\d+)(st|nd|rd|th)\s+Test/i) ? 'TEST ' + fullTitle.match(/(\d+)(st|nd|rd|th)\s+Test/i)[1] : 'TEST MATCH';
+    let leagueShort = (m.event_name || '').replace(/\s+2026$/,'').replace(/Womens/i,"Women's");
+    let shortA = (info.teamA||'').replace(/\s+Women$/i,'').replace(/\s+Men$/i,'');
+    let shortB = (info.teamB||'').replace(/\s+Women$/i,'').replace(/\s+Men$/i,'');
+    let subA = (info.teamA||'').toLowerCase().includes('women') ? 'Women' : '';
+    let subB = (info.teamB||'').toLowerCase().includes('women') ? 'Women' : '';
+    let cover = m.cover_image ? m.cover_image : 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
+    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})">
+      <div class="sports-cover">
+        <img src="${cover}" onerror="this.style.display='none'">
+        ${isLive ? `<div class="sports-badge live"><span style="width:6px;height:6px;background:#fff;border-radius:50%;display:inline-block"></span> LIVE</div>` : `<div class="sports-badge up">🕐 UPCOMING</div>`}
+        ${matchNo ? `<div class="sports-match-no">${matchNo}</div>` : ''}
+        <div class="sports-cover-time">🕐 ${dateStr}</div>
+      </div>
+      <div class="sports-body">
+        <div class="sports-league">${leagueShort}</div>
+        <div class="sports-type">${sp.emoji} ${sp.type}</div>
+        <div class="sports-teams">
+          <div class="team"><div class="team-name">${shortA}</div>${subA?`<div class="team-sub">${subA}</div>`:''}</div>
+          <div class="vs-wrap"><div class="vs-circle">VS</div></div>
+          <div class="team"><div class="team-name">${shortB}</div>${subB?`<div class="team-sub">${subB}</div>`:''}</div>
+        </div>
+      </div>
+    </div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
