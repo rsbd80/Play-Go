@@ -1,7 +1,8 @@
-/* RsLive Go - app.js - FULL FINAL - Events শুধু Match কার্ড */
+/* RsLive Go - app.js - FULL - No Default, Playlist থেকে লোড */
 let ALL_CHANNELS = [];
 let CURRENT_TAB = 'home';
 let CURRENT_CAT = '';
+let CURRENT_PILL = 'all';
 
 const CAT_META = {
   sports: { title: 'Sports', logo: 'https://cdn-icons-png.flaticon.com/512/857/857681.png', desc: 'Cricket, Football, Live Match' },
@@ -39,7 +40,7 @@ async function loadAll(){
     const res = await fetch('/api/playlists'); const pls = await res.json();
     for(let p of pls){ try{ const r = await fetch(p.url); const t = await r.text(); const chs = parseM3U(t, p.name); chs.forEach(c=>c.useProxy=p.useProxy); ALL_CHANNELS.push(...chs); }catch(e){} }
     const seen=new Set(); ALL_CHANNELS = ALL_CHANNELS.filter(c=>{ if(seen.has(c.url)) return false; seen.add(c.url); return true; });
-    renderHome(); renderEvents(); renderCategories();
+    renderHome(); renderEventsPills(); renderEvents(); renderCategories();
   }catch(e){ document.getElementById('homeGrid').innerHTML='<div class="empty">লোড হয় নাই</div>'; }
 }
 function cardHTML(c, isLive){
@@ -52,45 +53,51 @@ function renderHome(){
   document.getElementById('homeGrid').innerHTML = ALL_CHANNELS.length ? ALL_CHANNELS.map(c=>cardHTML(c,false)).join('') : '<div class="empty">কোনো চ্যানেল নাই</div>';
 }
 
-// EVENTS - শুধু Upcoming / Live Match কার্ড, শুধু Sports থেকে লোড, অন্য Sports Channel আসবে না
+// EVENTS - Category Playlist Pill - Playlist থেকে অটো, Default নাই
+function renderEventsPills(){
+  // Playlist থেকে আসল Category / Source গুলা
+  const sources = [...new Set(ALL_CHANNELS.map(c=>c.src))];
+  // All + Live Sports + বাকি Playlist
+  let pills = [{key:'all', label:'🏠 All', count: ALL_CHANNELS.length}, {key:'sports', label:'🏆 Live Sports', count: ALL_CHANNELS.filter(c=>c.cat==='sports').length}];
+  sources.forEach(s=>{
+    if(s.toLowerCase()==='sports') return;
+    pills.push({key:s.toLowerCase(), label:'📺 '+s, count: ALL_CHANNELS.filter(c=>c.src===s).length});
+  });
+  document.getElementById('eventsPills').innerHTML = pills.map(p=>`<button class="pill ${CURRENT_PILL===p.key?'active':''}" onclick="setPill('${p.key}')">${p.label} <span class="cnt">${p.count}</span></button>`).join('');
+}
+function setPill(key){ CURRENT_PILL=key; renderEventsPills(); renderEvents(); }
+window.setPill = setPill;
+
 function renderEvents(){
   const listEl = document.getElementById('eventsList');
-  // ১. আগের Upcoming - Static ২ টা
-  const upcoming = [
-    { t1:'Bangladesh', t1Flag:'https://flagcdn.com/w320/bd.png', t2:'South Africa', t2Flag:'https://flagcdn.com/w320/za.png', time:'আজ • রাত ৮:০০ টা', tag:'UPCOMING' },
-    { t1:'India', t1Flag:'https://flagcdn.com/w320/in.png', t2:'Pakistan', t2Flag:'https://flagcdn.com/w320/pk.png', time:'কাল • বিকাল ৪:০০ টা', tag:'UPCOMING' }
-  ];
-  let html = upcoming.map(m=>`
-    <div class="up-card">
-      <div class="up-top"><span class="up-badge">${m.tag}</span><span class="up-time">🕐 ${m.time}</span></div>
-      <div class="up-teams">
-        <div class="up-team"><img src="${m.t1Flag}"><p>${m.t1}</p></div>
-        <div class="up-vs">VS</div>
-        <div class="up-team"><img src="${m.t2Flag}"><p>${m.t2}</p></div>
-      </div>
-      <button class="up-btn" onclick="switchTab('home')">📺 চ্যানেল দেখো</button>
-    </div>`).join('');
-
-  // ২. Sports থেকে শুধু VS ওয়ালা ম্যাচগুলা - আগের সব খেলার আপডেট
-  // Sports ছাড়া অন্য Category থেকে নিবে না, Sports Channel গ্রিড ও দেখাবে না
-  const sportsMatches = ALL_CHANNELS.filter(c=>c.cat==='sports' && (c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs ') || c.name.includes(' VS') || c.name.includes('vs')));
-  sportsMatches.forEach(c=>{
+  // Pill অনুযায়ী ফিল্টার - সব Playlist থেকে
+  let arr = [];
+  if(CURRENT_PILL==='all') arr = ALL_CHANNELS;
+  else if(CURRENT_PILL==='sports') arr = ALL_CHANNELS.filter(c=>c.cat==='sports');
+  else arr = ALL_CHANNELS.filter(c=>c.src.toLowerCase()===CURRENT_PILL);
+  // শুধু VS ওয়ালা ম্যাচ - Default বাদ, আসল Playlist এর ম্যাচ
+  const matches = arr.filter(c=>c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs ') || c.name.includes(' VS') || c.name.includes('vs'));
+  if(!matches.length){ listEl.innerHTML = '<div class="empty">এই Playlist এ এখন কোনো Live ম্যাচ নাই 😔</div>'; return; }
+  let html = '';
+  matches.forEach(c=>{
     const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
     const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
     if(!t2) return;
     const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
-    html += `<div class="up-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
-      <div class="up-top"><span class="up-badge" style="background:#22c55e">● LIVE</span><span class="up-time">🕐 ${c.src}</span></div>
-      <div class="up-teams">
-        <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
-        <div class="up-vs">VS</div>
-        <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2}</p></div>
+    // ছবির মতো Time - এখনকার Time দেখাবে, Playlist এ Time থাকলে ওইটা
+    const now = new Date(); const timeStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+    html += `<div class="match-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
+      <div class="match-title">${cleanName(c.name)}</div>
+      <div class="match-teams">
+        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
+        <div class="m-mid"><span class="m-live"><i></i>LIVE</span><div class="m-vs">VS</div></div>
+        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2}</p></div>
       </div>
-      <button class="up-btn">▶ Live দেখো</button>
+      <div class="m-time">🕐 ${timeStr}</div>
     </div>`;
   });
-  listEl.innerHTML = html || '<div class="empty">এখন কোনো খেলা নাই</div>';
-  document.getElementById('navEvents').classList.toggle('has-live', sportsMatches.length>0);
+  listEl.innerHTML = html;
+  document.getElementById('navEvents').classList.toggle('has-live', matches.length>0);
 }
 
 function renderCategories(){
