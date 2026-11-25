@@ -58,22 +58,40 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
 .card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
 .card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
-#grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
-.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%}
-.sports-top{padding:7px 12px 0;text-align:center}
+#grid.sports-mode{grid-template-columns:1fr!important;gap:12px!important;padding:12px!important}
+.sports-yt-card{position:relative;background:linear-gradient(180deg,#141421,#0d0d17);border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:.2s}
+.sports-yt-card:active{transform:scale(.98)}
+.sports-yt-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--sport-grad, linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f));opacity:.9}
+.sports-yt-card.cricket{--sport-grad:linear-gradient(90deg,#22c55e,#a3e635,#22c55e)}
+.sports-yt-card.football{--sport-grad:linear-gradient(90deg,#22d3ee,#3b82f6,#22d3ee)}
+.sports-yt-card.basketball{--sport-grad:linear-gradient(90deg,#f97316,#fb923c,#f97316)}
+.sports-yt-card.hockey{--sport-grad:linear-gradient(90deg,#60a5fa,#38bdf8,#60a5fa)}
+.sports-yt-card.tennis{--sport-grad:linear-gradient(90deg,#facc15,#a3e635,#facc15)}
+.sports-yt-card.wwe{--sport-grad:linear-gradient(90deg,#ff2d55,#ff5d8f,#ff2d55)}
+.sports-top{padding:11px 12px 0;text-align:center}
+.sport-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 6px;border-radius:100px;margin-bottom:6px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+.sport-badge .sport-ico-wrap{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--sport-bg,#22d3ee);box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.sport-badge .sport-ico-wrap svg{width:15px;height:15px;fill:#fff}
+.sport-badge .sport-label{font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:#fff;text-transform:uppercase}
+.sport-badge.cricket .sport-ico-wrap{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.sport-badge.football .sport-ico-wrap{background:linear-gradient(135deg,#22d3ee,#2563eb)}
+.sport-badge.basketball .sport-ico-wrap{background:linear-gradient(135deg,#f97316,#ea580c)}
+.sport-badge.hockey .sport-ico-wrap{background:linear-gradient(135deg,#60a5fa,#2563eb)}
+.sport-badge.tennis .sport-ico-wrap{background:linear-gradient(135deg,#eab308,#65a30d)}
+.sport-badge.wwe .sport-ico-wrap{background:linear-gradient(135deg,#ff2d55,#e11d48)}
 .sports-top .league{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:#9ca3af;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:4px 12px 6px}
-.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}
-.sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
+.sports-teams{display:grid;grid-template-columns:1fr 78px 1fr;align-items:center;gap:4px;padding:6px 12px 8px}
+.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;text-align:center}
+.sports-teams .team img{width:50px;height:50px;border-radius:14px;background:#fff;padding:4px;object-fit:contain;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 .sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
-.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.sports-teams .vs-wrap .badge-live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;font-size:9px;font-weight:900;letter-spacing:1px;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap;animation:liveGlow 1.8s ease-in-out infinite}
+.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.sports-teams .vs-wrap .badge-live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;font-size:9px;font-weight:900;letter-spacing:1px;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap;animation:liveGlow 1.8s ease-in-out infinite}
 .sports-teams .vs-wrap .badge-live i{width:6px;height:6px;background:#fff;border-radius:50%;animation:liveDot 1.2s infinite}
 @keyframes liveGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,45,85,.45)}50%{box-shadow:0 0 12px 2px rgba(255,45,85,.35)}}
 @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.sports-teams .vs-wrap .badge-up{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.45);color:#fdba74;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
-.sports-teams .vs-wrap .vs-txt{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
-.sports-bottom{display:flex;align-items:center;justify-content:center;padding:7px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
+.sports-teams .vs-wrap .badge-up{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.45);color:#fdba74;font-size:8.5px;font-weight:800;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.sports-teams .vs-wrap .vs-txt{font-size:20px;font-weight:900;font-style:italic;color:#fff;text-shadow:0 2px 10px rgba(167,139,250,.5)}
+.sports-bottom{display:flex;align-items:center;justify-content:center;padding:8px 12px;border-top:1px solid rgba(255,255,255,.07);gap:8px;background:rgba(255,255,255,.02)}
 .sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
 #upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
 #upModal.show{display:flex}
@@ -253,6 +271,34 @@ function formatCountdown(ms){
   if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
+// ===== BEST ICON - Premium SVG, Emoji না =====
+const SPORT_SVG = {
+  cricket: `<svg viewBox="0 0 24 24"><path d="M20.6 3.4c-1.4-1.4-3.6-1.4-5 0L6 13l-2.6 5.2c-.4.8 0 1.8.8 2.2.8.4 1.8 0 2.2-.8L11.6 17l9.6-9.6c1.4-1.4 1.4-3.6-.6-4zM9.5 15.5l-2 2c-.3.3-.8.3-1.1 0s-.3-.8 0-1.1l2-2c.3-.3.8-.3 1.1 0s.3.8 0 1.1z"/></svg>`,
+  football: `<svg viewBox="0 0 24 24"><path d="M12 1.8l4.6 3.3 1.8 5.4-3.3 4.6-1.1 6.1-2 1-2-1-1.1-6.1-3.3-4.6 1.8-5.4L12 1.8zM12 8l1.8 1.3-.7 2.1H10.9L10.2 9.3 12 8z"/></svg>`,
+  basketball: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2.2c1.2 2.6 1.8 5.5 1.9 8.8H10.1c.1-3.3.7-6.2 1.9-8.8zM9.5 4.5c-2.1.8-3.8 2.3-4.8 4.3 1.5.9 3.1 1.4 4.9 1.5-.1-2.1-.1-4-.1-5.8zm5 0c0 1.8 0 3.7-.1 5.8 1.8-.1 3.4-.6 4.9-1.5-1-2-2.7-3.5-4.8-4.3zM4.2 12c0-1 .2-2 .5-2.9 1.7 1 3.6 1.6 5.5 1.7v3.2c-2.2-.1-4.3-.7-6-2zm15.6 0c-1.7 1.3-3.8 1.9-6 2v-3.2c1.9-.1 3.8-.7 5.5-1.7.3.9.5 1.9.5 2.9zm-6 4c-.1 2.5-.7 4.8-1.8 6.8-2.1-.8-3.8-2.3-4.8-4.3 1.5-.9 3.1-1.4 4.9-1.5.6 0 1.1-.6 1.7-1zm2 0c.6.1 1.1.6 1.7 1 1.5.9 3.1 1.4 4.9 1.5-1 2-2.7 3.5-4.8 4.3-1.1-2-1.7-4.3-1.8-6.8z"/></svg>`,
+  hockey: `<svg viewBox="0 0 24 24"><path d="M4 2h2.5v14.5c0 1.4 1.1 2.5 2.5 2.5h8.5c1 0 1.8.8 1.8 1.8s-.8 1.8-1.8 1.8H9c-2.8 0-5-2.2-5-5V2zm14.5 4.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5 1.1-2.5 2.5-2.5z"/></svg>`,
+  tennis: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-5.5 3.5c1.8 1 3 3.2 3 6.5s-1.2 5.5-3 6.5A8 8 0 0 1 6 4a8 8 0 0 1 .5 1.5zm11 0A8 8 0 0 1 18 12a8 8 0 0 1-.5 6.5c-1.8-1-3-3.2-3-6.5s1.2-5.5 3-6.5z"/></svg>`,
+  wwe: `<svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm-5 6c-1.7 0-3 1.3-3 3 0 1.2.7 2.2 1.7 2.7L4 19c-.2 1 .5 2 1.5 2.2 1 .2 2-.5 2.2-1.5l1.2-4.8c.3.1.7.1 1.1.1h4c.4 0 .8 0 1.1-.1l1.2 4.8c.2 1 1.2 1.7 2.2 1.5 1-.2 1.7-1.2 1.5-2.2l-1.7-5.3c1-.5 1.7-1.5 1.7-2.7 0-1.7-1.3-3-3-3H7z"/></svg>`,
+  baseball: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 4c1.2 1.8 1.8 4.2 1.8 6s-.6 4.2-1.8 6A8 8 0 0 1 6 12a8 8 0 0 1 2-6zm8 0A8 8 0 0 1 18 12a8 8 0 0 1-2 6c-1.2-1.8-1.8-4.2-1.8-6s.6-4.2 1.8-6z"/></svg>`,
+  trophy: `<svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5a2 2 0 0 0-2 2c0 2.6 1.9 4.7 4.4 5 .4.1.8.2 1.1.2.3 1.6 1.1 3 2.2 4H8.5A2.5 2.5 0 0 0 6 18.5 2.5 2.5 0 0 0 8.5 21h7A2.5 2.5 0 0 0 18 18.5 2.5 2.5 0 0 0 15.5 16h-2.2c1.1-1 1.9-2.4 2.2-4 .3 0 .7-.1 1.1-.2C19.1 11.7 21 9.6 21 7a2 2 0 0 0-2-2zM5 8a3 3 0 0 1 2-2.8V10c-1.2-.3-2-1.4-2-2zm14 0c0 .6-.8 1.7-2 2V5.2a3 3 0 0 1 2 2.8zM12 18h-1.5a.5.5 0 0 1-.5.5A.5.5 0 0 1 9.5 18H12z"/></svg>`
+};
+function getSportIcon(m){
+  let info = m.eventInfo || {};
+  let txt = ((m.event_name||'') + ' ' + (info.league||'') + ' ' + (info.tournament||'') + ' ' + (info.teamA||'') + ' ' + (info.teamB||'') + ' ' + (info.category||'') + ' ' + (info.sport||'')).toLowerCase();
+  if(txt.includes('cricket') || txt.includes('ipl') || txt.includes('bpl') || txt.includes('bbl') || txt.includes('psl') || txt.includes('t20') || txt.includes('odi') || txt.includes('asia cup')) return { svg: SPORT_SVG.cricket, label:'Cricket', cls:'cricket' };
+  if(txt.includes('football') || txt.includes('soccer') || txt.includes('premier league') || txt.includes('la liga') || txt.includes('serie a') || txt.includes('bundesliga') || txt.includes('ligue 1') || txt.includes('champions league') || txt.includes('fifa') || txt.includes('epl')) return { svg: SPORT_SVG.football, label:'Football', cls:'football' };
+  if(txt.includes('basketball') || txt.includes('nba') || txt.includes('wnba') || txt.includes('euroleague') || txt.includes('magic') || txt.includes('pistons') || txt.includes('celtics') || txt.includes('lakers') || txt.includes('warriors')) return { svg: SPORT_SVG.basketball, label:'Basketball', cls:'basketball' };
+  if(txt.includes('hockey') || txt.includes('nhl') || txt.includes('ice hockey') || txt.includes('oilers') || txt.includes('golden knights') || txt.includes('bruins') || txt.includes('maple leafs')) return { svg: SPORT_SVG.hockey, label:'Hockey', cls:'hockey' };
+  if(txt.includes('tennis') || txt.includes('atp') || txt.includes('wta') || txt.includes('wimbledon') || txt.includes('grand slam')) return { svg: SPORT_SVG.tennis, label:'Tennis', cls:'tennis' };
+  if(txt.includes('wwe') || txt.includes('wrestling') || txt.includes('raw') || txt.includes('smackdown') || txt.includes('nxt') || txt.includes('aew') || txt.includes('ufc') || txt.includes('mma') || txt.includes('boxing') || txt.includes('kabaddi')) return { svg: SPORT_SVG.wwe, label: txt.includes('ufc')||txt.includes('mma') ? 'UFC / MMA' : txt.includes('wwe')||txt.includes('nxt') ? 'WWE' : 'Wrestling', cls:'wwe' };
+  if(txt.includes('baseball') || txt.includes('mlb')) return { svg: SPORT_SVG.baseball, label:'Baseball', cls:'football' };
+  if(txt.includes('golf') || txt.includes('pga')) return { svg: SPORT_SVG.tennis, label:'Golf', cls:'tennis' };
+  if(txt.includes('formula') || txt.includes('f1 ') || txt.includes('motogp') || txt.includes('nascar')) return { svg: SPORT_SVG.trophy, label:'Racing', cls:'football' };
+  if(txt.includes('badminton')) return { svg: SPORT_SVG.tennis, label:'Badminton', cls:'tennis' };
+  if(txt.includes('volleyball')) return { svg: SPORT_SVG.football, label:'Volleyball', cls:'football' };
+  if(txt.includes('nfl') || txt.includes('american football')) return { svg: SPORT_SVG.football, label:'NFL', cls:'football' };
+  return { svg: SPORT_SVG.trophy, label:'Live Sports', cls:'football' };
+}
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
   gridEl.classList.add("sports-mode");
@@ -269,7 +315,8 @@ function renderSportsGrid(){
     let dateStr = '';
     if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league">${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
+    let sp = getSportIcon(m);
+    html += `<div class="sports-yt-card ${sp.cls}" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="sport-badge ${sp.cls}"><span class="sport-ico-wrap">${sp.svg}</span><span class="sport-label">${sp.label}</span></div><div class="league">${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
