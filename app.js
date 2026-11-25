@@ -217,7 +217,7 @@ function renderGrid(reset=true){
 }
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
-function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
+function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}&t=${Date.now()}` }
 let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 let sportsData = [];
@@ -331,7 +331,7 @@ function openMatch(idx){
   let streams = m.streams || [];
   try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: streams, savedAt: Date.now() })); }catch(e){}
   let firstUrl = streams.length ? (streams[0].stream_url || streams[0].url || '') : '';
-  let link = `player.html?url=${encodeURIComponent(firstUrl)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1`;
+  let link = `player.html?url=${encodeURIComponent(firstUrl)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1&t=${Date.now()}`;
   if(streams.length && streams[0].kid && streams[0].key) link += `&kid=${streams[0].kid}&key=${streams[0].key}`;
   window.location.href = link;
 }
