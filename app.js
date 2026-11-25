@@ -137,7 +137,12 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
+  {name:'Tapmad', url:'https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u', useProxy:false},
+  {name:'AynaOTT', url:'https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u', useProxy:false},
+  {name:'JagoBD', url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u', useProxy:false},
+  {name:'Bangladesh', url:'https://iptv-org.github.io/iptv/countries/bd.m3u', useProxy:false}
+]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version!==CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
@@ -157,6 +162,7 @@ async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
+  if(!CFG.playlists || !CFG.playlists.length){ CFG.playlists = DEFAULT.playlists; }
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
 function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
@@ -217,7 +223,7 @@ let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rsz
 let sportsData = [];
 async function loadSports(){
   try{
-    let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json');
+    let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json?t='+Date.now());
     let j = await r.json();
     sportsData = j.matches || [];
     _catCache = null; renderCats();
@@ -314,20 +320,19 @@ function checkNotifyMatches(){
     }
   });
 }
-// ===== LIVE SPORTS - সব Server Player এ পাঠাবে, Sports Category না =====
+// ===== LIVE SPORTS - Link না থাকলেও Player এ যাবে, Player নিজে Playlist থেকে খুঁজবে =====
 function openMatch(idx){
   let m = sportsData[idx];
   if(!m) return;
   let isLive = (m.status||'').toUpperCase() === 'LIVE';
   if(!isLive){ showUpModal(idx); return; }
-  if(!m.streams || !m.streams.length) return;
   let info = m.eventInfo || {};
   let name = info.teamA + ' Vs ' + info.teamB;
-  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: m.streams, savedAt: Date.now() })); }catch(e){}
-  let first = m.streams[0];
-  // src=Events + group=Events - Player বুঝবে এইটা Live Sports, Sports Category না
-  let link = `player.html?url=${encodeURIComponent(first.stream_url)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1`;
-  if(first.kid && first.key) link += `&kid=${first.kid}&key=${first.key}`;
+  let streams = m.streams || [];
+  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: streams, savedAt: Date.now() })); }catch(e){}
+  let firstUrl = streams.length ? (streams[0].stream_url || streams[0].url || '') : '';
+  let link = `player.html?url=${encodeURIComponent(firstUrl)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1`;
+  if(streams.length && streams[0].kid && streams[0].key) link += `&kid=${streams[0].kid}&key=${streams[0].key}`;
   window.location.href = link;
 }
 loadAll();
