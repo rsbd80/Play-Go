@@ -101,6 +101,17 @@ video::-webkit-media-controls{display:none!important}
 .sug-skel{flex:0 0 86px;width:86px;height:104px;border-radius:18px;background:#15151f;position:relative;overflow:hidden;flex-shrink:0}
 .sug-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+/* ===== Live Sports - Server Text Only, No Logo ===== */
+.server-row{display:flex;gap:8px;overflow-x:auto;padding:4px 14px 12px;scrollbar-width:none}
+.server-row::-webkit-scrollbar{display:none}
+.server-chip{flex:0 0 auto;min-width:92px;padding:10px 14px;text-align:center;border-radius:12px;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:0 4px 12px rgba(0,0,0,.30);transition:.2s}
+.server-chip:active{transform:scale(.94)}
+.server-chip .sv-name{font-size:13px;font-weight:800;color:#fff;letter-spacing:.3px}
+.server-chip .sv-sub{font-size:9px;font-weight:700;letter-spacing:1px;color:#888;margin-top:3px}
+.server-chip.playing{background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(167,139,250,.18));border-color:#22d3ee;box-shadow:0 0 0 1px #22d3ee, 0 6px 16px rgba(34,211,238,.25)}
+.server-chip.playing .sv-sub{color:#22d3ee}
+.server-chip.fail{border-color:rgba(255,93,93,.50);opacity:.55}
+.server-chip.fail .sv-sub{color:#ff5d5d}
 .ad-wrap{margin:14px 14px 0;background:linear-gradient(180deg,#14141f,#111118);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 12px 14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.30)}
 .ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:10px;font-family:var(--mono)}
 .ad-box{border-radius:12px;overflow:hidden;background:#0a0a12;display:flex;justify-content:center}
@@ -127,6 +138,8 @@ video::-webkit-media-controls{display:none!important}
   .sug-card small{margin-top:2px;font-size:10px;text-align:left}
   .sug-card .sug-play{width:30px;height:30px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
   .sug-skel{flex:none;width:100%;height:62px}
+  .server-row{flex-direction:column;overflow-x:hidden;overflow-y:auto;padding:0 10px 10px}
+  .server-chip{width:100%;min-width:0}
   .ad-wrap{max-width:1400px;margin-left:auto;margin-right:auto}
 }
 @media(min-width:1300px){ .suggest{width:380px} }
@@ -140,7 +153,6 @@ video::-webkit-media-controls{display:none!important}
 <div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
 <div class="live-pill"><i></i> LIVE</div>
 </div>
-
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
@@ -163,7 +175,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 </div>
-
 <div class="suggest">
 <div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
@@ -171,12 +182,9 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 </div>
-
 <div class="ad-wrap">
 <div class="ad-label">ADVERTISEMENT</div>
-<div class="ad-box">
-<div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div>
-</div>
+<div class="ad-box"><div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div></div>
 </div>
 <div class="ad-note">তুমি দেখছো <b id="chName2">RsLive Go</b> • কোনো সমস্যা হলে টেলিগ্রামে জানাও</div>
 <script async="async" data-cfasync="false" src="https://czernik.org/21/cdeccdd75d3e2e6916a42ce9653cfb08"></script>
@@ -220,10 +228,7 @@ async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await 
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
-
 // ===== শুধু LIVE SPORTS চিনবে - Sports Category না =====
-// Live Sports = Events থেকে আসা, বা group এ Live Sports, বা নামে VS থাকা ম্যাচ
-// Sports Category = T Sports / Star Sports / Sony Sports - এইগুলা এইখানে ঢুকবে না
 function isLiveSports(){
   const s = (srcParam||'').toLowerCase();
   const g = (currentGroup||'').toLowerCase();
@@ -235,7 +240,18 @@ function isLiveSports(){
 }
 let SERVER_LIST = [];
 let CURRENT_SERVER_IDX = 0;
-
+function updateServerUI(activeIdx, failedIdx){
+  document.querySelectorAll('.server-chip').forEach((el,i)=>{
+    el.classList.toggle('playing', i===activeIdx);
+    if(i===failedIdx) el.classList.add('fail');
+    let sub = document.getElementById('server-sub-'+i);
+    if(sub){
+      if(i===failedIdx) sub.textContent='✕ FAILED';
+      else if(i===activeIdx) sub.textContent='▶ PLAYING';
+      else sub.textContent='TAP TO PLAY';
+    }
+  });
+}
 let isFullscreenBusy = false;
 function getVideoEl(){ return document.querySelector('#player video'); }
 async function toggleFullscreen(){
@@ -269,20 +285,14 @@ async function toggleFullscreen(){
   }
 }
 document.addEventListener('fullscreenchange', ()=>{
-  if(document.fullscreenElement){
-    const v = document.querySelector('#player video');
-    if(v) v.style.objectFit = 'fill';
-  } else {
-    const v = document.querySelector('#player video');
-    if(v) v.style.objectFit = 'contain';
-    try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
-  }
+  const v = document.querySelector('#player video');
+  if(v) v.style.objectFit = document.fullscreenElement ? 'fill' : 'contain';
+  if(!document.fullscreenElement){ try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
 });
 document.addEventListener('webkitfullscreenchange', ()=>{
   const v = document.querySelector('#player video');
   if(!v) return;
-  if(document.webkitFullscreenElement) v.style.objectFit = 'fill';
-  else v.style.objectFit = 'contain';
+  v.style.objectFit = document.webkitFullscreenElement ? 'fill' : 'contain';
 });
 let lastTap = 0;
 let singleTapTimer = null;
@@ -352,6 +362,17 @@ async function loadSuggestions(){
   // ===== শুধু LIVE SPORTS হলে Extra Server, বাকি সব আগের মতো =====
   if(isLiveSports()){
     if(titleEl) titleEl.textContent = 'Extra Server দেখো';
+    grid.classList.add('server-row');
+    // 1. আগে localStorage থেকে আসল Streams চেক করো - এইটাই আসল Server
+    let stored = null;
+    try{ stored = JSON.parse(localStorage.getItem('rslive_sports_match')||'null'); }catch(e){}
+    if(stored && stored.streams && stored.streams.length && stored.name === currentName){
+      SERVER_LIST = stored.streams.map((s)=>({ name: currentName, url: s.stream_url || s.url || '', logo:'', group:'Events', src:'Server', kid: s.kid||'', key: s.key||'' })).filter(x=>x.url);
+      CURRENT_SERVER_IDX = 0;
+      grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
+      return;
+    }
+    // 2. localStorage এ না পাইলে Playlist থেকে খুঁজো (Fallback)
     try{
       let list=[];
       for(let plUrl of SUGGEST_PLAYLISTS){
@@ -365,17 +386,16 @@ async function loadSuggestions(){
       const clean = (s)=> cleanName(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
       const myClean = clean(currentName);
       let servers = list.filter(c => clean(c.name) === myClean);
-      let current = servers.find(s=>s.url===streamSource);
-      if(current){ servers = [current, ...servers.filter(s=>s.url!==streamSource)]; }
       if(!servers.find(s=>s.url===streamSource)) servers.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam});
       SERVER_LIST = servers;
       CURRENT_SERVER_IDX = 0;
       if(servers.length===0) throw new Error('empty');
-      grid.innerHTML = servers.map((c,i)=>`<div class="sug-card" id="server-${i}" style="${i===0?'border-color:#22d3ee;box-shadow:0 0 0 1px #22d3ee':''}" onclick="playServer(${i})"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>Server ${i+1}</p><small>${i===0?'▶ PLAYING':c.src||'LIVE'} • HD</small></div><div class="sug-play">${i===0?'●':'▶'}</div></div>`).join("");
-    }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
+      grid.innerHTML = servers.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
+    }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই</div>`; }
     return;
   }
   // ===== Sports Category সহ বাকি সব - আগের মতোই =====
+  grid.classList.remove('server-row');
   if(titleEl){
     let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
     titleEl.textContent = 'আরো ' + label + ' দেখো';
@@ -402,12 +422,10 @@ async function loadSuggestions(){
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
 function playServer(idx){
   if(!SERVER_LIST[idx]) return;
+  let prevIdx = CURRENT_SERVER_IDX;
   CURRENT_SERVER_IDX = idx;
   streamSource = SERVER_LIST[idx].url;
-  document.querySelectorAll('[id^="server-"]').forEach((el,i)=>{
-    el.style.borderColor = i===idx ? '#22d3ee' : '';
-    el.style.boxShadow = i===idx ? '0 0 0 1px #22d3ee' : '';
-  });
+  updateServerUI(idx, -1);
   showLoader();
   triedProxy = false; triedDirect = false;
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); }
@@ -421,7 +439,7 @@ if(!streamSource){
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
   video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
-  video.muted = false; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
+  video.muted = true; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
@@ -432,14 +450,28 @@ if(!streamSource){
     else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
   }
   updateMuteBtn();
+  function showSoundBtn(){
+    let old = document.getElementById('soundBtn');
+    if(old) return;
+    let b = document.createElement('div');
+    b.id = 'soundBtn';
+    b.innerHTML = '🔊 Sound On করতে ট্যাপ করো';
+    b.style.cssText = 'position:absolute;top:12px;right:12px;z-index:90;background:rgba(0,0,0,.70);border:1px solid rgba(255,255,255,.30);color:#fff;font-size:12px;font-weight:700;padding:8px 12px;border-radius:20px;cursor:pointer;backdrop-filter:blur(8px)';
+    b.onclick = (e)=>{
+      e.stopPropagation();
+      video.muted = false; video.volume = 1; video.play().catch(()=>{});
+      updateMuteBtn(); b.remove();
+    };
+    wrapper.appendChild(b);
+    setTimeout(()=>{ let el=document.getElementById('soundBtn'); if(el) el.remove(); }, 6000);
+  }
   function doPlay(){
-    video.muted = false; video.volume = 1; updateMuteBtn();
-    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
-      autoplayBlocked = true;
-      video.muted = true;
-      video.play().then(()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
-      updateMuteBtn();
-    });
+    // প্রথমে Muted এ চালাও - ব্রাউজার ব্লক করবে না, বড় Popup আসবে না
+    video.muted = true;
+    video.volume = 1;
+    updateMuteBtn();
+    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); showSoundBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+    updateMuteBtn();
   }
   tapPlayEl.addEventListener('click', ()=>{
     video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{});
@@ -461,18 +493,17 @@ if(!streamSource){
           if(!data.fatal) return;
           // ===== শুধু LIVE SPORTS: এই Server ফেল -> পরের Server, সব ফেল -> Fail =====
           if(isLiveSports() && SERVER_LIST.length > 1){
+            let failed = CURRENT_SERVER_IDX;
             if(CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
               CURRENT_SERVER_IDX++;
               streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
               showLoader();
-              document.querySelectorAll('[id^="server-"]').forEach((el,i)=>{
-                el.style.borderColor = i===CURRENT_SERVER_IDX ? '#22d3ee' : '';
-                el.style.boxShadow = i===CURRENT_SERVER_IDX ? '0 0 0 1px #22d3ee' : '';
-              });
+              updateServerUI(CURRENT_SERVER_IDX, failed);
               triedProxy = false; triedDirect = false;
               loadStream(streamSource, false);
               return;
             }
+            updateServerUI(CURRENT_SERVER_IDX, failed);
             showNoStreamState({message:'সব সার্ভার চেক করা হইছে, কোনোটাই চলতেছে না'});
             return;
           }
