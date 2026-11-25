@@ -240,7 +240,7 @@ let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rsz
 let sportsData = [];
 async function loadSports(){
   try{
-    let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/main/Sports_data.json?t='+Date.now());
+    let r = await fetch('https://raw.githubusercontent.com/srhady/willow-event/refs/heads/main/live_sports.json?t='+Date.now());
     let j = await r.json();
     sportsData = j.matches || [];
     _catCache = null; renderCats();
