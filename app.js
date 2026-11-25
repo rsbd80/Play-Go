@@ -27,11 +27,10 @@ html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 .sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-/* ===== HEADER - Player এর ১ম ছবির সাথে ১০০% সেম ===== */
-header{background:#0a0a14;backdrop-filter:blur(16px);padding:12px 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+/* ===== HEADER - Player এর সাথে ১০০% সেম ===== */
+header{background:#0a0a14;backdrop-filter:blur(16px);padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
-.search-wrap{position:relative;margin-top:12px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
 .logo .play-ico{width:44px;height:44px;min-width:44px;border-radius:13px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 6px 20px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
@@ -46,9 +45,16 @@ header::before{content:"";position:absolute;top:-50px;left:-20px;width:220px;hei
 header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.38),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
 @keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
-.search-wrap .s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
-#search{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#1d1d2e;color:#fff;font-size:13.5px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text}
-#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+/* ===== SEARCH - Header আর Category এর মাঝখানে Center, ছোট + সুন্দর ===== */
+.search-bar-wrap{display:flex;justify-content:center;padding:12px 16px 4px;background:#07070f}
+.search-wrap{position:relative;width:100%;max-width:520px}
+.search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.8}
+#search{width:100%;padding:11px 16px 11px 42px;border-radius:100px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,#23233a,#1a1a2b);color:#fff;font-size:13px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text;box-shadow:0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);transition:.2s}
+#search::placeholder{color:#8a8aa5}
+#search:focus{border-color:rgba(167,139,250,.6);box-shadow:0 0 0 3px rgba(167,139,250,.18), 0 8px 24px rgba(0,0,0,.4)}
+#searchClear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);display:none;align-items:center;justify-content:center;font-size:11px;cursor:pointer;color:#fff}
+#searchClear.show{display:flex}
+#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:10px 12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
 #cats::-webkit-scrollbar{display:none}
 .cat{padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
@@ -123,7 +129,8 @@ body{display:block;overflow-y:auto}
 .sticky{position:sticky;top:0}
 header{max-width:1440px;margin:0 auto;padding:16px 24px}
 .top-row{flex-direction:row;align-items:center;gap:20px}
-.search-wrap{flex:1;margin-top:0;max-width:720px;margin-left:auto}
+.search-bar-wrap{padding:14px 24px 6px;max-width:1440px;margin:0 auto;width:100%}
+.search-wrap{max-width:640px}
 .desktop-wrap{flex-direction:row;max-width:1440px;margin:0 auto;gap:18px;padding:16px 24px 40px}
 #mainCol{order:1}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
@@ -138,7 +145,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
+<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div></div></header><div class="search-bar-wrap"><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"><span id="searchClear" onclick="clearSearch()">✕</span></div></div></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
@@ -165,6 +172,7 @@ if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.text
 if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
 }catch(e){}
 function goHome(){ window.location.href=window.location.origin+'/?t='+Date.now(); }
+function clearSearch(){ let s=document.getElementById('search'); s.value=''; document.getElementById('searchClear').classList.remove('show'); renderGrid(true); s.focus(); }
 let all=[]; let cat="All"; let _catCache=null; let visibleCount=200; let currentFiltered=[];
 async function getPlaylistsFromSW(){ try{ await navigator.serviceWorker.ready; let r=await fetch('/api/playlists'); let data=await r.json(); if(data&&data.length) return data; }catch(e){} return CFG.playlists; }
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
@@ -227,7 +235,7 @@ function renderGrid(reset=true){
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}&t=${Date.now()}` }
-let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
+let _searchT=null; document.getElementById("search").addEventListener("input",(e)=>{ let v=e.target.value; document.getElementById('searchClear').classList.toggle('show', v.length>0); clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 let sportsData = [];
 async function loadSports(){
