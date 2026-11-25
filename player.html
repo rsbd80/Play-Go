@@ -13,12 +13,13 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
-.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+/* ===== FIX 1: HEADER - HOME PAGE ER SATHE HUBOHU SAME SIZE ===== */
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;height:58px;min-height:58px;max-height:58px;padding:0 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
 .topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.30),transparent 70%);filter:blur(10px);pointer-events:none}
 .topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.32),transparent 70%);filter:blur(10px);pointer-events:none}
 .brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
 .brand:active{transform:scale(.96)}
-.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.brand .play-ico{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .brand-text{line-height:1}
 .brand-text .pg{font-size:18px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 10px rgba(167,139,250,.35);white-space:nowrap}
@@ -226,7 +227,7 @@ let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
-// ===== FIX: Controls + Quality Menu একসাথে Hide =====
+// ===== FIX 2: Controls + Quality Menu - Tap + Auto 2 vabei Hide =====
 let hideCtrlTimer=null;
 function hideControls(){ wrapper.classList.remove('show-controls'); if(qualityMenu) qualityMenu.classList.remove('show'); }
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>{ hideControls(); },3000); }
@@ -243,8 +244,9 @@ document.addEventListener('webkitbeginfullscreen',()=>{ isIOSFullscreen=true; co
 document.addEventListener('webkitendfullscreen',()=>{ isIOSFullscreen=false; const v=getVideoEl(); if(v){ v.style.objectFit='fill'; v.setAttribute('playsinline',''); } },true);
 let lastTap=0; let singleTapTimer=null; let ignoreNextClick=false;
 function handleTap(e){
-  if(e.target.closest('button')||e.target.closest('input')||e.target.closest('#qualityMenu')) return;
-  // Player এর খালি জায়গায় Tap করলে - Controls + Quality Menu ২ টাই একসাথে Toggle
+  if(e.target.closest('button')||e.target.closest('input')) return;
+  if(e.target.closest('#qualityMenu')) return;
+  // Quality Menu খোলা থাকলে - Video তে Tap করলেই Menu + Control 2 tai Hide
   if(qualityMenu.classList.contains('show')){ hideControls(); return; }
   e.preventDefault();
   let now=Date.now();
@@ -276,14 +278,14 @@ function buildQualityMenu(){
 function setQuality(id,label,level,trackId,height){
   currentQuality=(id==='auto')?'auto':label;
   qualityBtn.classList.toggle('low',label==='360p'||label==='480p');
-  // FIX: Quality সিলেক্ট করলেই Menu + Controls ২ টাই একসাথে Hide
   hideControls();
   if(hls){ if(id==='auto'){ hls.currentLevel=-1; hls.autoLevelEnabled=true; } else if(level>=0){ hls.currentLevel=level; hls.autoLevelEnabled=false; } else { let best=-1,bestDiff=99999; hls.levels.forEach((lv,i)=>{ let d=Math.abs((lv.height||0)-height); if(d<bestDiff){bestDiff=d;best=i;} }); if(best>=0){ hls.currentLevel=best; hls.autoLevelEnabled=false; } } try{ hls.config.maxBufferLength=(label==='360p'||label==='480p')?4:8; }catch(e){} }
   if(shakaPlayer){ try{ if(id==='auto'){ shakaPlayer.configure({abr:{enabled:true}}); } else { shakaPlayer.configure({abr:{enabled:false}}); let tracks=shakaPlayer.getVariantTracks(); let target=null; if(trackId>=0) target=tracks.find(t=>t.id===trackId); if(!target&&height){ target=tracks.reduce((a,b)=>Math.abs((a.height||0)-height)<Math.abs((b.height||0)-height)?a:b); } if(target) shakaPlayer.selectVariantTrack(target,true); } }catch(e){} }
   buildQualityMenu();
 }
 window.setQuality=setQuality;
-qualityBtn.addEventListener('click',(e)=>{ e.stopPropagation(); buildQualityMenu(); let willShow=!qualityMenu.classList.contains('show'); qualityMenu.classList.toggle('show'); if(willShow){ showControls(); clearTimeout(hideCtrlTimer); } else { hideControls(); } });
+// FIX: Quality Button এ ক্লিক করলেও Auto-Hide Timer চলবে, Timer বন্ধ হবে না
+qualityBtn.addEventListener('click',(e)=>{ e.stopPropagation(); buildQualityMenu(); let willShow=!qualityMenu.classList.contains('show'); qualityMenu.classList.toggle('show'); showControls(); });
 document.addEventListener('click',(e)=>{ if(!e.target.closest('#qualityMenu')&&!e.target.closest('#qualityBtn')) qualityMenu.classList.remove('show'); });
 function ensureVideo(){ if(video) return video; video=document.createElement('video'); video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline',''); video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true'); video.muted=false; video.volume=1; video.autoplay=true; video.controls=false; video.preload='auto'; video.playsInline=true; video.style.cssText='width:100%;height:100%;object-fit:fill;background:#000'; document.getElementById('player').appendChild(video); video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); }); video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); }); video.addEventListener('pause',()=>{ playBtn.querySelector('.ctrl-txt').textContent='▶'; releaseWakeLock(); }); video.addEventListener('play',()=>{ playBtn.querySelector('.ctrl-txt').textContent='❚❚'; requestWakeLock(); }); video.addEventListener('volumechange',()=>{ updateMuteBtn(); }); video.addEventListener('error',()=>{}); video.addEventListener('webkitbeginfullscreen',()=>{ isIOSFullscreen=true; video.style.objectFit='fill'; }); video.addEventListener('webkitendfullscreen',()=>{ isIOSFullscreen=false; video.style.objectFit='fill'; video.setAttribute('playsinline',''); }); return video; }
 function updateMuteBtn(){ if(!video) return; let l1=document.getElementById('muteLine1'),l2=document.getElementById('muteLine2'),w=document.getElementById('muteWave'); if(video.muted||video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; } else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; } }
