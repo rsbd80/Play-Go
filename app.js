@@ -27,7 +27,7 @@ html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 .sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-/* ===== HEADER - Player এর সাথে ১০০% সেম ===== */
+/* ===== HEADER ===== */
 header{background:#0a0a14;backdrop-filter:blur(16px);padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
@@ -45,7 +45,7 @@ header::before{content:"";position:absolute;top:-50px;left:-20px;width:220px;hei
 header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.38),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
 @keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
-/* ===== SEARCH - Header আর Category এর মাঝখানে Center, ছোট + সুন্দর ===== */
+/* ===== SEARCH - Header আর Category এর মাঝখানে Center ===== */
 .search-bar-wrap{display:flex;justify-content:center;padding:12px 16px 4px;background:#07070f}
 .search-wrap{position:relative;width:100%;max-width:520px}
 .search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.8}
@@ -145,7 +145,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 @media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div></div></header><div class="search-bar-wrap"><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"><span id="searchClear" onclick="clearSearch()">✕</span></div></div></div>
+<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div></div></header><div class="search-bar-wrap"><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"><span id="searchClear" onclick="clearSearch()">✕</span></div></div></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
@@ -153,7 +153,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 <div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
   {name:'Tapmad', url:'https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u', useProxy:false},
   {name:'AynaOTT', url:'https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u', useProxy:false},
   {name:'JagoBD', url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u', useProxy:false},
