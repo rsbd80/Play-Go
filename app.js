@@ -61,7 +61,8 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%;position:relative}
 .sports-top{padding:7px 12px 0;text-align:center}
-.sports-top .league{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:#9ca3af;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.3px;color:#e5e7eb;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sports-top .league .sport-emoji{font-size:13px;margin-right:5px}
 .sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:4px 12px 6px}
 .sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}
 .sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
@@ -75,14 +76,6 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .sports-teams .vs-wrap .vs-txt{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
 .sports-bottom{display:flex;align-items:center;justify-content:center;padding:7px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
 .sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
-.sport-corner{position:absolute;top:8px;left:8px;z-index:5;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.35)}
-.sport-corner svg{width:16px;height:16px;fill:#fff}
-.sport-corner.cricket{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.sport-corner.football{background:linear-gradient(135deg,#22d3ee,#2563eb)}
-.sport-corner.basketball{background:linear-gradient(135deg,#f97316,#ea580c)}
-.sport-corner.hockey{background:linear-gradient(135deg,#60a5fa,#2563eb)}
-.sport-corner.tennis{background:linear-gradient(135deg,#eab308,#65a30d)}
-.sport-corner.wwe{background:linear-gradient(135deg,#ff2d55,#e11d48)}
 #upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
 #upModal.show{display:flex}
 .up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -261,45 +254,33 @@ function formatCountdown(ms){
   if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
-// ===== BEST ICON - বাম কর্নারে, কার্ড আগের মতো =====
-const SPORT_SVG = {
-  cricket: `<svg viewBox="0 0 24 24"><path d="M20.6 3.4c-1.4-1.4-3.6-1.4-5 0L6 13l-2.6 5.2c-.4.8 0 1.8.8 2.2.8.4 1.8 0 2.2-.8L11.6 17l9.6-9.6c1.4-1.4 1.4-3.6-.6-4zM9.5 15.5l-2 2c-.3.3-.8.3-1.1 0s-.3-.8 0-1.1l2-2c.3-.3.8-.3 1.1 0s.3.8 0 1.1z"/></svg>`,
-  football: `<svg viewBox="0 0 24 24"><path d="M12 1.8l4.6 3.3 1.8 5.4-3.3 4.6-1.1 6.1-2 1-2-1-1.1-6.1-3.3-4.6 1.8-5.4L12 1.8zM12 8l1.8 1.3-.7 2.1H10.9L10.2 9.3 12 8z"/></svg>`,
-  basketball: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2.2c1.2 2.6 1.8 5.5 1.9 8.8H10.1c.1-3.3.7-6.2 1.9-8.8zM9.5 4.5c-2.1.8-3.8 2.3-4.8 4.3 1.5.9 3.1 1.4 4.9 1.5-.1-2.1-.1-4-.1-5.8zm5 0c0 1.8 0 3.7-.1 5.8 1.8-.1 3.4-.6 4.9-1.5-1-2-2.7-3.5-4.8-4.3zM4.2 12c0-1 .2-2 .5-2.9 1.7 1 3.6 1.6 5.5 1.7v3.2c-2.2-.1-4.3-.7-6-2zm15.6 0c-1.7 1.3-3.8 1.9-6 2v-3.2c1.9-.1 3.8-.7 5.5-1.7.3.9.5 1.9.5 2.9zm-6 4c-.1 2.5-.7 4.8-1.8 6.8-2.1-.8-3.8-2.3-4.8-4.3 1.5-.9 3.1-1.4 4.9-1.5.6 0 1.1-.6 1.7-1zm2 0c.6.1 1.1.6 1.7 1 1.5.9 3.1 1.4 4.9 1.5-1 2-2.7 3.5-4.8 4.3-1.1-2-1.7-4.3-1.8-6.8z"/></svg>`,
-  hockey: `<svg viewBox="0 0 24 24"><path d="M4 2h2.5v14.5c0 1.4 1.1 2.5 2.5 2.5h8.5c1 0 1.8.8 1.8 1.8s-.8 1.8-1.8 1.8H9c-2.8 0-5-2.2-5-5V2zm14.5 4.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5 1.1-2.5 2.5-2.5z"/></svg>`,
-  tennis: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-5.5 3.5c1.8 1 3 3.2 3 6.5s-1.2 5.5-3 6.5A8 8 0 0 1 6 4a8 8 0 0 1 .5 1.5zm11 0A8 8 0 0 1 18 12a8 8 0 0 1-.5 6.5c-1.8-1-3-3.2-3-6.5s1.2-5.5 3-6.5z"/></svg>`,
-  wwe: `<svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm-5 6c-1.7 0-3 1.3-3 3 0 1.2.7 2.2 1.7 2.7L4 19c-.2 1 .5 2 1.5 2.2 1 .2 2-.5 2.2-1.5l1.2-4.8c.3.1.7.1 1.1.1h4c.4 0 .8 0 1.1-.1l1.2 4.8c.2 1 1.2 1.7 2.2 1.5 1-.2 1.7-1.2 1.5-2.2l-1.7-5.3c1-.5 1.7-1.5 1.7-2.7 0-1.7-1.3-3-3-3H7z"/></svg>`,
-  baseball: `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 4c1.2 1.8 1.8 4.2 1.8 6s-.6 4.2-1.8 6A8 8 0 0 1 6 12a8 8 0 0 1 2-6zm8 0A8 8 0 0 1 18 12a8 8 0 0 1-2 6c-1.2-1.8-1.8-4.2-1.8-6s.6-4.2 1.8-6z"/></svg>`,
-  trophy: `<svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5a2 2 0 0 0-2 2c0 2.6 1.9 4.7 4.4 5 .4.1.8.2 1.1.2.3 1.6 1.1 3 2.2 4H8.5A2.5 2.5 0 0 0 6 18.5 2.5 2.5 0 0 0 8.5 21h7A2.5 2.5 0 0 0 18 18.5 2.5 2.5 0 0 0 15.5 16h-2.2c1.1-1 1.9-2.4 2.2-4 .3 0 .7-.1 1.1-.2C19.1 11.7 21 9.6 21 7a2 2 0 0 0-2-2zM5 8a3 3 0 0 1 2-2.8V10c-1.2-.3-2-1.4-2-2zm14 0c0 .6-.8 1.7-2 2V5.2a3 3 0 0 1 2 2.8zM12 18h-1.5a.5.5 0 0 1-.5.5A.5.5 0 0 1 9.5 18H12z"/></svg>`
-};
-function getSportIcon(m){
-  // পুরা ম্যাচের JSON টাই পড়ো - event_name এ Cricket লেখা না থাকলেও টিম / লিগ থেকে চিনবে
+// ===== Title এর বাম পাশে Normal Emoji =====
+function getSportEmoji(m){
   let txt = '';
   try{ txt = JSON.stringify(m||{}).toLowerCase(); }catch(e){ txt = ''; }
   let info = m.eventInfo || {};
   txt += ' ' + ((m.event_name||'') + ' ' + (info.league||'') + ' ' + (info.tournament||'') + ' ' + (info.teamA||'') + ' ' + (info.teamB||'')).toLowerCase();
   const has = (...keys)=> keys.some(k=> txt.includes(k));
-  // FOOTBALL আগে - কারণ Cricket টিমের নামে Football টিমের নাম মিলে যেতে পারে
-  if(has('football','soccer','premier league','la liga','laliga','serie a','bundesliga','ligue 1','champions league','europa league','fifa world cup','kashima antlers','jeonbuk','manchester','real madrid','barcelona','arsenal','chelsea','liverpool','psg','bayern','dortmund','juventus','inter milan','ac milan','ajax','porto','benfica','hyundai motors')) return { svg: SPORT_SVG.football, cls:'football' };
-  if(has('basketball','nba','wnba','euroleague','orlando magic','detroit pistons','boston celtics','lakers','warriors','chicago bulls','miami heat','brooklyn nets')) return { svg: SPORT_SVG.basketball, cls:'basketball' };
-  if(has('hockey','nhl','ice hockey','edmonton oilers','vegas golden knights','boston bruins','toronto maple','maple leafs','new york rangers','chicago blackhawks')) return { svg: SPORT_SVG.hockey, cls:'hockey' };
-  if(has('tennis','atp','wta','wimbledon','grand slam','us open tennis','french open')) return { svg: SPORT_SVG.tennis, cls:'tennis' };
-  if(has('wwe','wrestling','smackdown','raw','nxt','aew','ufc','mma','boxing','kabaddi')) return { svg: SPORT_SVG.wwe, cls:'wwe' };
-  if(has('baseball','mlb')) return { svg: SPORT_SVG.baseball, cls:'football' };
-  if(has('golf','pga')) return { svg: SPORT_SVG.tennis, cls:'tennis' };
-  if(has('formula','motogp','nascar','f1 racing')) return { svg: SPORT_SVG.trophy, cls:'football' };
-  if(has('badminton')) return { svg: SPORT_SVG.tennis, cls:'tennis' };
-  if(has('volleyball')) return { svg: SPORT_SVG.football, cls:'football' };
-  if(has('nfl','american football')) return { svg: SPORT_SVG.football, cls:'football' };
-  // CRICKET - টিমের নাম দিয়ে চিনো, কারণ event_name এ Cricket লেখা থাকে না
-  if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test match','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')) return { svg: SPORT_SVG.cricket, cls:'cricket' };
-  // দেশ বনাম দেশ - এই ডাটায় বেশিরভাগই ক্রিকেট (South Africa vs Bangladesh, India vs Pakistan...)
+  if(has('football','soccer','premier league','la liga','laliga','serie a','bundesliga','ligue 1','champions league','europa league','fifa world cup','kashima antlers','jeonbuk','manchester','real madrid','barcelona','arsenal','chelsea','liverpool','psg','bayern','dortmund','juventus','inter milan','ac milan','ajax','porto','benfica','hyundai motors')) return '⚽';
+  if(has('basketball','nba','wnba','euroleague','orlando magic','detroit pistons','boston celtics','lakers','warriors','chicago bulls','miami heat','brooklyn nets')) return '🏀';
+  if(has('hockey','nhl','ice hockey','edmonton oilers','vegas golden knights','boston bruins','toronto maple','maple leafs','new york rangers','chicago blackhawks')) return '🏒';
+  if(has('tennis','atp','wta','wimbledon','grand slam','us open tennis','french open')) return '🎾';
+  if(has('wwe','wrestling','smackdown','raw','nxt','aew')) return '🤼';
+  if(has('ufc','mma','boxing')) return '🥊';
+  if(has('kabaddi')) return '🤼';
+  if(has('baseball','mlb')) return '⚾';
+  if(has('golf','pga')) return '🏌️';
+  if(has('formula','motogp','nascar','f1 racing')) return '🏎️';
+  if(has('badminton')) return '🏸';
+  if(has('volleyball')) return '🏐';
+  if(has('nfl','american football')) return '🏈';
+  if(has('rugby')) return '🏉';
+  if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test match','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')) return '🏏';
   let teamA = (info.teamA||'').toLowerCase(); let teamB = (info.teamB||'').toLowerCase();
   let cricketCountries = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
-  if(cricketCountries.includes(teamA) && cricketCountries.includes(teamB)) return { svg: SPORT_SVG.cricket, cls:'cricket' };
-  // Women টিম - Renegades / Heat / Sixers থাকলে ক্রিকেট
-  if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return { svg: SPORT_SVG.cricket, cls:'cricket' };
-  return { svg: SPORT_SVG.trophy, cls:'football' };
+  if(cricketCountries.includes(teamA) && cricketCountries.includes(teamB)) return '🏏';
+  if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return '🏏';
+  return '🏆';
 }
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
@@ -317,8 +298,8 @@ function renderSportsGrid(){
     let dateStr = '';
     if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
-    let sp = getSportIcon(m);
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sport-corner ${sp.cls}" title="${sp.cls}">${sp.svg}</div><div class="sports-top"><div class="league">${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
+    let emoji = getSportEmoji(m);
+    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league"><span class="sport-emoji">${emoji}</span>${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
@@ -346,7 +327,8 @@ function showUpModal(idx){
   let ts=parseStartTime(info,m);
   let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
   let on=isNotified(name);
-  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${league}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
+  let emoji = getSportEmoji(m);
+  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${emoji} ${league}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
   document.getElementById('upModal').classList.add('show');
   if(_upTimer) clearInterval(_upTimer);
   if(ts){
