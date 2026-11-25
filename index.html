@@ -2,100 +2,62 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#07070f">
 <title>RsLive Go - Live TV</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#07070f">
+<script>
+// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
+(function(){
+  function kick(){
+    try{ window.top.location.href = 'about:blank'; }catch(e){}
+    try{ window.parent.location.href = 'about:blank'; }catch(e){}
+    try{ window.location.href = 'about:blank'; }catch(e){}
+    try{ window.location.replace('about:blank'); }catch(e){}
+    try{ window.close(); }catch(e){}
+    document.documentElement.innerHTML = '';
+    document.write('');
+    setInterval(function(){
+      try{ window.top.location.href = 'about:blank'; }catch(e){}
+      try{ window.location.href = 'about:blank'; }catch(e){}
+      document.documentElement.innerHTML = '';
+    }, 100);
+  }
+  var h = window.location.hostname || '';
+  var p = window.location.protocol || '';
+  var ref = document.referrer || '';
+  if(p === 'blob:' || p === 'data:' || p === 'file:' || p === 'about:' || h === '' || h === 'null'){
+    kick(); throw new Error('Blocked');
+  }
+  if(h !== 'rslivego.pages.dev' && h !== 'www.rslivego.pages.dev' && h !== 'localhost' && h !== '127.0.0.1'){
+    kick(); throw new Error('Blocked');
+  }
+  if(window.top !== window.self){
+    kick(); throw new Error('Blocked');
+  }
+  if(ref.indexOf('codebeautify') !== -1 || ref.indexOf('html-viewer') !== -1 || ref.indexOf('htmlpreview') !== -1 || ref.indexOf('online-tool') !== -1){
+    kick(); throw new Error('Blocked');
+  }
+})();
+</script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WFG156QL5T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WFG156QL5T');
+</script>
+<!-- Google Analytics End -->
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;overflow-x:hidden}
-body{background:#07070f;color:#eef0f7;font-family:'Poppins','Hind Siliguri',sans-serif;padding-bottom:78px;min-height:100vh}
-/* Header - একদম চিকন, প্লেইন, বডির সাথে মিশে যাবে, কোনো এফেক্ট / বর্ডার / Tagline নাই */
-.topbar{position:sticky;top:0;z-index:100;padding:9px 10px 9px;background:#07070f;display:flex;align-items:center}
-.brand{display:flex;align-items:center;gap:8px}
-.brand .ico{width:30px;height:30px;border-radius:8px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;border:1px solid rgba(255,255,255,.12)}
-.brand .pg{font-size:18px;font-weight:900;line-height:1;color:#fff;letter-spacing:.2px}
-.brand .pg i{font-style:normal;color:#fff}
-.view{display:none;padding:10px 8px 0;width:100%}
-.view.active{display:block}
-.sec-title{font-size:14px;font-weight:800;margin:6px 2px 10px}
-.grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:10px;width:100%}
-.card{background:#13131f;border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:12px 6px 10px;text-align:center;cursor:pointer;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;overflow:hidden}
-.card:active{transform:scale(.95);border-color:#a78bfa}
-.card img{width:54px;height:54px;object-fit:cover;background:#fff;border-radius:50%;padding:4px;border:2px solid rgba(255,255,255,.2);flex-shrink:0}
-.card p{font-size:12px;font-weight:600;margin-top:8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:30px;word-break:break-word}
-.live-badge{position:absolute;top:5px;right:5px;background:#ff2d55;color:#fff;font-size:7px;font-weight:800;padding:2px 6px;border-radius:20px}
-/* Live Events Card - চিকন + সুন্দর */
-.match-card{background:#12121e;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:8px 10px 8px;margin-bottom:8px;cursor:pointer}
-.match-card:active{transform:scale(.98);border-color:#a78bfa}
-.match-title{text-align:center;font-size:11px;font-weight:600;letter-spacing:.3px;color:#9a9ab5;text-transform:uppercase;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.match-teams{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.m-team{flex:1;text-align:center;min-width:0}
-.m-team .m-logo{width:44px;height:44px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto;font-size:15px;font-weight:900;color:#111}
-.m-team .m-logo img{width:100%;height:100%;object-fit:cover}
-.m-team p{font-size:12.5px;font-weight:700;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-mid{text-align:center;flex-shrink:0}
-.m-live{display:inline-block;background:#ff2d55;color:#fff;font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.5px}
-.m-live i{width:5px;height:5px;background:#fff;border-radius:50%;display:inline-block;margin-right:4px}
-.m-up{display:inline-block;background:rgba(255,255,255,.10);color:#cbd5e1;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:20px}
-.m-vs{font-size:14px;font-weight:800;font-style:italic;color:#fff;margin-top:5px}
-.m-time{text-align:center;font-size:11px;color:#9a9ab5;margin-top:6px}
-.cat-grid{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:10px;width:100%}
-.cat-card{background:#13131f;border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px 8px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
-.cat-card .cat-logo{width:60px;height:60px;border-radius:50%;background:#fff;padding:5px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.2);margin-bottom:8px}
-.cat-card .cat-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.cat-card h3{font-size:13px;font-weight:800}
-.cat-card p{font-size:10.5px;color:#9a9ab5;margin-top:2px}
-.cat-card .count{margin-top:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#e9d5ff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px}
-.back-btn{display:inline-flex;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px;cursor:pointer}
-.empty{text-align:center;color:#888;font-size:13px;padding:30px 10px;line-height:1.6}
-.skel{aspect-ratio:1/1;border-radius:16px;background:#15151f}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:#07070f;border-top:1px solid rgba(255,255,255,.10);padding:5px 6px calc(5px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.nav-btn{background:transparent;border:1px solid transparent;color:#8a8a9e;padding:6px 4px 5px;border-radius:12px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
-.nav-btn .nav-ico{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
-.nav-btn .nav-ico svg{width:20px;height:20px}
-.nav-btn .nav-label{font-size:12px;font-weight:700;line-height:1}
-.nav-btn.active{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
-.nav-btn.active .nav-ico{color:#fff}
-.nav-btn .dot{position:absolute;top:5px;right:22%;width:6px;height:6px;background:#ff2d55;border-radius:50%;border:1px solid #0a0a14;display:none}
-.nav-btn.has-live .dot{display:block}
-@media(min-width:900px){body{padding-bottom:0}.bottom-nav{position:sticky;top:0;bottom:auto;max-width:600px;margin:0 auto;border-radius:0 0 14px 14px;border:1px solid rgba(255,255,255,.1);border-top:none}.grid{grid-template-columns:repeat(6,1fr)}.cat-grid{grid-template-columns:repeat(4,1fr)}}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif}
 </style>
 </head>
 <body>
-<!-- Header - চিকন, প্লেইন, Tagline নাই -->
-<div class="topbar">
-  <div class="brand"><div class="ico">▶</div><div class="pg">RsLive <i>Go</i></div></div>
-</div>
-
-<div id="view-home" class="view active">
-  <div id="homeGrid" class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-</div>
-
-<div id="view-events" class="view">
-  <div id="eventsList"><div class="empty">লোড হচ্ছে...</div></div>
-</div>
-
-<div id="view-categories" class="view">
-  <div id="catListWrap"><div id="catGrid" class="cat-grid"></div></div>
-  <div id="catDetailWrap" style="display:none"><div class="back-btn" onclick="backToCategories()">← সব Category</div><div class="sec-title" id="catDetailTitle">Category</div><div id="catDetailGrid" class="grid"></div></div>
-</div>
-
-<nav class="bottom-nav">
-  <button class="nav-btn" id="navEvents" onclick="switchTab('events')">
-    <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 5h1"/><path d="M17 6h3a2 2 0 0 1-2 5h-1"/></svg></span>
-    <span class="nav-label">Events</span><span class="dot"></span>
-  </button>
-  <button class="nav-btn active" id="navHome" onclick="switchTab('home')">
-    <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span>
-    <span class="nav-label">Home</span>
-  </button>
-  <button class="nav-btn" id="navCategories" onclick="switchTab('categories')">
-    <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-    <span class="nav-label">Categories</span>
-  </button>
-</nav>
-<script src="/app.js"></script>
+<div id="app"></div>
+<script src="app.js"></script>
 </body>
 </html>

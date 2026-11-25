@@ -12,29 +12,28 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;background:#07070f;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139,250,.18), transparent 70%), radial-gradient(500px 250px at 100% 0%, rgba(34,211,238,.12), transparent 70%), #07070f;-webkit-user-select:none;user-select:none}
-.topbar{position:sticky;top:0;z-index:100;padding:14px 12px;background:rgba(10,10,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(10,10,20,.88);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
 .topbar::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.30),transparent 70%);filter:blur(10px);pointer-events:none}
-.topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.30),transparent 70%);filter:blur(10px);pointer-events:none}
-.topbar-row{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
-.brand{display:flex;align-items:center;gap:10px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
+.topbar::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.32),transparent 70%);filter:blur(10px);pointer-events:none}
+.brand{display:flex;align-items:center;gap:9px;position:relative;z-index:2;flex-shrink:0;cursor:pointer}
 .brand:active{transform:scale(.96)}
-.brand .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.brand .play-ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.brand-text{line-height:1;min-width:0}
-.brand-text .pg{font-size:21px;font-weight:900;letter-spacing:.2px;color:#fff!important;-webkit-text-fill-color:#fff!important;font-family:'Poppins',sans-serif;white-space:nowrap;text-shadow:0 2px 10px rgba(167,139,250,.35)}
-.brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
-@keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
-.brand-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px;white-space:nowrap}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px;flex-shrink:0;position:relative;z-index:2;white-space:nowrap}
+.brand-text{line-height:1}
+.brand-text .pg{font-size:18px;font-weight:900;letter-spacing:.3px;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 2px 10px rgba(167,139,250,.35);white-space:nowrap}
+.brand-text .pg i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.brand-text .tag{font-size:8px;letter-spacing:2.8px;color:#9a9ab5;font-weight:700;margin-top:3px}
+.divider{width:1px;height:34px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.25),transparent);flex-shrink:0;position:relative;z-index:2}
+#chName{font-weight:700;font-size:14.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+#chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2;margin-top:1px}
+#chSub b{color:#7CFC00}
+.live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:7px 11px;border-radius:20px;flex-shrink:0;position:relative;z-index:2;box-shadow:0 0 16px rgba(255,45,85,.25)}
 .live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-.ch-bar{margin-top:12px;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;position:relative;z-index:2;min-width:0}
-#chName{font-weight:700;font-size:13.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
-#chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;line-height:1.2}
-#chSub b{color:#7CFC00}
 .main-layout{width:100%;display:block}
 .player-col{width:100%}
-#player-wrapper{position:relative;width:calc(100% - 20px);margin:10px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(167,139,250,.12), 0 0 32px rgba(167,139,250,.12);touch-action:manipulation}
+#player-wrapper{position:relative;width:calc(100% - 24px);margin:12px auto 0;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(167,139,250,.12), 0 0 32px rgba(167,139,250,.12);touch-action:manipulation}
 #player-wrapper:fullscreen{width:100vw;height:100vh;margin:0;aspect-ratio:auto;border-radius:0;border:none;box-shadow:none}
 #player-wrapper:fullscreen #player{width:100vw!important;height:100vh!important}
 #player-wrapper:fullscreen #player video{object-fit:fill!important}
@@ -59,15 +58,20 @@ video::-webkit-media-controls{display:none!important}
 .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
 @keyframes dot-pulse{0%,80%,100%{transform:scale(.6);opacity:.35}40%{transform:scale(1);opacity:1}}
 .status-line{font-family:var(--mono);font-size:9.5px;letter-spacing:2.8px;color:var(--text-dim);text-transform:uppercase;text-align:center;margin:0;line-height:1}
-.state-content{text-align:center;color:var(--text);z-index:100;padding:0 20px;pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;max-width:320px;margin:auto}
-.state-content .glyph{font-size:30px;color:var(--alert);margin-bottom:2px;line-height:1}
+.state-content{text-align:center;color:var(--text);z-index:100;padding:0 24px;pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.state-content .glyph{font-size:34px;color:var(--alert);margin-bottom:14px}
 .state-content .glyph.warn{color:var(--warn)}
-.state-content p.title{font-size:13px;letter-spacing:.5px;font-weight:600;line-height:1.3}
-.state-content p.sub{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:0;max-width:280px;overflow-wrap:anywhere;line-height:1.4}
-.state-content .brand-name{display:block;margin-top:8px}
-.state-content button{display:none!important}
-.retry-btn,.retry-btn2{display:none!important}
-#tapPlay{display:none!important}
+.state-content p.title{font-size:13px;letter-spacing:1px;font-weight:600}
+.state-content p.sub{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:280px;overflow-wrap:anywhere}
+.state-content .brand-name{display:block;margin-top:18px}
+.retry-btn{margin-top:16px;padding:10px 22px;font-weight:700;font-size:12px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(167,139,250,.4)}
+.retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
+#tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);cursor:pointer;text-align:center;padding:20px}
+#tapPlay.show{display:flex}
+#tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 10px 30px rgba(167,139,250,.6);animation:tpPulse 1.6s infinite}
+@keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
+#tapPlay p{font-size:14px;font-weight:700;color:#fff}
+#tapPlay small{font-size:11px;color:#ccc}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -76,37 +80,32 @@ video::-webkit-media-controls{display:none!important}
 #seek{flex:1;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.30);border-radius:5px;outline:none;min-width:0}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid #a78bfa;cursor:pointer;box-shadow:0 2px 8px rgba(167,139,250,.6)}
 #time-label{font-family:var(--mono);font-size:11px;color:#fff;white-space:nowrap;background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.35);padding:4px 8px;border-radius:10px}
-.suggest{margin:14px 0 0;width:100%;overflow:hidden}
-.suggest-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px 10px;width:100%;box-sizing:border-box}
-.suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap;min-width:0;flex:1}
-.suggest-head h3 .suggest-ico{width:28px;height:28px;min-width:28px;flex-shrink:0;background:rgba(255,138,0,.15);border:1px solid rgba(255,138,0,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.suggest{margin:16px 0 0;width:100%;overflow:hidden}
+.suggest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px;width:100%;box-sizing:border-box}
+.suggest-head h3{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff!important;margin:0;line-height:1;letter-spacing:.2px;white-space:nowrap}
+.suggest-head h3 .suggest-ico{width:28px;height:28px;flex-shrink:0;background:rgba(255,138,0,.15);border:1px solid rgba(255,138,0,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
 .suggest-head h3 #suggestTitle{width:auto;height:auto;background:none!important;border:none!important;border-radius:0!important;box-shadow:none!important;display:inline;flex-shrink:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.suggest-head a{font-size:13px;font-weight:800;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 2px;background:none!important;background-color:transparent!important;border:none!important;box-shadow:none!important;color:#fff!important;line-height:1;white-space:nowrap;text-decoration:none}
+.suggest-head a{font-size:14px;font-weight:800;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:7px;height:32px;padding:0 2px;background:none!important;background-color:transparent!important;border:none!important;box-shadow:none!important;color:#fff!important;line-height:1;white-space:nowrap;text-decoration:none}
 .suggest-head a .arrow-ico{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee 0%,#a78bfa 50%,#ff5d8f 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.5);animation:arrowNudge 1.8s ease-in-out infinite}
 .suggest-head a .arrow-ico svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 @keyframes arrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 .suggest-head a:active{transform:scale(.94);opacity:.8}
-.suggest-grid{display:flex;gap:8px;overflow-x:auto;padding:6px 12px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:stretch;scroll-padding-left:12px}
+.suggest-grid{display:flex;gap:10px;overflow-x:auto;padding:4px 14px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;align-items:stretch}
 .suggest-grid::-webkit-scrollbar{display:none}
-.sug-card{flex:0 0 92px;width:92px;height:94px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:8px 6px 6px;text-align:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0}
-.sug-card:hover{border-color:#a78bfa;transform:translateY(-2px);box-shadow:0 12px 24px rgba(167,139,250,.30)}
-.sug-card:active{transform:scale(.95);border-color:#a78bfa}
-.sug-card img{width:48px;height:48px;min-height:48px;object-fit:contain;background:#fff;border-radius:12px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.35);pointer-events:none;flex-shrink:0}
-.sug-card p{font-size:11px;font-weight:600;margin-top:5px;line-height:1.25;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff!important;font-family:'Hind Siliguri',sans-serif;word-break:break-word;min-height:26px}
-.sug-card small{display:none!important}
-.sug-skel{flex:0 0 92px;width:92px;height:94px;border-radius:14px;background:#15151f;position:relative;overflow:hidden;flex-shrink:0}
+.sug-card{flex:0 0 86px;width:86px;height:104px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 6px 8px;text-align:center;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;flex-shrink:0}
+.sug-card:hover{border-color:#a78bfa;transform:translateY(-3px);box-shadow:0 12px 24px rgba(167,139,250,.30)}
+.sug-card:active{transform:scale(.93);border-color:#a78bfa}
+.sug-card img{width:44px;height:44px;min-height:44px;object-fit:contain;background:#fff;border-radius:12px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.35);pointer-events:none;flex-shrink:0}
+.sug-card p{font-size:11.5px;font-weight:600;margin-top:8px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff!important;font-family:'Hind Siliguri',sans-serif}
+.sug-card small{display:block;font-size:8.5px;color:#22d3ee;letter-spacing:1px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sug-skel{flex:0 0 86px;width:86px;height:104px;border-radius:18px;background:#15151f;position:relative;overflow:hidden;flex-shrink:0}
 .sug-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.suggest-grid.server-mode{display:grid!important;grid-template-columns:repeat(3,1fr);gap:8px;overflow:visible;padding:6px 12px 12px;scroll-snap-type:none}
-.srv-pill{width:100%;min-width:0;text-align:center;padding:11px 4px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#cbd5e1;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;height:40px}
-.srv-pill.active{background:rgba(167,139,250,.22)!important;border-color:rgba(167,139,250,.45)!important;color:#e9d5ff!important}
-.srv-pill.extra{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-style:solid;color:#cbd5e1}
-.srv-pill.failed{opacity:.35;text-decoration:line-through}
-.ad-wrap{margin:14px 12px 0;background:linear-gradient(180deg,#14141f,#111118);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:10px 10px 12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.30)}
-.ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:8px;font-family:var(--mono)}
+.ad-wrap{margin:14px 14px 0;background:linear-gradient(180deg,#14141f,#111118);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:12px 12px 14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.30)}
+.ad-label{font-size:9px;letter-spacing:3px;color:#777;text-align:center;margin-bottom:10px;font-family:var(--mono)}
 .ad-box{border-radius:12px;overflow:hidden;background:#0a0a12;display:flex;justify-content:center}
 #container-cdeccdd75d3e2e6916a42ce9653cfb08{width:100%!important;max-width:100%!important}
-.ad-note{text-align:center;font-size:11px;color:#666;margin:12px 0 20px;padding:0 12px}
+.ad-note{text-align:center;font-size:11px;color:#666;margin:14px 0 22px}
 .ad-note b{color:#a78bfa}
 #blockScreen{display:none;position:fixed;inset:0;background:#07070f;z-index:99999;align-items:center;justify-content:center;text-align:center;padding:30px}
 @media(min-width:900px){
@@ -120,14 +119,14 @@ video::-webkit-media-controls{display:none!important}
   .suggest-grid{display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;padding:0 10px 10px;scroll-snap-type:none;gap:8px;flex:1}
   .suggest-grid::-webkit-scrollbar{display:block;width:5px}
   .suggest-grid::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
-  .sug-card{flex:none;width:100%;height:56px;flex-direction:row;align-items:center;justify-content:flex-start;text-align:left;padding:6px 10px;gap:10px;border-radius:12px}
+  .sug-card{flex:none;width:100%;height:62px;flex-direction:row;align-items:center;justify-content:flex-start;text-align:left;padding:8px 10px;gap:10px;border-radius:14px}
   .sug-card:hover{transform:translateX(-3px)}
-  .sug-card img{width:44px;height:44px;min-height:44px;margin:0}
+  .sug-card img{width:42px;height:42px;min-height:42px;margin:0}
   .sug-card .sug-txt{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;justify-content:center}
-  .sug-card p{margin:0;font-size:13px;text-align:left;min-height:0;-webkit-line-clamp:1}
+  .sug-card p{margin:0;font-size:13px;text-align:left}
   .sug-card small{margin-top:2px;font-size:10px;text-align:left}
   .sug-card .sug-play{width:30px;height:30px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
-  .sug-skel{flex:none;width:100%;height:56px}
+  .sug-skel{flex:none;width:100%;height:62px}
   .ad-wrap{max-width:1400px;margin-left:auto;margin-right:auto}
 }
 @media(min-width:1300px){ .suggest{width:380px} }
@@ -136,9 +135,12 @@ video::-webkit-media-controls{display:none!important}
 <body>
 <div id="blockScreen"><div><div style="font-size:50px">🔒</div><h2 style="margin:12px 0">Security Alert</h2><p style="color:#aaa">DevTools বন্ধ করে আবার ঢুকো<br>RsLive Go Protected</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:800">Reload</button></div></div>
 <div class="topbar">
-<div class="topbar-row"><div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV • BANGLADESH</div></div></div><div class="live-pill"><i></i> LIVE</div></div>
-<div class="ch-bar"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
+<div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div>
+<div class="divider"></div>
+<div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div>
+<div class="live-pill"><i></i> LIVE</div>
 </div>
+
 <div class="main-layout">
 <div class="player-col">
 <div id="player-wrapper">
@@ -153,6 +155,7 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
+<div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>এই ফোনে ব্রাউজার সাউন্ড ব্লক করছে</small></div>
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
 <button id="playBtn">▶</button>
@@ -160,13 +163,15 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 </div>
+
 <div class="suggest">
-<div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html" id="seeAllBtn"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
+<div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">তুমি আরো দেখতে পারো</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span> সব দেখো</a></div>
 <div class="suggest-grid" id="suggestGrid">
 <div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div>
 </div>
 </div>
 </div>
+
 <div class="ad-wrap">
 <div class="ad-label">ADVERTISEMENT</div>
 <div class="ad-box">
@@ -181,21 +186,9 @@ const PROXY = "https://stream-through-spark.lovable.app/api/proxy?u=";
 const urlParams = new URLSearchParams(window.location.search);
 let streamSource = urlParams.get('url') || '';
 try{ streamSource = decodeURIComponent(streamSource); }catch(e){}
-let chNameParam = urlParams.get('name') || '';
-let srcParam = urlParams.get('src') || '';
-let groupParam = urlParams.get('group') || '';
-function cleanParam(v){
-  if(!v) return '';
-  try{ v = decodeURIComponent(v); }catch(e){}
-  try{ v = decodeURIComponent(v); }catch(e){}
-  v = v.trim().replace(/^['"]+|['"]+$/g,'');
-  if(v.includes('encodeURIComponent') || v.includes('encodeURI') || v==='n' || v==='u' || v.length>80) return '';
-  return v;
-}
-chNameParam = cleanParam(chNameParam);
-srcParam = cleanParam(srcParam);
-groupParam = cleanParam(groupParam);
-if(streamSource && (streamSource.includes('encodeURIComponent') || streamSource==='u')) streamSource='';
+const chNameParam = urlParams.get('name') || '';
+const srcParam = urlParams.get('src') || '';
+const groupParam = urlParams.get('group') || '';
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -205,27 +198,30 @@ const isToffee = PROXY_FIRST.includes(srcParam.toLowerCase()) || PROXY_FIRST.som
 const canUseProxy = PROXY_FALLBACK.includes(srcParam.toLowerCase()) || PROXY_FALLBACK.some(n => streamSource.toLowerCase().includes(n));
 let currentName = '';
 let currentGroup = '';
-try{ if(chNameParam){ currentName = chNameParam; document.getElementById('chName').textContent = chNameParam; document.getElementById('chName2').textContent = chNameParam; document.title = chNameParam + ' - RsLive Go'; } }catch(e){}
-try{ if(groupParam){ currentGroup = groupParam; } }catch(e){}
+try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - RsLive Go'; } }catch(e){}
+try{ if(groupParam){ currentGroup = decodeURIComponent(groupParam); } }catch(e){}
 const loaderEl = document.getElementById('loader');
 const statusEl = document.getElementById('status-line');
 const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
+const tapPlayEl = document.getElementById('tapPlay');
 const muteBtnEl = document.getElementById('muteBtn');
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
-let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusIdx=(statusIdx+1)%statusMessages.length; if(statusEl) statusEl.textContent=statusMessages[statusIdx]; },1800);
+let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusIdx=(statusIdx+1)%statusMessages.length; statusEl.textContent=statusMessages[statusIdx]; },1800);
 function showLoader(){ loaderEl.classList.remove('hide-now'); }
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
-function showState(html){ loaderEl.innerHTML=html; showLoader(); }
-function brandBlock(){ return '<div class="brand-name"><b>RsLive</b> <i>Go</i></div>'; }
+function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
+function brandBlock(){ return `<div class="brand-name"><b>RsLive</b> <i>Go</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
 async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await wakeLock.release();}catch(e){} wakeLock=null; } }
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
+
+// ===== FULLSCREEN + ROTATE - iPhone 11 FIX =====
 let isFullscreenBusy = false;
 function getVideoEl(){ return document.querySelector('#player video'); }
 async function toggleFullscreen(){
@@ -234,6 +230,7 @@ async function toggleFullscreen(){
   setTimeout(()=>{ isFullscreenBusy = false; }, 600);
   const v = getVideoEl();
   if(!v) return;
+  // iPhone / iOS : Safari শুধু video কে fullscreen দেয়, div কে দেয় না
   if(IS_IOS){
     if(document.webkitFullscreenElement || document.fullscreenElement || v.webkitDisplayingFullscreen){
       try{ if(document.exitFullscreen) await document.exitFullscreen(); }catch(e){}
@@ -247,6 +244,7 @@ async function toggleFullscreen(){
     }
     return;
   }
+  // Android / PC : আগের মতো div fullscreen
   if(document.fullscreenElement){
     try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
     try{ await document.exitFullscreen(); }catch(e){}
@@ -274,11 +272,13 @@ document.addEventListener('webkitfullscreenchange', ()=>{
   if(document.webkitFullscreenElement) v.style.objectFit = 'fill';
   else v.style.objectFit = 'contain';
 });
+
+// ===== SINGLE / DOUBLE TAP - CLEAN FIX =====
 let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input')) return;
+  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
@@ -302,7 +302,8 @@ if(IS_TOUCH){
   wrapper.addEventListener('dblclick', (e)=>{ if(e.target.closest('button')||e.target.closest('input')) return; e.preventDefault(); toggleFullscreen(); });
 }
 wrapper.addEventListener('mousemove', showControls);
-function cleanName(name){ return (name||'').replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
+
+function cleanName(name){ return name.replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function makeProxyUrl(original){
   if(!original) return original;
   if(original.startsWith(PROXY)) return original;
@@ -317,7 +318,7 @@ class ProxyLoader extends Hls.DefaultConfig.loader {
   }
 }
 function getCategory(name, group){
-  const t = ((name||'') + ' ' + (group||'')).toLowerCase();
+  const t = (name + ' ' + group).toLowerCase();
   if(t.includes('sport') || t.includes('cricket') || t.includes('football') || t.includes('t sports') || t.includes('ten ') || t.includes('star sports') || t.includes('sony sports') || t.includes('ptv sports')) return 'sports';
   if(t.includes('news') || t.includes('somoy') || t.includes('jamuna') || t.includes('dbc') || t.includes('independent') || t.includes('atn news') || t.includes('channel 24') || t.includes('ekattor') || t.includes('ndtv') || t.includes('aaj tak') || t.includes('republic') || t.includes('abp')) return 'news';
   if(t.includes('movie') || t.includes('cinema') || t.includes('film') || t.includes('star gold') || t.includes('zee cinema')) return 'movies';
@@ -334,107 +335,8 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
-let serverList=[]; let currentServerIdx=0; let _loadStreamFn=null;
-let failedServers=new Set(); let autoTrying=false; let autoTimer=null;
-function isLiveSportsMatch(){
-  if((srcParam||'').toLowerCase()!=='sports') return false;
-  try{
-    let saved=JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
-    if(saved && saved.streams && saved.streams.length && saved.name===currentName) return true;
-    return false;
-  }catch(e){ return false; }
-}
-function buildServers(){
-  let seeAll = document.getElementById('seeAllBtn');
-  if(!isLiveSportsMatch()){
-    if(seeAll) seeAll.style.display='flex';
-    loadSuggestions(); return;
-  }
-  if(seeAll) seeAll.style.display='none';
-  try{
-    let saved=JSON.parse(localStorage.getItem('rslive_sports_match')||'null');
-    if(saved && saved.streams && saved.streams.length && saved.name===currentName){
-      serverList=saved.streams.map((s,i)=>({label:s.channel_name||('Server '+(i+1)), url:s.stream_url, type:'sports', isExtra:false}));
-      let f=serverList.findIndex(s=>s.url===streamSource); if(f>=0) currentServerIdx=f;
-    } else {
-      serverList=[{label:'Server 1', url:streamSource, type:'direct', isExtra:false}];
-      currentServerIdx=0;
-    }
-  }catch(e){ serverList=[{label:'Server 1', url:streamSource, type:'direct', isExtra:false}]; }
-  let extras=[
-    {label:'Extra Server 1 • Proxy', url:streamSource, type:'proxy', isExtra:true},
-    {label:'Extra Server 2 • Direct', url:streamSource, type:'direct', isExtra:true},
-    {label:'Extra Server 3 • Backup', url:streamSource, type:'direct', isExtra:true},
-  ];
-  extras.forEach(e=>{ if(!serverList.find(s=>s.label===e.label)) serverList.push(e); });
-  document.getElementById('suggestTitle').textContent='Available Servers';
-  const grid=document.getElementById('suggestGrid');
-  grid.classList.add('server-mode');
-  grid.innerHTML='';
-  serverList.forEach(function(s,i){
-    var d=document.createElement('div');
-    d.className='srv-pill'+(i===currentServerIdx?' active':'')+(failedServers.has(i)?' failed':'');
-    d.textContent=s.label;
-    d.addEventListener('click',function(e){ switchServer(i,e); });
-    grid.appendChild(d);
-  });
-}
-window.switchServer=function(idx,e){
-  if(e) e.stopPropagation();
-  if(idx===currentServerIdx && !autoTrying) return;
-  autoTrying=false; clearTimeout(autoTimer);
-  currentServerIdx=idx; let s=serverList[idx]; if(!s) return;
-  streamSource=s.url; failedServers.delete(idx); renderServerPills(); showLoader();
-  if(_loadStreamFn){
-    if(s.type==='proxy') _loadStreamFn(makeProxyUrl(streamSource), true);
-    else _loadStreamFn(streamSource, false);
-  } else { location.reload(); }
-  startAutoTimer();
-};
-function renderServerPills(){
-  if(!isLiveSportsMatch()) return;
-  const grid=document.getElementById('suggestGrid'); if(!grid) return;
-  grid.innerHTML='';
-  serverList.forEach(function(s,i){
-    var d=document.createElement('div');
-    d.className='srv-pill'+(i===currentServerIdx?' active':'')+(failedServers.has(i)?' failed':'');
-    d.textContent=s.label;
-    d.addEventListener('click',function(e){ switchServer(i,e); });
-    grid.appendChild(d);
-  });
-}
-function tryNextServer(){
-  if(!isLiveSportsMatch()) return false;
-  if(autoTrying) return false;
-  autoTrying=true;
-  failedServers.add(currentServerIdx);
-  let next=-1;
-  for(let i=0;i<serverList.length;i++){ let idx=(currentServerIdx+1+i)%serverList.length; if(!failedServers.has(idx)){ next=idx; break; } }
-  if(next===-1){ autoTrying=false; return false; }
-  if(statusEl) statusEl.textContent='TRYING SERVER '+(next+1);
-  currentServerIdx=next; let s=serverList[next]; streamSource=s.url; failedServers.delete(next);
-  renderServerPills(); showLoader();
-  setTimeout(()=>{ autoTrying=false; },500);
-  if(_loadStreamFn){
-    if(s.type==='proxy') _loadStreamFn(makeProxyUrl(streamSource), true);
-    else _loadStreamFn(streamSource, false);
-  }
-  startAutoTimer();
-  return true;
-}
-function startAutoTimer(){
-  clearTimeout(autoTimer);
-  if(!isLiveSportsMatch()) return;
-  autoTimer=setTimeout(()=>{
-    let v=document.querySelector('#player video');
-    if(v && v.paused && v.readyState<2){
-      tryNextServer();
-    }
-  },9000);
-}
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
-  grid.classList.remove('server-mode');
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
@@ -458,123 +360,90 @@ async function loadSuggestions(){
     let sameCat = filtered.filter(c => c.src.toLowerCase() !== mySrc && getCategory(c.name, c.group) === myCat);
     const show = [...shuffle(sameBoth), ...shuffle(samePlaylist), ...shuffle(sameCat)].slice(0,20);
     if(show.length===0) throw new Error('empty');
-    grid.innerHTML = "";
-    show.forEach(function(c){
-      var card = document.createElement("div");
-      card.className = "sug-card";
-      card.title = cleanName(c.name);
-      card.setAttribute("data-url", c.url);
-      card.setAttribute("data-name", c.name);
-      card.setAttribute("data-src", c.src);
-      card.setAttribute("data-group", c.group);
-      card.innerHTML = '<img src="' + (c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png') + '" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/1179/1179069.png\'"><div class="sug-txt"><p>' + cleanName(c.name) + '</p></div><div class="sug-play">▶</div>';
-      card.addEventListener("click", function(){
-        var u = card.getAttribute("data-url");
-        var n = card.getAttribute("data-name");
-        var s = card.getAttribute("data-src");
-        var g = card.getAttribute("data-group");
-        window.location.href = 'player.html?url=' + encodeURIComponent(u) + '&name=' + encodeURIComponent(n) + '&src=' + encodeURIComponent(s||'') + '&group=' + encodeURIComponent(g||'');
-      });
-      grid.appendChild(card);
-    });
-  }catch(e){ grid.innerHTML = '<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>'; }
+    grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div><div class="sug-play">▶</div></div>`).join("");
+  }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
-buildServers();
+function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
+loadSuggestions();
 if(!streamSource){
-  // NO POPUP - sudhu loading dekhabe, auto home e pathabe na, user nije back korbe
-  showState('<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">Loading...</p><p class="sub">Channel load hocche...</p>'+brandBlock()+'</div>');
+  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
 } else {
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
   video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
-  video.muted = true; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
+  video.muted = false; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
-  let hls=null, everPlayed=false, triedDirect=false, triedProxy=false;
+  let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, autoplayBlocked=false;
   function updateMuteBtn(){
     let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
     if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
     else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
   }
   updateMuteBtn();
-  // NO TAP POPUP - chupchap muted e chalbe, user sound button e chap dile sound asbe
   function doPlay(){
-    video.muted = true;
-    video.play().then(()=>{ hideLoader(); everPlayed=true; failedServers.delete(currentServerIdx); renderServerPills(); clearTimeout(autoTimer); updateMuteBtn(); requestWakeLock();
-      // sound try koro, block hole muted ei cholbe, popup dibe na
-      setTimeout(()=>{ video.muted=false; video.play().then(()=>{ updateMuteBtn(); }).catch(()=>{ video.muted=true; updateMuteBtn(); }); }, 400);
-    }).catch(()=>{ setTimeout(()=>{ video.play().catch(()=>{}); }, 800); });
+    video.muted = false; video.volume = 1; updateMuteBtn();
+    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); }).catch(e=>{
+      autoplayBlocked = true;
+      video.muted = true;
+      video.play().then(()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+      updateMuteBtn();
+    });
   }
-  // player e jekhane tap korbe sound on hobe - popup chara
-  wrapper.addEventListener('touchstart', function(){
-    if(video.muted && everPlayed){ video.muted=false; video.play().catch(()=>{}); updateMuteBtn(); }
-  }, {passive:true});
+  tapPlayEl.addEventListener('click', ()=>{
+    video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{});
+  });
   muteBtnEl.addEventListener('click', (e)=>{
     e.stopPropagation(); video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
   });
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
-    video.removeAttribute('src'); video.load(); everPlayed=false;
-    startAutoTimer();
+    video.removeAttribute('src'); video.load();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
-        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:2, fragLoadingMaxRetry:2, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
+        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:4, fragLoadingMaxRetry:4, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
         if(viaProxy){ hlsConfig.loader = ProxyLoader; }
         hls = new Hls(hlsConfig);
         hls.loadSource(url); hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
-          if(isLiveSportsMatch()){
-            if(!tryNextServer()){ hls.startLoad(); }
-            return;
-          }
-          // NO POPUP - auto proxy/direct try
           if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
-            else { hls.startLoad(); setTimeout(()=>{ if(!everPlayed) loadStream(streamSource, false); }, 3000); }
+            else { hls.startLoad(); }
           } else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); }
           else {
             if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
             else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
-            else showNoStreamState();
+            else showNoStreamState({message:'HLS Error: '+data.details});
           }
         });
       } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
-      else { showNoStreamState(); }
-    } else if(url.includes('.mpd')){ showNoStreamState(); }
+      else { showNoStreamState({message:'Browser HLS support নেই'}); }
+    } else if(url.includes('.mpd')){ showNoStreamState({message:'DASH লিংক সাপোর্ট করে না'}); }
     else { video.src=url; doPlay(); }
   }
-  _loadStreamFn = loadStream;
-  window.loadStream = loadStream;
-  window.tryNextServer = tryNextServer;
-  // NO BUTTON POPUP - sudhu loading, auto retry cholbe
-  let noStreamTries = 0;
-  function showNoStreamState(){
-    if(isLiveSportsMatch() && tryNextServer()) return;
+  function showNoStreamState(err){
     releaseWakeLock();
-    noStreamTries++;
-    if(noStreamTries < 4){
-      showLoader();
-      setTimeout(()=>{ if(!everPlayed) loadStream(streamSource, noStreamTries % 2 === 1); }, 2500);
-      return;
-    }
-    // shob fail holeo button dibe na, loading e thakbe
-    if(statusEl) statusEl.textContent = 'TRYING...';
-    showLoader();
+    tapPlayEl.classList.remove('show');
+    const proxyBtn = `<br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button>`;
+    const directBtn = `<br><button class="retry-btn2" onclick="tryDirectManually()">📡 Direct দিয়ে চেষ্টা করো</button>`;
+    showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">এই চ্যানেলটা এখন চলছে না</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">🔄 Retry</button>${proxyBtn}${directBtn}<br><button class="retry-btn2" onclick="location.href='index.html'">🏠 হোমে যাও</button>${brandBlock()}</div>`);
   }
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; failedServers.delete(currentServerIdx); renderServerPills(); clearTimeout(autoTimer); updateMuteBtn(); requestWakeLock(); });
+  window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
+  window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
-  video.addEventListener('error',()=>{ if(isLiveSportsMatch()){ tryNextServer(); return; } if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
+  video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
   if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
-  setTimeout(()=>{ if(!everPlayed && !isLiveSportsMatch() && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
+  setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
 }
 </script>
 <script>
@@ -603,4 +472,4 @@ if(!streamSource){
 })();
 </script>
 </body>
-</html>
+  </html>

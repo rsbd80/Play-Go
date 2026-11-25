@@ -1,6 +1,6 @@
-/* RsLive Go - Secure SW + PWA - CLEAN v6 */
-const CACHE_NAME = 'rslive-v6-pwa';
-const CORE_ASSETS = ['/', '/index.html', '/player.html', '/app.js', '/manifest.json'];
+/* RsLive Go - Secure SW + PWA */
+const CACHE_NAME = 'rslive-v3-pwa';
+const CORE_ASSETS = ['/', '/index.html', '/player.html', '/manifest.json'];
 
 const _P = [
   { n: 'Tapmad', u: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NtLW1vbmlydWxpc2xhbS9UYXBtYWRfQXV0b19VcGRhdGVfUGxheWxpc3QvcmVmcy9oZWFkcy9tYWluL3RhcG1hZF9zbS5tM3U=', p: 0 },
@@ -25,11 +25,11 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if(url.pathname.endsWith('/api/playlists')){
     const data = _P.map(x => ({ name: x.n, url: _d(x.u), useProxy: x.p===1 }));
-    event.respondWith(new Response(JSON.stringify(data), { headers: {'Content-Type':'application/json', 'Cache-Control':'no-store'} }));
+    event.respondWith(new Response(JSON.stringify(data), { headers: {'Content-Type':'application/json'} }));
     return;
   }
   if(req.method !== 'GET') return;
-  if(url.pathname.endsWith('.m3u8') || url.pathname.endsWith('.ts') || url.pathname.endsWith('.m3u') || url.pathname.includes('/api/')) return;
+  if(url.pathname.endsWith('.m3u8') || url.pathname.endsWith('.ts') || url.pathname.includes('/api/')) return;
   event.respondWith(
     fetch(req).then(res => {
       if(res && res.status===200 && res.type==='basic'){
