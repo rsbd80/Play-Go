@@ -200,12 +200,23 @@ const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
 const muteBtnEl = document.getElementById('muteBtn');
+// Loader এর আসল HTML টা মনে রাখো - FAILED দেখানোর পর আবার LOADING এ ফিরতে লাগবে
+const LOADER_HTML = loaderEl.innerHTML;
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
-let statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; statusIdx=(statusIdx+1)%statusMessages.length; statusEl.textContent=statusMessages[statusIdx]; },1800);
-function showLoader(){ loaderEl.classList.remove('hide-now'); }
+let statusTimer = null;
+function startStatusTimer(){
+  if(statusTimer) clearInterval(statusTimer);
+  statusTimer = setInterval(()=>{ if(loaderEl.classList.contains('hide-now')) return; let s = document.getElementById('status-line'); if(s){ statusIdx=(statusIdx+1)%statusMessages.length; s.textContent=statusMessages[statusIdx]; } },1800);
+}
+startStatusTimer();
+function showLoader(){
+  // FAILED থেকে আবার LOADING এ ফিরলে Loader HTML ফিরিয়ে আনো
+  if(!document.getElementById('status-line')){ loaderEl.innerHTML = LOADER_HTML; startStatusTimer(); }
+  loaderEl.classList.remove('hide-now');
+}
 function hideLoader(){ loaderEl.classList.add('hide-now'); }
-function showState(html){ clearInterval(statusTimer); loaderEl.innerHTML=html; showLoader(); }
+function showState(html){ if(statusTimer) clearInterval(statusTimer); statusTimer=null; loaderEl.innerHTML=html; showLoader(); }
 function brandBlock(){ return `<div class="brand-name"><b>RsLive</b> <i>Go</i></div>`; }
 let wakeLock=null,wakeLockWanted=false;
 async function requestWakeLock(){ wakeLockWanted=true; if(!('wakeLock' in navigator))return; if(wakeLock)return; if(document.visibilityState!=='visible')return; try{ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); }catch(e){ wakeLock=null; } }
@@ -351,6 +362,94 @@ async function fetchAllPlaylistChannels(){
   }
   return list;
 }
+// ===== VIDEO + PLAYER - সবসময় বানানো হবে, URL খালি হলেও =====
+let video = null, hls = null, everPlayed = false;
+function ensureVideo(){
+  if(video) return video;
+  video = document.createElement('video');
+  video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+  video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
+  video.muted = true; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
+  video.playsInline = true;
+  video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
+  document.getElementById('player').appendChild(video);
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
+  video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
+  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
+  video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
+  video.addEventListener('error',()=>{});
+  return video;
+}
+function updateMuteBtn(){
+  if(!video) return;
+  let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
+  if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
+  else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
+}
+function doPlay(){
+  if(!video) return;
+  video.muted = true; video.volume = 1; updateMuteBtn();
+  video.play().then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(()=>{});
+  updateMuteBtn();
+}
+function showNoStreamState(){
+  releaseWakeLock();
+  showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
+}
+function tryNextServerOrFail(){
+  if(!triedProxyForThisServer){
+    triedProxyForThisServer = true; showLoader();
+    loadStream(makeProxyUrl(streamSource), true); return;
+  }
+  triedProxyForThisServer = false;
+  if(isLiveSports() && SERVER_LIST.length > 1 && CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
+    let failed = CURRENT_SERVER_IDX;
+    CURRENT_SERVER_IDX++;
+    streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
+    showLoader(); updateServerUI(CURRENT_SERVER_IDX, failed);
+    loadStream(streamSource, false); return;
+  }
+  updateServerUI(CURRENT_SERVER_IDX, CURRENT_SERVER_IDX);
+  showNoStreamState();
+}
+function loadStream(url, viaProxy){
+  ensureVideo();
+  if(!url){ showNoStreamState(); return; }
+  if(hls){ try{hls.destroy();}catch(e){} hls=null; }
+  video.removeAttribute('src'); video.load();
+  if(url.includes('.m3u8') || url.includes('m3u8')){
+    if(window.Hls && Hls.isSupported()){
+      const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
+      if(viaProxy){ hlsConfig.loader = ProxyLoader; }
+      hls = new Hls(hlsConfig);
+      hls.loadSource(url); hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
+      hls.on(Hls.Events.ERROR, (e,data)=>{
+        if(!data.fatal) return;
+        if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); return; }
+        tryNextServerOrFail();
+      });
+    } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
+    else { showNoStreamState(); }
+  } else if(url.includes('.mpd')){ showNoStreamState(); }
+  else { video.src=url; doPlay(); }
+}
+function playServer(idx){
+  if(!SERVER_LIST[idx]) return;
+  CURRENT_SERVER_IDX = idx;
+  streamSource = SERVER_LIST[idx].url;
+  triedProxyForThisServer = false;
+  updateServerUI(idx, -1);
+  showLoader();
+  loadStream(streamSource, false);
+}
+window.playServer = playServer;
+muteBtnEl.addEventListener('click', (e)=>{
+  e.stopPropagation(); if(!video) return; video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
+});
+playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(!video) return; if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
+fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
@@ -393,6 +492,15 @@ async function loadSuggestions(){
       return;
     }
     grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
+    // FIX: URL খালি আসলে - Playlist থেকে পাওয়া প্রথম Server টাই অটো চালাও
+    if(!streamSource && SERVER_LIST.length){
+      streamSource = SERVER_LIST[0].url;
+      CURRENT_SERVER_IDX = 0;
+      triedProxyForThisServer = false;
+      updateServerUI(0, -1);
+      showLoader();
+      loadStream(streamSource, false);
+    }
     return;
   }
   grid.classList.remove('server-row');
@@ -411,102 +519,13 @@ async function loadSuggestions(){
     grid.innerHTML = show.map(c=>`<div class="sug-card" title="${cleanName(c.name)}" onclick="openSuggest('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.src}','${encodeURIComponent(c.group)}')"><img src="${c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><div class="sug-txt"><p>${cleanName(c.name)}</p><small>LIVE • HD</small></div><div class="sug-play">▶</div></div>`).join("");
   }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ক্যাটাগরিতে আর চ্যানেল নাই - <a href="index.html" style="color:#a78bfa">সব চ্যানেল দেখো</a></div>`; }
 }
-function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
-function playServer(idx){
-  if(!SERVER_LIST[idx]) return;
-  CURRENT_SERVER_IDX = idx;
-  streamSource = SERVER_LIST[idx].url;
-  triedProxyForThisServer = false;
-  updateServerUI(idx, -1);
-  showLoader();
-  loadStream(streamSource, false);
-}
-window.playServer = playServer;
+function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}&t=${Date.now()}`; }
 loadSuggestions();
-if(!streamSource){
-  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
-} else {
-  const video = document.createElement('video');
-  video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
-  video.setAttribute('x5-video-player-type','h5'); video.setAttribute('x5-video-player-fullscreen','true');
-  video.muted = true; video.volume = 1; video.autoplay = true; video.controls = false; video.preload = 'auto';
-  video.playsInline = true;
-  video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
-  document.getElementById('player').appendChild(video);
-  let hls=null, everPlayed=false;
-  function updateMuteBtn(){
-    let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
-    if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
-    else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
-  }
-  updateMuteBtn();
-  function doPlay(){
-    video.muted = true;
-    video.volume = 1;
-    updateMuteBtn();
-    video.play().then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(()=>{});
-    updateMuteBtn();
-  }
-  muteBtnEl.addEventListener('click', (e)=>{
-    e.stopPropagation(); video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
-  });
-  function showNoStreamState(){
-    releaseWakeLock();
-    showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
-  }
-  function tryNextServerOrFail(failedIdx){
-    if(!triedProxyForThisServer){
-      triedProxyForThisServer = true;
-      showLoader();
-      loadStream(makeProxyUrl(streamSource), true);
-      return;
-    }
-    triedProxyForThisServer = false;
-    if(isLiveSports() && SERVER_LIST.length > 1 && CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
-      let failed = CURRENT_SERVER_IDX;
-      CURRENT_SERVER_IDX++;
-      streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
-      showLoader();
-      updateServerUI(CURRENT_SERVER_IDX, failed);
-      loadStream(streamSource, false);
-      return;
-    }
-    if(!isLiveSports()){
-      showNoStreamState();
-      return;
-    }
-    updateServerUI(CURRENT_SERVER_IDX, CURRENT_SERVER_IDX);
-    showNoStreamState();
-  }
-  function loadStream(url, viaProxy){
-    if(hls){ try{hls.destroy();}catch(e){} hls=null; }
-    video.removeAttribute('src'); video.load();
-    if(url.includes('.m3u8') || url.includes('m3u8')){
-      if(window.Hls && Hls.isSupported()){
-        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
-        if(viaProxy){ hlsConfig.loader = ProxyLoader; }
-        hls = new Hls(hlsConfig);
-        hls.loadSource(url); hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
-        hls.on(Hls.Events.ERROR, (e,data)=>{
-          if(!data.fatal) return;
-          if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); return; }
-          tryNextServerOrFail(CURRENT_SERVER_IDX);
-        });
-      } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
-      else { showNoStreamState(); }
-    } else if(url.includes('.mpd')){ showNoStreamState(); }
-    else { video.src=url; doPlay(); }
-  }
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); });
-  video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
-  video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
-  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
-  video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
-  video.addEventListener('error',()=>{});
-  playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
-  fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
+ensureVideo();
+if(streamSource){
   loadStream(streamSource, false);
+} else {
+  showLoader();
 }
 </script>
 <script>
