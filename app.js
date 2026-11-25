@@ -1,4 +1,4 @@
-// KICK-OUT LOCK
+// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
 (function(){
   function kick(){
     try{ window.top.location.href = 'about:blank'; }catch(e){}
@@ -20,6 +20,7 @@
   if(window.top !== window.self){ kick(); throw new Error('Blocked'); }
 })();
 
+// --- UI বানানো ---
 document.getElementById('app').innerHTML = `
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
@@ -27,83 +28,39 @@ html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100
 body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 .sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-/* ===== HEADER ===== */
-header{background:#0a0a14;backdrop-filter:blur(16px);padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .top-row{display:flex;flex-direction:column;position:relative;z-index:2}
 .header-top{display:flex;align-items:center;justify-content:space-between}
+.search-wrap{position:relative;margin-top:12px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .play-ico{width:44px;height:44px;min-width:44px;border-radius:13px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 6px 20px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
+.logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:26px;font-weight:900;line-height:1;color:#fff;letter-spacing:.2px}
-.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6,#fb923c,#38bdf8);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
+.logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1;color:#fff}
+/* ✅ FIX - আগে এখানে animation ছিল না, তাই Color আটকে থাকতো */
+.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
 @keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
-.logo-text .tag{font-size:10px;letter-spacing:4px;color:#9a9ab5;font-weight:700;margin-top:3px}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.45);color:#ff6b81;font-size:11px;font-weight:800;padding:6px 11px;border-radius:20px}
-.live-pill i{width:8px;height:8px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
+.logo-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
+.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-header::before{content:"";position:absolute;top:-50px;left:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(56,189,248,.35),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
-header::after{content:"";position:absolute;top:-50px;right:-20px;width:220px;height:120px;background:radial-gradient(circle,rgba(167,139,250,.38),transparent 70%);filter:blur(12px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
+/* ✅ FIX - Header এর পিছনের Color Glow এখন ঘুরবে, আটকে থাকবে না */
+header::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
+header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
 @keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
 @keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
-/* ===== SEARCH - Header আর Category এর মাঝখানে Center ===== */
-.search-bar-wrap{display:flex;justify-content:center;padding:12px 16px 4px;background:#07070f}
-.search-wrap{position:relative;width:100%;max-width:520px}
-.search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.8}
-#search{width:100%;padding:11px 16px 11px 42px;border-radius:100px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,#23233a,#1a1a2b);color:#fff;font-size:13px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text;box-shadow:0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);transition:.2s}
-#search::placeholder{color:#8a8aa5}
-#search:focus{border-color:rgba(167,139,250,.6);box-shadow:0 0 0 3px rgba(167,139,250,.18), 0 8px 24px rgba(0,0,0,.4)}
-#searchClear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);display:none;align-items:center;justify-content:center;font-size:11px;cursor:pointer;color:#fff}
-#searchClear.show{display:flex}
-#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:10px 12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.search-wrap .s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
+#search{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#1d1d2e;color:#fff;font-size:13.5px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text}
+#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
 #cats::-webkit-scrollbar{display:none}
 .cat{padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
 .cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
 .cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
 #scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:16px;padding:14px 6px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:152px}
-.card img{width:68px;height:68px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
-.card p{font-size:12px;font-weight:700;margin-top:9px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:30px;word-break:break-word}
-.card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
-#grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
-.sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%;position:relative}
-.sports-top{padding:8px 12px 0;text-align:center}
-.sports-top .league{font-size:12.5px;font-weight:800;letter-spacing:.3px;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
-.sports-top .league .sport-emoji{font-size:20px;margin-right:6px;vertical-align:-2px}
-.sports-top .match-type{font-size:10px;font-weight:700;letter-spacing:.6px;color:#22d3ee;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-.sports-top .match-type.cricket{color:#86efac}
-.sports-top .match-type.football{color:#67e8f9}
-.sports-top .match-type.basketball{color:#fdba74}
-.sports-top .match-type.hockey{color:#93c5fd}
-.sports-top .match-type.tennis{color:#fde047}
-.sports-top .match-type.wwe{color:#fda4af}
-.sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:5px 12px 6px}
-.sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}
-.sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
-.sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
-.sports-teams .vs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.sports-teams .vs-wrap .badge-live{background:linear-gradient(90deg,#ff2d55,#ff5d8f);color:#fff;font-size:9px;font-weight:900;letter-spacing:1px;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;white-space:nowrap;animation:liveGlow 1.8s ease-in-out infinite}
-.sports-teams .vs-wrap .badge-live i{width:6px;height:6px;background:#fff;border-radius:50%;animation:liveDot 1.2s infinite}
-@keyframes liveGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,45,85,.45)}50%{box-shadow:0 0 12px 2px rgba(255,45,85,.35)}}
-@keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.sports-teams .vs-wrap .badge-up{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.45);color:#fdba74;font-size:8.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
-.sports-teams .vs-wrap .vs-txt{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
-.sports-bottom{display:flex;align-items:center;justify-content:center;padding:7px 12px;border-top:1px solid rgba(255,255,255,.08);gap:8px}
-.sports-bottom .date{font-size:11.5px;color:#9ca3af;display:flex;align-items:center;gap:6px;white-space:nowrap}
-#upModal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
-#upModal.show{display:flex}
-.up-sheet{width:100%;max-width:420px;background:#111118;border-radius:22px;border:1px solid rgba(255,255,255,.15);padding:10px 16px 22px;animation:upPop .22s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-@keyframes upPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-.up-close{position:absolute;right:14px;top:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;z-index:2}
-.up-teams{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:6px;padding:8px 0 12px;text-align:center}
-.up-teams img{width:54px;height:54px;background:#fff;border-radius:12px;padding:4px;object-fit:contain;margin:0 auto}
-.up-teams .up-name{font-size:13px;font-weight:700;margin-top:6px;line-height:1.2;min-height:30px}
-.up-vs{font-size:18px;font-weight:900;font-style:italic;color:#cbd5e1}
-.up-count{font-size:22px;font-weight:900;text-align:center;color:#fb923c;letter-spacing:1px}
-.up-start{font-size:12px;color:#9ca3af;text-align:center;margin-top:4px}
-.up-notify{width:100%;margin-top:16px;padding:13px;border:none;border-radius:14px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;font-size:14px;font-weight:800;cursor:pointer}
-.up-notify.done{background:rgba(31,157,85,.35);border:1px solid rgba(31,157,85,.5);color:#d1fae5}
-.up-note{font-size:11px;color:#888;text-align:center;margin-top:10px;line-height:1.5}
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
+.card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+.card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
+.card small{font-size:8.5px;color:#22d3ee}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -129,36 +86,29 @@ body{display:block;overflow-y:auto}
 .sticky{position:sticky;top:0}
 header{max-width:1440px;margin:0 auto;padding:16px 24px}
 .top-row{flex-direction:row;align-items:center;gap:20px}
-.search-bar-wrap{padding:14px 24px 6px;max-width:1440px;margin:0 auto;width:100%}
-.search-wrap{max-width:640px}
+.search-wrap{flex:1;margin-top:0;max-width:720px;margin-left:auto}
 .desktop-wrap{flex-direction:row;max-width:1440px;margin:0 auto;gap:18px;padding:16px 24px 40px}
 #mainCol{order:1}
 #cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
 .cat{width:100%;padding:11px 12px;font-size:13.5px}
 #scrollArea{overflow:visible}
 #grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
-#grid.sports-mode{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
-.card{border-radius:16px;padding:18px 10px;min-height:170px}
-.card img{width:88px;height:88px;border-radius:14px;padding:8px}
-.card p{font-size:13px}
+.card{border-radius:16px;padding:14px 8px}
+.card img{width:60px;height:60px;border-radius:12px;padding:6px}
+.card p{font-size:12px}
 }
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} #grid.sports-mode{grid-template-columns:repeat(2,1fr)!important} }
+@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div></div></header><div class="search-bar-wrap"><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"><span id="searchClear" onclick="clearSearch()">✕</span></div></div></div>
+<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
 <div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
-<div id="upModal" onclick="if(event.target.id==='upModal') closeUpModal()"><div class="up-sheet"><div class="up-close" onclick="closeUpModal()">✕</div><div id="upModalContent"></div></div></div>
 `;
+
 const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[
-  {name:'Tapmad', url:'https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u', useProxy:false},
-  {name:'AynaOTT', url:'https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u', useProxy:false},
-  {name:'JagoBD', url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u', useProxy:false},
-  {name:'Bangladesh', url:'https://iptv-org.github.io/iptv/countries/bd.m3u', useProxy:false}
-]};
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
 let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved || saved.version!==CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
 const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
@@ -172,19 +122,16 @@ if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.text
 if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
 }catch(e){}
 function goHome(){ window.location.href=window.location.origin+'/?t='+Date.now(); }
-function clearSearch(){ let s=document.getElementById('search'); s.value=''; document.getElementById('searchClear').classList.remove('show'); renderGrid(true); s.focus(); }
 let all=[]; let cat="All"; let _catCache=null; let visibleCount=200; let currentFiltered=[];
 async function getPlaylistsFromSW(){ try{ await navigator.serviceWorker.ready; let r=await fetch('/api/playlists'); let data=await r.json(); if(data&&data.length) return data; }catch(e){} return CFG.playlists; }
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
 async function loadAll(){
   CFG.playlists=await getPlaylistsFromSW();
-  if(!CFG.playlists || !CFG.playlists.length){ CFG.playlists = DEFAULT.playlists; }
   for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
-function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All","🏆 Live Sports",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
-function catIcon(c){ if(c==='All') return '🏠'; if(c==='🏆 Live Sports') return '🏆'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
+function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
+function catIcon(c){ if(c==='All') return '🏠'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
-  if(c==='🏆 Live Sports') return sportsData.length;
   if(!all.length) return 0; let n=0;
   if(c==='All') n=all.length;
   else if(CFG.playlists.find(p=>p.name===c)) n=all.filter(x=>x.source===c).length;
@@ -201,7 +148,6 @@ function catCount(c){
 }
 function matchesCat(c,catName){
   if(catName==="All") return true;
-  if(catName==="🏆 Live Sports") return false;
   if(CFG.playlists.find(p=>p.name===catName)) return c.source===catName;
   if(catName==="Sports") return c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");
   if(catName==="News") return c.group.toLowerCase().includes("news");
@@ -221,8 +167,6 @@ function renderCats(){
 }
 function renderGrid(reset=true){
   if(reset) visibleCount=200;
-  if(cat==="🏆 Live Sports"){ renderSportsGrid(); return; }
-  document.getElementById("grid").classList.remove("sports-mode");
   let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
   for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
   let show=currentFiltered.slice(0,visibleCount); let html='';
@@ -234,189 +178,10 @@ function renderGrid(reset=true){
 }
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
-function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}&t=${Date.now()}` }
-let _searchT=null; document.getElementById("search").addEventListener("input",(e)=>{ let v=e.target.value; document.getElementById('searchClear').classList.toggle('show', v.length>0); clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
+function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
+let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
-let sportsData = [];
-async function loadSports(){
-  try{
-    let r = await fetch('https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/refs/heads/main/Sports_data.json?t='+Date.now());
-    let j = await r.json();
-    sportsData = j.matches || [];
-    _catCache = null; renderCats();
-    if(cat === "🏆 Live Sports") renderGrid(true);
-    checkNotifyMatches();
-  }catch(e){ console.log('Sports load fail', e); }
-}
-function parseStartTime(info, m){
-  let s = info.startTime || info.start_time || info.startDate || info.date || info.time || m.startTime || m.start_time || m.date || '';
-  if(!s) return null;
-  s = String(s).trim();
-  let dm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM|am|pm)?)?/);
-  if(dm){
-    let dd=parseInt(dm[1]), mo=parseInt(dm[2])-1, yy=parseInt(dm[3]);
-    let hh=dm[4]?parseInt(dm[4]):0, mm=dm[5]?parseInt(dm[5]):0, ss=dm[6]?parseInt(dm[6]):0;
-    let ap=(dm[7]||'').toUpperCase(); if(ap==='PM'&&hh<12) hh+=12; if(ap==='AM'&&hh===12) hh=0;
-    return new Date(yy,mo,dd,hh,mm,ss).getTime();
-  }
-  let t = Date.parse(s);
-  if(!isNaN(t)) return t;
-  return null;
-}
-function formatCountdown(ms){
-  if(ms<=0) return 'Starting...';
-  let sec=Math.floor(ms/1000); let d=Math.floor(sec/86400); sec%=86400; let h=Math.floor(sec/3600); sec%=3600; let m=Math.floor(sec/60); let s=sec%60;
-  let pad=n=>String(n).padStart(2,'0');
-  if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
-  return pad(h)+':'+pad(m)+':'+pad(s);
-}
-function getSportInfo(m){
-  let txt = '';
-  try{ txt = JSON.stringify(m||{}).toLowerCase(); }catch(e){ txt = ''; }
-  let info = m.eventInfo || {};
-  let extra = ((m.event_name||'') + ' ' + (info.league||'') + ' ' + (info.tournament||'') + ' ' + (info.category||'') + ' ' + (info.format||'') + ' ' + (info.matchType||'') + ' ' + (info.series||'') + ' ' + (info.teamA||'') + ' ' + (info.teamB||'')).toLowerCase();
-  txt += ' ' + extra;
-  const has = (...keys)=> keys.some(k=> txt.includes(k));
-  let emoji='🏆', cls='football', type='LIVE SPORTS';
-  if(has('football','soccer','premier league','la liga','laliga','serie a','bundesliga','ligue 1','champions league','europa league','fifa world cup','kashima antlers','jeonbuk','manchester','real madrid','barcelona','arsenal','chelsea','liverpool','psg','bayern','dortmund','juventus','inter milan','ac milan','ajax','porto','benfica','hyundai motors')){ emoji='⚽'; cls='football';
-    if(has('champions league')) type='AFC / UEFA CHAMPIONS LEAGUE • FOOTBALL';
-    else if(has('premier league')) type='PREMIER LEAGUE • FOOTBALL';
-    else if(has('la liga')||has('laliga')) type='LA LIGA • FOOTBALL';
-    else if(has('serie a')) type='SERIE A • FOOTBALL';
-    else if(has('bundesliga')) type='BUNDESLIGA • FOOTBALL';
-    else if(has('world cup')) type='FIFA WORLD CUP • FOOTBALL';
-    else type='FOOTBALL MATCH';
-    return {emoji, cls, type};
-  }
-  if(has('basketball','nba','wnba','euroleague','orlando magic','detroit pistons','boston celtics','lakers','warriors','chicago bulls','miami heat','brooklyn nets')){ emoji='🏀'; cls='basketball'; type=has('nba')?'NBA • BASKETBALL':'BASKETBALL MATCH'; return {emoji, cls, type}; }
-  if(has('hockey','nhl','ice hockey','edmonton oilers','vegas golden knights','boston bruins','toronto maple','maple leafs','new york rangers','chicago blackhawks')){ emoji='🏒'; cls='hockey'; type=has('nhl')?'NHL • ICE HOCKEY':'ICE HOCKEY MATCH'; return {emoji, cls, type}; }
-  if(has('tennis','atp','wta','wimbledon','grand slam','us open tennis','french open')){ emoji='🎾'; cls='tennis'; type=has('wimbledon')?'WIMBLEDON • TENNIS':has('grand slam')?'GRAND SLAM • TENNIS':'TENNIS MATCH'; return {emoji, cls, type}; }
-  if(has('wwe','wrestling','smackdown','raw','nxt','aew')){ emoji='🤼'; cls='wwe'; type=has('wwe')?'WWE • WRESTLING':has('nxt')?'WWE NXT • WRESTLING':'WRESTLING SHOW'; return {emoji, cls, type}; }
-  if(has('ufc','mma','boxing')){ emoji='🥊'; cls='wwe'; type=has('ufc')?'UFC • MMA FIGHT':'BOXING • FIGHT'; return {emoji, cls, type}; }
-  if(has('kabaddi')){ emoji='🤼'; cls='wwe'; type='KABADDI MATCH'; return {emoji, cls, type}; }
-  if(has('baseball','mlb')){ emoji='⚾'; cls='football'; type='MLB • BASEBALL'; return {emoji, cls, type}; }
-  if(has('golf','pga')){ emoji='🏌️'; cls='tennis'; type='GOLF TOURNAMENT'; return {emoji, cls, type}; }
-  if(has('formula','motogp','nascar','f1 racing')){ emoji='🏎️'; cls='football'; type='RACING • FORMULA / MOTOGP'; return {emoji, cls, type}; }
-  if(has('badminton')){ emoji='🏸'; cls='tennis'; type='BADMINTON MATCH'; return {emoji, cls, type}; }
-  if(has('volleyball')){ emoji='🏐'; cls='football'; type='VOLLEYBALL MATCH'; return {emoji, cls, type}; }
-  if(has('nfl','american football')){ emoji='🏈'; cls='football'; type='NFL • AMERICAN FOOTBALL'; return {emoji, cls, type}; }
-  if(has('rugby')){ emoji='🏉'; cls='football'; type='RUGBY MATCH'; return {emoji, cls, type}; }
-  if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')){
-    emoji='🏏'; cls='cricket';
-    if(has('test')) type='TEST SERIES • TEST MATCH';
-    else if(has('odi')||has('one day')) type='ODI SERIES • ONE DAY MATCH';
-    else if(has('t20')||has('t20i')) type='T20 SERIES • T20 MATCH';
-    else if(has('t10')) type='T10 LEAGUE • T10 MATCH';
-    else if(has('wbbl')) type='WBBL • WOMEN T20 MATCH';
-    else if(has('bbl')||has('big bash')) type='BIG BASH LEAGUE • T20 MATCH';
-    else if(has('ipl')) type='INDIAN PREMIER LEAGUE • T20 MATCH';
-    else if(has('bpl')) type='BANGLADESH PREMIER LEAGUE • T20 MATCH';
-    else if(has('psl')) type='PAKISTAN SUPER LEAGUE • T20 MATCH';
-    else if(has('asia cup')) type='ASIA CUP • CRICKET';
-    else if(has('world cup')) type='WORLD CUP • CRICKET';
-    else {
-      let teamA = (info.teamA||'').toLowerCase(); let teamB = (info.teamB||'').toLowerCase();
-      let cc = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
-      if(cc.includes(teamA) && cc.includes(teamB)) type='INTERNATIONAL SERIES • CRICKET';
-      else type='CRICKET MATCH';
-    }
-    let realLeague = info.tournament || info.league || info.series || '';
-    if(realLeague && realLeague.toLowerCase() !== (m.event_name||'').toLowerCase()){
-      type = realLeague.toUpperCase() + ' • ' + type.split(' • ')[1];
-    }
-    return {emoji, cls, type};
-  }
-  let teamA2 = (info.teamA||'').toLowerCase(); let teamB2 = (info.teamB||'').toLowerCase();
-  let cricketCountries = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
-  if(cricketCountries.includes(teamA2) && cricketCountries.includes(teamB2)) return {emoji:'🏏', cls:'cricket', type:'INTERNATIONAL SERIES • CRICKET'};
-  if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return {emoji:'🏏', cls:'cricket', type:'WBBL • WOMEN T20 MATCH'};
-  return {emoji:'🏆', cls:'football', type:'LIVE SPORTS'};
-}
-function renderSportsGrid(){
-  let gridEl = document.getElementById("grid");
-  gridEl.classList.add("sports-mode");
-  let live = sportsData.filter(m => (m.status||'').toUpperCase() === 'LIVE');
-  let up = sportsData.filter(m => (m.status||'').toUpperCase() !== 'LIVE');
-  let html = '';
-  if(!sportsData.length) html = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">Loading sports matches...</div>`;
-  [...live, ...up].forEach((m) => {
-    let isLive = (m.status||'').toUpperCase() === 'LIVE';
-    let info = m.eventInfo || {};
-    let sIdx = sportsData.indexOf(m);
-    let ts = !isLive ? parseStartTime(info, m) : null;
-    let league = m.event_name || info.league || info.tournament || 'LIVE SPORTS';
-    let dateStr = '';
-    if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
-    else if(info.startTime) dateStr = info.startTime;
-    let sp = getSportInfo(m);
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league"><span class="sport-emoji">${sp.emoji}</span>${league}</div><div class="match-type ${sp.cls}">${sp.type}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
-  });
-  gridEl.innerHTML = html;
-  document.getElementById("loadMoreWrap").style.display = 'none';
-}
-let _upTimer=null; let _upCurrentIdx=-1;
-function closeUpModal(){ let m=document.getElementById('upModal'); if(m) m.classList.remove('show'); if(_upTimer){clearInterval(_upTimer);_upTimer=null;} _upCurrentIdx=-1; }
-function getNotifyList(){ try{ return JSON.parse(localStorage.getItem('rslive_notify')||'[]'); }catch(e){ return []; } }
-function isNotified(name){ return getNotifyList().includes(name); }
-async function setNotify(idx){
-  let m=sportsData[idx]; if(!m) return;
-  let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
-  if('Notification' in window && Notification.permission==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
-  let list=getNotifyList();
-  if(list.includes(name)){ list=list.filter(x=>x!==name); localStorage.setItem('rslive_notify',JSON.stringify(list)); }
-  else { list.push(name); localStorage.setItem('rslive_notify',JSON.stringify(list)); }
-  showUpModal(idx);
-  let btn=document.getElementById('upNotifyBtn');
-  if(btn){ let on=isNotified(name); btn.textContent=on?'✅ Notify On - Tap to Off':'🔔 Notify Me'; btn.classList.toggle('done',on); }
-}
-function showUpModal(idx){
-  let m=sportsData[idx]; if(!m) return;
-  _upCurrentIdx=idx;
-  let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
-  let league=m.event_name||info.league||'LIVE SPORTS';
-  let ts=parseStartTime(info,m);
-  let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
-  let on=isNotified(name);
-  let sp = getSportInfo(m);
-  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:12px;font-weight:700;margin-top:10px">${sp.emoji} ${league}</div><div style="text-align:center;font-size:11px;color:#22d3ee;margin-top:4px">${sp.type}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
-  document.getElementById('upModal').classList.add('show');
-  if(_upTimer) clearInterval(_upTimer);
-  if(ts){
-    _upTimer=setInterval(()=>{
-      let el=document.getElementById('upCount'); if(!el){ clearInterval(_upTimer); return; }
-      let diff=ts-Date.now();
-      if(diff<=0){ el.textContent='Starting...'; clearInterval(_upTimer); setTimeout(()=>{ closeUpModal(); loadSports(); },1500); return; }
-      el.textContent=formatCountdown(diff);
-    },1000);
-  }
-}
-function checkNotifyMatches(){
-  let list=getNotifyList(); if(!list.length) return;
-  sportsData.forEach(m=>{
-    let info=m.eventInfo||{}; let name=info.teamA+' Vs '+info.teamB;
-    if(list.includes(name) && (m.status||'').toUpperCase()==='LIVE'){
-      if('Notification' in window && Notification.permission==='granted'){
-        try{ new Notification('RsLive Go - Match Started!',{body:name+' is now LIVE. Tap to watch.'}); }catch(e){}
-      }
-    }
-  });
-}
-function openMatch(idx){
-  let m = sportsData[idx];
-  if(!m) return;
-  let isLive = (m.status||'').toUpperCase() === 'LIVE';
-  if(!isLive){ showUpModal(idx); return; }
-  let info = m.eventInfo || {};
-  let name = info.teamA + ' Vs ' + info.teamB;
-  let streams = m.streams || [];
-  try{ localStorage.setItem('rslive_sports_match', JSON.stringify({ name: name, event_name: m.event_name||'', streams: streams, savedAt: Date.now() })); }catch(e){}
-  let firstUrl = streams.length ? (streams[0].stream_url || streams[0].url || '') : '';
-  let link = `player.html?url=${encodeURIComponent(firstUrl)}&name=${encodeURIComponent(name)}&src=Events&group=Events&fs=1&live=1&t=${Date.now()}`;
-  if(streams.length && streams[0].kid && streams[0].key) link += `&kid=${streams[0].kid}&key=${streams[0].key}`;
-  window.location.href = link;
-}
 loadAll();
-loadSports();
 (function(){
   function kill(){ try{ document.documentElement.innerHTML=''; }catch(e){} }
   document.addEventListener('contextmenu',e=>{ e.preventDefault(); return false; });
