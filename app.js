@@ -1,8 +1,7 @@
-/* RsLive Go - app.js - FULL - No Default, Playlist থেকে লোড */
+/* RsLive Go - app.js - FULL - No Search, No Pill, Events লোড হবে */
 let ALL_CHANNELS = [];
 let CURRENT_TAB = 'home';
 let CURRENT_CAT = '';
-let CURRENT_PILL = 'all';
 
 const CAT_META = {
   sports: { title: 'Sports', logo: 'https://cdn-icons-png.flaticon.com/512/857/857681.png', desc: 'Cricket, Football, Live Match' },
@@ -18,7 +17,7 @@ const CAT_META = {
 function cleanName(n){ return (n||'').replace(/\(.*?\)/g,'').replace(/\[.*?\]/g,'').replace(/HD|FHD|4K|1080p|720p/gi,'').replace(/\s+/g,' ').trim(); }
 function getCategory(name, group){
   const t = ((name||'') + ' ' + (group||'')).toLowerCase();
-  if(t.includes('sport') || t.includes('cricket') || t.includes('football') || t.includes('t sports') || t.includes('star sports') || t.includes('sony sports') || t.includes('ptv sports')) return 'sports';
+  if(t.includes('sport') || t.includes('cricket') || t.includes('football') || t.includes('t sports') || t.includes('star sports') || t.includes('sony sports') || t.includes('ptv sports') || t.includes('live') || t.includes('vs')) return 'sports';
   if(t.includes('news') || t.includes('somoy') || t.includes('jamuna') || t.includes('dbc') || t.includes('independent') || t.includes('atn news') || t.includes('channel 24') || t.includes('ekattor') || t.includes('ndtv') || t.includes('aaj tak')) return 'news';
   if(t.includes('movie') || t.includes('cinema') || t.includes('film') || t.includes('star gold') || t.includes('zee cinema')) return 'movies';
   if(t.includes('kid') || t.includes('cartoon') || t.includes('chutti') || t.includes('disney') || t.includes('pogo') || t.includes('nick')) return 'kids';
@@ -40,8 +39,8 @@ async function loadAll(){
     const res = await fetch('/api/playlists'); const pls = await res.json();
     for(let p of pls){ try{ const r = await fetch(p.url); const t = await r.text(); const chs = parseM3U(t, p.name); chs.forEach(c=>c.useProxy=p.useProxy); ALL_CHANNELS.push(...chs); }catch(e){} }
     const seen=new Set(); ALL_CHANNELS = ALL_CHANNELS.filter(c=>{ if(seen.has(c.url)) return false; seen.add(c.url); return true; });
-    renderHome(); renderEventsPills(); renderEvents(); renderCategories();
-  }catch(e){ document.getElementById('homeGrid').innerHTML='<div class="empty">লোড হয় নাই</div>'; }
+    renderHome(); renderEvents(); renderCategories();
+  }catch(e){ document.getElementById('homeGrid').innerHTML='<div class="empty">লোড হয় নাই - Playlist চেক করো</div>'; }
 }
 function cardHTML(c, isLive){
   const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
@@ -53,51 +52,45 @@ function renderHome(){
   document.getElementById('homeGrid').innerHTML = ALL_CHANNELS.length ? ALL_CHANNELS.map(c=>cardHTML(c,false)).join('') : '<div class="empty">কোনো চ্যানেল নাই</div>';
 }
 
-// EVENTS - Category Playlist Pill - Playlist থেকে অটো, Default নাই
-function renderEventsPills(){
-  // Playlist থেকে আসল Category / Source গুলা
-  const sources = [...new Set(ALL_CHANNELS.map(c=>c.src))];
-  // All + Live Sports + বাকি Playlist
-  let pills = [{key:'all', label:'🏠 All', count: ALL_CHANNELS.length}, {key:'sports', label:'🏆 Live Sports', count: ALL_CHANNELS.filter(c=>c.cat==='sports').length}];
-  sources.forEach(s=>{
-    if(s.toLowerCase()==='sports') return;
-    pills.push({key:s.toLowerCase(), label:'📺 '+s, count: ALL_CHANNELS.filter(c=>c.src===s).length});
-  });
-  document.getElementById('eventsPills').innerHTML = pills.map(p=>`<button class="pill ${CURRENT_PILL===p.key?'active':''}" onclick="setPill('${p.key}')">${p.label} <span class="cnt">${p.count}</span></button>`).join('');
-}
-function setPill(key){ CURRENT_PILL=key; renderEventsPills(); renderEvents(); }
-window.setPill = setPill;
-
+// EVENTS - Pill নাই, Default নাই, সব Sports চ্যানেলই Event কার্ড হবে - এইটাই লোডের ফিক্স
 function renderEvents(){
   const listEl = document.getElementById('eventsList');
-  // Pill অনুযায়ী ফিল্টার - সব Playlist থেকে
-  let arr = [];
-  if(CURRENT_PILL==='all') arr = ALL_CHANNELS;
-  else if(CURRENT_PILL==='sports') arr = ALL_CHANNELS.filter(c=>c.cat==='sports');
-  else arr = ALL_CHANNELS.filter(c=>c.src.toLowerCase()===CURRENT_PILL);
-  // শুধু VS ওয়ালা ম্যাচ - Default বাদ, আসল Playlist এর ম্যাচ
-  const matches = arr.filter(c=>c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs ') || c.name.includes(' VS') || c.name.includes('vs'));
-  if(!matches.length){ listEl.innerHTML = '<div class="empty">এই Playlist এ এখন কোনো Live ম্যাচ নাই 😔</div>'; return; }
+  const sports = ALL_CHANNELS.filter(c=>c.cat==='sports');
+  if(!sports.length){ listEl.innerHTML = '<div class="empty">এখন কোনো Live ম্যাচ নাই 😔<br>Playlist এ Sports চ্যানেল নাই</div>'; return; }
   let html = '';
-  matches.forEach(c=>{
-    const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
-    const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
-    if(!t2) return;
+  sports.forEach(c=>{
     const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
-    // ছবির মতো Time - এখনকার Time দেখাবে, Playlist এ Time থাকলে ওইটা
     const now = new Date(); const timeStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+    const hasVS = c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs ') || c.name.includes(' VS');
+    if(hasVS){
+      const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
+      const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
+      if(t2){
+        html += `<div class="match-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
+          <div class="match-title">${cleanName(c.name)}</div>
+          <div class="match-teams">
+            <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
+            <div class="m-mid"><span class="m-live"><i></i>LIVE</span><div class="m-vs">VS</div></div>
+            <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2}</p></div>
+          </div>
+          <div class="m-time">🕐 ${timeStr}</div>
+        </div>`;
+        return;
+      }
+    }
+    // VS নাই - তাও Event কার্ড হবে, খালি থাকবে না
     html += `<div class="match-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
       <div class="match-title">${cleanName(c.name)}</div>
       <div class="match-teams">
-        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
-        <div class="m-mid"><span class="m-live"><i></i>LIVE</span><div class="m-vs">VS</div></div>
-        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2}</p></div>
+        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>
+        <div class="m-mid"><span class="m-live"><i></i>LIVE</span><div class="m-vs">▶</div></div>
+        <div class="m-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.src}</p></div>
       </div>
       <div class="m-time">🕐 ${timeStr}</div>
     </div>`;
   });
   listEl.innerHTML = html;
-  document.getElementById('navEvents').classList.toggle('has-live', matches.length>0);
+  document.getElementById('navEvents').classList.toggle('has-live', sports.length>0);
 }
 
 function renderCategories(){
@@ -114,9 +107,4 @@ function backToCategories(){ document.getElementById('catListWrap').style.displa
 window.backToCategories=backToCategories;
 function switchTab(tab){ CURRENT_TAB=tab; ['home','events','categories'].forEach(t=>{ document.getElementById('view-'+t).classList.toggle('active', t===tab); document.getElementById('nav'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab); }); if(tab==='categories') backToCategories(); window.scrollTo({top:0}); }
 window.switchTab=switchTab;
-document.getElementById('searchInput').addEventListener('input', e=>{
-  const q=e.target.value.toLowerCase().trim(); if(!q){ renderHome(); return; }
-  const filtered=ALL_CHANNELS.filter(c=>c.name.toLowerCase().includes(q));
-  document.getElementById('homeGrid').innerHTML = filtered.map(c=>cardHTML(c,false)).join('');
-});
 loadAll();
