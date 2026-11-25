@@ -1,7 +1,6 @@
-/* RsLive Go - app.js - FINAL CLEAN */
+/* RsLive Go - app.js - FULL FINAL */
 let ALL_CHANNELS = [];
 let CURRENT_TAB = 'home';
-let CURRENT_HOME_CAT = 'all';
 let CURRENT_CAT = '';
 
 const CAT_META = {
@@ -40,40 +39,30 @@ async function loadAll(){
     const res = await fetch('/api/playlists'); const pls = await res.json();
     for(let p of pls){ try{ const r = await fetch(p.url); const t = await r.text(); const chs = parseM3U(t, p.name); chs.forEach(c=>c.useProxy=p.useProxy); ALL_CHANNELS.push(...chs); }catch(e){} }
     const seen=new Set(); ALL_CHANNELS = ALL_CHANNELS.filter(c=>{ if(seen.has(c.url)) return false; seen.add(c.url); return true; });
-    renderHomePills(); renderHome(); renderEvents(); renderCategories();
+    renderHome(); renderEvents(); renderCategories();
   }catch(e){ document.getElementById('homeGrid').innerHTML='<div class="empty">লোড হয় নাই</div>'; }
 }
+// Card - Category লেখা নাই, শুধু লোগো + নাম
 function cardHTML(c, isLive){
   const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
-  return `<div class="card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">${isLive?'<span class="live-badge">● LIVE</span>':''}<img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p><small>${c.src}</small></div>`;
+  return `<div class="card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">${isLive?'<span class="live-badge">● LIVE</span>':''}<img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>`;
 }
 function openChannel(url, name, src, group){ location.href = 'player.html?url='+url+'&name='+name+'&src='+src+'&group='+group; }
 window.openChannel = openChannel;
 
-// HOME - Pill + All Channels
-function renderHomePills(){
-  const pills = [{key:'all', label:'All'}, ...Object.keys(CAT_META).map(k=>({key:k, label:CAT_META[k].title}))];
-  document.getElementById('homeCatPills').innerHTML = pills.map(p=>{
-    const cnt = p.key==='all' ? ALL_CHANNELS.length : ALL_CHANNELS.filter(c=>c.cat===p.key).length;
-    return `<button class="cat-pill ${CURRENT_HOME_CAT===p.key?'active':''}" onclick="setHomeCat('${p.key}')">${p.label} • ${cnt}</button>`;
-  }).join('');
-}
-function setHomeCat(key){ CURRENT_HOME_CAT=key; renderHomePills(); renderHome(); }
-window.setHomeCat = setHomeCat;
+// HOME - শুধু All Channels, Pill নাই
 function renderHome(){
-  let arr = CURRENT_HOME_CAT==='all' ? ALL_CHANNELS : ALL_CHANNELS.filter(c=>c.cat===CURRENT_HOME_CAT);
-  document.getElementById('homeGrid').innerHTML = arr.length ? arr.map(c=>cardHTML(c,false)).join('') : '<div class="empty">কোনো চ্যানেল নাই</div>';
+  document.getElementById('homeGrid').innerHTML = ALL_CHANNELS.length ? ALL_CHANNELS.map(c=>cardHTML(c,false)).join('') : '<div class="empty">কোনো চ্যানেল নাই</div>';
 }
 
-// EVENTS - শুধু Upcoming Match, আর কিছু না
+// EVENTS - Upcoming + সব খেলার আপডেট
 function renderEvents(){
   const listEl = document.getElementById('eventsList');
-  // তোমার আগের Upcoming Match - এটাই থাকবে
   const upcoming = [
     { t1:'Bangladesh', t1Flag:'https://flagcdn.com/w320/bd.png', t2:'South Africa', t2Flag:'https://flagcdn.com/w320/za.png', time:'আজ • রাত ৮:০০ টা', tag:'UPCOMING' },
     { t1:'India', t1Flag:'https://flagcdn.com/w320/in.png', t2:'Pakistan', t2Flag:'https://flagcdn.com/w320/pk.png', time:'কাল • বিকাল ৪:০০ টা', tag:'UPCOMING' }
   ];
-  listEl.innerHTML = upcoming.map(m=>`
+  let html = upcoming.map(m=>`
     <div class="up-card">
       <div class="up-top"><span class="up-badge">${m.tag}</span><span class="up-time">🕐 ${m.time}</span></div>
       <div class="up-teams">
@@ -83,8 +72,32 @@ function renderEvents(){
       </div>
       <button class="up-btn" onclick="switchTab('home')">📺 চ্যানেল দেখো</button>
     </div>`).join('');
-  const hasLive = ALL_CHANNELS.filter(c=>c.cat==='sports').length>0;
-  document.getElementById('navEvents').classList.toggle('has-live', hasLive);
+  const sports = ALL_CHANNELS.filter(c=>c.cat==='sports');
+  const matches = sports.filter(c=>c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs '));
+  const others = sports.filter(c=>!matches.includes(c));
+  if(matches.length){
+    html += `<div class="sec-title">⚽ Live / সব খেলা</div>`;
+    matches.forEach(c=>{
+      const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
+      const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
+      const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
+      html += `<div class="up-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
+        <div class="up-top"><span class="up-badge" style="background:#22c55e">● LIVE</span><span class="up-time">🕐 ${c.src}</span></div>
+        <div class="up-teams">
+          <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
+          <div class="up-vs">VS</div>
+          <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2||'TBD'}</p></div>
+        </div>
+        <button class="up-btn">▶ Live দেখো</button>
+      </div>`;
+    });
+  }
+  if(others.length){
+    html += `<div class="sec-title">📺 Sports Channels</div><div class="grid">` + others.map(c=>cardHTML(c,true)).join('') + `</div>`;
+  }
+  if(!sports.length) html += '<div class="empty">এখন কোনো খেলা নাই</div>';
+  listEl.innerHTML = html;
+  document.getElementById('navEvents').classList.toggle('has-live', sports.length>0);
 }
 
 // CATEGORIES - শুধু Category
