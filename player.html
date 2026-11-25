@@ -200,7 +200,6 @@ let currentGroup = '';
 try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - RsLive Go'; } }catch(e){}
 try{ if(groupParam){ currentGroup = decodeURIComponent(groupParam); } }catch(e){}
 const loaderEl = document.getElementById('loader');
-const statusEl = document.getElementById('status-line');
 const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
@@ -239,6 +238,8 @@ function isLiveSports(){
 let SERVER_LIST = [];
 let CURRENT_SERVER_IDX = 0;
 let triedProxyForThisServer = false;
+let playSession = 0;
+let failoverTimer = null;
 function updateServerUI(activeIdx, failedIdx){
   document.querySelectorAll('.server-chip').forEach((el,i)=>{
     el.classList.toggle('playing', i===activeIdx);
@@ -365,7 +366,35 @@ async function fetchAllPlaylistChannels(){
   }
   return list;
 }
-// ===== VIDEO + PLAYER - সবসময় বানানো হবে, URL খালি হলেও =====
+// ===== FAST PROBE - সব Server একসাথে চেক, ফাস্টটা আগে =====
+async function probeOne(url, timeoutMs){
+  let start = Date.now();
+  try{
+    let ctrl = new AbortController();
+    let t = setTimeout(()=>ctrl.abort(), timeoutMs);
+    // Range দিয়ে শুধু মাথাটা আনো, পুরা Manifest নামাইও না
+    let r = await fetch(url, { signal: ctrl.signal, headers: { 'Range': 'bytes=0-2047' }, mode: 'cors', cache: 'no-store', redirect: 'follow' });
+    clearTimeout(t);
+    if(r.ok || r.status===206 || r.status===302) return Date.now()-start;
+    // CORS ব্লক হলেও Server জীবিত ধরে নাও, ফেল ধইরো না
+    return 9999;
+  }catch(e){
+    // CORS / Network Error মানেই Server মরা না, Shaka/HLS দিয়ে চলতে পারে - তাই মাঝামাঝি স্কোর দাও
+    return 5000;
+  }
+}
+async function sortServersBySpeed(list){
+  if(list.length <= 1) return list;
+  let scored = await Promise.all(list.map(async (s, i)=>{
+    let ms = await probeOne(s.url, 3500);
+    return { s, ms, i };
+  }));
+  // Direct URL যেটা আগে ছিলো, ওইটারে একটু প্রায়োরিটি দাও
+  scored.forEach(x=>{ if(x.s.url === streamSource) x.ms -= 2000; });
+  scored.sort((a,b)=> a.ms - b.ms);
+  return scored.map(x=>x.s);
+}
+// ===== VIDEO + PLAYER =====
 let video = null, hls = null, everPlayed = false;
 let shakaPlayer = null;
 function ensureVideo(){
@@ -377,7 +406,7 @@ function ensureVideo(){
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
@@ -399,22 +428,26 @@ function doPlay(){
 }
 function showNoStreamState(){
   releaseWakeLock();
+  if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;}
   showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
 }
+// FAST FAILOVER - 4s এ না চললে সাথে সাথে পরের Server, Proxy দিয়ে সময় নষ্ট না
 function tryNextServerOrFail(){
-  if(!triedProxyForThisServer){
-    triedProxyForThisServer = true; showLoader();
-    loadStream(makeProxyUrl(streamSource), true); return;
-  }
-  triedProxyForThisServer = false;
+  if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;}
   if(isLiveSports() && SERVER_LIST.length > 1 && CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
     let failed = CURRENT_SERVER_IDX;
     CURRENT_SERVER_IDX++;
     streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
     currentKid = SERVER_LIST[CURRENT_SERVER_IDX].kid || currentKid || '';
     currentKey = SERVER_LIST[CURRENT_SERVER_IDX].key || currentKey || '';
+    triedProxyForThisServer = true;
     showLoader(); updateServerUI(CURRENT_SERVER_IDX, failed);
     loadStream(streamSource, false); return;
+  }
+  // Live Sports না হইলে বা আর Server না থাকলে - শেষ চেষ্টা হিসেবে ১ বার Proxy
+  if(!triedProxyForThisServer && streamSource && !streamSource.startsWith(PROXY)){
+    triedProxyForThisServer = true; showLoader();
+    loadStream(makeProxyUrl(streamSource), true); return;
   }
   updateServerUI(CURRENT_SERVER_IDX, CURRENT_SERVER_IDX);
   showNoStreamState();
@@ -422,41 +455,56 @@ function tryNextServerOrFail(){
 function loadStream(url, viaProxy){
   ensureVideo();
   if(!url){ showNoStreamState(); return; }
+  playSession++;
+  let mySession = playSession;
   if(hls){ try{hls.destroy();}catch(e){} hls=null; }
   if(shakaPlayer){ try{ shakaPlayer.destroy(); }catch(e){} shakaPlayer = null; }
   video.removeAttribute('src'); video.load();
+  // 4 সেকেন্ডে Playing না হইলে অটো পরের Server
+  if(failoverTimer) clearTimeout(failoverTimer);
+  failoverTimer = setTimeout(()=>{
+    if(mySession !== playSession) return;
+    if(video && !video.paused && video.readyState >= 2) return;
+    if(everPlayed) return;
+    tryNextServerOrFail();
+  }, 4000);
   if(url.includes('.mpd')){
-    loadDASH(url, viaProxy);
+    loadDASH(url, viaProxy, mySession);
     return;
   }
   if(url.includes('.m3u8') || url.includes('m3u8')){
     if(window.Hls && Hls.isSupported()){
-      const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
+      // FAST HLS - ছোট Buffer, No Retry, Low Latency
+      const hlsConfig = { maxBufferLength:8, maxMaxBufferLength:16, maxBufferSize: 8*1000*1000, enableWorker:true, lowLatencyMode:true, backBufferLength:0, manifestLoadingMaxRetry:0, levelLoadingMaxRetry:1, fragLoadingMaxRetry:1, manifestLoadingRetryDelay:300, levelLoadingRetryDelay:300, fragLoadingRetryDelay:300, manifestLoadingTimeOut:4000, levelLoadingTimeOut:4000, fragLoadingTimeOut:4000, startLevel:-1, autoStartLoad:true };
       if(viaProxy){ hlsConfig.loader = ProxyLoader; }
       hls = new Hls(hlsConfig);
       hls.loadSource(url); hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
       hls.on(Hls.Events.ERROR, (e,data)=>{
+        if(mySession !== playSession) return;
         if(!data.fatal) return;
-        if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); return; }
+        if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ try{ hls.recoverMediaError(); }catch(err){} return; }
         tryNextServerOrFail();
       });
     } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
     else { showNoStreamState(); }
   } else { video.src=url; doPlay(); }
 }
-// ===== DRM - DASH (.mpd) + ClearKey =====
-async function loadDASH(url, viaProxy){
+// ===== DRM - DASH (.mpd) + ClearKey - FAST =====
+async function loadDASH(url, viaProxy, mySession){
   ensureVideo();
   if(!window.shaka){ showNoStreamState(); return; }
   if(shakaPlayer){ try{ await shakaPlayer.destroy(); }catch(e){} shakaPlayer = null; }
+  if(mySession !== playSession) return;
   try{ shaka.Player.polyfill.installAll(); }catch(e){}
   shakaPlayer = new shaka.Player(video);
-  if(currentKid && currentKey){
-    try{
-      shakaPlayer.configure({ drm: { clearKeys: { [currentKid]: currentKey } } });
-    }catch(e){}
-  }
+  try{
+    shakaPlayer.configure({
+      drm: (currentKid && currentKey) ? { clearKeys: { [currentKid]: currentKey } } : {},
+      streaming: { bufferingGoal: 4, rebufferingGoal: 1, bufferBehind: 2, safeSeekOffset: 2, retryParameters: { timeout: 4000, maxAttempts: 1, baseDelay: 200, backoffFactor: 1, fuzzFactor: 0 }, smallGapLimit: 0.5, jumpLargeGaps: true },
+      manifest: { retryParameters: { timeout: 4000, maxAttempts: 1, baseDelay: 200, backoffFactor: 1, fuzzFactor: 0 } }
+    });
+  }catch(e){}
   if(viaProxy){
     try{
       shakaPlayer.getNetworkingEngine().registerRequestFilter((type, request)=>{
@@ -466,21 +514,22 @@ async function loadDASH(url, viaProxy){
       });
     }catch(e){}
   }
-  shakaPlayer.addEventListener('error', ()=>{ tryNextServerOrFail(); });
+  shakaPlayer.addEventListener('error', ()=>{ if(mySession === playSession) tryNextServerOrFail(); });
   try{
     await shakaPlayer.load(url);
-    doPlay();
+    if(mySession === playSession) doPlay();
   }catch(e){
-    tryNextServerOrFail();
+    if(mySession === playSession) tryNextServerOrFail();
   }
 }
 function playServer(idx){
   if(!SERVER_LIST[idx]) return;
+  everPlayed = false;
   CURRENT_SERVER_IDX = idx;
   streamSource = SERVER_LIST[idx].url;
   currentKid = SERVER_LIST[idx].kid || currentKid || '';
   currentKey = SERVER_LIST[idx].key || currentKey || '';
-  triedProxyForThisServer = false;
+  triedProxyForThisServer = true;
   updateServerUI(idx, -1);
   showLoader();
   loadStream(streamSource, false);
@@ -527,23 +576,31 @@ async function loadSuggestions(){
       SERVER_LIST.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam, kid: currentKid || '', key: currentKey || ''});
     }
     CURRENT_SERVER_IDX = 0;
-    triedProxyForThisServer = false;
-    if(SERVER_LIST.length && !currentKid && SERVER_LIST[0].kid){
-      currentKid = SERVER_LIST[0].kid || '';
-      currentKey = SERVER_LIST[0].key || '';
-    }
+    triedProxyForThisServer = true;
     if(!SERVER_LIST.length){
       grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই</div>`;
       return;
     }
-    grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
-    if(!streamSource && SERVER_LIST.length){
+    // FAST: সব Server একসাথে Probe করে ফাস্টটা আগে সাজাও
+    SERVER_LIST = await sortServersBySpeed(SERVER_LIST);
+    if(SERVER_LIST.length && !currentKid && SERVER_LIST[0].kid){
+      currentKid = SERVER_LIST[0].kid || '';
+      currentKey = SERVER_LIST[0].key || '';
+    }
+    // যদি URL খালি আসে বা প্রথম Server টাই চালাতে হয় - Probe করা ফাস্ট Server টা চালাও
+    if(!streamSource){
       streamSource = SERVER_LIST[0].url;
       currentKid = SERVER_LIST[0].kid || currentKid || '';
       currentKey = SERVER_LIST[0].key || currentKey || '';
-      CURRENT_SERVER_IDX = 0;
-      triedProxyForThisServer = false;
-      updateServerUI(0, -1);
+    } else {
+      // URL আছে - ওই Server টা লিস্টে কোথায়, ওইখান থেকে শুরু করো
+      let found = SERVER_LIST.findIndex(s=>s.url===streamSource);
+      CURRENT_SERVER_IDX = found >= 0 ? found : 0;
+      if(found >= 0){ currentKid = SERVER_LIST[found].kid || currentKid || ''; currentKey = SERVER_LIST[found].key || currentKey || ''; }
+    }
+    grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===CURRENT_SERVER_IDX?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===CURRENT_SERVER_IDX?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
+    // যদি এখনো কিছু চলে নাই - ফাস্ট Server টা অটো চালাও
+    if(!everPlayed && !video?.src){
       showLoader();
       loadStream(streamSource, false);
     }
