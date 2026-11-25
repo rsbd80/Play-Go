@@ -1,4 +1,4 @@
-/* RsLive Go - app.js - FULL FINAL */
+/* RsLive Go - app.js - FULL FINAL - Events শুধু Match কার্ড */
 let ALL_CHANNELS = [];
 let CURRENT_TAB = 'home';
 let CURRENT_CAT = '';
@@ -42,22 +42,20 @@ async function loadAll(){
     renderHome(); renderEvents(); renderCategories();
   }catch(e){ document.getElementById('homeGrid').innerHTML='<div class="empty">লোড হয় নাই</div>'; }
 }
-// Card - Category লেখা নাই, শুধু লোগো + নাম
 function cardHTML(c, isLive){
   const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
   return `<div class="card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">${isLive?'<span class="live-badge">● LIVE</span>':''}<img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${cleanName(c.name)}</p></div>`;
 }
 function openChannel(url, name, src, group){ location.href = 'player.html?url='+url+'&name='+name+'&src='+src+'&group='+group; }
 window.openChannel = openChannel;
-
-// HOME - শুধু All Channels, Pill নাই
 function renderHome(){
   document.getElementById('homeGrid').innerHTML = ALL_CHANNELS.length ? ALL_CHANNELS.map(c=>cardHTML(c,false)).join('') : '<div class="empty">কোনো চ্যানেল নাই</div>';
 }
 
-// EVENTS - Upcoming + সব খেলার আপডেট
+// EVENTS - শুধু Upcoming / Live Match কার্ড, শুধু Sports থেকে লোড, অন্য Sports Channel আসবে না
 function renderEvents(){
   const listEl = document.getElementById('eventsList');
+  // ১. আগের Upcoming - Static ২ টা
   const upcoming = [
     { t1:'Bangladesh', t1Flag:'https://flagcdn.com/w320/bd.png', t2:'South Africa', t2Flag:'https://flagcdn.com/w320/za.png', time:'আজ • রাত ৮:০০ টা', tag:'UPCOMING' },
     { t1:'India', t1Flag:'https://flagcdn.com/w320/in.png', t2:'Pakistan', t2Flag:'https://flagcdn.com/w320/pk.png', time:'কাল • বিকাল ৪:০০ টা', tag:'UPCOMING' }
@@ -72,35 +70,29 @@ function renderEvents(){
       </div>
       <button class="up-btn" onclick="switchTab('home')">📺 চ্যানেল দেখো</button>
     </div>`).join('');
-  const sports = ALL_CHANNELS.filter(c=>c.cat==='sports');
-  const matches = sports.filter(c=>c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs '));
-  const others = sports.filter(c=>!matches.includes(c));
-  if(matches.length){
-    html += `<div class="sec-title">⚽ Live / সব খেলা</div>`;
-    matches.forEach(c=>{
-      const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
-      const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
-      const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
-      html += `<div class="up-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
-        <div class="up-top"><span class="up-badge" style="background:#22c55e">● LIVE</span><span class="up-time">🕐 ${c.src}</span></div>
-        <div class="up-teams">
-          <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
-          <div class="up-vs">VS</div>
-          <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2||'TBD'}</p></div>
-        </div>
-        <button class="up-btn">▶ Live দেখো</button>
-      </div>`;
-    });
-  }
-  if(others.length){
-    html += `<div class="sec-title">📺 Sports Channels</div><div class="grid">` + others.map(c=>cardHTML(c,true)).join('') + `</div>`;
-  }
-  if(!sports.length) html += '<div class="empty">এখন কোনো খেলা নাই</div>';
-  listEl.innerHTML = html;
-  document.getElementById('navEvents').classList.toggle('has-live', sports.length>0);
+
+  // ২. Sports থেকে শুধু VS ওয়ালা ম্যাচগুলা - আগের সব খেলার আপডেট
+  // Sports ছাড়া অন্য Category থেকে নিবে না, Sports Channel গ্রিড ও দেখাবে না
+  const sportsMatches = ALL_CHANNELS.filter(c=>c.cat==='sports' && (c.name.includes(' VS ') || c.name.includes(' vs ') || c.name.includes(' Vs ') || c.name.includes(' VS') || c.name.includes('vs')));
+  sportsMatches.forEach(c=>{
+    const parts = c.name.split(/\s+VS\s+|\s+vs\s+|\s+Vs\s+/);
+    const t1 = cleanName(parts[0]||c.name), t2 = cleanName(parts[1]||'');
+    if(!t2) return;
+    const logo = c.logo || 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
+    html += `<div class="up-card" onclick="openChannel('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.src)}','${encodeURIComponent(c.group)}')">
+      <div class="up-top"><span class="up-badge" style="background:#22c55e">● LIVE</span><span class="up-time">🕐 ${c.src}</span></div>
+      <div class="up-teams">
+        <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t1}</p></div>
+        <div class="up-vs">VS</div>
+        <div class="up-team"><img src="${logo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${t2}</p></div>
+      </div>
+      <button class="up-btn">▶ Live দেখো</button>
+    </div>`;
+  });
+  listEl.innerHTML = html || '<div class="empty">এখন কোনো খেলা নাই</div>';
+  document.getElementById('navEvents').classList.toggle('has-live', sportsMatches.length>0);
 }
 
-// CATEGORIES - শুধু Category
 function renderCategories(){
   const grid = document.getElementById('catGrid'); let html='';
   Object.keys(CAT_META).forEach(key=>{
@@ -109,7 +101,7 @@ function renderCategories(){
   });
   grid.innerHTML = html || '<div class="empty">Category লোড হয় নাই</div>';
 }
-function openCategory(key){ CURRENT_CAT=key; const m=CAT_META[key]; document.getElementById('catListWrap').style.display='none'; document.getElementById('catDetailWrap').style.display='block'; document.getElementById('catDetailTitle').textContent='📂 '+m.title; const arr=ALL_CHANNELS.filter(c=>c.cat===key); document.getElementById('catDetailGrid').innerHTML=arr.map(c=>cardHTML(c,key==='sports')).join(''); window.scrollTo({top:0}); }
+function openCategory(key){ CURRENT_CAT=key; const m=CAT_META[key]; document.getElementById('catListWrap').style.display='none'; document.getElementById('catDetailWrap').style.display='block'; document.getElementById('catDetailTitle').textContent=m.title; const arr=ALL_CHANNELS.filter(c=>c.cat===key); document.getElementById('catDetailGrid').innerHTML=arr.map(c=>cardHTML(c,key==='sports')).join(''); window.scrollTo({top:0}); }
 window.openCategory=openCategory;
 function backToCategories(){ document.getElementById('catListWrap').style.display='block'; document.getElementById('catDetailWrap').style.display='none'; }
 window.backToCategories=backToCategories;
