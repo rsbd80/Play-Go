@@ -60,10 +60,17 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .card small{font-size:9.5px;color:#22d3ee;margin-top:2px}
 #grid.sports-mode{grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
 .sports-yt-card{background:#0d1117;border:1px solid rgba(255,255,255,.11);border-radius:12px;overflow:hidden;cursor:pointer;width:100%;position:relative}
-.sports-top{padding:7px 12px 0;text-align:center}
-.sports-top .league{font-size:11px;font-weight:700;letter-spacing:.3px;color:#e5e7eb;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sports-top .league .sport-emoji{font-size:13px;margin-right:5px}
-.sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:4px 12px 6px}
+.sports-top{padding:8px 12px 0;text-align:center}
+.sports-top .league{font-size:12.5px;font-weight:800;letter-spacing:.3px;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.sports-top .league .sport-emoji{font-size:20px;margin-right:6px;vertical-align:-2px}
+.sports-top .match-type{font-size:10px;font-weight:700;letter-spacing:.6px;color:#22d3ee;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.sports-top .match-type.cricket{color:#86efac}
+.sports-top .match-type.football{color:#67e8f9}
+.sports-top .match-type.basketball{color:#fdba74}
+.sports-top .match-type.hockey{color:#93c5fd}
+.sports-top .match-type.tennis{color:#fde047}
+.sports-top .match-type.wwe{color:#fda4af}
+.sports-teams{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;gap:4px;padding:5px 12px 6px}
 .sports-teams .team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center}
 .sports-teams .team img{width:46px;height:46px;border-radius:10px;background:#fff;padding:3px;object-fit:contain}
 .sports-teams .team-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
@@ -254,33 +261,71 @@ function formatCountdown(ms){
   if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m';
   return pad(h)+':'+pad(m)+':'+pad(s);
 }
-// ===== Title এর বাম পাশে Normal Emoji =====
-function getSportEmoji(m){
+// ===== বড় Emoji + কোন ম্যাচ - Match Type =====
+function getSportInfo(m){
   let txt = '';
   try{ txt = JSON.stringify(m||{}).toLowerCase(); }catch(e){ txt = ''; }
   let info = m.eventInfo || {};
-  txt += ' ' + ((m.event_name||'') + ' ' + (info.league||'') + ' ' + (info.tournament||'') + ' ' + (info.teamA||'') + ' ' + (info.teamB||'')).toLowerCase();
+  let extra = ((m.event_name||'') + ' ' + (info.league||'') + ' ' + (info.tournament||'') + ' ' + (info.category||'') + ' ' + (info.format||'') + ' ' + (info.matchType||'') + ' ' + (info.series||'') + ' ' + (info.teamA||'') + ' ' + (info.teamB||'')).toLowerCase();
+  txt += ' ' + extra;
   const has = (...keys)=> keys.some(k=> txt.includes(k));
-  if(has('football','soccer','premier league','la liga','laliga','serie a','bundesliga','ligue 1','champions league','europa league','fifa world cup','kashima antlers','jeonbuk','manchester','real madrid','barcelona','arsenal','chelsea','liverpool','psg','bayern','dortmund','juventus','inter milan','ac milan','ajax','porto','benfica','hyundai motors')) return '⚽';
-  if(has('basketball','nba','wnba','euroleague','orlando magic','detroit pistons','boston celtics','lakers','warriors','chicago bulls','miami heat','brooklyn nets')) return '🏀';
-  if(has('hockey','nhl','ice hockey','edmonton oilers','vegas golden knights','boston bruins','toronto maple','maple leafs','new york rangers','chicago blackhawks')) return '🏒';
-  if(has('tennis','atp','wta','wimbledon','grand slam','us open tennis','french open')) return '🎾';
-  if(has('wwe','wrestling','smackdown','raw','nxt','aew')) return '🤼';
-  if(has('ufc','mma','boxing')) return '🥊';
-  if(has('kabaddi')) return '🤼';
-  if(has('baseball','mlb')) return '⚾';
-  if(has('golf','pga')) return '🏌️';
-  if(has('formula','motogp','nascar','f1 racing')) return '🏎️';
-  if(has('badminton')) return '🏸';
-  if(has('volleyball')) return '🏐';
-  if(has('nfl','american football')) return '🏈';
-  if(has('rugby')) return '🏉';
-  if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test match','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')) return '🏏';
-  let teamA = (info.teamA||'').toLowerCase(); let teamB = (info.teamB||'').toLowerCase();
+  let emoji='🏆', cls='football', type='LIVE SPORTS';
+  if(has('football','soccer','premier league','la liga','laliga','serie a','bundesliga','ligue 1','champions league','europa league','fifa world cup','kashima antlers','jeonbuk','manchester','real madrid','barcelona','arsenal','chelsea','liverpool','psg','bayern','dortmund','juventus','inter milan','ac milan','ajax','porto','benfica','hyundai motors')){ emoji='⚽'; cls='football';
+    if(has('champions league')) type='AFC / UEFA CHAMPIONS LEAGUE • FOOTBALL';
+    else if(has('premier league')) type='PREMIER LEAGUE • FOOTBALL';
+    else if(has('la liga')||has('laliga')) type='LA LIGA • FOOTBALL';
+    else if(has('serie a')) type='SERIE A • FOOTBALL';
+    else if(has('bundesliga')) type='BUNDESLIGA • FOOTBALL';
+    else if(has('world cup')) type='FIFA WORLD CUP • FOOTBALL';
+    else type='FOOTBALL MATCH';
+    return {emoji, cls, type};
+  }
+  if(has('basketball','nba','wnba','euroleague','orlando magic','detroit pistons','boston celtics','lakers','warriors','chicago bulls','miami heat','brooklyn nets')){ emoji='🏀'; cls='basketball'; type=has('nba')?'NBA • BASKETBALL':'BASKETBALL MATCH'; return {emoji, cls, type}; }
+  if(has('hockey','nhl','ice hockey','edmonton oilers','vegas golden knights','boston bruins','toronto maple','maple leafs','new york rangers','chicago blackhawks')){ emoji='🏒'; cls='hockey'; type=has('nhl')?'NHL • ICE HOCKEY':'ICE HOCKEY MATCH'; return {emoji, cls, type}; }
+  if(has('tennis','atp','wta','wimbledon','grand slam','us open tennis','french open')){ emoji='🎾'; cls='tennis'; type=has('wimbledon')?'WIMBLEDON • TENNIS':has('grand slam')?'GRAND SLAM • TENNIS':'TENNIS MATCH'; return {emoji, cls, type}; }
+  if(has('wwe','wrestling','smackdown','raw','nxt','aew')){ emoji='🤼'; cls='wwe'; type=has('wwe')?'WWE • WRESTLING':has('nxt')?'WWE NXT • WRESTLING':'WRESTLING SHOW'; return {emoji, cls, type}; }
+  if(has('ufc','mma','boxing')){ emoji='🥊'; cls='wwe'; type=has('ufc')?'UFC • MMA FIGHT':'BOXING • FIGHT'; return {emoji, cls, type}; }
+  if(has('kabaddi')){ emoji='🤼'; cls='wwe'; type='KABADDI MATCH'; return {emoji, cls, type}; }
+  if(has('baseball','mlb')){ emoji='⚾'; cls='football'; type='MLB • BASEBALL'; return {emoji, cls, type}; }
+  if(has('golf','pga')){ emoji='🏌️'; cls='tennis'; type='GOLF TOURNAMENT'; return {emoji, cls, type}; }
+  if(has('formula','motogp','nascar','f1 racing')){ emoji='🏎️'; cls='football'; type='RACING • FORMULA / MOTOGP'; return {emoji, cls, type}; }
+  if(has('badminton')){ emoji='🏸'; cls='tennis'; type='BADMINTON MATCH'; return {emoji, cls, type}; }
+  if(has('volleyball')){ emoji='🏐'; cls='football'; type='VOLLEYBALL MATCH'; return {emoji, cls, type}; }
+  if(has('nfl','american football')){ emoji='🏈'; cls='football'; type='NFL • AMERICAN FOOTBALL'; return {emoji, cls, type}; }
+  if(has('rugby')){ emoji='🏉'; cls='football'; type='RUGBY MATCH'; return {emoji, cls, type}; }
+  // CRICKET - এখানেই Test / ODI / T20 চিনবে
+  if(has('cricket','ipl','bpl','bbl','psl','t20','odi','test','asia cup','world cup','icc','wbbl','big bash','melbourne renegades','brisbane heat','sydney sixers','perth scorchers','adelaide strikers','hobart hurricanes','melbourne stars','sydney thunder','kolkata knight','mumbai indians','chennai super','royal challengers','delhi capitals','punjab kings','rajasthan royals','sunrisers hyderabad','lucknow super','gujarat titans')){
+    emoji='🏏'; cls='cricket';
+    if(has('test')) type='TEST SERIES • TEST MATCH';
+    else if(has('odi')||has('one day')) type='ODI SERIES • ONE DAY MATCH';
+    else if(has('t20')||has('t20i')) type='T20 SERIES • T20 MATCH';
+    else if(has('t10')) type='T10 LEAGUE • T10 MATCH';
+    else if(has('wbbl')) type='WBBL • WOMEN T20 MATCH';
+    else if(has('bbl')||has('big bash')) type='BIG BASH LEAGUE • T20 MATCH';
+    else if(has('ipl')) type='INDIAN PREMIER LEAGUE • T20 MATCH';
+    else if(has('bpl')) type='BANGLADESH PREMIER LEAGUE • T20 MATCH';
+    else if(has('psl')) type='PAKISTAN SUPER LEAGUE • T20 MATCH';
+    else if(has('asia cup')) type='ASIA CUP • CRICKET';
+    else if(has('world cup')) type='WORLD CUP • CRICKET';
+    else {
+      // দেশ বনাম দেশ হলে ডিফল্ট Test ধরে নাও না - Series লেখো
+      let teamA = (info.teamA||'').toLowerCase(); let teamB = (info.teamB||'').toLowerCase();
+      let cc = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
+      if(cc.includes(teamA) && cc.includes(teamB)) type='INTERNATIONAL SERIES • CRICKET';
+      else type='CRICKET MATCH';
+    }
+    // JSON এ আসল Tournament / League থাকলে সেটাই দেখাও - সবচেয়ে সঠিক
+    let realLeague = info.tournament || info.league || info.series || '';
+    if(realLeague && realLeague.toLowerCase() !== (m.event_name||'').toLowerCase()){
+      type = realLeague.toUpperCase() + ' • ' + type.split(' • ')[1];
+    }
+    return {emoji, cls, type};
+  }
+  let teamA2 = (info.teamA||'').toLowerCase(); let teamB2 = (info.teamB||'').toLowerCase();
   let cricketCountries = ['bangladesh','south africa','india','pakistan','australia','england','new zealand','sri lanka','west indies','afghanistan','zimbabwe','ireland','netherlands','nepal','scotland','uae','oman','namibia','kenya'];
-  if(cricketCountries.includes(teamA) && cricketCountries.includes(teamB)) return '🏏';
-  if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return '🏏';
-  return '🏆';
+  if(cricketCountries.includes(teamA2) && cricketCountries.includes(teamB2)) return {emoji:'🏏', cls:'cricket', type:'INTERNATIONAL SERIES • CRICKET'};
+  if(has('renegades','brisbane heat','sixers','scorchers','strikers','hurricanes','stars women','thunder women')) return {emoji:'🏏', cls:'cricket', type:'WBBL • WOMEN T20 MATCH'};
+  return {emoji:'🏆', cls:'football', type:'LIVE SPORTS'};
 }
 function renderSportsGrid(){
   let gridEl = document.getElementById("grid");
@@ -298,8 +343,8 @@ function renderSportsGrid(){
     let dateStr = '';
     if(ts) dateStr = new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase();
     else if(info.startTime) dateStr = info.startTime;
-    let emoji = getSportEmoji(m);
-    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league"><span class="sport-emoji">${emoji}</span>${league}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
+    let sp = getSportInfo(m);
+    html += `<div class="sports-yt-card" onclick="openMatch(${sIdx})"><div class="sports-top"><div class="league"><span class="sport-emoji">${sp.emoji}</span>${league}</div><div class="match-type ${sp.cls}">${sp.type}</div></div><div class="sports-teams"><div class="team"><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamA||''}</div></div><div class="vs-wrap">${isLive ? `<div class="badge-live"><i></i> LIVE</div>` : `<div class="badge-up">🕐 UPCOMING</div>`}<div class="vs-txt">VS</div></div><div class="team"><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="team-name">${info.teamB||''}</div></div></div><div class="sports-bottom"><div class="date">🕐 ${dateStr || ''}</div></div></div>`;
   });
   gridEl.innerHTML = html;
   document.getElementById("loadMoreWrap").style.display = 'none';
@@ -327,8 +372,8 @@ function showUpModal(idx){
   let ts=parseStartTime(info,m);
   let dateStr=ts?new Date(ts).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).toUpperCase():(info.startTime||'');
   let on=isNotified(name);
-  let emoji = getSportEmoji(m);
-  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:11px;color:#9ca3af;margin-top:10px">${emoji} ${league}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
+  let sp = getSportInfo(m);
+  document.getElementById('upModalContent').innerHTML=`<div style="text-align:center"><span style="background:#f97316;color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px">🕐 UPCOMING • NOT STARTED YET</span></div><div style="text-align:center;font-size:12px;font-weight:700;margin-top:10px">${sp.emoji} ${league}</div><div style="text-align:center;font-size:11px;color:#22d3ee;margin-top:4px">${sp.type}</div><div class="up-teams"><div><img src="${info.teamAFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamA||''}</div></div><div class="up-vs">VS</div><div><img src="${info.teamBFlag||''}" onerror="this.style.display='none'"><div class="up-name">${info.teamB||''}</div></div></div><div style="text-align:center;font-size:12px;color:#aaa">⏳ Match starts in</div><div class="up-count" id="upCount">${ts?formatCountdown(ts-Date.now()):'Soon'}</div><div class="up-start">🕐 ${dateStr}</div><button class="up-notify ${on?'done':''}" id="upNotifyBtn" onclick="setNotify(${idx})">${on?'✅ Notify On - Tap to Off':'🔔 Notify Me'}</button><div class="up-note">Match has not started yet.<br>Video will play automatically when it goes LIVE.<br>Tap Notify Me, we will alert you.</div>`;
   document.getElementById('upModal').classList.add('show');
   if(_upTimer) clearInterval(_upTimer);
   if(ts){
