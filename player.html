@@ -64,14 +64,6 @@ video::-webkit-media-controls{display:none!important}
 .state-content p.title{font-size:13px;letter-spacing:1px;font-weight:600}
 .state-content p.sub{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;max-width:280px;overflow-wrap:anywhere}
 .state-content .brand-name{display:block;margin-top:18px}
-.retry-btn{margin-top:16px;padding:10px 22px;font-weight:700;font-size:12px;color:#0a0a12;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(167,139,250,.4)}
-.retry-btn2{margin-top:10px;padding:10px 22px;font-weight:700;font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;cursor:pointer}
-#tapPlay{position:absolute;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);cursor:pointer;text-align:center;padding:20px}
-#tapPlay.show{display:flex}
-#tapPlay .tp-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 10px 30px rgba(167,139,250,.6);animation:tpPulse 1.6s infinite}
-@keyframes tpPulse{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%{box-shadow:0 0 0 18px rgba(167,139,250,0)}100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}}
-#tapPlay p{font-size:14px;font-weight:700;color:#fff}
-#tapPlay small{font-size:11px;color:#ccc}
 #controls{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:8px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);opacity:0;transition:opacity .3s;touch-action:manipulation}
 #player-wrapper.show-controls #controls{opacity:1}
 #controls button{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;width:44px;height:44px;border-radius:50%;font-size:16px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -101,7 +93,6 @@ video::-webkit-media-controls{display:none!important}
 .sug-skel{flex:0 0 86px;width:86px;height:104px;border-radius:18px;background:#15151f;position:relative;overflow:hidden;flex-shrink:0}
 .sug-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-/* ===== Live Sports - Server Text Only, No Logo ===== */
 .server-row{display:flex;gap:8px;overflow-x:auto;padding:4px 14px 12px;scrollbar-width:none}
 .server-row::-webkit-scrollbar{display:none}
 .server-chip{flex:0 0 auto;min-width:92px;padding:10px 14px;text-align:center;border-radius:12px;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:0 4px 12px rgba(0,0,0,.30);transition:.2s}
@@ -167,7 +158,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
-<div id="tapPlay"><div class="tp-btn">▶</div><p>চালু করতে ট্যাপ করো</p><small>এই ফোনে ব্রাউজার সাউন্ড ব্লক করছে</small></div>
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
 <button id="playBtn">▶</button>
@@ -200,10 +190,6 @@ const groupParam = urlParams.get('group') || '';
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-const PROXY_FIRST = ['toffee','jago','ayna','tapmad'];
-const PROXY_FALLBACK = ['toffee','jago','ayna','tapmad','sonyliv','bongo'];
-const isToffee = PROXY_FIRST.includes(srcParam.toLowerCase()) || PROXY_FIRST.some(n => streamSource.toLowerCase().includes(n));
-const canUseProxy = PROXY_FALLBACK.includes(srcParam.toLowerCase()) || PROXY_FALLBACK.some(n => streamSource.toLowerCase().includes(n));
 let currentName = '';
 let currentGroup = '';
 try{ if(chNameParam){ const decodedName = decodeURIComponent(chNameParam); currentName = decodedName; document.getElementById('chName').textContent = decodedName; document.getElementById('chName2').textContent = decodedName; document.title = decodedName + ' - RsLive Go'; } }catch(e){}
@@ -213,7 +199,6 @@ const statusEl = document.getElementById('status-line');
 const wrapper = document.getElementById('player-wrapper');
 const playBtn = document.getElementById('playBtn');
 const fsBtn = document.getElementById('fsBtn');
-const tapPlayEl = document.getElementById('tapPlay');
 const muteBtnEl = document.getElementById('muteBtn');
 const statusMessages = ['LOADING','CONNECTING','BUFFERING'];
 let statusIdx = 0;
@@ -228,7 +213,6 @@ async function releaseWakeLock(){ wakeLockWanted=false; if(wakeLock){ try{await 
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&wakeLockWanted) requestWakeLock(); });
 let hideCtrlTimer=null;
 function showControls(){ wrapper.classList.add('show-controls'); clearTimeout(hideCtrlTimer); hideCtrlTimer=setTimeout(()=>wrapper.classList.remove('show-controls'),3000); }
-// ===== শুধু LIVE SPORTS চিনবে - Sports Category না =====
 function isLiveSports(){
   const s = (srcParam||'').toLowerCase();
   const g = (currentGroup||'').toLowerCase();
@@ -240,6 +224,7 @@ function isLiveSports(){
 }
 let SERVER_LIST = [];
 let CURRENT_SERVER_IDX = 0;
+let triedProxyForThisServer = false;
 function updateServerUI(activeIdx, failedIdx){
   document.querySelectorAll('.server-chip').forEach((el,i)=>{
     el.classList.toggle('playing', i===activeIdx);
@@ -298,7 +283,7 @@ let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#tapPlay')) return;
+  if(e.target.closest('button') || e.target.closest('input')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
@@ -354,62 +339,69 @@ const SUGGEST_PLAYLISTS = [
   "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
   "https://iptv-org.github.io/iptv/countries/bd.m3u"
 ];
+async function fetchAllPlaylistChannels(){
+  let list=[];
+  for(let plUrl of SUGGEST_PLAYLISTS){
+    try{
+      const res = await fetch(plUrl);
+      const text = await res.text();
+      const lines = text.split("\n"); let cur=null;
+      for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
+    }catch(e){}
+  }
+  return list;
+}
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
   const mySrc = (srcParam || '').toLowerCase();
   const titleEl = document.getElementById('suggestTitle');
-  // ===== শুধু LIVE SPORTS হলে Extra Server, বাকি সব আগের মতো =====
   if(isLiveSports()){
     if(titleEl) titleEl.textContent = 'Extra Server দেখো';
     grid.classList.add('server-row');
-    // 1. আগে localStorage থেকে আসল Streams চেক করো - এইটাই আসল Server
     let stored = null;
     try{ stored = JSON.parse(localStorage.getItem('rslive_sports_match')||'null'); }catch(e){}
+    let jsonServers = [];
     if(stored && stored.streams && stored.streams.length && stored.name === currentName){
-      SERVER_LIST = stored.streams.map((s)=>({ name: currentName, url: s.stream_url || s.url || '', logo:'', group:'Events', src:'Server', kid: s.kid||'', key: s.key||'' })).filter(x=>x.url);
-      CURRENT_SERVER_IDX = 0;
-      grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
-      return;
+      jsonServers = stored.streams.map((s)=>({ name: currentName, url: s.stream_url || s.url || '', logo:'', group:'Events', src:'Server' })).filter(x=>x.url);
     }
-    // 2. localStorage এ না পাইলে Playlist থেকে খুঁজো (Fallback)
+    let playlistServers = [];
     try{
-      let list=[];
-      for(let plUrl of SUGGEST_PLAYLISTS){
-        try{
-          const res = await fetch(plUrl);
-          const text = await res.text();
-          const lines = text.split("\n"); let cur=null;
-          for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
-        }catch(e){}
-      }
+      let list = await fetchAllPlaylistChannels();
       const clean = (s)=> cleanName(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
       const myClean = clean(currentName);
-      let servers = list.filter(c => clean(c.name) === myClean);
-      if(!servers.find(s=>s.url===streamSource)) servers.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam});
-      SERVER_LIST = servers;
-      CURRENT_SERVER_IDX = 0;
-      if(servers.length===0) throw new Error('empty');
-      grid.innerHTML = servers.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
-    }catch(e){ grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই</div>`; }
+      let parts = currentName.split(/vs/i).map(p=>clean(p)).filter(p=>p.length>3);
+      playlistServers = list.filter(c=>{
+        let cn = clean(c.name);
+        if(cn === myClean) return true;
+        if(parts.length===2 && (cn.includes(parts[0]) || cn.includes(parts[1]))) return true;
+        return false;
+      });
+    }catch(e){}
+    let seen = new Set();
+    SERVER_LIST = [...jsonServers, ...playlistServers].filter(s=>{
+      if(!s.url || seen.has(s.url)) return false;
+      seen.add(s.url); return true;
+    });
+    if(streamSource && !SERVER_LIST.find(s=>s.url===streamSource)){
+      SERVER_LIST.unshift({name:currentName, url:streamSource, logo:'', group:currentGroup, src:srcParam});
+    }
+    CURRENT_SERVER_IDX = 0;
+    triedProxyForThisServer = false;
+    if(!SERVER_LIST.length){
+      grid.innerHTML = `<div style="flex:0 0 100%;text-align:center;font-size:12px;color:#888;padding:10px">এই ম্যাচে আর Server নাই</div>`;
+      return;
+    }
+    grid.innerHTML = SERVER_LIST.map((c,i)=>`<div class="server-chip ${i===0?'playing':''}" id="server-${i}" onclick="playServer(${i})"><div class="sv-name">Server ${i+1}</div><div class="sv-sub" id="server-sub-${i}">${i===0?'▶ PLAYING':'TAP TO PLAY'}</div></div>`).join("");
     return;
   }
-  // ===== Sports Category সহ বাকি সব - আগের মতোই =====
   grid.classList.remove('server-row');
   if(titleEl){
     let label = myCat === 'sports' ? 'Sports' : myCat === 'news' ? 'News' : myCat === 'movies' ? 'Movies' : myCat === 'kids' ? 'Kids' : myCat === 'music' ? 'Music' : myCat === 'bangla' ? 'Bangla' : myCat === 'entertainment' ? 'Entertainment' : 'একই ক্যাটাগরি';
     titleEl.textContent = 'আরো ' + label + ' দেখো';
   }
   try{
-    let list=[];
-    for(let plUrl of SUGGEST_PLAYLISTS){
-      try{
-        const res = await fetch(plUrl);
-        const text = await res.text();
-        const lines = text.split("\n"); let cur=null;
-        for(let line of lines){ line=line.trim(); if(line.startsWith("#EXTINF")){ const name=line.split(",").pop().trim(); const logoMatch=line.match(/tvg-logo="([^"]+)"/); const groupMatch=line.match(/group-title="([^"]+)"/); cur={name,logo:logoMatch?logoMatch[1]:"",group:groupMatch?groupMatch[1]:"General",src:plUrl.includes('Tapmad')?'Tapmad':plUrl.includes('Ayna')?'AynaOTT':plUrl.includes('jago')?'JagoBD':'Bangladesh'}; } else if(line.startsWith("http") && cur){ cur.url=line; if(cur.name&&cur.url && !list.find(x=>x.url===cur.url)) list.push(cur); cur=null; } }
-      }catch(e){}
-    }
+    let list = await fetchAllPlaylistChannels();
     let filtered = list.filter(c=>c.url !== streamSource && c.name.toLowerCase() !== currentName.toLowerCase());
     let sameBoth = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) === myCat);
     let samePlaylist = filtered.filter(c => c.src.toLowerCase() === mySrc && getCategory(c.name, c.group) !== myCat);
@@ -422,19 +414,17 @@ async function loadSuggestions(){
 function openSuggest(urlEnc, nameEnc, src, groupEnc){ const url = decodeURIComponent(urlEnc); window.location.href = `player.html?url=${encodeURIComponent(url)}&name=${nameEnc}&src=${encodeURIComponent(src||'')}&group=${groupEnc||''}`; }
 function playServer(idx){
   if(!SERVER_LIST[idx]) return;
-  let prevIdx = CURRENT_SERVER_IDX;
   CURRENT_SERVER_IDX = idx;
   streamSource = SERVER_LIST[idx].url;
+  triedProxyForThisServer = false;
   updateServerUI(idx, -1);
   showLoader();
-  triedProxy = false; triedDirect = false;
-  if(isToffee){ loadStream(makeProxyUrl(streamSource), true); }
-  else { loadStream(streamSource, false); }
+  loadStream(streamSource, false);
 }
 window.playServer = playServer;
 loadSuggestions();
 if(!streamSource){
-  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">No stream URL supplied</p><p class="sub">index.html থেকে চ্যানেলে ক্লিক করে আসো, ডাইরেক্ট player.html খুললে চলবে না।</p><button class="retry-btn" onclick="location.href='index.html'">হোমে যাও</button>${brandBlock()}</div>`);
+  showState(`<div class="state-content"><div class="glyph warn"><i>&#9888;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
 } else {
   const video = document.createElement('video');
   video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
@@ -443,106 +433,80 @@ if(!streamSource){
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:contain;background:#000';
   document.getElementById('player').appendChild(video);
-  let hls=null, everPlayed=false, triedDirect=false, triedProxy=false, autoplayBlocked=false;
+  let hls=null, everPlayed=false;
   function updateMuteBtn(){
     let l1=document.getElementById('muteLine1'), l2=document.getElementById('muteLine2'), w=document.getElementById('muteWave');
     if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
     else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
   }
   updateMuteBtn();
-  function showSoundBtn(){
-    let old = document.getElementById('soundBtn');
-    if(old) return;
-    let b = document.createElement('div');
-    b.id = 'soundBtn';
-    b.innerHTML = '🔊 Sound On করতে ট্যাপ করো';
-    b.style.cssText = 'position:absolute;top:12px;right:12px;z-index:90;background:rgba(0,0,0,.70);border:1px solid rgba(255,255,255,.30);color:#fff;font-size:12px;font-weight:700;padding:8px 12px;border-radius:20px;cursor:pointer;backdrop-filter:blur(8px)';
-    b.onclick = (e)=>{
-      e.stopPropagation();
-      video.muted = false; video.volume = 1; video.play().catch(()=>{});
-      updateMuteBtn(); b.remove();
-    };
-    wrapper.appendChild(b);
-    setTimeout(()=>{ let el=document.getElementById('soundBtn'); if(el) el.remove(); }, 6000);
-  }
   function doPlay(){
-    // প্রথমে Muted এ চালাও - ব্রাউজার ব্লক করবে না, বড় Popup আসবে না
     video.muted = true;
     video.volume = 1;
     updateMuteBtn();
-    video.play().then(()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); showSoundBtn(); requestWakeLock(); }).catch(()=>{ tapPlayEl.classList.add('show'); });
+    video.play().then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(()=>{});
     updateMuteBtn();
   }
-  tapPlayEl.addEventListener('click', ()=>{
-    video.muted=false; video.volume=1; video.play().then(()=>{ tapPlayEl.classList.remove('show'); hideLoader(); updateMuteBtn(); }).catch(()=>{});
-  });
   muteBtnEl.addEventListener('click', (e)=>{
     e.stopPropagation(); video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
   });
+  function showNoStreamState(){
+    releaseWakeLock();
+    showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">FAILED</p><p class="sub">এই চ্যানেলটা এখন চলছে না</p>${brandBlock()}</div>`);
+  }
+  function tryNextServerOrFail(failedIdx){
+    if(!triedProxyForThisServer){
+      triedProxyForThisServer = true;
+      showLoader();
+      loadStream(makeProxyUrl(streamSource), true);
+      return;
+    }
+    triedProxyForThisServer = false;
+    if(isLiveSports() && SERVER_LIST.length > 1 && CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
+      let failed = CURRENT_SERVER_IDX;
+      CURRENT_SERVER_IDX++;
+      streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
+      showLoader();
+      updateServerUI(CURRENT_SERVER_IDX, failed);
+      loadStream(streamSource, false);
+      return;
+    }
+    if(!isLiveSports()){
+      showNoStreamState();
+      return;
+    }
+    updateServerUI(CURRENT_SERVER_IDX, CURRENT_SERVER_IDX);
+    showNoStreamState();
+  }
   function loadStream(url, viaProxy){
     if(hls){ try{hls.destroy();}catch(e){} hls=null; }
     video.removeAttribute('src'); video.load();
     if(url.includes('.m3u8') || url.includes('m3u8')){
       if(window.Hls && Hls.isSupported()){
-        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:4, fragLoadingMaxRetry:4, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
+        const hlsConfig = { maxBufferLength:30, maxMaxBufferLength:60, enableWorker:false, lowLatencyMode:false, manifestLoadingMaxRetry:2, levelLoadingMaxRetry:3, fragLoadingMaxRetry:3, manifestLoadingRetryDelay:800, fragLoadingRetryDelay:800 };
         if(viaProxy){ hlsConfig.loader = ProxyLoader; }
         hls = new Hls(hlsConfig);
         hls.loadSource(url); hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ doPlay(); });
         hls.on(Hls.Events.ERROR, (e,data)=>{
           if(!data.fatal) return;
-          // ===== শুধু LIVE SPORTS: এই Server ফেল -> পরের Server, সব ফেল -> Fail =====
-          if(isLiveSports() && SERVER_LIST.length > 1){
-            let failed = CURRENT_SERVER_IDX;
-            if(CURRENT_SERVER_IDX < SERVER_LIST.length - 1){
-              CURRENT_SERVER_IDX++;
-              streamSource = SERVER_LIST[CURRENT_SERVER_IDX].url;
-              showLoader();
-              updateServerUI(CURRENT_SERVER_IDX, failed);
-              triedProxy = false; triedDirect = false;
-              loadStream(streamSource, false);
-              return;
-            }
-            updateServerUI(CURRENT_SERVER_IDX, failed);
-            showNoStreamState({message:'সব সার্ভার চেক করা হইছে, কোনোটাই চলতেছে না'});
-            return;
-          }
-          // ===== Sports Category সহ বাকি সব - আগের মতো =====
-          if(data.type===Hls.ErrorTypes.NETWORK_ERROR){
-            if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
-            else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
-            else { hls.startLoad(); }
-          } else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); }
-          else {
-            if(!viaProxy && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); }
-            else if(viaProxy && !triedDirect){ triedDirect=true; loadStream(streamSource, false); }
-            else showNoStreamState({message:'HLS Error: '+data.details});
-          }
+          if(data.type===Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); return; }
+          tryNextServerOrFail(CURRENT_SERVER_IDX);
         });
       } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; doPlay(); }
-      else { showNoStreamState({message:'Browser HLS support নেই'}); }
-    } else if(url.includes('.mpd')){ showNoStreamState({message:'DASH লিংক সাপোর্ট করে না'}); }
+      else { showNoStreamState(); }
+    } else if(url.includes('.mpd')){ showNoStreamState(); }
     else { video.src=url; doPlay(); }
   }
-  function showNoStreamState(err){
-    releaseWakeLock();
-    tapPlayEl.classList.remove('show');
-    const proxyBtn = `<br><button class="retry-btn2" onclick="tryProxyManually()">🌐 Proxy দিয়ে চেষ্টা করো</button>`;
-    const directBtn = `<br><button class="retry-btn2" onclick="tryDirectManually()">📡 Direct দিয়ে চেষ্টা করো</button>`;
-    showState(`<div class="state-content"><div class="glyph"><i>&#10060;</i></div><p class="title">এই চ্যানেলটা এখন চলছে না</p><p class="sub">${err&&err.message?err.message:'The source could not be reached.'}</p><button class="retry-btn" onclick="location.reload()">🔄 Retry</button>${proxyBtn}${directBtn}<br><button class="retry-btn2" onclick="location.href='index.html'">🏠 হোমে যাও</button>${brandBlock()}</div>`);
-  }
-  window.tryProxyManually = function(){ showLoader(); loadStream(makeProxyUrl(streamSource), true); };
-  window.tryDirectManually = function(){ showLoader(); loadStream(streamSource, false); };
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; tapPlayEl.classList.remove('show'); updateMuteBtn(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
   video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
   video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
-  video.addEventListener('error',()=>{ if(!everPlayed && canUseProxy && !triedProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } });
+  video.addEventListener('error',()=>{});
   playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
   fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
-  if(isToffee){ loadStream(makeProxyUrl(streamSource), true); } else { loadStream(streamSource, false); }
-  setTimeout(()=>{ if(!everPlayed && !triedProxy && canUseProxy){ triedProxy=true; loadStream(makeProxyUrl(streamSource), true); } }, 6000);
+  loadStream(streamSource, false);
 }
 </script>
 <script>
