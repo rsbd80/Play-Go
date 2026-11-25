@@ -41,10 +41,6 @@ body{padding:0;background:radial-gradient(600px 300px at 50% -80px, rgba(167,139
 #player{position:absolute;inset:0;width:100%!important;height:100%!important;touch-action:manipulation}
 #player video{width:100%!important;height:100%!important;object-fit:fill!important;background:#000;touch-action:manipulation}
 video::-webkit-media-controls{display:none!important}
-/* ===== SOUND BUTTON + iPHONE FULLSCREEN FIX ===== */
-#soundBtn{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:120;background:rgba(0,0,0,.75);border:2px solid #fff;color:#fff;padding:14px 22px;border-radius:100px;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.6);animation:soundPulse 1.6s infinite}
-@keyframes soundPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
-#iosFsHint{display:none;position:absolute;top:10px;right:10px;z-index:120;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:6px 10px;border-radius:20px}
 #loader{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,var(--bg-2) 0%,var(--bg-1) 70%);display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:99;transition:opacity .1s ease,visibility .1s ease;pointer-events:none}
 #loader.hide-now{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 .tuner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;width:100%;margin:0 auto;padding:0}
@@ -163,8 +159,6 @@ video::-webkit-media-controls{display:none!important}
 </div>
 </div>
 <div id="player"></div>
-<div id="soundBtn" onclick="unmuteVideo(event)">🔊 Sound On - Tap</div>
-<div id="iosFsHint">⛶ Fullscreen • ঘুরালেই Landscape হবে</div>
 <div id="controls">
 <button id="muteBtn" title="Sound On/Off"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7" style="display:"/></svg></button>
 <button id="playBtn">▶</button>
@@ -260,7 +254,7 @@ function updateServerUI(activeIdx, failedIdx){
 }
 let isFullscreenBusy = false;
 function getVideoEl(){ return document.querySelector('#player video'); }
-// ===== iPHONE 11 FULLSCREEN - আগের মতো Native Fullscreen =====
+// ===== iPHONE 11 FULLSCREEN =====
 let isIOSFullscreen = false;
 async function toggleFullscreen(){
   if(isFullscreenBusy) return;
@@ -268,26 +262,20 @@ async function toggleFullscreen(){
   setTimeout(()=>{ isFullscreenBusy = false; }, 600);
   const v = getVideoEl();
   if(!v) return;
-  // iPhone / iPad - Safari Native Video Fullscreen
   if(IS_IOS){
     try{
       if(v.webkitDisplayingFullscreen){
         if(v.webkitExitFullscreen) v.webkitExitFullscreen();
       } else {
-        // Fullscreen এর আগে Sound On + Fill
-        v.muted = false; v.volume = 1;
         v.style.objectFit = 'fill';
         v.style.width = '100%'; v.style.height = '100%';
-        // playsinline থাকলে iOS Fullscreen আটকায়, তাই সাময়িক তুলে দাও
         v.removeAttribute('playsinline');
         if(v.webkitEnterFullscreen) v.webkitEnterFullscreen();
         else if(v.webkitRequestFullscreen) v.webkitRequestFullscreen();
         else if(wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
-        // আবার playsinline ফিরায় দাও যাতে Inline এ সমস্যা না হয়
         setTimeout(()=>{ v.setAttribute('playsinline',''); }, 500);
       }
     }catch(e){
-      // Fallback - Wrapper Fullscreen
       try{ if(document.webkitFullscreenElement) document.webkitExitFullscreen(); else if(wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen(); }catch(err){}
     }
     return;
@@ -305,29 +293,26 @@ async function toggleFullscreen(){
 }
 document.addEventListener('fullscreenchange', ()=>{
   const v = document.querySelector('#player video');
-  if(v) v.style.objectFit = document.fullscreenElement ? 'fill' : 'fill';
+  if(v) v.style.objectFit = 'fill';
   if(!document.fullscreenElement){ try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){} }
 });
 document.addEventListener('webkitfullscreenchange', ()=>{
   const v = document.querySelector('#player video');
   if(!v) return;
-  v.style.objectFit = document.webkitFullscreenElement ? 'fill' : 'fill';
+  v.style.objectFit = 'fill';
 });
-// iOS Native Fullscreen Events
-document.addEventListener('webkitbeginfullscreen', ()=>{ isIOSFullscreen = true; const v=getVideoEl(); if(v){ v.style.objectFit='fill'; } const h=document.getElementById('iosFsHint'); if(h) h.style.display='none'; }, true);
+document.addEventListener('webkitbeginfullscreen', ()=>{ isIOSFullscreen = true; const v=getVideoEl(); if(v){ v.style.objectFit='fill'; } }, true);
 document.addEventListener('webkitendfullscreen', ()=>{ isIOSFullscreen = false; const v=getVideoEl(); if(v){ v.style.objectFit='fill'; v.setAttribute('playsinline',''); } }, true);
 let lastTap = 0;
 let singleTapTimer = null;
 let ignoreNextClick = false;
 function handleTap(e){
-  if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#soundBtn')) return;
+  if(e.target.closest('button') || e.target.closest('input')) return;
   e.preventDefault();
   let now = Date.now();
   if(now - lastTap < 300){
     clearTimeout(singleTapTimer); singleTapTimer = null; lastTap = 0;
     ignoreNextClick = true; setTimeout(()=>{ ignoreNextClick = false; }, 400);
-    // Double Tap = Fullscreen + Sound On (iPhone 11 স্টাইল)
-    unmuteVideo();
     toggleFullscreen();
     return;
   }
@@ -413,26 +398,6 @@ async function sortServersBySpeed(list){
 }
 let video = null, hls = null, everPlayed = false;
 let shakaPlayer = null;
-// ===== SOUND FIX - প্রতিটি ক্লিকে Sound সহ Play =====
-function unmuteVideo(e){
-  if(e) { e.stopPropagation(); e.preventDefault(); }
-  const v = getVideoEl() || video;
-  if(!v) return;
-  v.muted = false;
-  v.volume = 1;
-  v.play().catch(()=>{});
-  const sb = document.getElementById('soundBtn');
-  if(sb) sb.style.display = 'none';
-  updateMuteBtn();
-}
-window.unmuteVideo = unmuteVideo;
-function showSoundBtnIfMuted(){
-  const v = getVideoEl() || video;
-  const sb = document.getElementById('soundBtn');
-  if(!sb) return;
-  if(v && (v.muted || v.volume === 0)) sb.style.display = 'block';
-  else sb.style.display = 'none';
-}
 function ensureVideo(){
   if(video) return video;
   video = document.createElement('video');
@@ -442,17 +407,14 @@ function ensureVideo(){
   video.playsInline = true;
   video.style.cssText='width:100%;height:100%;object-fit:fill;background:#000';
   document.getElementById('player').appendChild(video);
-  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); showSoundBtnIfMuted(); requestWakeLock(); });
+  video.addEventListener('playing',()=>{ hideLoader(); everPlayed=true; if(failoverTimer){clearTimeout(failoverTimer); failoverTimer=null;} updateMuteBtn(); requestWakeLock(); });
   video.addEventListener('waiting',()=>{ if(!video.paused) showLoader(); });
   video.addEventListener('pause',()=>{ playBtn.textContent='▶'; releaseWakeLock(); });
-  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); showSoundBtnIfMuted(); });
-  video.addEventListener('volumechange',()=>{ updateMuteBtn(); showSoundBtnIfMuted(); });
+  video.addEventListener('play',()=>{ playBtn.textContent='❚❚'; requestWakeLock(); });
+  video.addEventListener('volumechange',()=>{ updateMuteBtn(); });
   video.addEventListener('error',()=>{});
-  // iOS Fullscreen Events - Video তে সরাসরি
   video.addEventListener('webkitbeginfullscreen', ()=>{ isIOSFullscreen=true; video.style.objectFit='fill'; });
   video.addEventListener('webkitendfullscreen', ()=>{ isIOSFullscreen=false; video.style.objectFit='fill'; video.setAttribute('playsinline',''); });
-  // Video তে ১ম ক্লিকেই Sound On
-  video.addEventListener('click', ()=>{ unmuteVideo(); });
   return video;
 }
 function updateMuteBtn(){
@@ -461,15 +423,18 @@ function updateMuteBtn(){
   if(video.muted || video.volume===0){ if(l1) l1.style.display=''; if(l2) l2.style.display=''; if(w) w.style.display='none'; }
   else { if(l1) l1.style.display='none'; if(l2) l2.style.display='none'; if(w) w.style.display=''; }
 }
+// ===== SOUND LOGIC - Pop-up ছাড়া, শুধু Mute বাটন দিয়ে =====
+// Sound আসে এমন Device এ Sound সহ চলবে
+// Sound আসে না এমন Device এ Mute হয়ে থাকবে, User Mute বাটন থেকে Unmute করবে
 function doPlay(){
   if(!video) return;
-  // Sound সহ চালানোর চেষ্টা, Browser Block করলে Mute করে চালাও + Sound বাটন দেখাও
   video.muted = false; video.volume = 1; updateMuteBtn();
   var p = video.play();
   if(p){
-    p.then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); showSoundBtnIfMuted(); }).catch(()=>{
+    p.then(()=>{ hideLoader(); everPlayed=true; requestWakeLock(); }).catch(()=>{
+      // Browser Sound Block করছে - Mute করে চালাও, কোনো Pop-up না
       video.muted = true;
-      video.play().then(()=>{ showSoundBtnIfMuted(); }).catch(()=>{});
+      video.play().catch(()=>{});
       updateMuteBtn();
     });
   }
@@ -580,13 +545,10 @@ function playServer(idx){
 }
 window.playServer = playServer;
 muteBtnEl.addEventListener('click', (e)=>{
-  e.stopPropagation(); if(!video) return; video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showSoundBtnIfMuted(); showControls();
+  e.stopPropagation(); if(!video) return; video.muted = !video.muted; if(!video.muted){ video.volume=1; video.play().catch(()=>{}); } updateMuteBtn(); showControls();
 });
-playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(!video) return; if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); showSoundBtnIfMuted(); } else { video.pause(); } showControls(); });
-fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); unmuteVideo(); toggleFullscreen(); showControls(); });
-// পেজে যেকোনো ক্লিকেই Sound On - iPhone এর জন্য জরুরি
-document.addEventListener('click', ()=>{ const v=getVideoEl()||video; if(v && v.muted){ v.muted=false; v.volume=1; v.play().catch(()=>{}); updateMuteBtn(); showSoundBtnIfMuted(); } }, {passive:true});
-document.addEventListener('touchstart', ()=>{ const v=getVideoEl()||video; if(v && v.muted){ v.muted=false; v.volume=1; v.play().catch(()=>{}); updateMuteBtn(); showSoundBtnIfMuted(); } }, {passive:true});
+playBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(!video) return; if(video.paused){ video.muted=false; video.volume=1; video.play(); updateMuteBtn(); } else { video.pause(); } showControls(); });
+fsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); toggleFullscreen(); showControls(); });
 async function loadSuggestions(){
   const grid = document.getElementById('suggestGrid');
   const myCat = getCategory(currentName, currentGroup);
