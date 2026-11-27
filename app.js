@@ -1,4 +1,4 @@
-/* RsLive Go v61 - All TV Removed + Events Shows Channels + Home Load Fix */
+/* RsLive Go v61 - rsbd80 / RsLive-Go - Events Back + All TV Removed */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -172,9 +172,9 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
 const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3e0f08e510.png';
-// ===== GITHUB CLOUD =====
-const GH_OWNER='PASTE_TOMAR_GITHUB_USERNAME';
-const GH_REPO='PASTE_TOMAR_REPO_NAME';
+// ===== GITHUB CLOUD - rsbd80 / RsLive-Go =====
+const GH_OWNER='rsbd80';
+const GH_REPO='RsLive-Go';
 const GH_BRANCH='main';
 const GH_PATH='data/config.json';
 const CLOUD_URL=`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_PATH}?t=`+Date.now();
@@ -184,7 +184,7 @@ const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 let saved=null;try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved||!Array.isArray(saved.playlists))saved=null;
 let CFG={...DEFAULT,...(saved||{})};
-let all=[],cat='All',currentTab='home',_catCache=null,visibleCount=200,currentFiltered=[],allMatches=[],categoryHomeMode=false,currentGroupFilter=null,selectedPlaylistName='All';
+let all=[],cat='All',currentTab='events',_catCache=null,visibleCount=200,currentFiltered=[],allMatches=[],categoryHomeMode=false,currentGroupFilter=null,selectedPlaylistName='All';
 let isPlaylistLoading=true;
 let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=localStorage.getItem('rslive_events_mode')!=='0';
 function getSearchQ(){return (document.getElementById('search')?.value||'').trim().toLowerCase()}
@@ -277,7 +277,7 @@ async function loadAll(){
   }
   isPlaylistLoading=false;
   renderGrid(); renderMatches();
-  switchTab('home');
+  switchTab(eventsMode?'events':'home');
 }
 function getGroupCounts(){const map=new Map();all.forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++});return [...map.values()].sort((a,b)=>b.count-a.count)}
 function getGroupCountByName(name){return all.filter(c=>normName(cleanGroupName(c.group))===normName(name)).length}
@@ -301,7 +301,6 @@ function renderGrid(reset=true){
     show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(list.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+list.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return;
   }
   if(q){grid.style.display='grid';if(reset)visibleCount=200;currentFiltered=all.filter(c=>String(c.name).toLowerCase().includes(q)||String(c.group).toLowerCase().includes(q)||String(c.source).toLowerCase().includes(q));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return}
-  // FIXED: Events ট্যাবে ম্যাচ না থাকলেও চ্যানেল দেখাবে - খালি পেজ না
   if(currentTab==='events'){
     if(all.length===0 && isPlaylistLoading){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px;color:#9a9ab5;font-size:14px">Loading channels...<br><span style="font-size:12px">Please wait</span></div>';return;}
     grid.style.display='grid';if(reset)visibleCount=200;currentFiltered=all;const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}return;
