@@ -1,4 +1,4 @@
-/* RsLive Go v60 - No Header Icon + Slim Match Cards + Mobile Back Fix */
+/* RsLive Go v60 - Only Header Icons Bigger + Slim Match Cards + Mobile Back Fix */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -18,10 +18,10 @@ header{background:#1E1E24;padding:14px 10px 10px}
 .logo-text .name{font-size:24px;font-weight:900;line-height:1;white-space:nowrap}
 .logo-text .name i{font-style:normal;color:#FFC107}
 .logo-text .tag{font-size:9px;letter-spacing:2px;color:#9a9ab5;font-weight:600;margin-top:3px;white-space:nowrap}
-.top-actions{margin-left:auto;display:flex;gap:4px;flex-shrink:0}
-.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
+.top-actions{margin-left:auto;display:flex;gap:6px;flex-shrink:0}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
 .icon-btn:active{transform:scale(.92)}
-.icon-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #notifBadge{position:absolute;top:1px;right:1px;background:#FF3B30;color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px}
 #searchWrap{display:none;margin-top:8px;position:relative}#searchWrap.open{display:flex}
 #search{width:100%;padding:11px 12px 11px 30px;border-radius:99px;border:1px solid #444;background:#34343C;color:#fff;font-size:14px;outline:none;user-select:text;-webkit-user-select:text}
