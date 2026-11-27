@@ -1,4 +1,4 @@
-/* RsLive Go - v38 FINAL PREMIUM DARK - Header No Icon + No Recent + No Cat Chips + Dark Settings */
+/* RsLive Go - v39 FINAL - Only Settings Dark, Rest Same, No Bangla, Real Telegram Icon, About Page Like Screenshot */
 (function(){
   const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
   if(!isDesktop) return;
@@ -11,16 +11,16 @@
 document.getElementById('app').innerHTML = `
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none}
-html,body{height:100%;width:100%;background:#000;color:#fff;font-family:Poppins,'Hind Siliguri',sans-serif;overflow-x:hidden}
+html,body{height:100%;width:100%;background:#000;color:#fff;font-family:Poppins,sans-serif;overflow-x:hidden}
 body{display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0}
 .sticky{flex-shrink:0;z-index:100}
-/* HEADER - NO ICON, TEXT FROM CORNER */
+/* HEADER - NO ICON, TEXT FROM CORNER, 2 COLOR NAME */
 header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px}
 .header-top{display:flex;align-items:center;gap:10px;min-height:42px}
 .logo{display:flex;align-items:center;cursor:pointer;padding-left:2px}
 .logo-text .name{font-size:23px;font-weight:900;line-height:1;letter-spacing:.3px;white-space:nowrap}
-.logo-text .name i{font-style:normal;color:#fff}
+.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#a78bfa,#22d3ee,#ff5d8f);background-clip:text;-webkit-background-clip:text;color:transparent}
 .logo-text .tag{font-size:9px;letter-spacing:2.5px;color:#9a9ab5;font-weight:600;margin-top:4px;white-space:nowrap}
 .top-actions{margin-left:auto;display:flex;gap:8px}
 .icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
@@ -43,11 +43,11 @@ header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px}
 .match-top{display:flex;justify-content:space-between;margin-bottom:6px}
 .sport-badge{display:flex;gap:5px;font-size:10.5px;font-weight:800;max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-badge{display:inline-flex;gap:5px;border-radius:99px;padding:4px 10px;font-size:8.5px;font-weight:800;flex-shrink:0}
-.match-badge.live{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}
-.match-badge.upcoming{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
-.match-badge.soon{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}
-.match-badge.today{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
-.match-badge.tomorrow{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
+.match-badge.live{background:rgba(255,48,78,.14);color:#ff8fa0;border:1px solid rgba(255,48,78,.35)}
+.match-badge.upcoming{background:rgba(245,164,59,.13);color:#e8b26a;border:1px solid rgba(245,164,59,.35)}
+.match-badge.soon{background:rgba(255,80,80,.14);color:#ff9a9a;border:1px solid rgba(255,80,80,.4)}
+.match-badge.today{background:rgba(250,204,21,.13);color:#e8d27a;border:1px solid rgba(250,204,21,.35)}
+.match-badge.tomorrow{background:rgba(34,211,238,.12);color:#8adfe8;border:1px solid rgba(34,211,238,.35)}
 .match-teams{display:flex;justify-content:center;gap:16px}
 .match-team{flex:0 1 115px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
 .match-team img,.team-fallback{width:42px;height:42px;object-fit:contain;border-radius:50%;background:#fff;padding:4px;border:2px solid rgba(255,255,255,.25)}
@@ -56,14 +56,14 @@ header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px}
 .match-vs{padding-top:10px}.match-vs .vs-txt{font-size:11px;font-weight:900;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 8px;border-radius:99px}
 .match-bottom{display:flex;justify-content:space-between;gap:8px;margin-top:8px;padding-top:7px;border-top:1px solid #ffffff14}
 .match-time{font-size:9.5px;color:#c9cce0}
-.match-action{border:0;border-radius:20px;padding:6px 11px;font-size:9px;font-weight:900;color:#000;background:#fff;cursor:pointer}
-.match-countdown{color:#fff;font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
+.match-action{border:0;border-radius:20px;padding:6px 11px;font-size:9px;font-weight:900;color:#fff;background:linear-gradient(90deg,#e93658,#f07836);cursor:pointer}
+.match-countdown{color:#fff2cc;font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
 .match-countdown small{display:block;font-size:7.5px;color:#b8bccf;letter-spacing:1.5px}
 #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 10px}
-.card{background:#1c1c22;border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:92px;padding:12px 10px;position:relative;transition:.18s}
+.card{background:#2b2f3a;border:1px solid rgba(255,255,255,.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:92px;padding:12px 10px;position:relative;transition:.18s}
 .card:active{transform:scale(.97)}
-.card.pressing{transform:scale(.94);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
-.card img{width:58px;height:58px;min-width:58px;object-fit:contain;background:#fff;border-radius:6px;padding:4px}
+.card.pressing{transform:scale(.94);border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.25)}
+.card img{width:58px;height:58px;min-width:58px;object-fit:contain;background:#fff;border-radius:2px;padding:4px}
 .card .c-txt{flex:1;min-width:0;display:flex;justify-content:center}
 .card p{font-size:14px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;font-weight:600}
 body.view-list #grid{grid-template-columns:1fr !important;gap:8px}
@@ -77,8 +77,8 @@ body.view-compact .card img{width:40px;height:40px;min-width:40px}
 body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .fav-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;pointer-events:none;animation:popFav .6s ease forwards;z-index:5}
 @keyframes popFav{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.25);opacity:1}100%{transform:scale(1.1) translateY(-8px);opacity:0}}
-.cat-box{background:#1c1c22 !important;border:1px solid rgba(255,255,255,.08) !important;border-radius:10px !important;min-height:96px !important;width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;padding:12px !important;cursor:pointer}
-.cat-box:active{transform:scale(.97);border-color:#fff}
+.cat-box{background:#2b2f3a !important;border:1px solid rgba(255,255,255,.08) !important;border-radius:10px !important;min-height:96px !important;width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;padding:12px !important;cursor:pointer}
+.cat-box:active{transform:scale(.97);border-color:#a78bfa}
 .cat-box .cat-name{font-size:15px !important;line-height:1.35 !important;font-weight:600 !important;flex:1;min-width:0;white-space:normal !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;word-break:break-word !important;overflow-wrap:anywhere !important}
 .cat-box .cat-name.fav{color:#FFE45C}
 .cat-box .cat-count{font-size:14px;color:#C8CBD6;flex-shrink:0}
@@ -89,12 +89,12 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .cat-head .back-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:#1e1e2e;border:1px solid rgba(255,255,255,.2);padding:11px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* SETTINGS - DARK PREMIUM ONLY, NO BRIGHT COLOR */
+/* SETTINGS - DARK ONLY */
 #settingsOverlay{display:none;position:fixed;inset:0;background:#0e0e12;z-index:2000;flex-direction:column;overflow-y:auto}
 #settingsOverlay.open{display:flex}
 .set-head{display:flex;align-items:center;gap:14px;padding:16px;position:sticky;top:0;background:#0e0e12;z-index:2;border-bottom:1px solid rgba(255,255,255,.08)}
 .set-head button{width:38px;height:38px;border-radius:50%;border:0;background:#1c1c22;color:#fff;font-size:20px;cursor:pointer}
-.set-head h2{font-size:21px;font-weight:800;letter-spacing:.2px}
+.set-head h2{font-size:21px;font-weight:800}
 .set-body{padding:14px 14px 30px;display:flex;flex-direction:column;gap:12px}
 .set-card{background:#17171d;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px}
 .set-card b{font-size:15px;display:block}
@@ -106,7 +106,9 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .set-btn.ghost{background:#22222a;border:1px solid rgba(255,255,255,.12);color:#fff}
 .set-row{display:flex;align-items:center;gap:14px;background:#17171d;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer}
 .set-row:active{background:#1f1f26}
-.set-row .ico{width:36px;height:36px;border-radius:12px;background:#22222a;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}
+.set-row .ico{width:36px;height:36px;border-radius:12px;background:#22222a;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.set-row .ico svg{width:20px;height:20px}
+.set-row .ico.tele-ico{background:#229ED9;border-color:#229ED9}
 .set-row span{flex:1;font-size:15px;font-weight:600}
 .set-row small{color:#9a9ab5;font-size:11.5px;display:block;font-weight:400;margin-top:2px}
 .toggle{width:52px;height:30px;border-radius:99px;background:#33333d;position:relative;flex-shrink:0;transition:.2s;cursor:pointer;border:1px solid rgba(255,255,255,.1)}
@@ -120,6 +122,29 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .qual-btn{flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0e0e12;color:#C8CBD6;font-weight:700;font-size:12px;cursor:pointer}
 .qual-btn.active{background:#fff;color:#000;border-color:#fff}
 .set-row2{display:flex;gap:8px}.set-row2 .set-btn{flex:1}
+/* ABOUT - LIKE YOUR SCREENSHOT */
+#aboutOverlay{display:none;position:fixed;inset:0;background:#0f0f12;z-index:3000;flex-direction:column;overflow-y:auto}
+#aboutOverlay.open{display:flex}
+.about-head{display:flex;align-items:center;gap:14px;padding:16px}
+.about-head button{width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer}
+.about-head h2{font-size:24px;font-weight:700}
+.about-body{padding:10px 24px 30px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.about-logo{width:140px;height:140px;border-radius:28px;background:linear-gradient(135deg,#1a3a8f,#0a1a4a);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.6);border:2px solid #2a4a9f;margin:14px 0 18px;overflow:hidden;position:relative}
+.about-logo .al-name{font-size:34px;font-weight:900;line-height:1;text-align:center;color:#fff;text-shadow:0 2px 0 #00aaff}
+.about-logo .al-name i{font-style:normal;color:#00c2ff}
+.about-logo .al-tv{font-size:11px;letter-spacing:4px;color:#fff;margin-top:4px;font-weight:800}
+.about-body h1{font-size:34px;font-weight:800}
+.about-body .ver{color:#9a9ab5;font-size:18px;margin-top:6px}
+.about-info{margin-top:28px;width:100%;text-align:center}
+.about-info b{font-size:19px;display:block;line-height:1.6}
+.about-info span{font-size:18px;color:#e8e8e8;display:block;line-height:1.6}
+.about-thanks{margin-top:32px}
+.about-thanks b{font-size:19px}
+.about-thanks p{font-size:16px;color:#c9c9c9;line-height:1.6;margin-top:10px}
+.about-btn{width:100%;padding:16px;border:0;border-radius:14px;background:#FFD500;color:#000;font-weight:800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
+.about-btn:active{transform:scale(.98)}
+.about-btn svg{width:22px;height:22px;fill:#000}
+.about-copy{margin-top:28px;color:#8e8e9a;font-size:14px}
 #homeEmpty{display:none;text-align:center;padding:30px 16px;color:#9a9ab5}
 #homeEmpty b{color:#fff;font-size:14px;display:block;margin-bottom:6px}
 #homeEmpty button{margin-top:12px;padding:12px 22px;border-radius:30px;border:0;background:#fff;color:#000;font-weight:800;font-size:14px;cursor:pointer}
@@ -132,7 +157,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .bnav .b-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .bnav .b-txt{font-size:11px;font-weight:600}
 .bnav.active{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
-.tele{position:fixed;right:14px;bottom:108px;width:46px;height:46px;border-radius:50%;background:#1c1c22;display:flex;align-items:center;justify-content:center;z-index:999;border:1px solid rgba(255,255,255,.2)}
+.tele{position:fixed;right:14px;bottom:108px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;border:1px solid rgba(255,255,255,.3)}
 .tele svg{width:23px;height:23px;fill:#fff}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:70px;z-index:998;background:#17171d;border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:7px;align-items:center;gap:6px}
 #installBar .ib-txt{flex:1;text-align:center}#installBar .ib-txt b{font-size:12px;display:block}#installBar .ib-txt span{font-size:10px;color:#b8b8d0}
@@ -144,20 +169,29 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="settingsOverlay"><div class="set-head"><button id="settingsBackBtn">←</button><h2>Settings</h2></div><div class="set-body">
-<div class="set-card"><b>➕ Add New Playlist</b><span>নিজের M3U Playlist যোগ করো - সবার উপরে, প্রথম অপশন</span><input class="set-input" id="newPlName" placeholder="Playlist Name - যেমন: My Playlist"><input class="set-input" id="newPlUrl" placeholder="M3U URL - https://.../playlist.m3u"><button class="set-btn" id="addPlBtn">+ Add Playlist</button></div>
+<div class="set-card"><b>Add New Playlist</b><span>Add your own M3U Playlist - first option on top</span><input class="set-input" id="newPlName" placeholder="Playlist Name - Example: My Playlist"><input class="set-input" id="newPlUrl" placeholder="M3U URL - https://.../playlist.m3u"><button class="set-btn" id="addPlBtn">+ Add Playlist</button></div>
 <div class="set-row" id="networkStreamRow"><div class="ico">🔗</div><span>Network Stream<small>Paste any M3U / M3U8 / MP4 link & play</small></span><span style="flex:none;color:#9a9ab5;font-size:18px">›</span></div>
-<div id="networkStreamBox" style="display:none"><div class="set-card"><b>▶️ Play Any Link Direct</b><span>যেকোনো লিংক পেস্ট করে সরাসরি চালাও - Add করা লাগবে না</span><input class="set-input" id="directUrl" placeholder="https://.../channel.m3u8  বা  .m3u"><input class="set-input" id="directName" placeholder="Channel Name (Optional)"><button class="set-btn" id="playDirectBtn">▶️ Play Now</button></div></div>
-<div class="set-row"><div class="ico">📺</div><span>TV Mode<small>TV এর মতো বড় কার্ড, শুধু TV চ্যানেল</small></span><button class="toggle" id="tvModeToggle"></button></div>
-<div class="set-row"><div class="ico">🏆</div><span>Events Mode<small>Live & Upcoming Matches দেখাবে</small></span><button class="toggle" id="eventsModeToggle"></button></div>
-<div class="set-card"><b>📋 My Playlists</b><span>শুধু তুমি যা Add করছো - এগুলাই Delete করতে পারবা</span><div id="myPlList"></div></div>
-<div class="set-card"><b>🎞️ Default Quality</b><span>Player এ ডিফল্ট কোয়ালিটি</span><div class="qual-row"><button class="qual-btn" data-q="auto">Auto</button><button class="qual-btn" data-q="hd">HD</button><button class="qual-btn" data-q="sd">SD</button></div></div>
-<div class="set-card"><b>⭐ Favorites</b><span>চ্যানেলে লং প্রেস করলে Favorites হবে</span><div class="set-row2"><button class="set-btn ghost" id="clearFavBtn">Clear Favorites</button><button class="set-btn ghost" id="clearCacheBtn">Clear Cache</button></div></div>
-<div class="set-row" id="checkUpdateRow"><div class="ico">↻</div><span>Check for Update<small>নতুন ভার্সন আছে কিনা চেক করো</small></span></div>
-<div class="set-row" id="teleRow"><div class="ico">✈</div><span>Telegram<small>নতুন লিংক, আপডেট পেতে জয়েন করো</small></span></div>
-<div class="set-row" id="aboutRow"><div class="ico">i</div><span>About<small>RsLive Go v38 • Made in Bangladesh 🇧🇩</small></span></div>
+<div id="networkStreamBox" style="display:none"><div class="set-card"><b>Play Any Link Direct</b><span>Paste any link and play directly - no need to add</span><input class="set-input" id="directUrl" placeholder="https://.../channel.m3u8 or .m3u"><input class="set-input" id="directName" placeholder="Channel Name (Optional)"><button class="set-btn" id="playDirectBtn">Play Now</button></div></div>
+<div class="set-row"><div class="ico">📺</div><span>TV Mode<small>Big cards like TV, only TV channels</small></span><button class="toggle" id="tvModeToggle"></button></div>
+<div class="set-row"><div class="ico">🏆</div><span>Events Mode<small>Show Live & Upcoming Matches</small></span><button class="toggle" id="eventsModeToggle"></button></div>
+<div class="set-card"><b>My Playlists</b><span>Only playlists you added - you can delete these</span><div id="myPlList"></div></div>
+<div class="set-card"><b>Default Quality</b><span>Default quality in Player</span><div class="qual-row"><button class="qual-btn" data-q="auto">Auto</button><button class="qual-btn" data-q="hd">HD</button><button class="qual-btn" data-q="sd">SD</button></div></div>
+<div class="set-card"><b>Favorites</b><span>Long press on a channel to add to Favorites</span><div class="set-row2"><button class="set-btn ghost" id="clearFavBtn">Clear Favorites</button><button class="set-btn ghost" id="clearCacheBtn">Clear Cache</button></div></div>
+<div class="set-row" id="checkUpdateRow"><div class="ico">↻</div><span>Check for Update<small>Check if a new version is available</small></span></div>
+<div class="set-row" id="teleRow"><div class="ico tele-ico"><svg viewBox="0 0 24 24"><path fill="#fff" d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><span>Telegram<small>Join for new links and updates</small></span></div>
+<div class="set-row" id="aboutRow"><div class="ico">i</div><span>About<small>RsLive Go v39 - Made in Bangladesh</small></span></div>
+</div></div>
+<div id="aboutOverlay"><div class="about-head"><button id="aboutBackBtn">←</button><h2>About</h2></div><div class="about-body">
+<div class="about-logo"><div><div class="al-name">RsLive<br><i>Go</i></div><div class="al-tv">LIVE TV</div></div></div>
+<h1>RsLive Go</h1><div class="ver">Version 1.0</div>
+<div class="about-info"><b>Developed By : RsLive Team</b><span>App Name : RsLive Go</span><span>My Location : Dhaka, Bangladesh</span></div>
+<div class="about-thanks"><b>Thank you for using RsLive Go.</b><p>If you enjoy this app, please join our Telegram community for updates, support, and announcements.</p></div>
+<button class="about-btn" id="aboutTeleBtn"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg> Join our Telegram</button>
+<button class="about-btn" id="aboutShareBtn"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> Share this app</button>
+<div class="about-copy">© 2026 RsLive Go. All rights reserved.</div>
 </div></div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
-<div id="installBar"><div class="ib-txt"><b>Add To Home Screen</b><span>App এর মতো চালাও</span></div><button id="installBtn">Add</button><span id="closeInstall">✕</span></div>
+<div id="installBar"><div class="ib-txt"><b>Add To Home Screen</b><span>Run like an App</span></div><button id="installBtn">Add</button><span id="closeInstall">✕</span></div>
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',showTele:true,proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
@@ -183,7 +217,7 @@ function toggleFav(ch){try{let f=getFav();if(f.some(x=>x.url===ch.url))f=f.filte
 function getCustomPl(){try{return JSON.parse(localStorage.getItem('rslive_custom_playlists')||'[]');}catch(e){return [];}}
 function saveCustomPl(l){localStorage.setItem('rslive_custom_playlists',JSON.stringify(l));}
 function switchTab(tab){
-  if(tab==='events'&&!eventsMode){showToast('Events Mode OFF - Settings থেকে ON করো');tab='home';}
+  if(tab==='events'&&!eventsMode){showToast('Events Mode OFF - Turn ON from Settings');tab='home';}
   currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;
   document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));
   const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');
@@ -262,7 +296,6 @@ function makeCatCard(name,count,isFavFlag,onClick){
 function renderCategoryHome(){
   const grid=document.getElementById('grid');grid.style.display='grid';grid.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';grid.replaceChildren();
   const fav=getFav();const groups=getGroupCounts();
-  // NO CHIPS HERE - Categories এর উপরের লিস্ট বাদ
   grid.appendChild(makeCatCard('All channels',all.length,false,()=>{currentGroupFilter=null;categoryHomeMode=false;cat='All';switchTab('home');}));
   grid.appendChild(makeCatCard('Favorites',fav.length||'',true,()=>{currentGroupFilter='__fav__';categoryHomeMode=false;renderGrid(true);}));
   groups.forEach(g=>{grid.appendChild(makeCatCard(g.name,g.count,false,()=>{currentGroupFilter=g.name;categoryHomeMode=false;renderGrid(true);}));});
@@ -273,7 +306,7 @@ function makeChannelCard(c,i){
   const img=document.createElement('img');img.loading='lazy';img.src=c.logo||DEFAULT_CAT_LOGO;img.onerror=function(){this.onerror=null;this.src=DEFAULT_CAT_LOGO;};
   const txt=document.createElement('div');txt.className='c-txt';const name=document.createElement('p');name.textContent=c.name;txt.append(name);card.append(img,txt);
   let pressTimer=null,longPressed=false;
-  const startPress=()=>{longPressed=false;card.classList.add('pressing');pressTimer=setTimeout(()=>{longPressed=true;if(navigator.vibrate)navigator.vibrate([30,40,30]);toggleFav(c);const pop=document.createElement('div');pop.className='fav-pop';pop.textContent=isFav(c.url)?'⭐':'💔';card.appendChild(pop);setTimeout(()=>pop.remove(),650);showToast(isFav(c.url)?'⭐ Favorites এ যোগ হলো':'Favorites থেকে বাদ গেলো');card.classList.remove('pressing');},550);};
+  const startPress=()=>{longPressed=false;card.classList.add('pressing');pressTimer=setTimeout(()=>{longPressed=true;if(navigator.vibrate)navigator.vibrate([30,40,30]);toggleFav(c);const pop=document.createElement('div');pop.className='fav-pop';pop.textContent=isFav(c.url)?'⭐':'💔';card.appendChild(pop);setTimeout(()=>pop.remove(),650);showToast(isFav(c.url)?'Added to Favorites':'Removed from Favorites');card.classList.remove('pressing');},550);};
   const endPress=()=>{clearTimeout(pressTimer);card.classList.remove('pressing');};
   card.addEventListener('touchstart',startPress,{passive:true});card.addEventListener('touchend',endPress,{passive:true});card.addEventListener('touchmove',endPress,{passive:true});card.addEventListener('touchcancel',endPress,{passive:true});
   card.addEventListener('contextmenu',e=>e.preventDefault());
@@ -292,7 +325,7 @@ function renderGrid(reset=true){
     const title=document.createElement('b');title.textContent=currentGroupFilter==='__fav__'?'Favorites':currentGroupFilter;
     const back=document.createElement('button');back.className='back-btn';back.innerHTML='<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Categories';back.addEventListener('click',()=>{currentGroupFilter=null;categoryHomeMode=true;switchTab('category');});
     head.append(title,back);grid.appendChild(head);
-    if(!show.length){const em=document.createElement('div');em.style.cssText='grid-column:1/-1;text-align:center;color:#9a9ab5;padding:30px 10px;font-size:13px';em.textContent=currentGroupFilter==='__fav__'?'কোনো চ্যানেল লং প্রেস করে Favorites করো':'এই ক্যাটাগরিতে চ্যানেল নাই';grid.appendChild(em);}
+    if(!show.length){const em=document.createElement('div');em.style.cssText='grid-column:1/-1;text-align:center;color:#9a9ab5;padding:30px 10px;font-size:13px';em.textContent=currentGroupFilter==='__fav__'?'Long press any channel to add to Favorites':'No channels in this category';grid.appendChild(em);}
     show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));
     const btn=document.getElementById('loadMoreBtn');if(list.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+list.length+') ↓';}else wrap.style.display='none';
     if(feat)feat.style.display='none';return;
@@ -307,46 +340,50 @@ let _searchT=null;document.getElementById('search').addEventListener('input',()=
 window.addEventListener('resize',()=>{setTimeout(()=>switchTab(currentTab),150);});
 function openSettings(){renderMyPlList();updateQualBtns();applyModes();document.getElementById('settingsOverlay').classList.add('open');}
 function closeSettings(){document.getElementById('settingsOverlay').classList.remove('open');}
+function openAbout(){document.getElementById('aboutOverlay').classList.add('open');}
+function closeAbout(){document.getElementById('aboutOverlay').classList.remove('open');}
 function updateQualBtns(){document.querySelectorAll('.qual-btn').forEach(b=>b.classList.toggle('active',b.dataset.q===(CFG.quality||'auto')));}
 function renderMyPlList(){
   const wrap=document.getElementById('myPlList');if(!wrap)return;wrap.replaceChildren();
   const custom=getCustomPl();
-  if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">এখনো নিজের Playlist Add করো নাই</span>';
-  else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';const b=document.createElement('b');b.textContent=p.name;const tag=document.createElement('button');tag.className='tag';tag.textContent='Yours';const del=document.createElement('button');del.className='del';del.textContent='Delete';del.addEventListener('click',()=>{let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist ডিলিট হলো');});row.append(b,tag,del);wrap.appendChild(row);});
-  // NOTE: Default / Built-in Playlist এখানে শো করবে না - ইচ্ছা করে বাদ দেওয়া
+  if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">No playlist added yet</span>';
+  else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';const b=document.createElement('b');b.textContent=p.name;const tag=document.createElement('button');tag.className='tag';tag.textContent='Yours';const del=document.createElement('button');del.className='del';del.textContent='Delete';del.addEventListener('click',()=>{let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted');});row.append(b,tag,del);wrap.appendChild(row);});
 }
-document.getElementById('viewBtn')?.addEventListener('click',()=>{if(tvMode){showToast('TV Mode ON - Settings থেকে OFF করো');return;}currentView=currentView==='grid'?'list':currentView==='list'?'compact':'grid';applyView();showToast(currentView==='grid'?'▦ Grid View':currentView==='list'?'☰ List View':'⊞ Compact View');renderGrid(false);});
+document.getElementById('viewBtn')?.addEventListener('click',()=>{if(tvMode){showToast('TV Mode ON - Turn OFF from Settings');return;}currentView=currentView==='grid'?'list':currentView==='list'?'compact':'grid';applyView();showToast(currentView==='grid'?'Grid View':currentView==='list'?'List View':'Compact View');renderGrid(false);});
 document.getElementById('searchBtn')?.addEventListener('click',()=>{const w=document.getElementById('searchWrap');w.classList.toggle('open');if(w.classList.contains('open'))document.getElementById('search').focus();else{document.getElementById('search').value='';renderGrid(true);renderMatches();}});
 document.getElementById('settingsBtn')?.addEventListener('click',openSettings);
 document.getElementById('settingsBackBtn')?.addEventListener('click',closeSettings);
+document.getElementById('aboutBackBtn')?.addEventListener('click',closeAbout);
+document.getElementById('aboutTeleBtn')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank');});
+document.getElementById('aboutShareBtn')?.addEventListener('click',async()=>{const txt='RsLive Go - Watch Live TV - '+location.origin;if(navigator.share){try{await navigator.share({title:'RsLive Go',text:txt,url:location.origin});}catch(e){}}else{try{await navigator.clipboard.writeText(location.origin);showToast('Link copied');}catch(e){showToast(txt);}}});
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{const b=document.getElementById('networkStreamBox');b.style.display=b.style.display==='none'?'block':'none';});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid();});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home');});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('✅ তুমি Latest Version এ আছো - v38'),800);});
-document.getElementById('aboutRow')?.addEventListener('click',()=>{showToast('RsLive Go v38 • Made in Bangladesh 🇧🇩');});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v39'),800);});
+document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout();});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank');});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{
   const url=document.getElementById('directUrl').value.trim();const name=document.getElementById('directName').value.trim()||'Direct Channel';
-  if(!url||!url.startsWith('http')){showToast('সঠিক লিংক দাও');return;}
-  closeSettings();showToast('লোড হচ্ছে...');
-  if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('Playlist এ চ্যানেল পাই নাই');return;}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1);}catch(e){showToast('লিংক খুলে নাই');}}
+  if(!url||!url.startsWith('http')){showToast('Enter a valid link');return;}
+  closeSettings();showToast('Loading...');
+  if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found in playlist');return;}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1);}catch(e){showToast('Link failed to open');}}
   else openCh(url,name,'Direct','Direct',1);
 });
 document.getElementById('addPlBtn')?.addEventListener('click',async()=>{
   const name=document.getElementById('newPlName').value.trim();const url=document.getElementById('newPlUrl').value.trim();
-  if(!name||!url||!url.startsWith('http')){showToast('নাম + সঠিক M3U URL দাও');return;}
-  if(getCustomPl().some(x=>x.url===url)){showToast('এই Playlist আগেই আছে');return;}
+  if(!name||!url||!url.startsWith('http')){showToast('Enter name + valid M3U URL');return;}
+  if(getCustomPl().some(x=>x.url===url)){showToast('This playlist already exists');return;}
   const np={name,url,useProxy:false};let c=getCustomPl();c.push(np);saveCustomPl(c);CFG.playlists.push(np);
-  document.getElementById('newPlName').value='';document.getElementById('newPlUrl').value='';showToast('Playlist যোগ হচ্ছে...');closeSettings();
+  document.getElementById('newPlName').value='';document.getElementById('newPlUrl').value='';showToast('Adding playlist...');closeSettings();
   const list=await loadOne(np);for(const ch of list){ch.source=np.name;const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch);}
-  _catCache=null;renderGrid();showToast('✅ '+name+' যোগ হলো - '+list.length+' চ্যানেল');
+  _catCache=null;renderGrid();showToast(name+' added - '+list.length+' channels');
 });
 document.querySelectorAll('.qual-btn').forEach(b=>{b.addEventListener('click',()=>{CFG.quality=b.dataset.q;try{let s=JSON.parse(localStorage.getItem('rslive_config')||'{}');s.quality=CFG.quality;localStorage.setItem('rslive_config',JSON.stringify(s));}catch(e){}updateQualBtns();showToast('Quality: '+CFG.quality.toUpperCase());});});
-document.getElementById('clearFavBtn')?.addEventListener('click',()=>{localStorage.removeItem('rslive_fav');showToast('Favorites ক্লিয়ার হলো');renderGrid();});
-document.getElementById('clearCacheBtn')?.addEventListener('click',()=>{localStorage.removeItem('rslive_fav');showToast('Cache ক্লিয়ার - Reload হচ্ছে...');setTimeout(()=>location.reload(),800);});
+document.getElementById('clearFavBtn')?.addEventListener('click',()=>{localStorage.removeItem('rslive_fav');showToast('Favorites cleared');renderGrid();});
+document.getElementById('clearCacheBtn')?.addEventListener('click',()=>{localStorage.removeItem('rslive_fav');showToast('Cache cleared - Reloading...');setTimeout(()=>location.reload(),800);});
 applyView();applyModes();loadAll();setInterval(loadMatches,60000);setInterval(renderMatches,1000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>{});}
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex';}});
-document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share → Add to Home Screen');return;}if(!deferredPrompt){alert('Browser Menu → Add to Home Screen');return;}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null;});
+document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share -> Add to Home Screen');return;}if(!deferredPrompt){alert('Browser Menu -> Add to Home Screen');return;}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null;});
 document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1');});
