@@ -11,7 +11,7 @@
   "streams": [
     {
       "name": "Live Stream 1",
-      "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
+      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F12.m3u8",
       "show": true
     }
   ]
