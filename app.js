@@ -1,4 +1,4 @@
-/* RsLive Go - v42 FINAL CLEAN - All Icons Same Style - Mobile + Tablet + Laptop + PC + TV - Low TV */
+/* RsLive Go - v42 FINAL CLEAN - All Icons Same Style - Mobile + Tablet + Laptop + PC + TV - Low TV + Header Name Fix + Telegram Popup */
 (function(){
   const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
   if(!isDesktop) return;
@@ -85,7 +85,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .cat-head .back-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#1e1e2e;border:1px solid #444;padding:11px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1}
-/* ===== SETTINGS - ALL ICONS SAME STYLE - FLAT YELLOW, NO BOX ===== */
 #settingsOverlay{display:none;position:fixed;inset:0;background:#121214;z-index:2000;flex-direction:column;overflow-y:auto}
 #settingsOverlay.open{display:flex}
 .set-head{display:flex;align-items:center;gap:16px;padding:14px 16px 16px;position:sticky;top:0;background:#121214;z-index:2}
@@ -119,7 +118,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .pl-item .view{background:#FFC107;color:#000}
 .pl-item .edit{background:#1e3a5f;color:#6db3ff}
 .pl-item .del{background:#3a1a1a;color:#ff6b6b}
-/* ===== ABOUT ===== */
 #aboutOverlay{display:none;position:fixed;inset:0;background:#0f0f12;z-index:3000;flex-direction:column;overflow-y:auto}
 #aboutOverlay.open{display:flex}
 .about-head{display:flex;align-items:center;gap:14px;padding:16px}
@@ -456,3 +454,78 @@ let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex';}});
 document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share -> Add to Home Screen');return;}if(!deferredPrompt){alert('Browser Menu -> Add to Home Screen');return;}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null;});
 document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1');});
+
+// ===== RsLive Go - Header Name Fix + Telegram Popup - FINAL =====
+(function(){
+  const TELEGRAM_LINK = "https://t.me/RsLiveGo";
+  function fixHeaderName(){
+    const logoName = document.querySelector('.logo-text .name');
+    if(logoName){
+      logoName.innerHTML = 'RsLive <i>Go</i>';
+      logoName.style.color = '#fff';
+      logoName.style.fontSize = '23px';
+      logoName.style.fontWeight = '900';
+    }
+    const tag = document.getElementById('taglineEl');
+    if(tag){
+      tag.textContent = 'LIVE TV • BANGLADESH';
+      tag.style.color = '#9a9ab5';
+      tag.style.fontSize = '9px';
+      tag.style.letterSpacing = '2.5px';
+    }
+  }
+  fixHeaderName();
+  setTimeout(fixHeaderName, 500);
+  const style = document.createElement("style");
+  style.textContent = `
+    .telegram-popup { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
+    .popup-box { background: #2b2b2b; width: 100%; max-width: 380px; border-radius: 14px; padding: 16px; position: relative; font-family: 'Hind Siliguri', sans-serif; }
+    .popup-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: #aaa; font-size: 16px; cursor: pointer; }
+    .popup-content { display: flex; align-items: center; gap: 12px; }
+    .telegram-icon { background: #29a9eb; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .popup-text h3 { font-size: 17px; margin-bottom: 3px; color: #fff; text-align: left; }
+    .popup-text p { font-size: 14px; color: #ddd; line-height: 1.4; text-align: left; }
+    .join-btn { background: #1a7dff; color: #fff; border: none; padding: 9px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-left: auto; flex-shrink: 0; }
+    .dont-show { display: flex; align-items: center; gap: 7px; margin-top: 14px; font-size: 13px; color: #bbb; cursor: pointer; }
+  `;
+  document.head.appendChild(style);
+  function showTelegramPopup() {
+    if (localStorage.getItem("hideTelegramPopup") === "true") return;
+    if (document.getElementById("telegramPopup")) return;
+    const popup = document.createElement("div");
+    popup.id = "telegramPopup";
+    popup.className = "telegram-popup";
+    popup.innerHTML = `
+      <div class="popup-box">
+        <button class="popup-close" id="popupClose">✕</button>
+        <div class="popup-content">
+          <div class="telegram-icon">✈️</div>
+          <div class="popup-text">
+            <h3>Welcome</h3>
+            <p>সর্বশেষ আপডেট পেতে আমাদের টেলিগ্রামে জয়েন করুন</p>
+          </div>
+          <button class="join-btn" id="joinBtn">Join</button>
+        </div>
+        <label class="dont-show">
+          <input type="checkbox" id="dontShowAgain" />
+          <span>আর দেখাবেন না</span>
+        </label>
+      </div>
+    `;
+    document.body.appendChild(popup);
+    function saveDontShow() {
+      if (document.getElementById("dontShowAgain").checked) {
+        localStorage.setItem("hideTelegramPopup", "true");
+      }
+    }
+    document.getElementById("popupClose").addEventListener("click", () => {
+      saveDontShow(); popup.remove();
+    });
+    document.getElementById("joinBtn").addEventListener("click", () => {
+      saveDontShow();
+      window.open(TELEGRAM_LINK, "_blank");
+      popup.remove();
+    });
+  }
+  setTimeout(showTelegramPopup, 1000);
+})();
