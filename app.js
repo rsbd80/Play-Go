@@ -1,4 +1,4 @@
-/* RsLive Go v60 - No Bangla + Header Icon + Header Click = Fresh Events */
+/* RsLive Go v60 - No Bangla + Header Icon + Header Click = Fresh Events + Setting Icon Fix */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -12,15 +12,15 @@ document.getElementById('app').innerHTML=`
 html,body{height:100%;width:100%;background:#1E1E24;color:#fff;font-family:Poppins,sans-serif;overflow-x:hidden}
 body{display:flex;flex-direction:column}#app{display:flex;flex-direction:column;flex:1;min-height:0}
 .sticky{flex-shrink:0;z-index:100}
-header{background:#1E1E24;padding:14px 14px 10px}
+header{background:#1E1E24;padding:14px 10px 10px}
 .header-top{display:flex;align-items:center;gap:8px;min-height:42px}
-.logo{display:flex;align-items:center;cursor:pointer;gap:9px}
-.logo-ico{width:32px;height:32px;min-width:32px;border-radius:8px;background:#FFC107;display:flex;align-items:center;justify-content:center;font-size:12px;color:#000;flex-shrink:0}
-.logo-text .name{font-size:24px;font-weight:900;line-height:1;white-space:nowrap}
+.logo{display:flex;align-items:center;cursor:pointer;gap:8px;min-width:0}
+.logo-ico{width:28px;height:28px;min-width:28px;border-radius:7px;background:#FFC107;display:flex;align-items:center;justify-content:center;font-size:10px;color:#000;flex-shrink:0}
+.logo-text .name{font-size:21px;font-weight:900;line-height:1;white-space:nowrap}
 .logo-text .name i{font-style:normal;color:#FFC107}
 .logo-text .tag{font-size:9px;letter-spacing:2px;color:#9a9ab5;font-weight:600;margin-top:3px;white-space:nowrap}
-.top-actions{margin-left:auto;display:flex;gap:6px}
-.icon-btn{width:38px;height:38px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.top-actions{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
 .icon-btn:active{transform:scale(.92)}
 .icon-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #notifBadge{position:absolute;top:1px;right:1px;background:#FF3B30;color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px}
