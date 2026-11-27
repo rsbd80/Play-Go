@@ -14,9 +14,8 @@
 html,body{width:100%;background:#1E1E24;font-family:var(--font);overflow-x:hidden}
 body{padding:0;background:#1E1E24;-webkit-user-select:none;user-select:none;color:#fff}
 .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 14px 13px;background:#1E1E24;border-bottom:1px solid #34343C}
-.brand{display:flex;align-items:center;gap:9px;flex-shrink:0;cursor:pointer}
+.brand{display:flex;align-items:center;gap:0;flex-shrink:0;cursor:pointer}
 .brand:active{transform:scale(.96)}
-.brand .play-ico{width:24px;height:24px;border-radius:8px;background:#FFC107;display:flex;align-items:center;justify-content:center;font-size:10px;color:#000}
 .brand-text{line-height:1}
 .brand-text .pg{font-size:18px;font-weight:900;letter-spacing:.3px;color:#fff;white-space:nowrap}
 .brand-text .pg i{font-style:normal;color:#FFC107}
@@ -24,7 +23,7 @@ body{padding:0;background:#1E1E24;-webkit-user-select:none;user-select:none;colo
 .divider{width:1px;height:34px;background:#444;flex-shrink:0}
 #chName{font-weight:700;font-size:14.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #chSub{font-size:10px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-#chSub b{color:#7CFC00}
+#chSub b{color:#B8FFC9}
 .live-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.40);color:#ff6b81;font-size:10px;font-weight:800;letter-spacing:1px;padding:6px 10px;border-radius:20px;flex-shrink:0}
 .live-pill i{width:6px;height:6px;background:#ff2d55;border-radius:50%;animation:pulseDot 1.4s infinite}
 @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
@@ -130,7 +129,7 @@ video::-webkit-media-controls{display:none!important}
 </style>
 </head>
 <body>
-<div class="topbar"><div class="brand" onclick="goHome()"><div class="play-ico">▶</div><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div><div class="divider"></div><div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div><div class="live-pill"><i></i> LIVE</div></div>
+<div class="topbar"><div class="brand" onclick="goHome()"><div class="brand-text"><div class="pg">RsLive <i>Go</i></div><div class="tag">LIVE TV</div></div></div><div class="divider"></div><div style="min-width:0;flex:1"><div id="chName">RsLive Go</div><div id="chSub">● <b>Now Playing</b> • HD Live</div></div><div class="live-pill"><i></i> LIVE</div></div>
 <div class="main-layout"><div class="player-col"><div id="player-wrapper"><div id="loader"><div class="tuner"><div class="tv-wrap"><div class="tv-glow"></div><svg class="tv-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path class="tv-body" d="M22 12 32 20 42 12"/><clipPath id="screenClip"><rect x="12" y="20" width="40" height="26" rx="4"/></clipPath><g class="screen-bars" clip-path="url(#screenClip)"><rect x="12" y="20" width="8" height="26"/><rect x="20" y="20" width="8" height="26"/><rect x="28" y="20" width="8" height="26"/><rect x="36" y="20" width="8" height="26"/><rect x="44" y="20" width="8" height="26"/></g><rect class="tv-body" x="12" y="20" width="40" height="26" rx="4"/><line class="tv-body" x1="24" y1="46" x2="24" y2="50"/><line class="tv-body" x1="40" y1="46" x2="40" y2="50"/><line class="tv-body" x1="20" y1="50" x2="44" y2="50"/></svg></div><div class="brand-name"><b>RsLive</b> <i>Go</i></div><div class="dots"><span></span><span></span><span></span></div><div class="status-line" id="status-line">LOADING</div></div></div><div id="player"></div><div id="tapPlay"><div class="tp-btn">▶</div><p>Tap to Play</p><small>Browser blocked sound</small></div><div id="qualityMenu"><div class="q-head"><svg class="sig-ico" viewBox="0 0 24 24"><rect x="2" y="16" width="3.5" height="6" rx="1"/><rect x="7" y="12" width="3.5" height="10" rx="1"/><rect x="12" y="8" width="3.5" height="14" rx="1"/><rect x="17" y="4" width="3.5" height="18" rx="1"/></svg> QUALITY</div><div id="qList"></div></div><div id="controls"><button id="muteBtn" title="Sound"><svg class="ctrl-ico" id="muteIco" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line id="muteLine1" x1="23" y1="9" x2="17" y2="15" style="display:none"/><line id="muteLine2" x1="17" y1="9" x2="23" y2="15" style="display:none"/><path id="muteWave" d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><button id="playBtn">▶</button><input type="range" id="seek" value="0" min="0" max="100"><span id="lowBadge">LOW</span><span id="time-label">LIVE</span><button id="settingsBtn" title="Quality"><svg class="sig-ico" viewBox="0 0 24 24"><rect x="2" y="16" width="3.5" height="6" rx="1"/><rect x="7" y="12" width="3.5" height="10" rx="1"/><rect x="12" y="8" width="3.5" height="14" rx="1"/><rect x="17" y="4" width="3.5" height="18" rx="1"/></svg></button><button id="fsBtn">⛶</button></div></div></div><div class="suggest"><div class="suggest-head"><h3><span class="suggest-ico">🔴</span><span id="suggestTitle">You May Also Like</span></h3><a href="index.html"><span class="arrow-ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>View All</a></div><div class="suggest-grid" id="suggestGrid"><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div><div class="sug-skel"></div></div></div></div>
 <div class="ad-wrap"><div class="ad-label">ADVERTISEMENT</div><div class="ad-box"><div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div></div></div>
 <div class="ad-note">You are watching <b id="chName2">RsLive Go</b> • Report issue on Telegram</div>
@@ -254,7 +253,7 @@ if(selectedQuality<=360){window._hls.config.maxMaxBufferLength=12;window._hls.co
 if(window._shaka){
 try{
 if(selectedQuality===-1){window._shaka.configure({abr:{enabled:true,restrictions:{maxBandwidth:8000000,maxHeight:1080}}});}
-else{window._shaka.configure({abr:{enabled:false,restrictions:{maxBandwidth:8000000,maxHeight:selectedQuality}}});var tracks=window._shaka.getVariantTracks();var match=null;for(var t=0;t<tracks.length;t++){if(tracks[t].height===selectedQuality){match=tracks[t];break;}}if(!match){var sd=99999;for(var t2=0;t2<tracks.length;t2++){var dd=Math.abs((tracks[t2].height||0)-selectedQuality);if(dd<sd){sd=dd;match=tracks[t2];}}}if(match)window._shaka.selectVariantTrack(match,true);}
+else{window._shaka.configure({abr:{enabled:false,restrictions:{maxBandwidth:800000,maxHeight:selectedQuality}}});var tracks=window._shaka.getVariantTracks();var match=null;for(var t=0;t<tracks.length;t++){if(tracks[t].height===selectedQuality){match=tracks[t];break;}}if(!match){var sd=99999;for(var t2=0;t2<tracks.length;t2++){var dd=Math.abs((tracks[t2].height||0)-selectedQuality);if(dd<sd){sd=dd;match=tracks[t2];}}}if(match)window._shaka.selectVariantTrack(match,true);}
 }catch(e){}
 }
 }
