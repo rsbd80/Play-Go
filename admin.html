@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RsLive Go - Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1E1E24;--card:#2E2E36;--card2:#34343C;--border:#3A3A44;--yellow:#FFC107;--yellow2:#FFE066;--text:#fff;--dim:#9a9ab5;--green:#B8FFC9;--red:#ff6b6b;--blue:#6db3ff}
+body{background:var(--bg);color:var(--text);font-family:'Poppins','Hind Siliguri',sans-serif;min-height:100vh}
+button,input,textarea,select{font-family:inherit}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#444;border-radius:99px}
+
+/* ===== LOGIN ===== */
+#login{position:fixed;inset:0;background:#0f0f13;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
+#login .box{background:#2E2E36;border:1px solid #444;border-radius:20px;padding:28px 22px;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#login .logo{font-size:32px;font-weight:900;line-height:1} #login .logo i{font-style:normal;color:var(--yellow)}
+#login .tag{font-size:10px;letter-spacing:3px;color:var(--dim);font-weight:700;margin:6px 0 18px}
+#login h2{font-size:18px;margin-bottom:4px} #login p{font-size:12px;color:var(--dim);margin-bottom:16px}
+#login input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#34343C;color:#fff;font-size:14px;outline:none;margin-bottom:10px}
+#login input:focus{border-color:var(--yellow)}
+#login .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--yellow);color:#000;font-weight:800;font-size:15px;cursor:pointer}
+#login .hint{margin-top:14px;font-size:11px;color:var(--dim)} #login .hint b{color:var(--yellow)}
+
+/* ===== LAYOUT ===== */
+.admin{display:flex;min-height:100vh}
+.sidebar{width:260px;flex-shrink:0;background:#16161C;border-right:1px solid #2A2A32;padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar .logo{font-size:24px;font-weight:900;line-height:1;padding:4px 8px 12px} .sidebar .logo i{font-style:normal;color:var(--yellow)}
+.sidebar .logo small{display:block;font-size:9px;letter-spacing:2.5px;color:var(--dim);font-weight:700;margin-top:5px}
+.sidebar .menu-label{font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:700;padding:16px 8px 6px}
+.nav-btn{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;border:0;border-radius:11px;background:transparent;color:#C8CBD6;font-size:14px;font-weight:600;cursor:pointer;text-align:left}
+.nav-btn .ico{width:32px;height:32px;min-width:32px;border-radius:9px;background:#2E2E36;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-btn:hover{background:#2E2E36;color:#fff}
+.nav-btn.active{background:var(--yellow);color:#000}
+.nav-btn.active .ico{background:rgba(0,0,0,.18)}
+.nav-btn .badge{margin-left:auto;background:#FF3B30;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.nav-btn.active .badge{background:#000;color:#fff}
+.sidebar .foot{margin-top:auto;padding-top:16px;border-top:1px solid #2A2A32}
+.sidebar .user{display:flex;align-items:center;gap:10px;padding:8px}
+.sidebar .user .av{width:38px;height:38px;border-radius:50%;background:var(--yellow);color:#000;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sidebar .user b{font-size:13px;display:block} .sidebar .user span{font-size:11px;color:var(--green)}
+
+.main{flex:1;min-width:0;padding:18px 20px 110px;max-width:1200px;margin:0 auto;width:100%}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.topbar h1{font-size:22px;font-weight:900} .topbar h1 span{color:var(--yellow)}
+.topbar p{font-size:12px;color:var(--dim)}
+.topbar .actions{margin-left:auto;display:flex;gap:8px}
+.btn{padding:11px 18px;border:0;border-radius:11px;background:var(--yellow);color:#000;font-weight:800;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:active{transform:scale(.97)} .btn2{background:#34343C;color:#fff;border:1px solid #444} .btn-red{background:#3a1a1a;color:#ff6b6b} .btn-green{background:#1a3a1a;color:var(--green)} .btn-block{width:100%;padding:13px}
+.sync{position:fixed;top:0;left:0;right:0;background:var(--yellow);color:#000;text-align:center;font-size:12px;font-weight:800;padding:8px;z-index:9999;display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1e1e2e;border:1px solid #444;padding:11px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;display:none;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center}
+.stat .ico{width:44px;height:44px;min-width:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.stat b{font-size:22px;display:block;line-height:1} .stat span{font-size:11px;color:var(--dim)}
+.stat small{font-size:10px;color:var(--green);font-weight:700}
+
+/* Cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h2{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.card .desc{font-size:11px;color:var(--dim);margin-bottom:12px}
+.card h2 .tag{margin-left:auto;font-size:10px;background:#34343C;padding:4px 8px;border-radius:99px;color:var(--dim)}
+label{font-size:11px;letter-spacing:1px;color:var(--dim);font-weight:700;display:block;margin:12px 0 5px}
+input,textarea,select{width:100%;padding:12px 13px;border-radius:11px;border:1px solid #444;background:#34343C;color:#fff;font-size:14px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--yellow)}
+textarea{min-height:70px;resize:vertical}
+.row{display:flex;gap:8px} .row>*{flex:1}
+.toggle{display:flex;justify-content:space-between;align-items:center;background:#34343C;border-radius:11px;padding:12px 13px;margin-top:8px;gap:10px}
+.toggle b{font-size:14px} .toggle small{display:block;font-size:11px;color:var(--dim);font-weight:500;margin-top:1px}
+.sw{width:46px;height:26px;min-width:46px;border-radius:99px;border:1.5px solid #6e6e7a;position:relative;cursor:pointer;background:transparent;flex-shrink:0}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#8e8e9a;transition:.2s}
+.sw.on{border-color:var(--yellow);background:#2a2410} .sw.on:after{left:22px;background:var(--yellow)}
+.item{background:#34343C;border-radius:11px;padding:11px 12px;margin-top:8px;display:flex;gap:8px;align-items:center}
+.item .thumb{width:36px;height:36px;border-radius:8px;background:#fff;padding:3px;object-fit:contain;flex-shrink:0}
+.item b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item small{display:block;font-size:11px;color:var(--dim);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item button{border:0;padding:7px 11px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0}
+.item .edit{background:#1e3a5f;color:#6db3ff} .item .del{background:#3a1a1a;color:#ff6b6b} .item .view{background:var(--yellow);color:#000}
+.color-row{display:flex;gap:8px;margin-top:8px} .color-opt{flex:1;height:38px;border-radius:10px;border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000}
+.color-opt.sel{border-color:#fff;transform:scale(1.03)}
+.tab{display:none} .tab.active{display:block;animation:fade .2s} @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.empty{padding:22px;text-align:center;color:var(--dim);font-size:12px}
+.preview{border-radius:12px;overflow:hidden;border:1px solid #444;margin-top:10px}
+.preview .p-head{background:#1E1E24;padding:12px 14px;display:flex;align-items:center;gap:8px}
+.preview .p-head b{font-size:16px} .preview .p-head b i{font-style:normal;color:var(--yellow)}
+.preview .p-body{padding:12px;background:#2E2E36;font-size:12px;color:var(--dim)}
+.bottom-nav{display:none}
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{padding:14px 12px 110px}
+  .stats{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .topbar h1{font-size:19px}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#16161C;border-top:1px solid #2A2A32;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:100;gap:4px;overflow-x:auto}
+  .bottom-nav button{flex:1;min-width:64px;background:transparent;border:0;color:#8e8e9a;padding:7px 4px;border-radius:10px;font-size:10px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center}
+  .bottom-nav button.active{background:var(--yellow);color:#000}
+}
+</style>
+</head>
+<body>
+<div class="sync" id="syncBar">☁️ GitHub এ আপলোড হচ্ছে...</div>
+
+<div id="login"><div class="box">
+<div class="logo">RsLive <i>Go</i></div><div class="tag">ADMIN PANEL • GITHUB CLOUD</div>
+<h2>Welcome Back, Admin 👋</h2><p>Login করে পুরো ওয়েবসাইট কন্ট্রোল করো</p>
+<input id="passInput" type="password" placeholder="Admin Password">
+<button class="btn" onclick="doLogin()">Login →</button>
+<div class="hint">Default Password: <b>rslive123</b><br>পরে Settings থেকে বদলাতে পারবা</div>
+</div></div>
+
+<div class="admin">
+<!-- SIDEBAR DESKTOP -->
+<aside class="sidebar">
+<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v61</small></div>
+<div class="menu-label">MAIN MENU</div>
+<button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
+<button class="nav-btn" data-tab="general" onclick="showTab('general',this)"><span class="ico">🌐</span>Website</button>
+<button class="nav-btn" data-tab="appearance" onclick="showTab('appearance',this)"><span class="ico">🎨</span>Appearance</button>
+<button class="nav-btn" data-tab="playlist" onclick="showTab('playlist',this)"><span class="ico">📺</span>Playlists <span class="badge" id="badgePl">0</span></button>
+<button class="nav-btn" data-tab="match" onclick="showTab('match',this)"><span class="ico">🏏</span>Matches <span class="badge" id="badgeMatch">0</span></button>
+<button class="nav-btn" data-tab="notice" onclick="showTab('notice',this)"><span class="ico">📢</span>Notice Bar</button>
+<button class="nav-btn" data-tab="noti" onclick="showTab('noti',this)"><span class="ico">🔔</span>Notifications <span class="badge" id="badgeNoti">0</span></button>
+<div class="menu-label">SYSTEM</div>
+<button class="nav-btn" data-tab="featured" onclick="showTab('featured',this)"><span class="ico">⭐</span>Featured Live</button>
+<button class="nav-btn" data-tab="settings" onclick="showTab('settings',this)"><span class="ico">⚙️</span>Settings & Security</button>
+<div class="foot">
+<div class="user"><div class="av">A</div><div><b>Admin</b><span>● Online - GitHub Connected</span></div></div>
+<button class="nav-btn" onclick="window.open('index.html','_blank')"><span class="ico">🏠</span>View Website</button>
+<button class="nav-btn" style="color:#ff6b6b" onclick="logout()"><span class="ico">🚪</span>Logout</button>
+</div>
+</aside>
+
+<main class="main">
+<div class="topbar"><div><h1>RsLive <span>Go</span> Admin</h1><p id="topSub">সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud</p></div><div class="actions"><button class="btn btn2" onclick="loadFromGitHub()">↻ Refresh</button><button class="btn" onclick="pushToGitHub('Manual sync')">☁️ Publish All</button></div></div>
+
+<!-- DASHBOARD -->
+<div class="tab active" id="tab-dashboard">
+<div class="stats">
+<div class="stat"><div class="ico" style="background:#2a2410">📺</div><div><b id="stPl">0</b><span>Playlists</span><br><small id="stPlSub">Active</small></div></div>
+<div class="stat"><div class="ico" style="background:#1a3a1a">🏏</div><div><b id="stMatch">0</b><span>Matches</span><br><small id="stMatchSub">Live & Upcoming</small></div></div>
+<div class="stat"><div class="ico" style="background:#1e3a5f">🔔</div><div><b id="stNoti">0</b><span>Notifications</span><br><small>Sent to all</small></div></div>
+<div class="stat"><div class="ico" style="background:#3a1a1a">📢</div><div><b id="stNotice">OFF</b><span>Notice Bar</span><br><small id="stNoticeSub">Hidden</small></div></div>
+</div>
+<div class="grid2">
+<div class="card"><h2>⚡ Quick Actions</h2><p class="desc">এক ক্লিকে সবচেয়ে বেশি ব্যবহৃত কাজ</p>
+<button class="btn btn-block" style="margin-bottom:8px" onclick="showTab('match',document.querySelector('[data-tab=match]'))">🏏 + New Match Add করো</button>
+<button class="btn btn-block btn2" style="margin-bottom:8px" onclick="showTab('noti',document.querySelector('[data-tab=noti]'))">🔔 Notification পাঠাও</button>
+<button class="btn btn-block btn2" onclick="showTab('notice',document.querySelector('[data-tab=notice]'))">📢 Notice Bar ON করো</button>
+</div>
+<div class="card"><h2>🔑 GitHub Setup <span class="tag">১ বারই</span></h2><p class="desc">Token শুধু তোমার ব্রাউজারে থাকবে</p>
+<label>GitHub Token (ghp_...)</label><input id="ghToken" type="password" placeholder="ghp_xxxxxxxxxxxx">
+<div class="row"><div><label>Owner</label><input id="ghOwner" placeholder="rslivego"></div><div><label>Repo</label><input id="ghRepo" placeholder="rslive-go"></div></div>
+<div class="row"><div><label>Branch</label><input id="ghBranch" value="main"></div><div><label>File Path</label><input id="ghPath" value="data/config.json"></div></div>
+<button class="btn btn-block" onclick="saveKeys()">🔑 Save & Load from GitHub</button>
+</div>
+</div>
+<div class="card"><h2>📋 Recent Activity</h2><p class="desc">শেষ ৫টা Match / Notification</p><div id="recentList"></div></div>
+</div>
+
+<!-- GENERAL -->
+<div class="tab" id="tab-general">
+<div class="grid2">
+<div class="card"><h2>🌐 Website Settings</h2><p class="desc">সাইটের নাম, লিংক, সার্চ - সব সবার ফোনে যাবে</p>
+<label>Site Name</label><input id="siteName">
+<label>Tagline</label><input id="tagline">
+<label>Telegram Link</label><input id="telegram">
+<label>Search Placeholder</label><input id="searchPh">
+<label>Proxy URL (খালি রাখলে Auto)</label><input id="proxyUrl">
+<button class="btn btn-block" onclick="saveGeneral()">💾 Save & Publish ☁️</button>
+</div>
+<div class="card"><h2>⚙️ Modes - সবার জন্য</h2><p class="desc">Events OFF করলে Home দেখাবে</p>
+<div class="toggle"><div><b>Events Mode</b><small>Live & Upcoming Matches দেখাবে</small></div><button class="sw on" id="swEvents" onclick="this.classList.toggle('on')"></button></div>
+<div class="toggle"><div><b>TV Mode</b><small>List View - TV এর মতো</small></div><button class="sw" id="swTv" onclick="this.classList.toggle('on')"></button></div>
+<div class="toggle"><div><b>Auto Quality</b><small>নেট স্লো হলে Auto Low হবে</small></div><button class="sw on" id="swAutoQ" onclick="this.classList.toggle('on')"></button></div>
+<div class="toggle"><div><b>Telegram Popup</b><small>নতুন ইউজারকে Telegram Join দেখাবে</small></div><button class="sw on" id="swTelePop" onclick="this.classList.toggle('on')"></button></div>
+<button class="btn btn-block" onclick="saveModes()">💾 Save Modes ☁️</button>
+<div class="preview"><div class="p-head"><b id="previewName">RsLive <i>Go</i></b></div><div class="p-body" id="previewTag">LIVE TV • BANGLADESH<br><br>👆 উপরে লাইভ প্রিভিউ দেখো</div></div>
+</div>
+</div>
+</div>
+
+<!-- APPEARANCE -->
+<div class="tab" id="tab-appearance">
+<div class="grid2">
+<div class="card"><h2>🎨 Theme Color</h2><p class="desc">ওয়েবসাইটের মেইন কালার বদলাও</p>
+<label>Primary Color (Buttons / Highlights)</label>
+<div class="color-row">
+<div class="color-opt sel" style="background:#FFC107" onclick="pickColor(this,'#FFC107')">Yellow</div>
+<div class="color-opt" style="background:#FF3B30;color:#fff" onclick="pickColor(this,'#FF3B30')">Red</div>
+<div class="color-opt" style="background:#00D26A" onclick="pickColor(this,'#00D26A')">Green</div>
+<div class="color-opt" style="background:#4A90FF;color:#fff" onclick="pickColor(this,'#4A90FF')">Blue</div>
+</div>
+<label>Custom Color Code</label><input id="customColor" placeholder="#FFC107">
+<button class="btn btn-block" onclick="saveAppearance()">🎨 Save Theme ☁️</button>
+</div>
+<div class="card"><h2>🖼️ Logo & About</h2><p class="desc">About পেজের লোগো</p>
+<label>Logo URL</label><input id="logoUrl" placeholder="https://.../logo.png">
+<label>About Text</label><textarea id="aboutText" placeholder="Thanks for using RsLive Go..."></textarea>
+<label>Footer Text</label><input id="footerText" placeholder="© 2026 RsLive Go. All rights reserved.">
+<button class="btn btn-block" onclick="saveAppearance()">💾 Save Appearance ☁️</button>
+</div>
+</div>
+</div>
+
+<!-- PLAYLIST -->
+<div class="tab" id="tab-playlist">
+<div class="grid2">
+<div class="card"><h2>📺 Add New Playlist</h2><p class="desc">M3U লিংক দিলেই সবার ফোনে চ্যানেল চলে যাবে</p>
+<label>Playlist Name</label><input id="plName" placeholder="Ex: Jago BD">
+<label>M3U URL</label><input id="plUrl" placeholder="https://.../playlist.m3u">
+<label><input type="checkbox" id="plProxy" style="width:auto"> Use Proxy (ব্লক হলে ON করো)</label>
+<button class="btn btn-block" onclick="addPlaylist()">+ Add & Publish ☁️</button>
+</div>
+<div class="card"><h2>📋 All Playlists <span class="tag" id="plCount">0</span></h2><p class="desc">Delete করলে সবার ফোন থেকে চ্যানেল চলে যাবে</p><div id="plList"></div></div>
+</div>
+</div>
+
+<!-- MATCH -->
+<div class="tab" id="tab-match">
+<div class="grid2">
+<div class="card"><h2>🏏 Add Match</h2><p class="desc">সবার Events ট্যাবে দেখাবে</p>
+<div class="row"><div><label>Team A</label><input id="mTeamA" placeholder="Bangladesh"></div><div><label>Team B</label><input id="mTeamB" placeholder="India"></div></div>
+<div class="row"><div><label>Team A Logo</label><input id="mLogoA" placeholder="https://.../ban.png"></div><div><label>Team B Logo</label><input id="mLogoB" placeholder="https://.../ind.png"></div></div>
+<label>Category / Type</label><input id="mType" placeholder="Cricket | Asia Cup">
+<label>Start Time</label><input id="mStart" type="datetime-local">
+<label>Stream URL (m3u8)</label><input id="mUrl" placeholder="https://.../live.m3u8">
+<button class="btn btn-block" onclick="addMatch()">+ Add Match to All ☁️</button>
+</div>
+<div class="card"><h2>📋 All Matches <span class="tag" id="matchCount">0</span></h2><div id="matchList"></div></div>
+</div>
+</div>
+
+<!-- NOTICE -->
+<div class="tab" id="tab-notice">
+<div class="grid2">
+<div class="card"><h2>📢 Notice Bar</h2><p class="desc">সবার ফোনের উপরে সাদা বার দেখাবে</p>
+<div class="toggle"><div><b>Show Notice</b><small>ON করলে সবার ফোনে দেখাবে</small></div><button class="sw" id="swNotice" onclick="this.classList.toggle('on')"></button></div>
+<label>Notice Text</label><textarea id="noticeText" placeholder="আজ রাত ৮টায় বাংলাদেশ বনাম ভারত ম্যাচ লাইভ!"></textarea>
+<button class="btn btn-block" onclick="saveNotice()">📢 Publish Notice ☁️</button>
+<button class="btn btn-block btn-red" style="margin-top:8px" onclick="clearNotice()">Clear Notice</button>
+</div>
+<div class="card"><h2>👀 Live Preview</h2><p class="desc">ইউজার যেমন দেখবে</p>
+<div class="preview"><div style="background:#fff;color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center" id="noticePreview">Notice OFF - কিছু দেখাবে না</div><div class="p-body">উপরে Notice এর প্রিভিউ<br>টেক্সট লিখলেই এখানে দেখবে</div></div>
+</div>
+</div>
+</div>
+
+<!-- NOTI -->
+<div class="tab" id="tab-noti">
+<div class="grid2">
+<div class="card"><h2>🔔 Send Notification to All</h2><p class="desc">সবার ফোনে বেল আইকনে যাবে</p>
+<label>Title</label><input id="notiTitle" placeholder="Live Match Started!">
+<label>Message</label><textarea id="notiMsg" placeholder="বাংলাদেশ বনাম ভারত এখন লাইভ"></textarea>
+<label>Link (Optional)</label><input id="notiLink" placeholder="https://...">
+<button class="btn btn-block" onclick="sendNoti()">📤 Send to All Users ☁️</button>
+</div>
+<div class="card"><h2>📋 All Notifications</h2><div id="notiList"></div></div>
+</div>
+</div>
+
+<!-- FEATURED -->
+<div class="tab" id="tab-featured">
+<div class="grid2">
+<div class="card"><h2>⭐ Featured Live</h2><p class="desc">Home এর উপরে বড় কার্ড দেখাবে</p>
+<div class="toggle"><div><b>Show Featured</b><small>ON করলে Home এ দেখাবে</small></div><button class="sw" id="swFeat" onclick="this.classList.toggle('on')"></button></div>
+<label>Featured Channel Name</label><input id="featName" placeholder="Ex: T Sports HD">
+<label>Featured URL (m3u8)</label><input id="featUrl" placeholder="https://.../live.m3u8">
+<button class="btn btn-block" onclick="saveFeatured()">💾 Save Featured ☁️</button>
+</div>
+<div class="card"><h2>👀 Preview</h2><div class="preview"><div class="p-body"><b style="color:#fff" id="featPreview">FEATURED LIVE</b><br><span id="featPreview2">No featured set</span><br><br><span style="color:#FFC107">Watch Now →</span></div></div></div>
+</div>
+</div>
+
+<!-- SETTINGS -->
+<div class="tab" id="tab-settings">
+<div class="grid2">
+<div class="card"><h2>🔐 Security</h2><p class="desc">Admin Password + GitHub Token</p>
+<label>New Admin Password</label><input id="newPass" type="password" placeholder="New Password (min 4 char)">
+<button class="btn btn-block" onclick="changePass()">Change Password</button>
+<label style="margin-top:16px">GitHub Token Hide / Show</label>
+<button class="btn btn-block btn2" onclick="toggleTokenView()">👁️ Token দেখো / লুকাও</button>
+<button class="btn btn-block btn-red" style="margin-top:8px" onclick="logout()">🚪 Logout</button>
+</div>
+<div class="card"><h2>💾 Backup & Reset</h2><p class="desc">সব ডাটা ব্যাকআপ রাখো</p>
+<button class="btn btn-block btn2" onclick="exportData()">⬇ Export Backup (JSON)</button>
+<button class="btn btn-block btn2" style="margin-top:8px" onclick="document.getElementById('importFile').click()">⬆ Import Backup</button>
+<input type="file" id="importFile" accept=".json" hidden onchange="importData(event)">
+<button class="btn btn-block btn-red" style="margin-top:8px" onclick="resetAll()">🗑 Reset All Data</button>
+</div>
+</div>
+<div class="card"><h2>🔗 Quick Links</h2><div class="row"><button class="btn btn2" onclick="window.open('index.html','_blank')">🏠 Website</button><button class="btn btn2" onclick="window.open('player.html','_blank')">▶ Player</button><button class="btn btn2" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button></div></div>
+</div>
+
+</main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav">
+<button class="active" onclick="showTab('dashboard',this)">📊<span>Home</span></button>
+<button onclick="showTab('playlist',this)">📺<span>Playlist</span></button>
+<button onclick="showTab('match',this)">🏏<span>Match</span></button>
+<button onclick="showTab('noti',this)">🔔<span>Noti</span></button>
+<button onclick="showTab('settings',this)">⚙️<span>Settings</span></button>
+</nav>
+
+<div class="toast" id="toast"></div>
+<script>
+let GH={token:localStorage.getItem('rslive_gh_token')||'',owner:localStorage.getItem('rslive_gh_owner')||'',repo:localStorage.getItem('rslive_gh_repo')||'',branch:localStorage.getItem('rslive_gh_branch')||'main',path:localStorage.getItem('rslive_gh_path')||'data/config.json'};
+let CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};
+let FILE_SHA='';
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav button').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  document.querySelector(`.nav-btn[data-tab="${id}"]`)?.classList.add('active');
+  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Delete',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',featured:'Featured Live Card',settings:'Security / Backup / Reset'}[id]||'';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function doLogin(){if(document.getElementById('passInput').value===(localStorage.getItem('rslive_admin_pass')||'rslive123')){sessionStorage.setItem('rslive_admin','1');document.getElementById('login').style.display='none';if(GH.token) loadFromGitHub();else fillUI();}else toast('❌ Wrong Password')}
+if(sessionStorage.getItem('rslive_admin')==='1') document.getElementById('login').style.display='none';
+function logout(){sessionStorage.removeItem('rslive_admin');location.reload()}
+function changePass(){const p=document.getElementById('newPass').value.trim();if(p.length<4) return toast('Password কমপক্ষে ৪ অক্ষর');localStorage.setItem('rslive_admin_pass',p);toast('Password Changed ✅')}
+function toggleTokenView(){const el=document.getElementById('ghToken');el.type=el.type==='password'?'text':'password'}
+function toB64(s){return btoa(unescape(encodeURIComponent(s)))} function fromB64(b){return decodeURIComponent(escape(atob(b)))}
+function fillKeysUI(){document.getElementById('ghToken').value=GH.token;document.getElementById('ghOwner').value=GH.owner;document.getElementById('ghRepo').value=GH.repo;document.getElementById('ghBranch').value=GH.branch;document.getElementById('ghPath').value=GH.path;}
+fillKeysUI();
+function saveKeys(){GH.token=document.getElementById('ghToken').value.trim();GH.owner=document.getElementById('ghOwner').value.trim();GH.repo=document.getElementById('ghRepo').value.trim();GH.branch=document.getElementById('ghBranch').value.trim()||'main';GH.path=document.getElementById('ghPath').value.trim()||'data/config.json';if(!GH.token||!GH.owner||!GH.repo) return toast('Token + Owner + Repo দাও');localStorage.setItem('rslive_gh_token',GH.token);localStorage.setItem('rslive_gh_owner',GH.owner);localStorage.setItem('rslive_gh_repo',GH.repo);localStorage.setItem('rslive_gh_branch',GH.branch);localStorage.setItem('rslive_gh_path',GH.path);toast('Keys Saved ✅');loadFromGitHub();}
+async function loadFromGitHub(){if(!GH.token) return;document.getElementById('syncBar').style.display='block';document.getElementById('syncBar').textContent='☁️ GitHub থেকে লোড হচ্ছে...';try{const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}?ref=${GH.branch}`;const r=await fetch(url,{headers:{'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github.v3+json'}});if(!r.ok) throw new Error('GitHub Load Failed '+r.status);const j=await r.json();FILE_SHA=j.sha;CLOUD={...CLOUD,...JSON.parse(fromB64(j.content.replace(/\n/g,'')))};fillUI();toast('GitHub Loaded ✅');}catch(e){toast('❌ '+e.message)}document.getElementById('syncBar').style.display='none';}
+async function pushToGitHub(msg){if(!GH.token) return toast('আগে GitHub Keys দাও');document.getElementById('syncBar').style.display='block';document.getElementById('syncBar').textContent='☁️ GitHub এ আপলোড হচ্ছে - সবার ফোনে যাচ্ছে...';try{if(!FILE_SHA) await loadFromGitHub();const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}`;const body={message:msg||'Update RsLive Go Admin',content:toB64(JSON.stringify(CLOUD,null,2)),branch:GH.branch,sha:FILE_SHA};const r=await fetch(url,{method:'PUT',headers:{'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!r.ok) throw new Error(j.message||'Push Failed');FILE_SHA=j.content.sha;toast('✅ Published! সবার ফোনে আপডেট হবে');}catch(e){toast('❌ '+e.message)}document.getElementById('syncBar').style.display='none';}
+function fillUI(){
+  document.getElementById('siteName').value=CLOUD.siteName||'';document.getElementById('tagline').value=CLOUD.tagline||'';document.getElementById('telegram').value=CLOUD.telegram||'';document.getElementById('searchPh').value=CLOUD.searchPh||'';document.getElementById('proxyUrl').value=CLOUD.proxyUrl||'';
+  document.getElementById('featName').value=CLOUD.featName||'';document.getElementById('featUrl').value=CLOUD.featUrl||'';
+  document.getElementById('noticeText').value=CLOUD.notice||'';document.getElementById('logoUrl').value=CLOUD.logoUrl||'';document.getElementById('aboutText').value=CLOUD.aboutText||'';document.getElementById('footerText').value=CLOUD.footerText||'';document.getElementById('customColor').value=CLOUD.themeColor||'#FFC107';
+  document.getElementById('swFeat').classList.toggle('on',!!CLOUD.showFeat);document.getElementById('swNotice').classList.toggle('on',!!CLOUD.showNotice);document.getElementById('swEvents').classList.toggle('on',CLOUD.eventsMode!==false);document.getElementById('swTv').classList.toggle('on',!!CLOUD.tvMode);document.getElementById('swAutoQ').classList.toggle('on',CLOUD.autoQuality!==false);document.getElementById('swTelePop').classList.toggle('on',CLOUD.telePopup!==false);
+  document.getElementById('previewName').innerHTML=(CLOUD.siteName||'RsLive Go').replace(' Go',' <i>Go</i>');document.getElementById('previewTag').textContent=CLOUD.tagline||'';
+  document.getElementById('noticePreview').textContent=CLOUD.showNotice&&CLOUD.notice?CLOUD.notice:'Notice OFF - কিছু দেখাবে না';
+  document.getElementById('featPreview2').textContent=CLOUD.featName||'No featured set';
+  document.getElementById('stPl').textContent=(CLOUD.playlists||[]).length;document.getElementById('stMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('stNoti').textContent=(CLOUD.notis||[]).length;document.getElementById('stNotice').textContent=CLOUD.showNotice?'ON':'OFF';document.getElementById('stNoticeSub').textContent=CLOUD.showNotice?'Visible to all':'Hidden';
+  document.getElementById('badgePl').textContent=(CLOUD.playlists||[]).length;document.getElementById('badgeMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('badgeNoti').textContent=(CLOUD.notis||[]).length;
+  document.getElementById('plCount').textContent=(CLOUD.playlists||[]).length;document.getElementById('matchCount').textContent=(CLOUD.matches||[]).length;
+  renderPl();renderNoti();renderMatch();renderRecent();
+  document.querySelectorAll('.color-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()!=='Custom'&&CLOUD.themeColor===el.getAttribute('onclick')?.match(/'(#[^']+)'/)?.[1]));
+}
+function renderRecent(){const w=document.getElementById('recentList');w.innerHTML='';const items=[...(CLOUD.matches||[]).slice(-3).map(m=>({t:'🏏 Match',s:m.teamA+' vs '+m.teamB})),...(CLOUD.notis||[]).slice(-2).map(n=>({t:'🔔 Noti',s:n.title}))].reverse();if(!items.length) w.innerHTML='<div class="empty">No activity yet - Match বা Notification পাঠাও</div>';else items.forEach(it=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${it.t}</b><small>${it.s}</small>`;w.appendChild(d)});}
+function pickColor(el,c){document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('customColor').value=c;CLOUD.themeColor=c;}
+async function saveGeneral(){CLOUD.siteName=document.getElementById('siteName').value.trim();CLOUD.tagline=document.getElementById('tagline').value.trim();CLOUD.telegram=document.getElementById('telegram').value.trim();CLOUD.searchPh=document.getElementById('searchPh').value.trim();CLOUD.proxyUrl=document.getElementById('proxyUrl').value.trim();await pushToGitHub('Update general');fillUI();}
+async function saveModes(){CLOUD.eventsMode=document.getElementById('swEvents').classList.contains('on');CLOUD.tvMode=document.getElementById('swTv').classList.contains('on');CLOUD.autoQuality=document.getElementById('swAutoQ').classList.contains('on');CLOUD.telePopup=document.getElementById('swTelePop').classList.contains('on');await pushToGitHub('Update modes');fillUI();}
+async function saveAppearance(){CLOUD.themeColor=document.getElementById('customColor').value.trim()||'#FFC107';CLOUD.logoUrl=document.getElementById('logoUrl').value.trim();CLOUD.aboutText=document.getElementById('aboutText').value.trim();CLOUD.footerText=document.getElementById('footerText').value.trim();await pushToGitHub('Update appearance');fillUI();}
+async function saveFeatured(){CLOUD.featName=document.getElementById('featName').value.trim();CLOUD.featUrl=document.getElementById('featUrl').value.trim();CLOUD.showFeat=document.getElementById('swFeat').classList.contains('on');await pushToGitHub('Update featured');fillUI();}
+async function saveNotice(){CLOUD.notice=document.getElementById('noticeText').value.trim();CLOUD.showNotice=document.getElementById('swNotice').classList.contains('on');await pushToGitHub('Update notice');fillUI();}
+async function clearNotice(){document.getElementById('noticeText').value='';CLOUD.notice='';CLOUD.showNotice=false;await pushToGitHub('Clear notice');fillUI();}
+async function addPlaylist(){const n=document.getElementById('plName').value.trim(),u=document.getElementById('plUrl').value.trim();if(!n||!u.startsWith('http')) return toast('Name + URL দাও');CLOUD.playlists=CLOUD.playlists||[];if(CLOUD.playlists.some(x=>x.url===u)) return toast('এই Playlist আগেই আছে');CLOUD.playlists.push({name:n,url:u,useProxy:document.getElementById('plProxy').checked});document.getElementById('plName').value='';document.getElementById('plUrl').value='';await pushToGitHub('Add playlist: '+n);fillUI();}
+async function delPl(i){if(!confirm('Delete this playlist?'))return;CLOUD.playlists.splice(i,1);await pushToGitHub('Delete playlist');fillUI();}
+function renderPl(){const w=document.getElementById('plList');w.innerHTML='';(CLOUD.playlists||[]).forEach((p,i)=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${p.name}</b><small>${p.url.slice(0,40)}...</small><button class="del" onclick="delPl(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.playlists?.length) w.innerHTML='<div class="empty">No playlist yet</div>';}
+async function sendNoti(){const t=document.getElementById('notiTitle').value.trim(),m=document.getElementById('notiMsg').value.trim(),l=document.getElementById('notiLink').value.trim();if(!t||!m) return toast('Title + Message দাও');CLOUD.notis=CLOUD.notis||[];CLOUD.notis.push({id:Date.now(),title:t,message:m,link:l,time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});document.getElementById('notiTitle').value='';document.getElementById('notiMsg').value='';document.getElementById('notiLink').value='';await pushToGitHub('Send notification: '+t);fillUI();}
+async function delNoti(i){CLOUD.notis.splice(i,1);await pushToGitHub('Delete notification');fillUI();}
+function renderNoti(){const w=document.getElementById('notiList');w.innerHTML='';(CLOUD.notis||[]).slice().reverse().forEach((n,ri)=>{const idx=CLOUD.notis.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${n.title}</b><small>${n.message.slice(0,40)}</small><button class="del" onclick="delNoti(${idx})">Delete</button>`;w.appendChild(d);});if(!CLOUD.notis?.length) w.innerHTML='<div class="empty">No notification</div>';}
+async function addMatch(){const m={name:document.getElementById('mTeamA').value.trim()+' vs '+document.getElementById('mTeamB').value.trim(),teamA:document.getElementById('mTeamA').value.trim(),teamALogo:document.getElementById('mLogoA').value.trim(),teamB:document.getElementById('mTeamB').value.trim(),teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:document.getElementById('mStart').value,url:document.getElementById('mUrl').value.trim(),streams:[{stream_url:document.getElementById('mUrl').value.trim()}]};if(!m.teamA||!m.teamB) return toast('Team A/B দাও');CLOUD.matches=CLOUD.matches||[];CLOUD.matches.push(m);await pushToGitHub('Add match: '+m.name);fillUI();toast('Match Published ✅');}
+async function delMatch(i){if(!confirm('Delete this match?'))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
+function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';(CLOUD.matches||[]).forEach((m,i)=>{const d=document.createElement('div');d.className='item';if(m.teamALogo) d.innerHTML+=`<img class="thumb" src="${m.teamALogo}">`;d.innerHTML+=`<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''}</small><button class="del" onclick="delMatch(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.matches?.length) w.innerHTML='<div class="empty">No match yet</div>';}
+function exportData(){const blob=new Blob([JSON.stringify(CLOUD,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rslive-backup-'+Date.now()+'.json';a.click();toast('Backup Downloaded ✅');}
+function importData(e){const f=e.target.files[0];if(!f) return;const r=new FileReader();r.onload=async()=>{try{CLOUD={...CLOUD,...JSON.parse(r.result)};await pushToGitHub('Import backup');fillUI();toast('Backup Restored ✅');}catch(err){toast('Invalid Backup')}};r.readAsText(f);}
+async function resetAll(){if(!confirm('সব ডাটা ডিলিট হবে! Sure?')) return;CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};await pushToGitHub('Reset all');fillUI();toast('Reset Done');}
+// Live preview for notice
+document.getElementById('noticeText')?.addEventListener('input',e=>{document.getElementById('noticePreview').textContent=e.target.value||'Notice OFF';});
+document.getElementById('siteName')?.addEventListener('input',e=>{document.getElementById('previewName').innerHTML=e.target.value.replace(' Go',' <i>Go</i>');});
+document.getElementById('tagline')?.addEventListener('input',e=>{document.getElementById('previewTag').textContent=e.target.value;});
+if(sessionStorage.getItem('rslive_admin')==='1'){if(GH.token) loadFromGitHub();else fillUI();}else fillUI();
+</script>
+</body>
+</html>
