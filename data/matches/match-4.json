@@ -7,8 +7,8 @@
   "endTime": "2026-11-28T14:00:00+06:00",
   "teamA": "New Zealand",
   "teamB": "India",
-  "teamALogo": "https://flagcdn.com/w320/nz.png",
-  "teamBLogo": "https://flagcdn.com/w320/in.png",
+  "teamALogo": "https://flagcdn.com/nz.svg",
+  "teamBLogo": "https://flagcdn.com/pk.svg",
   "streams": [
     {
       "name": "Server 1",
