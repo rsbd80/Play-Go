@@ -1,0 +1,18 @@
+{
+  "name": "New Zealand vs India",
+  "matchType": "Cricket | India tour of New Zealand | 2nd Test",
+  "status": "live",
+  "startTime": "2026-11-27T04:00:00+06:00",
+  "endTime": "2026-11-27T21:00:00+06:00",
+  "teamA": "New Zealand",
+  "teamB": "India",
+  "teamALogo": "https://flagcdn.com/w320/nz.png",
+  "teamBLogo": "https://flagcdn.com/w320/in.png",
+  "streams": [
+    {
+      "label": "Server 1",
+      "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F15.m3u8",
+      "src": "ftpbdlive"
+    }
+  ]
+}
