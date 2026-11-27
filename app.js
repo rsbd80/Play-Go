@@ -1,4 +1,4 @@
-/* RsLive Go v60 - No Bangla + Header Icon + Header Click = Fresh Events + Setting Icon Fix + Mobile Back Button Fix */
+/* RsLive Go v60 - No Header Icon + Slim Match Cards + Mobile Back Fix */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -14,13 +14,12 @@ body{display:flex;flex-direction:column}#app{display:flex;flex-direction:column;
 .sticky{flex-shrink:0;z-index:100}
 header{background:#1E1E24;padding:14px 10px 10px}
 .header-top{display:flex;align-items:center;gap:8px;min-height:42px}
-.logo{display:flex;align-items:center;cursor:pointer;gap:8px;min-width:0}
-.logo-ico{width:28px;height:28px;min-width:28px;border-radius:7px;background:#FFC107;display:flex;align-items:center;justify-content:center;font-size:10px;color:#000;flex-shrink:0}
-.logo-text .name{font-size:21px;font-weight:900;line-height:1;white-space:nowrap}
+.logo{display:flex;align-items:center;cursor:pointer;min-width:0}
+.logo-text .name{font-size:24px;font-weight:900;line-height:1;white-space:nowrap}
 .logo-text .name i{font-style:normal;color:#FFC107}
 .logo-text .tag{font-size:9px;letter-spacing:2px;color:#9a9ab5;font-weight:600;margin-top:3px;white-space:nowrap}
-.top-actions{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
-.icon-btn{width:34px;height:34px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
+.top-actions{margin-left:auto;display:flex;gap:4px;flex-shrink:0}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
 .icon-btn:active{transform:scale(.92)}
 .icon-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #notifBadge{position:absolute;top:1px;right:1px;background:#FF3B30;color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px}
@@ -30,28 +29,28 @@ header{background:#1E1E24;padding:14px 10px 10px}
 .desktop-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 #mainCol{flex:1;min-height:0;display:flex;flex-direction:column}
 #scrollArea{flex:1;overflow-y:auto;padding-bottom:80px;background:#1E1E24}
-#matchesSection{display:none;padding:12px 12px 4px}
-.matches-head{display:flex;justify-content:space-between;margin-bottom:8px}.matches-head strong{font-size:14px}.matches-head span{font-size:10px;color:#8e91a8}
-#matchesGrid{display:grid;grid-template-columns:1fr;gap:10px}
-.match-card{background:#34343C;border-radius:14px;padding:12px 14px 12px;cursor:pointer}
-.match-top{display:flex;justify-content:space-between;margin-bottom:10px}
-.sport-badge{display:flex;gap:5px;font-size:12px;font-weight:800;max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.match-badge{display:inline-flex;border-radius:99px;padding:5px 11px;font-size:10px;font-weight:800;flex-shrink:0}
+#matchesSection{display:none;padding:10px 10px 2px}
+.matches-head{display:flex;justify-content:space-between;margin-bottom:7px}.matches-head strong{font-size:13px}.matches-head span{font-size:10px;color:#8e91a8}
+#matchesGrid{display:grid;grid-template-columns:1fr;gap:8px}
+.match-card{background:#2E2E36;border:1px solid #3A3A44;border-radius:12px;padding:10px 10px 9px;cursor:pointer;overflow:hidden;min-width:0}
+.match-top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:7px;min-width:0}
+.sport-badge{display:flex;gap:5px;font-size:11px;font-weight:800;max-width:62%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:1}
+.match-badge{display:inline-flex;border-radius:99px;padding:4px 9px;font-size:9px;font-weight:800;flex-shrink:0;white-space:nowrap}
 .match-badge.live{background:#3a1a1a;color:#ff8fa0;border:1px solid #5a2a2a}
 .match-badge.upcoming{background:#2a2a1a;color:#e8b26a;border:1px solid #4a3a1a}
 .match-badge.soon{background:#3a1a1a;color:#ff9a9a;border:1px solid #5a2a2a}
 .match-badge.today{background:#2a2a1a;color:#e8d27a;border:1px solid #4a3a1a}
 .match-badge.tomorrow{background:#1a2a2a;color:#8adfe8;border:1px solid #1a4a4a}
-.match-teams{display:flex;justify-content:center;gap:18px}
-.match-team{flex:0 1 110px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
-.match-team img,.team-fallback{width:54px;height:54px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;border:2px solid #444}
-.team-fallback{display:flex;align-items:center;justify-content:center;background:#25283a;color:#fff;font-weight:900;font-size:13px}
-.match-team b{font-size:15px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.match-vs{padding-top:14px}.match-vs .vs-txt{font-size:11px;font-weight:900;background:#222;border:1px solid #333;padding:4px 8px;border-radius:99px}
-.match-bottom{display:flex;justify-content:space-between;gap:8px;margin-top:10px;padding-top:9px;border-top:1px solid #444}
-.match-time{font-size:11px;color:#c9cce0}
-.match-action{border:0;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:900;color:#000;background:#FFC107;cursor:pointer}
-.match-countdown{color:#fff2cc;font-size:12px;font-weight:700;text-align:right;white-space:nowrap}
+.match-teams{display:flex;justify-content:center;gap:12px}
+.match-team{flex:0 1 110px;display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
+.match-team img,.team-fallback{width:44px;height:44px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;border:2px solid #444}
+.team-fallback{display:flex;align-items:center;justify-content:center;background:#25283a;color:#fff;font-weight:900;font-size:12px}
+.match-team b{font-size:13.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.match-vs{padding-top:10px}.match-vs .vs-txt{font-size:10px;font-weight:900;background:#222;border:1px solid #333;padding:3px 7px;border-radius:99px}
+.match-bottom{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:7px;padding-top:7px;border-top:1px solid #3A3A44;min-width:0;flex-wrap:nowrap}
+.match-time{font-size:10.5px;color:#c9cce0;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match-action{border:0;border-radius:99px;padding:6px 12px;font-size:10.5px;font-weight:900;color:#000;background:#FFC107;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.match-countdown{color:#fff2cc;font-size:11px;font-weight:700;text-align:right;white-space:nowrap;flex-shrink:0}
 .match-countdown small{display:block;font-size:8px;color:#b8bccf;letter-spacing:1.5px}
 #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;background:#1E1E24}
 .card{background:#34343C;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:68px;padding:9px 7px;position:relative}
@@ -150,7 +149,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 @media(min-width:1920px){#grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.card{min-height:96px}.card img{width:60px;height:60px;min-width:60px}.card p{font-size:15.5px}.logo-text .name{font-size:32px}}
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="header-top"><div class="logo" onclick="location.href=location.origin+'/?t='+Date.now()"><div class="logo-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="headerBellBtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notifBadge">0</span></button><button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
+<div class="sticky"><header><div class="header-top"><div class="logo" onclick="location.href=location.origin+'/?t='+Date.now()"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="headerBellBtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notifBadge">0</span></button><button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="notifOverlay"><div class="notif-sheet"><div class="notif-head"><h3>🔔 Notifications</h3><button onclick="document.getElementById('notifOverlay').classList.remove('open')">✕</button></div><div class="notif-list" id="notifList"></div></div></div>
