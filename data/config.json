@@ -1,0 +1,18 @@
+{
+  "siteName": "RsLive Go",
+  "tagline": "LIVE TV • BANGLADESH",
+  "telegram": "https://t.me/RsLiveGo",
+  "searchPh": "Search channels...",
+  "proxyUrl": "",
+  "notice": "",
+  "showNotice": false,
+  "featName": "",
+  "featUrl": "",
+  "showFeat": false,
+  "playlists": [],
+  "notis": [],
+  "matches": [],
+  "eventsMode": true,
+  "tvMode": false,
+  "quality": "auto"
+}
