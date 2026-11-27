@@ -11,7 +11,7 @@
   "streams": [
     {
       "label": "Server 1",
-      "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http://live.ftpbdlive.com:8080/live/FTPBD-LIVETV/FTPBD-2026/10.m3u8"
+      "stream_url": "https://tencent-cdn.tapmad.com/v1/01a14abbcff31ea540a81c2b41b760/01a14abc06421567ee931e109fa577/main.m3u8"
     }
   ]
 }
