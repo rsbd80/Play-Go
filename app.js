@@ -1,4 +1,4 @@
-/* RsLive Go v52 - GitHub Theme + Bottom Nav Smaller + Highlight Medium + Cards Same */
+/* RsLive Go v53 - Card Color Distinct + Card Bigger 7 Visible + About Buttons Lighter */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -32,7 +32,7 @@ header{background:#0D1117;padding:14px 14px 10px}
 #matchesSection{display:none;padding:12px 12px 4px}
 .matches-head{display:flex;justify-content:space-between;margin-bottom:8px}.matches-head strong{font-size:14px}.matches-head span{font-size:10px;color:#8e91a8}
 #matchesGrid{display:grid;grid-template-columns:1fr;gap:10px}
-.match-card{background:#161B22;border-radius:14px;padding:12px 14px 12px;cursor:pointer}
+.match-card{background:#232E3E;border-radius:14px;padding:12px 14px 12px;cursor:pointer}
 .match-top{display:flex;justify-content:space-between;margin-bottom:10px}
 .sport-badge{display:flex;gap:5px;font-size:12px;font-weight:800;max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-badge{display:inline-flex;border-radius:99px;padding:5px 11px;font-size:10px;font-weight:800;flex-shrink:0}
@@ -53,27 +53,27 @@ header{background:#0D1117;padding:14px 14px 10px}
 .match-countdown{color:#fff2cc;font-size:12px;font-weight:700;text-align:right;white-space:nowrap}
 .match-countdown small{display:block;font-size:8px;color:#b8bccf;letter-spacing:1.5px}
 #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;background:#0D1117}
-/* CHANNEL + CATEGORY CARD - যেমন ছিল তেমনই, হাত দেওয়া হয় নাই */
-.card{background:#161B22;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:68px;padding:9px 7px;position:relative}
+/* CHANNEL + CATEGORY CARD - দুইটাই সেম, বড় করা - ৭টা দেখা যাবে */
+.card{background:#232E3E;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:9px;min-height:82px;padding:11px 9px;position:relative}
 .card:active{transform:scale(.97)}
-.card img{width:44px;height:44px;min-width:44px;object-fit:contain;background:#fff;border-radius:7px;padding:3px}
+.card img{width:52px;height:52px;min-width:52px;object-fit:contain;background:#fff;border-radius:7px;padding:3px}
 .card .c-txt{flex:1;min-width:0;display:flex;justify-content:center}
-.card p{font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;font-weight:600}
+.card p{font-size:13.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;font-weight:600}
 body.view-list #grid{grid-template-columns:1fr!important;gap:8px}
-body.view-list .card{min-height:62px;padding:9px 12px;justify-content:flex-start}
-body.view-list .card img{width:42px;height:42px;min-width:42px}
+body.view-list .card{min-height:76px;padding:11px 12px;justify-content:flex-start}
+body.view-list .card img{width:50px;height:50px;min-width:50px}
 body.view-list .card .c-txt{justify-content:flex-start}
-body.view-list .card p{font-size:13.5px}
+body.view-list .card p{font-size:14px}
 body.view-compact #grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}
-body.view-compact .card{min-height:68px;padding:8px 6px;flex-direction:column;gap:5px;text-align:center}
-body.view-compact .card img{width:36px;height:36px;min-width:36px}
+body.view-compact .card{min-height:78px;padding:9px 6px;flex-direction:column;gap:5px;text-align:center}
+body.view-compact .card img{width:40px;height:40px;min-width:40px}
 body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .fav-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none;z-index:5}
-.cat-box{background:#161B22!important;border:0!important;border-radius:10px!important;min-height:68px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:9px 7px!important;cursor:pointer}
+.cat-box{background:#232E3E!important;border:0!important;border-radius:10px!important;min-height:82px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:9px!important;padding:11px 9px!important;cursor:pointer}
 .cat-box:active{transform:scale(.97)}
-.cat-box .cat-name{font-size:12.5px!important;line-height:1.35!important;font-weight:600!important;flex:1;min-width:0;white-space:normal!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;word-break:break-word!important;color:#fff!important}
+.cat-box .cat-name{font-size:13.5px!important;line-height:1.35!important;font-weight:600!important;flex:1;min-width:0;white-space:normal!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;word-break:break-word!important;color:#fff!important}
 .cat-box .cat-name.fav{color:#FFE45C!important}
-.cat-box .cat-count{font-size:12.5px!important;color:#C8CBD6;flex-shrink:0;font-weight:600}
+.cat-box .cat-count{font-size:13.5px!important;color:#C8CBD6;flex-shrink:0;font-weight:600}
 .cat-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
 .cat-head b{font-size:15px;font-weight:900}
 .cat-head .back-btn{display:inline-flex;align-items:center;gap:5px;border:0;cursor:pointer;padding:6px 10px 6px 6px;border-radius:99px;font-weight:700;font-size:12px;color:#E8E8EE;background:#161B22;border:1px solid #30363D}
@@ -117,7 +117,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .about-body h1{font-size:26px;font-weight:800}.about-body .ver{color:#9a9ab5;font-size:14px;margin-top:3px}
 .about-info{margin-top:18px;width:100%;text-align:center}.about-info b{font-size:15px;display:block;line-height:1.6}.about-info span{font-size:14px;color:#e8e8e8;display:block;line-height:1.6}
 .about-thanks{margin-top:20px}.about-thanks b{font-size:15px}.about-thanks p{font-size:13px;color:#c9c9c9;line-height:1.6;margin-top:7px}
-.about-btn{width:100%;padding:12px;border:0;border-radius:11px;background:#FFD500;color:#000;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
+.about-btn{width:100%;padding:12px;border:0;border-radius:11px;background:#E2C95A;color:#000;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
 .about-btn svg{width:19px;height:19px;fill:#000}
 .about-copy{margin-top:18px;color:#8e8e9a;font-size:12px}
 #homeEmpty{display:none;text-align:center;padding:26px 14px;color:#9a9ab5}
@@ -144,10 +144,10 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .notif-item{background:#161B22;border-radius:11px;padding:11px}
 .notif-item b{font-size:13px;display:block;margin-bottom:3px}.notif-item p{font-size:12px;color:#ccc;line-height:1.5}.notif-item span{font-size:10px;color:#888;display:block;margin-top:5px}
 .notif-item.unread{border:1px solid #FFC107}
-@media(min-width:768px){#grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:10px}#matchesGrid{grid-template-columns:repeat(2,1fr)}.logo-text .name{font-size:26px}.card{min-height:76px}.card p{font-size:13.5px}.set-body,.about-body{max-width:640px;margin:0 auto;width:100%}}
-@media(min-width:1024px){body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}header{max-width:1200px;margin:auto}.desktop-wrap{flex-direction:row;max-width:1200px;margin:auto;gap:16px;padding:14px 22px 36px}#mainCol{order:1}#scrollArea{overflow:visible}#grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px 0}#matchesGrid{grid-template-columns:repeat(2,1fr)}#bottomNav{max-width:480px;left:50%;transform:translateX(-50%);border-radius:14px 14px 0 0}.card{min-height:80px;padding:11px 10px}.card img{width:52px;height:52px;min-width:52px}}
-@media(min-width:1440px){header{max-width:1600px}.desktop-wrap{max-width:1600px;padding:18px 30px 44px}.logo-text .name{font-size:30px}.logo-text .tag{font-size:10px}#grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}#matchesGrid{grid-template-columns:repeat(3,1fr)}.card{min-height:88px;padding:13px 12px;border-radius:12px}.card img{width:56px;height:56px;min-width:56px}.card p{font-size:14.5px}.bnav{min-height:56px}.bnav .b-txt{font-size:12px}}
-@media(min-width:1920px){#grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.card{min-height:96px}.card img{width:60px;height:60px;min-width:60px}.card p{font-size:15.5px}.logo-text .name{font-size:32px}}
+@media(min-width:768px){#grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:10px}#matchesGrid{grid-template-columns:repeat(2,1fr)}.logo-text .name{font-size:26px}.card{min-height:86px}.card p{font-size:14px}.set-body,.about-body{max-width:640px;margin:0 auto;width:100%}}
+@media(min-width:1024px){body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}header{max-width:1200px;margin:auto}.desktop-wrap{flex-direction:row;max-width:1200px;margin:auto;gap:16px;padding:14px 22px 36px}#mainCol{order:1}#scrollArea{overflow:visible}#grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px 0}#matchesGrid{grid-template-columns:repeat(2,1fr)}#bottomNav{max-width:480px;left:50%;transform:translateX(-50%);border-radius:14px 14px 0 0}.card{min-height:90px;padding:12px 10px}.card img{width:56px;height:56px;min-width:56px}}
+@media(min-width:1440px){header{max-width:1600px}.desktop-wrap{max-width:1600px;padding:18px 30px 44px}.logo-text .name{font-size:30px}.logo-text .tag{font-size:10px}#grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}#matchesGrid{grid-template-columns:repeat(3,1fr)}.card{min-height:98px;padding:13px 12px;border-radius:12px}.card img{width:60px;height:60px;min-width:60px}.card p{font-size:15px}.bnav{min-height:56px}.bnav .b-txt{font-size:12px}}
+@media(min-width:1920px){#grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.card{min-height:106px}.card img{width:64px;height:64px;min-width:64px}.card p{font-size:16px}.logo-text .name{font-size:32px}}
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="headerBellBtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notifBadge">0</span></button><button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
@@ -254,7 +254,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v52'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v53'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
