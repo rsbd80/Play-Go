@@ -1,4 +1,4 @@
-/* RsLive Go - v37 FINAL - No Recent, Favorites Only, Televizo Settings */
+/* RsLive Go - v38 FINAL PREMIUM DARK - Header No Icon + No Recent + No Cat Chips + Dark Settings */
 (function(){
   const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
   if(!isDesktop) return;
@@ -15,14 +15,13 @@ html,body{height:100%;width:100%;background:#000;color:#fff;font-family:Poppins,
 body{display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0}
 .sticky{flex-shrink:0;z-index:100}
-header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px;position:relative}
+/* HEADER - NO ICON, TEXT FROM CORNER */
+header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px}
 .header-top{display:flex;align-items:center;gap:10px;min-height:42px}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.play-ico{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#22d3ee,#8b7cff,#ff5d8f);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.28);box-shadow:0 6px 18px rgba(139,124,255,.45)}
-.play-ico svg{width:17px;height:17px;fill:#fff;margin-left:2px}
-.logo-text .name{font-size:22px;font-weight:900;line-height:1}
-.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#a78bfa,#22d3ee,#ff5d8f);background-clip:text;-webkit-background-clip:text;color:transparent}
-.logo-text .tag{font-size:7.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:3px}
+.logo{display:flex;align-items:center;cursor:pointer;padding-left:2px}
+.logo-text .name{font-size:23px;font-weight:900;line-height:1;letter-spacing:.3px;white-space:nowrap}
+.logo-text .name i{font-style:normal;color:#fff}
+.logo-text .tag{font-size:9px;letter-spacing:2.5px;color:#9a9ab5;font-weight:600;margin-top:4px;white-space:nowrap}
 .top-actions{margin-left:auto;display:flex;gap:8px}
 .icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .icon-btn:active{transform:scale(.9)}
@@ -44,11 +43,11 @@ header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px;
 .match-top{display:flex;justify-content:space-between;margin-bottom:6px}
 .sport-badge{display:flex;gap:5px;font-size:10.5px;font-weight:800;max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-badge{display:inline-flex;gap:5px;border-radius:99px;padding:4px 10px;font-size:8.5px;font-weight:800;flex-shrink:0}
-.match-badge.live{background:rgba(255,48,78,.14);color:#ff8fa0;border:1px solid rgba(255,48,78,.35)}
-.match-badge.upcoming{background:rgba(245,164,59,.13);color:#e8b26a;border:1px solid rgba(245,164,59,.35)}
-.match-badge.soon{background:rgba(255,80,80,.14);color:#ff9a9a;border:1px solid rgba(255,80,80,.4)}
-.match-badge.today{background:rgba(250,204,21,.13);color:#e8d27a;border:1px solid rgba(250,204,21,.35)}
-.match-badge.tomorrow{background:rgba(34,211,238,.12);color:#8adfe8;border:1px solid rgba(34,211,238,.35)}
+.match-badge.live{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.match-badge.upcoming{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
+.match-badge.soon{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.match-badge.today{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
+.match-badge.tomorrow{background:rgba(255,255,255,.06);color:#C8CBD6;border:1px solid rgba(255,255,255,.15)}
 .match-teams{display:flex;justify-content:center;gap:16px}
 .match-team{flex:0 1 115px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
 .match-team img,.team-fallback{width:42px;height:42px;object-fit:contain;border-radius:50%;background:#fff;padding:4px;border:2px solid rgba(255,255,255,.25)}
@@ -57,14 +56,14 @@ header{background:#000;border-bottom:1px solid #ffffff14;padding:12px 14px 10px;
 .match-vs{padding-top:10px}.match-vs .vs-txt{font-size:11px;font-weight:900;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 8px;border-radius:99px}
 .match-bottom{display:flex;justify-content:space-between;gap:8px;margin-top:8px;padding-top:7px;border-top:1px solid #ffffff14}
 .match-time{font-size:9.5px;color:#c9cce0}
-.match-action{border:0;border-radius:20px;padding:6px 11px;font-size:9px;font-weight:900;color:#fff;background:linear-gradient(90deg,#e93658,#f07836);cursor:pointer}
-.match-countdown{color:#fff2cc;font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
+.match-action{border:0;border-radius:20px;padding:6px 11px;font-size:9px;font-weight:900;color:#000;background:#fff;cursor:pointer}
+.match-countdown{color:#fff;font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
 .match-countdown small{display:block;font-size:7.5px;color:#b8bccf;letter-spacing:1.5px}
 #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 10px}
-.card{background:#2b2f3a;border:1px solid rgba(255,255,255,.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:92px;padding:12px 10px;position:relative;transition:.18s}
+.card{background:#1c1c22;border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:92px;padding:12px 10px;position:relative;transition:.18s}
 .card:active{transform:scale(.97)}
-.card.pressing{transform:scale(.94);border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.25)}
-.card img{width:58px;height:58px;min-width:58px;object-fit:contain;background:#fff;border-radius:2px;padding:4px}
+.card.pressing{transform:scale(.94);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.card img{width:58px;height:58px;min-width:58px;object-fit:contain;background:#fff;border-radius:6px;padding:4px}
 .card .c-txt{flex:1;min-width:0;display:flex;justify-content:center}
 .card p{font-size:14px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;font-weight:600}
 body.view-list #grid{grid-template-columns:1fr !important;gap:8px}
@@ -78,8 +77,8 @@ body.view-compact .card img{width:40px;height:40px;min-width:40px}
 body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .fav-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;pointer-events:none;animation:popFav .6s ease forwards;z-index:5}
 @keyframes popFav{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.25);opacity:1}100%{transform:scale(1.1) translateY(-8px);opacity:0}}
-.cat-box{background:#2b2f3a !important;border:1px solid rgba(255,255,255,.08) !important;border-radius:10px !important;min-height:96px !important;width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;padding:12px !important;cursor:pointer}
-.cat-box:active{transform:scale(.97);border-color:#a78bfa}
+.cat-box{background:#1c1c22 !important;border:1px solid rgba(255,255,255,.08) !important;border-radius:10px !important;min-height:96px !important;width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;padding:12px !important;cursor:pointer}
+.cat-box:active{transform:scale(.97);border-color:#fff}
 .cat-box .cat-name{font-size:15px !important;line-height:1.35 !important;font-weight:600 !important;flex:1;min-width:0;white-space:normal !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;word-break:break-word !important;overflow-wrap:anywhere !important}
 .cat-box .cat-name.fav{color:#FFE45C}
 .cat-box .cat-count{font-size:14px;color:#C8CBD6;flex-shrink:0}
@@ -88,91 +87,87 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .cat-head .back-btn{display:inline-flex;align-items:center;gap:6px;border:0;cursor:pointer;padding:7px 12px 7px 7px;border-radius:99px;font-weight:700;font-size:13px;color:#E8E8EE;background:#1E1E2E;border:1px solid rgba(255,255,255,.14)}
 .cat-head .back-btn:active{transform:scale(.94)}
 .cat-head .back-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.pl-chips{grid-column:1/-1;display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
-.pl-chips::-webkit-scrollbar{display:none}
-.pl-chip{flex-shrink:0;border:1px solid rgba(255,255,255,.18);background:#2b2f3a;color:#C8CBD6;padding:8px 16px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-.pl-chip.active{background:#fff;color:#000}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:#1e1e2e;border:1px solid rgba(255,255,255,.2);padding:11px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* SETTINGS - TELEVIZO FULL PAGE */
-#settingsOverlay{display:none;position:fixed;inset:0;background:#1a1a1e;z-index:2000;flex-direction:column;overflow-y:auto}
+/* SETTINGS - DARK PREMIUM ONLY, NO BRIGHT COLOR */
+#settingsOverlay{display:none;position:fixed;inset:0;background:#0e0e12;z-index:2000;flex-direction:column;overflow-y:auto}
 #settingsOverlay.open{display:flex}
-.set-head{display:flex;align-items:center;gap:14px;padding:16px;position:sticky;top:0;background:#1a1a1e;z-index:2}
-.set-head button{width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer}
-.set-head h2{font-size:22px;font-weight:800}
-.set-body{padding:6px 16px 30px;display:flex;flex-direction:column;gap:14px}
-.set-row{display:flex;align-items:center;gap:14px;background:#242429;border-radius:12px;padding:15px 16px;cursor:pointer}
-.set-row:active{background:#2e2e35}
-.set-row .ico{width:28px;height:28px;border-radius:50%;background:#FFC107;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:14px;flex-shrink:0}
-.set-row .ico.blue{background:#FFC107}
-.set-row span{flex:1;font-size:17px;font-weight:600}
-.set-row small{color:#9a9ab5;font-size:12px;display:block;font-weight:400}
-.toggle{width:52px;height:30px;border-radius:99px;background:#555;position:relative;flex-shrink:0;transition:.2s;cursor:pointer;border:0}
-.toggle:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#bbb;transition:.2s}
-.toggle.on{background:#FFC107}.toggle.on:after{left:25px;background:#fff}
-.set-card{background:#242429;border-radius:12px;padding:14px}
-.set-card b{font-size:14px;display:block;margin-bottom:4px}
-.set-card span{font-size:11px;color:#9a9ab5;display:block;line-height:1.5}
-.set-input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:#0f0f1a;color:#fff;font-size:13px;outline:none;margin:8px 0;user-select:text;-webkit-user-select:text}
-.set-btn{width:100%;padding:12px;border:0;border-radius:12px;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;font-weight:800;font-size:13px;cursor:pointer;margin-top:6px}
-.set-btn.ghost{background:#2b2f3a;border:1px solid rgba(255,255,255,.15)}
-.set-row2{display:flex;gap:8px}.set-row2 .set-btn{flex:1}
-.pl-item{display:flex;align-items:center;gap:10px;background:#0f0f1a;border-radius:10px;padding:10px;margin-top:8px}
-.pl-item b{flex:1;min-width:0;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+.set-head{display:flex;align-items:center;gap:14px;padding:16px;position:sticky;top:0;background:#0e0e12;z-index:2;border-bottom:1px solid rgba(255,255,255,.08)}
+.set-head button{width:38px;height:38px;border-radius:50%;border:0;background:#1c1c22;color:#fff;font-size:20px;cursor:pointer}
+.set-head h2{font-size:21px;font-weight:800;letter-spacing:.2px}
+.set-body{padding:14px 14px 30px;display:flex;flex-direction:column;gap:12px}
+.set-card{background:#17171d;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px}
+.set-card b{font-size:15px;display:block}
+.set-card span{font-size:12px;color:#9a9ab5;display:block;line-height:1.5;margin-top:3px}
+.set-input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0e0e12;color:#fff;font-size:13px;outline:none;margin:8px 0;user-select:text;-webkit-user-select:text}
+.set-input:focus{border-color:#fff}
+.set-btn{width:100%;padding:12px;border:0;border-radius:12px;background:#fff;color:#000;font-weight:800;font-size:13px;cursor:pointer;margin-top:6px}
+.set-btn:active{transform:scale(.98)}
+.set-btn.ghost{background:#22222a;border:1px solid rgba(255,255,255,.12);color:#fff}
+.set-row{display:flex;align-items:center;gap:14px;background:#17171d;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer}
+.set-row:active{background:#1f1f26}
+.set-row .ico{width:36px;height:36px;border-radius:12px;background:#22222a;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}
+.set-row span{flex:1;font-size:15px;font-weight:600}
+.set-row small{color:#9a9ab5;font-size:11.5px;display:block;font-weight:400;margin-top:2px}
+.toggle{width:52px;height:30px;border-radius:99px;background:#33333d;position:relative;flex-shrink:0;transition:.2s;cursor:pointer;border:1px solid rgba(255,255,255,.1)}
+.toggle:after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#8e8e9a;transition:.2s}
+.toggle.on{background:#fff}.toggle.on:after{left:24px;background:#000}
+.pl-item{display:flex;align-items:center;gap:10px;background:#0e0e12;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px;margin-top:8px}
+.pl-item b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
 .pl-item button{border:0;padding:7px 11px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer}
-.pl-item .del{background:#ff3b5c;color:#fff}.pl-item .tag{background:#2b2f3a;color:#C8CBD6}
-.qual-row{display:flex;gap:8px;margin-top:8px}
-.qual-btn{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:#0f0f1a;color:#C8CBD6;font-weight:700;font-size:12px;cursor:pointer}
-.qual-btn.active{background:#fff;color:#000}
+.pl-item .del{background:#2a2a2a;color:#ff6b6b;border:1px solid rgba(255,255,255,.1)}.pl-item .tag{background:#22222a;color:#C8CBD6}
+.qual-row{display:flex;gap:8px;margin-top:10px}
+.qual-btn{flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0e0e12;color:#C8CBD6;font-weight:700;font-size:12px;cursor:pointer}
+.qual-btn.active{background:#fff;color:#000;border-color:#fff}
+.set-row2{display:flex;gap:8px}.set-row2 .set-btn{flex:1}
 #homeEmpty{display:none;text-align:center;padding:30px 16px;color:#9a9ab5}
 #homeEmpty b{color:#fff;font-size:14px;display:block;margin-bottom:6px}
-#homeEmpty button{margin-top:12px;padding:12px 22px;border-radius:30px;border:0;background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+#homeEmpty button{margin-top:12px;padding:12px 22px;border-radius:30px;border:0;background:#fff;color:#000;font-weight:800;font-size:14px;cursor:pointer}
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-size:13px;font-weight:700;border:1px solid #ffffff33}
-#noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
-#featured{display:none;margin:12px;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
-#bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);border-top:1px solid #ffffff10;display:flex;gap:6px;padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
+#noticeBar{display:none;background:#fff;color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
+#featured{display:none;margin:12px;background:#17171d;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;cursor:pointer}
+#bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);border-top:1px solid #ffffff10;display:flex;gap:6px;padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
 .bnav{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border-radius:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:#7a7a8e;min-height:46px}
 .bnav .b-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .bnav .b-txt{font-size:11px;font-weight:600}
-.bnav.active{color:#fff;background:linear-gradient(180deg,rgba(139,124,255,.22),rgba(139,124,255,.06));border-color:rgba(139,124,255,.35)}
-.tele{position:fixed;right:14px;bottom:108px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;border:1px solid rgba(255,255,255,.3)}
+.bnav.active{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
+.tele{position:fixed;right:14px;bottom:108px;width:46px;height:46px;border-radius:50%;background:#1c1c22;display:flex;align-items:center;justify-content:center;z-index:999;border:1px solid rgba(255,255,255,.2)}
 .tele svg{width:23px;height:23px;fill:#fff}
-#installBar{display:none;position:fixed;left:10px;right:10px;bottom:70px;z-index:998;background:#1a1a2e;border:1px solid #a78bfa77;border-radius:100px;padding:7px;align-items:center;gap:6px}
+#installBar{display:none;position:fixed;left:10px;right:10px;bottom:70px;z-index:998;background:#17171d;border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:7px;align-items:center;gap:6px}
 #installBar .ib-txt{flex:1;text-align:center}#installBar .ib-txt b{font-size:12px;display:block}#installBar .ib-txt span{font-size:10px;color:#b8b8d0}
-#installBar button{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;border:0;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
+#installBar button{background:#fff;color:#000;border:0;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
 @media(min-width:900px){body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}header{max-width:1440px;margin:auto}.desktop-wrap{flex-direction:row;max-width:1440px;margin:auto;gap:18px;padding:16px 24px 40px}#mainCol{order:1}#scrollArea{overflow:visible}#grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 0}#matchesGrid{grid-template-columns:repeat(2,1fr)}#bottomNav{max-width:480px;left:50%;transform:translateX(-50%);border-radius:16px 16px 0 0}}
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="play-ico"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg></div><div class="logo-text"><div class="name">RsLive <i>TV</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="viewBtn" title="Change View"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="searchBtn" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="settingsBtn" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
+<div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="viewBtn" title="Change View"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="searchBtn" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="settingsBtn" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="settingsOverlay"><div class="set-head"><button id="settingsBackBtn">←</button><h2>Settings</h2></div><div class="set-body">
-<div class="set-row" id="networkStreamRow"><div class="ico">🔗</div><span>Network Stream<small>Paste any M3U / M3U8 / MP4 link & play</small></span></div>
-<div id="networkStreamBox" style="display:none"><div class="set-card"><b>▶️ Play Any Link Direct</b><span>যেকোনো লিংক পেস্ট করে সরাসরি চালাও</span><input class="set-input" id="directUrl" placeholder="https://.../channel.m3u8  বা  .m3u"><input class="set-input" id="directName" placeholder="Channel Name (Optional)"><button class="set-btn" id="playDirectBtn">▶️ Play Now</button></div></div>
+<div class="set-card"><b>➕ Add New Playlist</b><span>নিজের M3U Playlist যোগ করো - সবার উপরে, প্রথম অপশন</span><input class="set-input" id="newPlName" placeholder="Playlist Name - যেমন: My Playlist"><input class="set-input" id="newPlUrl" placeholder="M3U URL - https://.../playlist.m3u"><button class="set-btn" id="addPlBtn">+ Add Playlist</button></div>
+<div class="set-row" id="networkStreamRow"><div class="ico">🔗</div><span>Network Stream<small>Paste any M3U / M3U8 / MP4 link & play</small></span><span style="flex:none;color:#9a9ab5;font-size:18px">›</span></div>
+<div id="networkStreamBox" style="display:none"><div class="set-card"><b>▶️ Play Any Link Direct</b><span>যেকোনো লিংক পেস্ট করে সরাসরি চালাও - Add করা লাগবে না</span><input class="set-input" id="directUrl" placeholder="https://.../channel.m3u8  বা  .m3u"><input class="set-input" id="directName" placeholder="Channel Name (Optional)"><button class="set-btn" id="playDirectBtn">▶️ Play Now</button></div></div>
 <div class="set-row"><div class="ico">📺</div><span>TV Mode<small>TV এর মতো বড় কার্ড, শুধু TV চ্যানেল</small></span><button class="toggle" id="tvModeToggle"></button></div>
 <div class="set-row"><div class="ico">🏆</div><span>Events Mode<small>Live & Upcoming Matches দেখাবে</small></span><button class="toggle" id="eventsModeToggle"></button></div>
-<div class="set-card"><b>➕ Add New Playlist</b><span>নিজের M3U Playlist - শুধু তোমার ফোনে থাকবে</span><input class="set-input" id="newPlName" placeholder="Playlist Name"><input class="set-input" id="newPlUrl" placeholder="M3U URL - https://.../playlist.m3u"><button class="set-btn" id="addPlBtn">+ Add Playlist</button></div>
-<div class="set-card"><b>📋 My Playlists (Yours)</b><span>শুধু তুমি যা Add করছো - এগুলাই Delete করতে পারবা</span><div id="myPlList"></div></div>
-<div class="set-card"><b>🔒 Built-in Playlists</b><span>RsLive এর অফিসিয়াল Playlist - Delete / Edit করা যাবে না</span><div id="builtInList"></div></div>
+<div class="set-card"><b>📋 My Playlists</b><span>শুধু তুমি যা Add করছো - এগুলাই Delete করতে পারবা</span><div id="myPlList"></div></div>
 <div class="set-card"><b>🎞️ Default Quality</b><span>Player এ ডিফল্ট কোয়ালিটি</span><div class="qual-row"><button class="qual-btn" data-q="auto">Auto</button><button class="qual-btn" data-q="hd">HD</button><button class="qual-btn" data-q="sd">SD</button></div></div>
 <div class="set-card"><b>⭐ Favorites</b><span>চ্যানেলে লং প্রেস করলে Favorites হবে</span><div class="set-row2"><button class="set-btn ghost" id="clearFavBtn">Clear Favorites</button><button class="set-btn ghost" id="clearCacheBtn">Clear Cache</button></div></div>
-<div class="set-row" id="checkUpdateRow"><div class="ico">↻</div><span>Check for Update</span></div>
-<div class="set-row" id="aboutRow"><div class="ico">i</div><span>About<small>RsLive TV v37 • Made in Bangladesh 🇧🇩</small></span></div>
+<div class="set-row" id="checkUpdateRow"><div class="ico">↻</div><span>Check for Update<small>নতুন ভার্সন আছে কিনা চেক করো</small></span></div>
 <div class="set-row" id="teleRow"><div class="ico">✈</div><span>Telegram<small>নতুন লিংক, আপডেট পেতে জয়েন করো</small></span></div>
+<div class="set-row" id="aboutRow"><div class="ico">i</div><span>About<small>RsLive Go v38 • Made in Bangladesh 🇧🇩</small></span></div>
 </div></div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
 <div id="installBar"><div class="ib-txt"><b>Add To Home Screen</b><span>App এর মতো চালাও</span></div><button id="installBtn">Add</button><span id="closeInstall">✕</span></div>
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
-const DEFAULT={siteName:'RsLive TV',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',showTele:true,proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',showTele:true,proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 let saved=null;try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null');}catch(e){}
 if(!saved||!Array.isArray(saved.playlists))saved=null;
 const CFG={...DEFAULT,...(saved||{})};
 try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;if(!CFG.showTele)document.getElementById('teleBtn').style.display='none';if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block';}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;}}catch(e){}
-let all=[];let cat='All';let currentTab='events';let _catCache=null;let visibleCount=200;let currentFiltered=[];let allMatches=[];let categoryHomeMode=false;let currentGroupFilter=null;let selectedPlaylist='All';
+let all=[];let cat='All';let currentTab='events';let _catCache=null;let visibleCount=200;let currentFiltered=[];let allMatches=[];let categoryHomeMode=false;let currentGroupFilter=null;
 let currentView=localStorage.getItem('rslive_view')||'grid';
 let tvMode=localStorage.getItem('rslive_tv_mode')==='1';
 let eventsMode=localStorage.getItem('rslive_events_mode')!=='0';
@@ -181,13 +176,7 @@ function getSearchQ(){return (document.getElementById('search')?.value||'').trim
 let _toastT=null;
 function showToast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),1800);}
 function applyView(){document.body.classList.remove('view-grid','view-list','view-compact');document.body.classList.add('view-'+currentView);localStorage.setItem('rslive_view',currentView);}
-function applyModes(){
-  document.getElementById('tvModeToggle')?.classList.toggle('on',tvMode);
-  document.getElementById('eventsModeToggle')?.classList.toggle('on',eventsMode);
-  const ev=document.getElementById('navEvents');if(ev)ev.style.display=eventsMode?'flex':'none';
-  if(tvMode){document.body.classList.add('view-list');}else{applyView();}
-}
-// NO RECENT - ONLY FAVORITES
+function applyModes(){document.getElementById('tvModeToggle')?.classList.toggle('on',tvMode);document.getElementById('eventsModeToggle')?.classList.toggle('on',eventsMode);const ev=document.getElementById('navEvents');if(ev)ev.style.display=eventsMode?'flex':'none';if(tvMode)document.body.classList.add('view-list');else applyView();}
 function getFav(){try{return JSON.parse(localStorage.getItem('rslive_fav')||'[]');}catch(e){return [];}}
 function isFav(u){return getFav().some(x=>x.url===u);}
 function toggleFav(ch){try{let f=getFav();if(f.some(x=>x.url===ch.url))f=f.filter(x=>x.url!==ch.url);else f.unshift({url:ch.url,name:ch.name,logo:ch.logo||'',source:ch.source||'',group:ch.group||''});localStorage.setItem('rslive_fav',JSON.stringify(f));return true;}catch(e){return false;}}
@@ -196,11 +185,9 @@ function saveCustomPl(l){localStorage.setItem('rslive_custom_playlists',JSON.str
 function switchTab(tab){
   if(tab==='events'&&!eventsMode){showToast('Events Mode OFF - Settings থেকে ON করো');tab='home';}
   currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;
-  document.getElementById('search').value='';
-  document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));
+  document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));
   const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');
-  if(btn)btn.classList.add('active');if(tab==='home')cat='All';
-  renderGrid(true);renderMatches();
+  if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();
   const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});
 }
 function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ');}
@@ -223,20 +210,14 @@ async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
     matchesLoading=true;matchesFailed=false;renderMatches();
-    try{
-      const ir=await fetchWithTimeout(MATCH_INDEX_URL+'?t='+Date.now(),9000);const id=await ir.json();
-      if(!Array.isArray(id.files))throw new Error('No files');
-      const files=id.files.filter(f=>typeof f==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(f));
-      const res=await Promise.all(files.map(async file=>{try{const r=await fetchWithTimeout('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),9000);const d=await r.json();return unwrapMatchFile(d).map(normalizeMatch).filter(Boolean);}catch(e){return [];}}));
-      allMatches=res.flat();matchesLoading=false;renderMatches();
-    }catch(e){matchesLoading=false;if(!allMatches.length)matchesFailed=true;renderMatches();}
+    try{const ir=await fetchWithTimeout(MATCH_INDEX_URL+'?t='+Date.now(),9000);const id=await ir.json();if(!Array.isArray(id.files))throw new Error('No files');const files=id.files.filter(f=>typeof f==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(f));const res=await Promise.all(files.map(async file=>{try{const r=await fetchWithTimeout('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),9000);const d=await r.json();return unwrapMatchFile(d).map(normalizeMatch).filter(Boolean);}catch(e){return [];}}));allMatches=res.flat();matchesLoading=false;renderMatches();}
+    catch(e){matchesLoading=false;if(!allMatches.length)matchesFailed=true;renderMatches();}
     matchesLoadingPromise=null;
   })();return matchesLoadingPromise;
 }
 function renderMatches(){
   const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;
-  const q=getSearchQ();
-  const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));
+  const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));
   vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0));});
   const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';
   if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';
@@ -259,22 +240,17 @@ async function getPlaylistsFromSW(){try{if('serviceWorker' in navigator)await na
 async function loadOne(p){if(!p||!p.url)return[];const tf=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return parse(await r.text());};const up=isProxyOn(p.name);try{let u=p.url;if(up&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const l=await tf(u);if(l.length)return l;throw new Error('Empty');}catch(e1){try{return await tf((CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(p.url));}catch(e2){return [];}}}
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'};}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null;}}return out;}
 async function loadAll(){
-  localStorage.removeItem('rslive_recent'); // Recent বাদ
+  localStorage.removeItem('rslive_recent');
   loadMatches();
   let base=await getPlaylistsFromSW();let custom=getCustomPl();CFG.playlists=[...base,...custom];
   for(const p of CFG.playlists){
     const list=await loadOne(p);
-    for(const ch of list){
-      ch.source=p.name||'TV';const ex=all.find(y=>y.url===ch.url);
-      if(!ex)all.push(ch);
-      else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo;}
-    }
+    for(const ch of list){ch.source=p.name||'TV';const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch);else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo;}}
     _catCache=null;renderGrid();renderMatches();
   }
   renderGrid();renderMatches();switchTab(eventsMode?'events':'home');
 }
-function getScopedChannels(){return selectedPlaylist==='All'?all:all.filter(c=>normName(c.source)===normName(selectedPlaylist));}
-function getGroupCounts(){const map=new Map();getScopedChannels().forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++;});return [...map.values()].sort((a,b)=>b.count-a.count);}
+function getGroupCounts(){const map=new Map();all.forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++;});return [...map.values()].sort((a,b)=>b.count-a.count);}
 function getCats(){if(_catCache)return _catCache;const seen=new Set();const out=[];CFG.playlists.forEach(p=>{if(p.name){const k=normName(p.name);if(!seen.has(k)){seen.add(k);out.push(p.name.trim());}}});_catCache=['All',...out.filter(c=>normName(c)!=='all')];return _catCache;}
 function matchesCat(c,category){return normName(category)==='all'?true:normName(c.source)===normName(category);}
 function makeCatCard(name,count,isFavFlag,onClick){
@@ -285,13 +261,9 @@ function makeCatCard(name,count,isFavFlag,onClick){
 }
 function renderCategoryHome(){
   const grid=document.getElementById('grid');grid.style.display='grid';grid.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';grid.replaceChildren();
-  const fav=getFav();const groups=getGroupCounts();const scoped=getScopedChannels();
-  const chips=document.createElement('div');chips.className='pl-chips';
-  ['All',...getCats().filter(c=>normName(c)!=='all')].forEach(pl=>{const b=document.createElement('button');b.className='pl-chip'+(selectedPlaylist===pl?' active':'');b.textContent=pl;b.addEventListener('click',()=>{selectedPlaylist=pl;renderCategoryHome();});chips.appendChild(b);});
-  grid.appendChild(chips);
-  // 1 - All channels
-  grid.appendChild(makeCatCard('All channels',scoped.length,false,()=>{if(selectedPlaylist==='All'){currentGroupFilter=null;categoryHomeMode=false;cat='All';switchTab('home');}else{currentGroupFilter='__playlist__';categoryHomeMode=false;renderGrid(true);}}));
-  // 2 - Favorites - Recent এর জায়গায়, Recent নাই
+  const fav=getFav();const groups=getGroupCounts();
+  // NO CHIPS HERE - Categories এর উপরের লিস্ট বাদ
+  grid.appendChild(makeCatCard('All channels',all.length,false,()=>{currentGroupFilter=null;categoryHomeMode=false;cat='All';switchTab('home');}));
   grid.appendChild(makeCatCard('Favorites',fav.length||'',true,()=>{currentGroupFilter='__fav__';categoryHomeMode=false;renderGrid(true);}));
   groups.forEach(g=>{grid.appendChild(makeCatCard(g.name,g.count,false,()=>{currentGroupFilter=g.name;categoryHomeMode=false;renderGrid(true);}));});
   document.getElementById('loadMoreWrap').style.display='none';
@@ -314,11 +286,10 @@ function renderGrid(reset=true){
     grid.style.display='grid';grid.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';if(reset)visibleCount=200;
     let list=[];
     if(currentGroupFilter==='__fav__')list=getFav().map(r=>({...r,logo:r.logo||all.find(x=>x.url===r.url)?.logo||''}));
-    else if(currentGroupFilter==='__playlist__')list=getScopedChannels();
-    else list=getScopedChannels().filter(c=>normName(cleanGroupName(c.group))===normName(currentGroupFilter));
+    else list=all.filter(c=>normName(cleanGroupName(c.group))===normName(currentGroupFilter));
     currentFiltered=list;const show=list.slice(0,visibleCount);grid.replaceChildren();
     const head=document.createElement('div');head.className='cat-head';
-    const title=document.createElement('b');title.textContent=currentGroupFilter==='__fav__'?'Favorites':currentGroupFilter==='__playlist__'?selectedPlaylist:currentGroupFilter;
+    const title=document.createElement('b');title.textContent=currentGroupFilter==='__fav__'?'Favorites':currentGroupFilter;
     const back=document.createElement('button');back.className='back-btn';back.innerHTML='<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Categories';back.addEventListener('click',()=>{currentGroupFilter=null;categoryHomeMode=true;switchTab('category');});
     head.append(title,back);grid.appendChild(head);
     if(!show.length){const em=document.createElement('div');em.style.cssText='grid-column:1/-1;text-align:center;color:#9a9ab5;padding:30px 10px;font-size:13px';em.textContent=currentGroupFilter==='__fav__'?'কোনো চ্যানেল লং প্রেস করে Favorites করো':'এই ক্যাটাগরিতে চ্যানেল নাই';grid.appendChild(em);}
@@ -338,9 +309,11 @@ function openSettings(){renderMyPlList();updateQualBtns();applyModes();document.
 function closeSettings(){document.getElementById('settingsOverlay').classList.remove('open');}
 function updateQualBtns(){document.querySelectorAll('.qual-btn').forEach(b=>b.classList.toggle('active',b.dataset.q===(CFG.quality||'auto')));}
 function renderMyPlList(){
-  const wrap=document.getElementById('myPlList');const built=document.getElementById('builtInList');
-  if(wrap){wrap.replaceChildren();const custom=getCustomPl();if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">এখনো নিজের Playlist Add করো নাই</span>';else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';const b=document.createElement('b');b.textContent=p.name;const tag=document.createElement('button');tag.className='tag';tag.textContent='Yours';const del=document.createElement('button');del.className='del';del.textContent='Delete';del.addEventListener('click',()=>{let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist ডিলিট হলো');});row.append(b,tag,del);wrap.appendChild(row);});}
-  if(built){built.replaceChildren();const basePl=CFG.playlists.filter(p=>!getCustomPl().some(x=>x.url===p.url&&x.name===p.name));if(!basePl.length)built.innerHTML='<span style="font-size:11px;color:#9a9ab5">Loading...</span>';else basePl.forEach(p=>{const row=document.createElement('div');row.className='pl-item';row.innerHTML='<span>🔒</span>';const b=document.createElement('b');b.textContent=p.name;const tag=document.createElement('button');tag.className='tag';tag.textContent='Built-in';tag.disabled=true;row.append(b,tag);built.appendChild(row);});}
+  const wrap=document.getElementById('myPlList');if(!wrap)return;wrap.replaceChildren();
+  const custom=getCustomPl();
+  if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">এখনো নিজের Playlist Add করো নাই</span>';
+  else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';const b=document.createElement('b');b.textContent=p.name;const tag=document.createElement('button');tag.className='tag';tag.textContent='Yours';const del=document.createElement('button');del.className='del';del.textContent='Delete';del.addEventListener('click',()=>{let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist ডিলিট হলো');});row.append(b,tag,del);wrap.appendChild(row);});
+  // NOTE: Default / Built-in Playlist এখানে শো করবে না - ইচ্ছা করে বাদ দেওয়া
 }
 document.getElementById('viewBtn')?.addEventListener('click',()=>{if(tvMode){showToast('TV Mode ON - Settings থেকে OFF করো');return;}currentView=currentView==='grid'?'list':currentView==='list'?'compact':'grid';applyView();showToast(currentView==='grid'?'▦ Grid View':currentView==='list'?'☰ List View':'⊞ Compact View');renderGrid(false);});
 document.getElementById('searchBtn')?.addEventListener('click',()=>{const w=document.getElementById('searchWrap');w.classList.toggle('open');if(w.classList.contains('open'))document.getElementById('search').focus();else{document.getElementById('search').value='';renderGrid(true);renderMatches();}});
@@ -349,8 +322,8 @@ document.getElementById('settingsBackBtn')?.addEventListener('click',closeSettin
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{const b=document.getElementById('networkStreamBox');b.style.display=b.style.display==='none'?'block':'none';});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid();});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home');});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>{showToast('✅ তুমি Latest Version এ আছো - v37');},800);});
-document.getElementById('aboutRow')?.addEventListener('click',()=>{showToast('RsLive TV v37 • Made in Bangladesh 🇧🇩');});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('✅ তুমি Latest Version এ আছো - v38'),800);});
+document.getElementById('aboutRow')?.addEventListener('click',()=>{showToast('RsLive Go v38 • Made in Bangladesh 🇧🇩');});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank');});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{
   const url=document.getElementById('directUrl').value.trim();const name=document.getElementById('directName').value.trim()||'Direct Channel';
