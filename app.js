@@ -1,4 +1,4 @@
-/* RsLive Go - v41 FINAL CLEAN - Mobile + Tablet + Laptop + PC + TV Layout - Low TV Supported */
+/* RsLive Go - v42 FINAL CLEAN - All Icons Same Style - Mobile + Tablet + Laptop + PC + TV - Low TV */
 (function(){
   const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
   if(!isDesktop) return;
@@ -15,7 +15,6 @@ html,body{height:100%;width:100%;background:#000;color:#fff;font-family:Poppins,
 body{display:flex;flex-direction:column}
 #app{display:flex;flex-direction:column;flex:1;min-height:0}
 .sticky{flex-shrink:0;z-index:100}
-/* ===== HEADER - NO ICON, TEXT FROM CORNER ===== */
 header{background:#000;border-bottom:1px solid #222;padding:12px 14px 10px}
 .header-top{display:flex;align-items:center;gap:10px;min-height:42px}
 .logo{display:flex;align-items:center;cursor:pointer;padding-left:2px}
@@ -34,7 +33,6 @@ header{background:#000;border-bottom:1px solid #222;padding:12px 14px 10px}
 .desktop-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 #mainCol{flex:1;min-height:0;display:flex;flex-direction:column}
 #scrollArea{flex:1;overflow-y:auto;padding-bottom:82px}
-/* ===== MATCHES ===== */
 #matchesSection{display:none;padding:8px 10px 2px}
 .matches-head{display:flex;justify-content:space-between;margin-bottom:7px}
 .matches-head strong{font-size:12px}
@@ -60,7 +58,6 @@ header{background:#000;border-bottom:1px solid #222;padding:12px 14px 10px}
 .match-action{border:0;border-radius:20px;padding:6px 11px;font-size:9px;font-weight:900;color:#000;background:#FFC107;cursor:pointer}
 .match-countdown{color:#fff2cc;font-size:11px;font-weight:700;text-align:right;white-space:nowrap}
 .match-countdown small{display:block;font-size:7.5px;color:#b8bccf;letter-spacing:1.5px}
-/* ===== CHANNEL GRID - MOBILE DEFAULT ===== */
 #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 10px}
 .card{background:#1c1c20;border:1px solid #26262a;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:92px;padding:12px 10px;position:relative}
 .card:active{transform:scale(.97)}
@@ -79,7 +76,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .fav-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;pointer-events:none;z-index:5}
 .cat-box{background:#1c1c20 !important;border:1px solid #26262a !important;border-radius:10px !important;min-height:96px !important;width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;padding:12px !important;cursor:pointer}
 .cat-box:active{transform:scale(.97)}
-.cat-box .cat-name{font-size:15px !important;line-height:1.35 !important;font-weight:600 !important;flex:1;min-width:0;white-space:normal !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;word-break:break-word !important;overflow-wrap:anywhere !important}
+.cat-box .cat-name{font-size:15px !important;line-height:1.35 !important;font-weight:600 !important;flex:1;min-width:0;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;word-break:normal !important}
 .cat-box .cat-name.fav{color:#FFE45C}
 .cat-box .cat-count{font-size:14px;color:#C8CBD6;flex-shrink:0}
 .cat-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
@@ -88,7 +85,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .cat-head .back-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#1e1e2e;border:1px solid #444;padding:11px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1}
-/* ===== SETTINGS - CLEAN FLAT - ONLY ESSENTIALS ===== */
+/* ===== SETTINGS - ALL ICONS SAME STYLE - FLAT YELLOW, NO BOX ===== */
 #settingsOverlay{display:none;position:fixed;inset:0;background:#121214;z-index:2000;flex-direction:column;overflow-y:auto}
 #settingsOverlay.open{display:flex}
 .set-head{display:flex;align-items:center;gap:16px;padding:14px 16px 16px;position:sticky;top:0;background:#121214;z-index:2}
@@ -100,8 +97,9 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .set-label{font-size:11px;letter-spacing:1.5px;color:#8e8e9a;font-weight:700;padding:14px 4px 2px}
 .set-row{display:flex;align-items:center;gap:14px;background:#1e1e22;border:1px solid #26262a;border-radius:16px;padding:14px;cursor:pointer}
 .set-row:active{background:#26262c}
-.set-row .ico{width:38px;height:38px;min-width:38px;border-radius:11px;background:#2a2410;display:flex;align-items:center;justify-content:center;font-size:19px;color:#FFC107;flex-shrink:0}
-.set-row .ico svg{width:20px;height:20px;fill:#FFC107}
+.set-row .ico{width:38px;height:38px;min-width:38px;background:transparent !important;border-radius:0 !important;display:flex;align-items:center;justify-content:center;font-size:20px;color:#FFC107;flex-shrink:0}
+.set-row .ico svg{width:22px;height:22px;fill:none;stroke:#FFC107;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.set-row .ico.fill svg{fill:#FFC107;stroke:none}
 .set-row span{flex:1;font-size:16px;font-weight:600;color:#fff;line-height:1.3}
 .set-row .arrow{color:#6e6e7a;font-size:18px;flex:none}
 .toggle{width:52px;height:30px;border-radius:99px;background:transparent;position:relative;flex-shrink:0;cursor:pointer;border:1.5px solid #6e6e7a}
@@ -114,10 +112,13 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .set-input:focus{border-color:#FFC107}
 .set-btn{width:100%;padding:13px;border:0;border-radius:12px;background:#FFC107;color:#000;font-weight:800;font-size:14px;cursor:pointer;margin-top:6px}
 .set-btn:active{transform:scale(.98)}
-.pl-item{display:flex;align-items:center;gap:10px;background:#1e1e22;border:1px solid #26262a;border-radius:12px;padding:11px;margin-top:8px}
-.pl-item b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
-.pl-item button{border:0;padding:7px 11px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer}
-.pl-item .del{background:#2a2a2a;color:#ff6b6b}.pl-item .tag{background:#2a2a2a;color:#C8CBD6}
+.pl-item{display:flex;align-items:center;gap:8px;background:#1e1e22;border:1px solid #26262a;border-radius:14px;padding:12px;margin-top:8px}
+.pl-item b{flex:1;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+.pl-item button{border:0;padding:7px 12px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0}
+.pl-item .tag{background:#2a2a2a;color:#C8CBD6}
+.pl-item .view{background:#FFC107;color:#000}
+.pl-item .edit{background:#1e3a5f;color:#6db3ff}
+.pl-item .del{background:#3a1a1a;color:#ff6b6b}
 /* ===== ABOUT ===== */
 #aboutOverlay{display:none;position:fixed;inset:0;background:#0f0f12;z-index:3000;flex-direction:column;overflow-y:auto}
 #aboutOverlay.open{display:flex}
@@ -125,10 +126,8 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .about-head button{width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer}
 .about-head h2{font-size:24px;font-weight:700}
 .about-body{padding:10px 24px 30px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.about-logo{width:140px;height:140px;border-radius:28px;background:#1a3a8f;display:flex;align-items:center;justify-content:center;border:2px solid #2a4a9f;margin:14px 0 18px}
-.about-logo .al-name{font-size:34px;font-weight:900;line-height:1;text-align:center;color:#fff}
-.about-logo .al-name i{font-style:normal;color:#FFC107}
-.about-logo .al-tv{font-size:11px;letter-spacing:4px;color:#fff;margin-top:4px;font-weight:800}
+.about-logo{width:140px;height:140px;border-radius:28px;background:#000;display:flex;align-items:center;justify-content:center;border:1px solid #333;margin:14px 0 18px;overflow:hidden}
+.about-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .about-body h1{font-size:34px;font-weight:800}
 .about-body .ver{color:#9a9ab5;font-size:18px;margin-top:6px}
 .about-info{margin-top:28px;width:100%;text-align:center}
@@ -158,7 +157,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 #installBar{display:none;position:fixed;left:10px;right:10px;bottom:70px;z-index:998;background:#17171d;border:1px solid #333;border-radius:100px;padding:7px;align-items:center;gap:6px}
 #installBar .ib-txt{flex:1;text-align:center}#installBar .ib-txt b{font-size:12px;display:block}#installBar .ib-txt span{font-size:10px;color:#b8b8d0}
 #installBar button{background:#fff;color:#000;border:0;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
-/* ===== TABLET - 768px+ ===== */
 @media(min-width:768px){
   #grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 16px}
   #matchesGrid{grid-template-columns:repeat(2,1fr)}
@@ -168,7 +166,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
   .set-body{max-width:640px;margin:0 auto;width:100%}
   .about-body{max-width:640px;margin:0 auto;width:100%}
 }
-/* ===== LAPTOP / PC - 1024px+ ===== */
 @media(min-width:1024px){
   body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}
   header{max-width:1200px;margin:auto}
@@ -180,7 +177,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
   .card{min-height:104px;padding:14px 12px}
   .card img{width:64px;height:64px;min-width:64px}
 }
-/* ===== TV / LARGE PC - 1440px+ - REMOTE FRIENDLY ===== */
 @media(min-width:1440px){
   header{max-width:1600px}
   .desktop-wrap{max-width:1600px;padding:20px 32px 50px}
@@ -195,7 +191,6 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
   .bnav{min-height:56px}.bnav .b-txt{font-size:13px}
   .card:focus,.match-card:focus,.bnav:focus,.set-row:focus{outline:3px solid #FFC107;outline-offset:2px}
 }
-/* ===== BIG TV - 1920px+ ===== */
 @media(min-width:1920px){
   #grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
   .card{min-height:136px}
@@ -203,37 +198,36 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
   .card p{font-size:18px}
   .logo-text .name{font-size:36px}
 }
-/* ===== LOW QUALITY / OLD TV - NO HEAVY EFFECTS, SAVE MEMORY ===== */
 @media(max-width:1366px) and (max-height:768px){
   *{animation:none !important}
   .card,.match-card,.set-row{box-shadow:none !important}
 }
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="viewBtn" title="Change View"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="searchBtn" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="settingsBtn" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
+<div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn" title="Change View"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="settingsBtn" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
 <div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="settingsOverlay"><div class="set-head"><button class="set-back" id="settingsBackBtn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2>Settings</h2></div><div class="set-body">
 <div class="set-label">PLAYLIST</div>
-<div class="set-row" id="addPlRow"><div class="ico">+</div><span>Add New Playlist</span><span class="arrow">›</span></div>
+<div class="set-row" id="addPlRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><span>Add New Playlist</span><span class="arrow">›</span></div>
 <div class="set-expand" id="addPlBox"><input class="set-input" id="newPlName" placeholder="Playlist Name - Example: My Playlist"><input class="set-input" id="newPlUrl" placeholder="M3U URL - https://.../playlist.m3u"><button class="set-btn" id="addPlBtn">+ Add Playlist</button></div>
-<div class="set-row" id="myPlRow"><div class="ico">☰</div><span>My Playlists</span><span class="arrow">›</span></div>
+<div class="set-row" id="myPlRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div><span>My Playlists</span><span class="arrow">›</span></div>
 <div class="set-expand" id="myPlBox"><div id="myPlList"></div></div>
 <div class="set-label">PLAYER</div>
-<div class="set-row" id="networkStreamRow"><div class="ico">🔗</div><span>Network Stream</span><span class="arrow">›</span></div>
-<div class="set-expand" id="networkStreamBox"><input class="set-input" id="directUrl" placeholder="https://.../channel.m3u8 or .m3u"><input class="set-input" id="directName" placeholder="Channel Name (Optional)"><button class="set-btn" id="playDirectBtn">Play Now</button></div>
-<div class="set-row"><div class="ico">📺</div><span>TV Mode</span><button class="toggle" id="tvModeToggle"></button></div>
-<div class="set-row"><div class="ico">🏆</div><span>Events Mode</span><button class="toggle" id="eventsModeToggle"></button></div>
+<div class="set-row" id="networkStreamRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><span>Network Stream</span><span class="arrow">›</span></div>
+<div class="set-expand" id="networkStreamBox"><input class="set-input" id="directUrl" placeholder="Paste channel link here - https://.../channel.m3u8"><button class="set-btn" id="playDirectBtn">▶ Play Now</button></div>
+<div class="set-row"><div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg></div><span>TV Mode</span><button class="toggle" id="tvModeToggle"></button></div>
+<div class="set-row"><div class="ico"><svg viewBox="0 0 24 24"><path d="M6 2h12v4a6 6 0 01-12 0V2z"/><path d="M6 4H3v2a5 5 0 005 5M18 4h3v2a5 5 0 01-5 5"/><path d="M12 12v4"/><path d="M8 20h8"/><path d="M10 16h4v4h-4z"/></svg></div><span>Events Mode</span><button class="toggle" id="eventsModeToggle"></button></div>
 <div class="set-label">APP</div>
-<div class="set-row" id="checkUpdateRow"><div class="ico">↻</div><span>Check for Update</span></div>
+<div class="set-row" id="checkUpdateRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div><span>Check for Update</span></div>
 <div class="set-row" id="teleRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><span>Telegram</span></div>
-<div class="set-row" id="aboutRow"><div class="ico">ⓘ</div><span>About</span></div>
+<div class="set-row" id="aboutRow"><div class="ico fill"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01" stroke="#121214" stroke-width="2.5"/></svg></div><span>About</span></div>
 </div></div>
 <div id="aboutOverlay"><div class="about-head"><button id="aboutBackBtn">←</button><h2>About</h2></div><div class="about-body">
-<div class="about-logo"><div><div class="al-name">RsLive<br><i>Go</i></div><div class="al-tv">LIVE TV</div></div></div>
-<h1>RsLive Go</h1><div class="ver">Version 1.0</div>
-<div class="about-info"><b>Developed By : RsLive Team</b><span>App Name : RsLive Go</span><span>My Location : Dhaka, Bangladesh</span></div>
-<div class="about-thanks"><b>Thank you for using RsLive Go.</b><p>If you enjoy this app, please join our Telegram community for updates, support, and announcements.</p></div>
+<div class="about-logo"><img id="aboutLogoImg" src="" alt="RsLive Go"></div>
+<h1>RsLive <span style="color:#FFC107">Go</span></h1><div class="ver">Version 1.0</div>
+<div class="about-info"><b>Developed By : RsLive Team</b><span>App : RsLive Go</span><span>Dhaka, Bangladesh</span></div>
+<div class="about-thanks"><b>Thanks for using RsLive Go.</b><p>Join Telegram for updates & support.</p></div>
 <button class="about-btn" id="aboutTeleBtn"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg> Join our Telegram</button>
 <button class="about-btn" id="aboutShareBtn"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> Share this app</button>
 <div class="about-copy">© 2026 RsLive Go. All rights reserved.</div>
@@ -242,13 +236,14 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <div id="installBar"><div class="ib-txt"><b>Add To Home Screen</b><span>Run like an App</span></div><button id="installBtn">Add</button><span id="closeInstall">✕</span></div>
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
+const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3e0f08e510.png';
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',showTele:true,proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 let saved=null;try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null');}catch(e){}
 if(!saved||!Array.isArray(saved.playlists))saved=null;
 const CFG={...DEFAULT,...(saved||{})};
-try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;if(!CFG.showTele)document.getElementById('teleBtn').style.display='none';if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block';}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;}}catch(e){}
+try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;document.getElementById('aboutLogoImg').src=ABOUT_LOGO_URL;if(!CFG.showTele)document.getElementById('teleBtn').style.display='none';if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block';}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;}}catch(e){}
 let all=[];let cat='All';let currentTab='events';let _catCache=null;let visibleCount=200;let currentFiltered=[];let allMatches=[];let categoryHomeMode=false;let currentGroupFilter=null;let selectedPlaylistName='All';
 let currentView=localStorage.getItem('rslive_view')||'grid';
 let tvMode=localStorage.getItem('rslive_tv_mode')==='1';
@@ -388,7 +383,7 @@ function renderGrid(reset=true){
 function loadMore(){visibleCount+=200;renderGrid(false);}
 let _searchT=null;document.getElementById('search').addEventListener('input',()=>{clearTimeout(_searchT);_searchT=setTimeout(()=>{renderGrid(true);renderMatches();},100);});
 window.addEventListener('resize',()=>{setTimeout(()=>switchTab(currentTab),150);});
-function openSettings(){renderMyPlList();applyModes();document.getElementById('settingsOverlay').classList.add('open');}
+function openSettings(){renderMyPlList();applyModes();document.getElementById('addPlBox')?.classList.remove('open');document.getElementById('networkStreamBox')?.classList.remove('open');document.getElementById('settingsOverlay').classList.add('open');}
 function closeSettings(){document.getElementById('settingsOverlay').classList.remove('open');}
 function openAbout(){document.getElementById('aboutOverlay').classList.add('open');}
 function closeAbout(){document.getElementById('aboutOverlay').classList.remove('open');}
@@ -399,14 +394,29 @@ function renderMyPlList(){
   else custom.forEach(p=>{
     const row=document.createElement('div');row.className='pl-item';row.style.cursor='pointer';
     const b=document.createElement('b');b.textContent=p.name;
-    const tag=document.createElement('button');tag.className='tag';tag.textContent='Yours';
-    const viewBtn=document.createElement('button');viewBtn.className='tag';viewBtn.textContent='View';viewBtn.style.background='#FFC107';viewBtn.style.color='#000';
+    const viewBtn=document.createElement('button');viewBtn.className='view';viewBtn.textContent='View';
+    const editBtn=document.createElement('button');editBtn.className='edit';editBtn.textContent='Edit';
     const del=document.createElement('button');del.className='del';del.textContent='Delete';
     const openPl=()=>{selectedPlaylistName=p.name;currentGroupFilter='__playlist__';categoryHomeMode=false;closeSettings();renderGrid(true);showToast(p.name+' - '+all.filter(c=>c.source===p.name).length+' channels');};
-    row.addEventListener('click',(e)=>{if(e.target===del)return;openPl();});
+    row.addEventListener('click',(e)=>{if([del,editBtn,viewBtn].includes(e.target))return;openPl();});
     viewBtn.addEventListener('click',(e)=>{e.stopPropagation();openPl();});
-    del.addEventListener('click',()=>{let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted');});
-    row.append(b,tag,viewBtn,del);wrap.appendChild(row);
+    editBtn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const newName=prompt('Edit Playlist Name:',p.name);if(newName===null)return;
+      const newUrl=prompt('Edit Playlist URL:',p.url);if(newUrl===null)return;
+      if(!newName.trim()||!newUrl.trim().startsWith('http')){showToast('Invalid name or URL');return;}
+      let c=getCustomPl().map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);saveCustomPl(c);
+      CFG.playlists=CFG.playlists.map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);
+      all.forEach(ch=>{if(ch.source===p.name)ch.source=newName.trim();});
+      _catCache=null;renderMyPlList();renderGrid();showToast('Playlist updated');
+    });
+    del.addEventListener('click',()=>{
+      if(!confirm('Delete "'+p.name+'"?'))return;
+      let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);
+      CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));
+      all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted');
+    });
+    row.append(b,viewBtn,editBtn,del);wrap.appendChild(row);
   });
 }
 document.getElementById('viewBtn')?.addEventListener('click',()=>{if(tvMode){showToast('TV Mode ON - Turn OFF from Settings');return;}currentView=currentView==='grid'?'list':currentView==='list'?'compact':'grid';applyView();showToast(currentView==='grid'?'Grid View':currentView==='list'?'List View':'Compact View');renderGrid(false);});
@@ -421,15 +431,15 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open');});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid();});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home');});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v41'),800);});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v42'),800);});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout();});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank');});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{
-  const url=document.getElementById('directUrl').value.trim();const name=document.getElementById('directName').value.trim()||'Direct Channel';
-  if(!url||!url.startsWith('http')){showToast('Enter a valid link');return;}
+  const url=document.getElementById('directUrl').value.trim();
+  if(!url||!url.startsWith('http')){showToast('Paste a valid link');return;}
   closeSettings();showToast('Loading...');
-  if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found in playlist');return;}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1);}catch(e){showToast('Link failed to open');}}
-  else openCh(url,name,'Direct','Direct',1);
+  if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return;}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1);}catch(e){showToast('Link failed to open');}}
+  else openCh(url,'Live Channel','Direct','Direct',1);
 });
 document.getElementById('addPlBtn')?.addEventListener('click',async()=>{
   const name=document.getElementById('newPlName').value.trim();const url=document.getElementById('newPlUrl').value.trim();
