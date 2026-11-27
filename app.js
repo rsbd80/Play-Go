@@ -1,4 +1,4 @@
-/* RsLive Go v62 - app.js FULL FIXED - rsbd80 / RsLive-Go */
+/* RsLive Go v60 - Only Header Icons Bigger + Slim Match Cards + Mobile Back Fix */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -119,6 +119,9 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .about-btn{width:100%;padding:12px;border:0;border-radius:11px;background:#FFE066;color:#000;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}
 .about-btn svg{width:19px;height:19px;fill:#000}
 .about-copy{margin-top:18px;color:#8e8e9a;font-size:12px}
+#homeEmpty{display:none;text-align:center;padding:26px 14px;color:#9a9ab5}
+#homeEmpty b{color:#fff;font-size:13px;display:block;margin-bottom:5px}
+#homeEmpty button{margin-top:10px;padding:10px 20px;border-radius:30px;border:0;background:#fff;color:#000;font-weight:800;font-size:13px;cursor:pointer}
 #loadMoreWrap{text-align:center;padding:5px 10px 16px;display:none}
 #loadMoreBtn{width:100%;max-width:300px;padding:11px;border-radius:11px;background:#34343C;color:#fff;font-size:12px;font-weight:700;border:1px solid #444}
 #noticeBar{display:none;background:#fff;color:#000;font-size:11px;font-weight:700;padding:7px;text-align:center}
@@ -147,7 +150,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="header-top"><div class="logo" onclick="location.href=location.origin+'/?t='+Date.now()"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="headerBellBtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notifBadge">0</span></button><button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="notifOverlay"><div class="notif-sheet"><div class="notif-head"><h3>🔔 Notifications</h3><button onclick="document.getElementById('notifOverlay').classList.remove('open')">✕</button></div><div class="notif-list" id="notifList"></div></div></div>
 <div id="settingsOverlay"><div class="set-head"><button class="set-back" id="settingsBackBtn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2>Settings</h2></div><div class="set-body">
@@ -172,22 +175,17 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
 const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3e0f08e510.png';
-// ===== GITHUB CLOUD - FIXED =====
-const GH_OWNER='rsbd80';
-const GH_REPO='RsLive-Go';
-const GH_BRANCH='main';
-const GH_PATH='data/config.json';
-// FIX 1: প্রতিবার নতুন URL - Cache ধরবে না
-function cloudUrl(){ return `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_PATH}?t=`+Date.now(); }
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 let saved=null;try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
 if(!saved||!Array.isArray(saved.playlists))saved=null;
-let CFG={...DEFAULT,...(saved||{})};
+const CFG={...DEFAULT,...(saved||{})};
+try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;document.getElementById('aboutLogoImg').src=ABOUT_LOGO_URL;if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}}catch(e){}
 let all=[],cat='All',currentTab='events',_catCache=null,visibleCount=200,currentFiltered=[],allMatches=[],categoryHomeMode=false,currentGroupFilter=null,selectedPlaylistName='All';
 let isPlaylistLoading=true;
-let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=true;
+let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=localStorage.getItem('rslive_events_mode')!=='0';
+const MATCH_INDEX_URL='/data/matches/index.json';
 function getSearchQ(){return (document.getElementById('search')?.value||'').trim().toLowerCase()}
 let _toastT=null;function showToast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),1800)}
 function applyView(){document.body.classList.remove('view-grid','view-list','view-compact');document.body.classList.add('view-'+currentView);localStorage.setItem('rslive_view',currentView)}
@@ -199,38 +197,14 @@ function getRecent(){try{return JSON.parse(localStorage.getItem('rslive_recent')
 function saveRecent(ch){try{let r=getRecent().filter(x=>x.url!==ch.url);r.unshift({url:ch.url,name:ch.name,logo:ch.logo||'',source:ch.source||'',group:ch.group||''});localStorage.setItem('rslive_recent',JSON.stringify(r.slice(0,50)))}catch(e){}}
 function getCustomPl(){try{return JSON.parse(localStorage.getItem('rslive_custom_playlists')||'[]')}catch(e){return[]}}
 function saveCustomPl(l){localStorage.setItem('rslive_custom_playlists',JSON.stringify(l))}
-function switchTab(tab){if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});if(tab==='home'&&all.length===0&&!isPlaylistLoading){loadAll();}}
+function switchTab(tab){if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}
 function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ')}
 function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
 function isProxyOn(n){const p=CFG.playlists.find(x=>normName(x.name)===normName(n));return !!(p?.useProxy)}
-function normalizeMatch(r){
-  if(!r||typeof r!=='object')return null;
-  const m={...r};
-  m.name=String(m.name||m.event_name||m.title||'').trim();
-  const st=Array.isArray(m.streams)?m.streams:[];
-  const f=st.find(x=>x&&(x.url||x.stream_url||x.src));
-  // FIX: Admin এর ৩ রকম ফরম্যাটই ধরবে - url / stream_url / streams[0]
-  m.url=String(m.url||m.streamUrl||m.stream_url||(f&&(f.url||f.stream_url||f.src))||'').trim();
-  m.startTime=m.startTime||m.start_time||m.start||m.time||'';
-  m.endTime=m.endTime||m.end_time||m.end||'';
-  m.teamA=String(m.teamA||m.homeTeam||m.team1||m.team_a||'').trim();
-  m.teamB=String(m.teamB||m.awayTeam||m.team2||m.team_b||'').trim();
-  m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||m.logo_a||'';
-  m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||m.logo_b||'';
-  if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}
-  if(!m.name)return null;
-  return m;
-}
-// FIX 2: End Time না থাকলে কখনো Expired না
-function getMatchState(m){
-  const now=Date.now();
-  const s=Date.parse(m.startTime||'');
-  const e=Date.parse(m.endTime||'');
-  if(Number.isFinite(e)&&e>0&&now>=e) return 'expired';
-  if(Number.isFinite(s)&&s>0&&now<s) return 'upcoming';
-  return 'live';
-}
+function unwrapMatchFile(d){if(!d||typeof d!=='object')return[];if(Array.isArray(d.matches))return d.matches;if(d.match)return Array.isArray(d.match)?d.match:[d.match];if(Array.isArray(d.liveSports))return d.liveSports;if(d.name||d.event_name||d.title)return[d];return[]}
+function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||'';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
+function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
 function getBadgeInfo(m,state){if(state==='live')return{txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return{txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);if(diff<=3600000&&diff>=0)return{txt:'STARTING SOON',cls:'soon'};if(now.toDateString()===st.toDateString())return{txt:'TODAY',cls:'today'};const tm=new Date(now);tm.setDate(now.getDate()+1);if(tm.toDateString()===st.toDateString())return{txt:'TOMORROW',cls:'tomorrow'};return{txt:'UPCOMING',cls:'upcoming'}}
 function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
 function matchCountdown(m){const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return'';let sec=Math.max(0,Math.floor((t-Date.now())/1000));const d=Math.floor(sec/86400);sec%=86400;const h=Math.floor(sec/3600);sec%=3600;const mi=Math.floor(sec/60);sec%=60;return((d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0')+':'+String(sec).padStart(2,'0'))}
@@ -239,117 +213,20 @@ function teamNode(name,logo){const w=document.createElement('div');w.className='
 function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
-async function loadGitHubConfig(){
-  try{
-    const r=await fetch(cloudUrl(),{cache:'no-store'});
-    if(!r.ok) throw new Error('no cloud');
-    const cloud=await r.json();
-    CFG={...CFG,...cloud};
-    try{
-      document.getElementById('taglineEl').textContent=CFG.tagline||'LIVE TV • BANGLADESH';
-      document.getElementById('search').placeholder=CFG.searchPh||'Search channels...';
-      document.getElementById('teleBtn').href=CFG.telegram||'https://t.me/RsLiveGo';
-      if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
-      if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}
-      if(Array.isArray(cloud.playlists) && cloud.playlists.length){
-        cloud.playlists.forEach(p=>{ if(!CFG.playlists.some(x=>x.url===p.url)) CFG.playlists.push(p); });
-      }
-      // FIX 3: matches যেকোনো ফরম্যাটে থাকলেই ধরবে
-      if(Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);
-      // FIX 4: GitHub থেকে eventsMode OFF আসলেও ফোনে Events বন্ধ হবে না - Admin এর Toggle ই আসল
-      // eventsMode সবসময় true রাখো
-      eventsMode=true;
-      if(typeof cloud.tvMode!=='undefined') tvMode=!!cloud.tvMode;
-      applyModes(); renderMatches(); renderGrid();
-    }catch(e){}
-    return cloud;
-  }catch(e){return null}
-}
-async function loadMatches(force=false){if(matchesLoadingPromise&&!force)return matchesLoadingPromise;matchesLoadingPromise=(async()=>{matchesLoading=true;renderMatches();try{const cloud=await loadGitHubConfig();if(cloud&&Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);}catch(e){}matchesLoading=false;renderMatches();matchesLoadingPromise=null})();return matchesLoadingPromise}
-// FIX 5: renderMatches - Upcoming + Live ২টাই দেখাবে, Tab যাই হোক
-function renderMatches(){
-  const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');if(!sec||!grid)return;
-  const q=getSearchQ();
-  const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));
-  vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});
-  // Events + Home ২টাতেই ম্যাচ দেখাবে
-  const show=(currentTab==='events'||currentTab==='home'||!!q)&&eventsMode;
-  sec.style.display=(show&&vis.length)?'block':'none';
-  const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';
-  if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}
-  grid.replaceChildren();
-  vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})
-}
-async function getPlaylistsFromSW(){
-  try{
-    const r=await fetch(cloudUrl(),{cache:'no-store'});
-    const j=await r.json();
-    if(j.playlists && j.playlists.length) return j.playlists;
-  }catch(e){}
-  try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}
-  return Array.isArray(CFG.playlists)?CFG.playlists:[];
-}
+async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
+async function loadMatches(force=false){if(matchesLoadingPromise&&!force)return matchesLoadingPromise;matchesLoadingPromise=(async()=>{matchesLoading=true;renderMatches();try{const ir=await fetchWithTimeout(MATCH_INDEX_URL+'?t='+Date.now(),9000);const id=await ir.json();if(!Array.isArray(id.files))throw new Error('No files');const files=id.files.filter(f=>typeof f==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(f));const res=await Promise.all(files.map(async file=>{try{const r=await fetchWithTimeout('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),9000);const d=await r.json();return unwrapMatchFile(d).map(normalizeMatch).filter(Boolean)}catch(e){return[]}}));allMatches=res.flat();matchesLoading=false;renderMatches()}catch(e){matchesLoading=false;renderMatches()}matchesLoadingPromise=null})();return matchesLoadingPromise}
+function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
+async function getPlaylistsFromSW(){try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}return Array.isArray(CFG.playlists)?CFG.playlists:[]}
 async function loadOne(p){if(!p||!p.url)return[];const tf=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return parse(await r.text())};const up=isProxyOn(p.name);try{let u=p.url;if(up&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const l=await tf(u);if(l.length)return l;throw new Error('Empty')}catch(e1){try{return await tf((CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(p.url))}catch(e2){return[]}}}
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'}}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null}}return out}
-async function loadAll(){
-  isPlaylistLoading=true;
-  loadMatches();
-  renderGrid();
-  try{ await loadGitHubConfig(); }catch(e){}
-  let base=await getPlaylistsFromSW();
-  let custom=getCustomPl();
-  let merged=[...base,...custom];
-  (CFG.playlists||[]).forEach(p=>{ if(!merged.some(x=>x.url===p.url)) merged.push(p); });
-  CFG.playlists=merged;
-  if(!CFG.playlists.length){
-    CFG.playlists=[
-      {name:'Jago BD',url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u',useProxy:false},
-      {name:'Bangladesh',url:'https://iptv-org.github.io/iptv/countries/bd.m3u',useProxy:false}
-    ];
-  }
-  for(const p of CFG.playlists){
-    const list=await loadOne(p);
-    for(const ch of list){
-      ch.source=p.name||'TV';
-      const ex=all.find(y=>y.url===ch.url);
-      if(!ex) all.push(ch);
-      else{ if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group; if(!ex.logo&&ch.logo)ex.logo=ch.logo; }
-    }
-    _catCache=null; renderGrid(); renderMatches();
-  }
-  isPlaylistLoading=false;
-  renderGrid(); renderMatches();
-  switchTab(eventsMode?'events':'home');
-}
+async function loadAll(){isPlaylistLoading=true;loadMatches();renderGrid();let base=await getPlaylistsFromSW();let custom=getCustomPl();CFG.playlists=[...base,...custom];for(const p of CFG.playlists){const list=await loadOne(p);for(const ch of list){ch.source=p.name||'TV';const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch);else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo}}_catCache=null;renderGrid();renderMatches()}isPlaylistLoading=false;renderGrid();renderMatches();switchTab(eventsMode?'events':'home')}
 function getGroupCounts(){const map=new Map();all.forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++});return [...map.values()].sort((a,b)=>b.count-a.count)}
 function getGroupCountByName(name){return all.filter(c=>normName(cleanGroupName(c.group))===normName(name)).length}
 function matchesCat(c,category){return normName(category)==='all'?true:normName(c.source)===normName(category)}
 function makeCatCard(name,count,isFavFlag,onClick,hideCount){const box=document.createElement('div');box.className='cat-box';box.tabIndex=0;const n=document.createElement('span');n.className='cat-name'+(isFavFlag?' fav':'');n.textContent=name;const ct=document.createElement('span');ct.className='cat-count';ct.textContent=(hideCount||count==null||count==='')?'':String(count);box.append(n,ct);box.addEventListener('click',()=>{pushBackState('category');onClick()});return box}
 function renderCategoryHome(){const grid=document.getElementById('grid');grid.style.display='grid';grid.replaceChildren();const fav=getFav();grid.appendChild(makeCatCard('All channels',all.length,false,()=>{currentGroupFilter=null;categoryHomeMode=false;cat='All';switchTab('home')}));grid.appendChild(makeCatCard('Favorites',fav.length||'',true,()=>{currentGroupFilter='__fav__';categoryHomeMode=false;renderGrid(true)},fav.length===0));const order=['Bangla','English','Hindi','Islamic','Kids','Sports'];const groups=getGroupCounts();const used=new Set(order.map(normName));order.forEach(name=>{const cnt=getGroupCountByName(name);if(cnt>0)grid.appendChild(makeCatCard(name,cnt,false,()=>{currentGroupFilter=name;categoryHomeMode=false;renderGrid(true)}))});groups.forEach(g=>{if(!used.has(normName(g.name)))grid.appendChild(makeCatCard(g.name,g.count,false,()=>{currentGroupFilter=g.name;categoryHomeMode=false;renderGrid(true)}))});document.getElementById('loadMoreWrap').style.display='none'}
 function makeChannelCard(c,i){const card=document.createElement('div');card.className='card';card.tabIndex=0;const img=document.createElement('img');img.loading='lazy';img.src=c.logo||DEFAULT_CAT_LOGO;img.onerror=function(){this.onerror=null;this.src=DEFAULT_CAT_LOGO};const txt=document.createElement('div');txt.className='c-txt';const name=document.createElement('p');name.textContent=c.name;txt.append(name);card.append(img,txt);let pressTimer=null,longPressed=false;const startPress=()=>{longPressed=false;pressTimer=setTimeout(()=>{longPressed=true;if(navigator.vibrate)navigator.vibrate([30,40,30]);toggleFav(c);const pop=document.createElement('div');pop.className='fav-pop';pop.textContent=isFav(c.url)?'⭐':'💔';card.appendChild(pop);setTimeout(()=>pop.remove(),650);showToast(isFav(c.url)?'Added to Favorites':'Removed from Favorites')},550)};const endPress=()=>{clearTimeout(pressTimer)};card.addEventListener('touchstart',startPress,{passive:true});card.addEventListener('touchend',endPress,{passive:true});card.addEventListener('touchmove',endPress,{passive:true});card.addEventListener('touchcancel',endPress,{passive:true});card.addEventListener('contextmenu',e=>e.preventDefault());card.addEventListener('click',()=>{if(longPressed)return;openCh(c.url,c.name,c.source||'',c.group||'',i+1)});card.addEventListener('keydown',e=>{if(e.key==='Enter')openCh(c.url,c.name,c.source||'',c.group||'',i+1)});return card}
-function renderGrid(reset=true){
-  const grid=document.getElementById('grid');const wrap=document.getElementById('loadMoreWrap');const feat=document.getElementById('featured');const q=getSearchQ();
-  if(isPlaylistLoading&&all.length===0){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px;color:#9a9ab5;font-size:14px">Loading channels...<br><span style="font-size:12px">Please wait</span></div>';if(wrap)wrap.style.display='none';return}
-  if(!isPlaylistLoading&&all.length===0&&currentTab==='home'&&!q){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px"><b style="font-size:15px">No channels loaded</b><br><span style="color:#9a9ab5;font-size:12px">Internet / Playlist issue</span><br><button onclick="location.reload()" style="margin-top:12px;padding:10px 24px;border-radius:30px;border:0;background:#FFC107;color:#000;font-weight:800;font-size:14px">Retry ↻</button></div>';if(wrap)wrap.style.display='none';return}
-  if(currentGroupFilter&&!q){
-    grid.style.display='grid';if(reset)visibleCount=200;let list=[];
-    if(currentGroupFilter==='__fav__')list=getFav().map(r=>({...r,logo:r.logo||all.find(x=>x.url===r.url)?.logo||''}));
-    else if(currentGroupFilter==='__recent__')list=getRecent().map(r=>({...r,logo:r.logo||all.find(x=>x.url===r.url)?.logo||''}));
-    else if(currentGroupFilter==='__playlist__')list=all.filter(c=>c.source===selectedPlaylistName);
-    else list=all.filter(c=>normName(cleanGroupName(c.group))===normName(currentGroupFilter));
-    currentFiltered=list;const show=list.slice(0,visibleCount);grid.replaceChildren();
-    const head=document.createElement('div');head.className='cat-head';const title=document.createElement('b');title.textContent=currentGroupFilter==='__fav__'?'Favorites':currentGroupFilter==='__recent__'?'Recently watched':currentGroupFilter==='__playlist__'?selectedPlaylistName:currentGroupFilter;const back=document.createElement('button');back.className='back-btn';back.innerHTML='<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Categories';back.addEventListener('click',()=>{currentGroupFilter=null;selectedPlaylistName='All';categoryHomeMode=true;switchTab('category')});head.append(title,back);grid.appendChild(head);
-    if(!show.length){const em=document.createElement('div');em.style.cssText='grid-column:1/-1;text-align:center;color:#9a9ab5;padding:30px 10px;font-size:13px';em.textContent=currentGroupFilter==='__fav__'?'Long press any channel to add to Favorites':'No channels in this category';grid.appendChild(em)}
-    show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(list.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+list.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return;
-  }
-  if(q){grid.style.display='grid';if(reset)visibleCount=200;currentFiltered=all.filter(c=>String(c.name).toLowerCase().includes(q)||String(c.group).toLowerCase().includes(q)||String(c.source).toLowerCase().includes(q));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return}
-  if(currentTab==='events'){
-    if(all.length===0 && isPlaylistLoading){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px;color:#9a9ab5;font-size:14px">Loading channels...<br><span style="font-size:12px">Please wait</span></div>';return;}
-    grid.style.display='grid';if(reset)visibleCount=200;currentFiltered=all;const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}return;
-  }
-  if(currentTab==='category'&&categoryHomeMode){renderCategoryHome();return}
-  grid.style.display='grid';if(reset)visibleCount=200;const effCat=currentTab==='home'?'All':cat;currentFiltered=all.filter(c=>matchesCat(c,effCat));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}
-}
+function renderGrid(reset=true){const grid=document.getElementById('grid');const wrap=document.getElementById('loadMoreWrap');const feat=document.getElementById('featured');const q=getSearchQ();if(isPlaylistLoading&&all.length===0){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px;color:#9a9ab5;font-size:14px">Loading channels...<br><span style="font-size:12px">Please wait</span></div>';if(wrap)wrap.style.display='none';return}if(!isPlaylistLoading&&all.length===0&&currentTab==='home'&&!q){grid.style.display='grid';grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 10px"><b style="font-size:15px">No channels loaded</b><br><span style="color:#9a9ab5;font-size:12px">Internet / Playlist issue</span><br><button onclick="location.reload()" style="margin-top:12px;padding:10px 24px;border-radius:30px;border:0;background:#FFC107;color:#000;font-weight:800;font-size:14px">Retry ↻</button></div>';if(wrap)wrap.style.display='none';return}if(currentGroupFilter&&!q){grid.style.display='grid';if(reset)visibleCount=200;let list=[];if(currentGroupFilter==='__fav__')list=getFav().map(r=>({...r,logo:r.logo||all.find(x=>x.url===r.url)?.logo||''}));else if(currentGroupFilter==='__recent__')list=getRecent().map(r=>({...r,logo:r.logo||all.find(x=>x.url===r.url)?.logo||''}));else if(currentGroupFilter==='__playlist__')list=all.filter(c=>c.source===selectedPlaylistName);else list=all.filter(c=>normName(cleanGroupName(c.group))===normName(currentGroupFilter));currentFiltered=list;const show=list.slice(0,visibleCount);grid.replaceChildren();const head=document.createElement('div');head.className='cat-head';const title=document.createElement('b');title.textContent=currentGroupFilter==='__fav__'?'Favorites':currentGroupFilter==='__recent__'?'Recently watched':currentGroupFilter==='__playlist__'?selectedPlaylistName:currentGroupFilter;const back=document.createElement('button');back.className='back-btn';back.innerHTML='<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Categories';back.addEventListener('click',()=>{currentGroupFilter=null;selectedPlaylistName='All';categoryHomeMode=true;switchTab('category')});head.append(title,back);grid.appendChild(head);if(!show.length){const em=document.createElement('div');em.style.cssText='grid-column:1/-1;text-align:center;color:#9a9ab5;padding:30px 10px;font-size:13px';em.textContent=currentGroupFilter==='__fav__'?'Long press any channel to add to Favorites':'No channels in this category';grid.appendChild(em)}show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(list.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+list.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return}if(q){grid.style.display='grid';if(reset)visibleCount=200;currentFiltered=all.filter(c=>String(c.name).toLowerCase().includes(q)||String(c.group).toLowerCase().includes(q)||String(c.source).toLowerCase().includes(q));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(feat)feat.style.display='none';return}if(currentTab==='events'){grid.replaceChildren();grid.style.display='none';if(wrap)wrap.style.display='none';if(feat)feat.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}return}if(currentTab==='category'&&categoryHomeMode){renderCategoryHome();return}grid.style.display='grid';if(reset)visibleCount=200;const effCat=currentTab==='home'?'All':cat;currentFiltered=all.filter(c=>matchesCat(c,effCat));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>grid.appendChild(makeChannelCard(c,i)));const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓'}else wrap.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}}
 function loadMore(){visibleCount+=200;renderGrid(false)}
 let _searchT=null;document.getElementById('search').addEventListener('input',()=>{clearTimeout(_searchT);_searchT=setTimeout(()=>{renderGrid(true);renderMatches()},100)});
 window.addEventListener('resize',()=>{setTimeout(()=>switchTab(currentTab),150)});
@@ -358,7 +235,7 @@ function closeSettings(){document.getElementById('settingsOverlay').classList.re
 function openAbout(){document.getElementById('aboutOverlay').classList.add('open')}
 function closeAbout(){document.getElementById('aboutOverlay').classList.remove('open')}
 function renderMyPlList(){const wrap=document.getElementById('myPlList');if(!wrap)return;wrap.replaceChildren();const custom=getCustomPl();if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">No playlist added yet</span>';else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';row.style.cursor='pointer';const b=document.createElement('b');b.textContent=p.name;const viewBtn=document.createElement('button');viewBtn.className='view';viewBtn.textContent='View';const editBtn=document.createElement('button');editBtn.className='edit';editBtn.textContent='Edit';const del=document.createElement('button');del.className='del';del.textContent='Delete';const openPl=()=>{selectedPlaylistName=p.name;currentGroupFilter='__playlist__';categoryHomeMode=false;closeSettings();renderGrid(true);showToast(p.name+' - '+all.filter(c=>c.source===p.name).length+' channels')};row.addEventListener('click',(e)=>{if([del,editBtn,viewBtn].includes(e.target))return;openPl()});viewBtn.addEventListener('click',(e)=>{e.stopPropagation();openPl()});editBtn.addEventListener('click',(e)=>{e.stopPropagation();const newName=prompt('Edit Playlist Name:',p.name);if(newName===null)return;const newUrl=prompt('Edit Playlist URL:',p.url);if(newUrl===null)return;if(!newName.trim()||!newUrl.trim().startsWith('http')){showToast('Invalid name or URL');return}let c=getCustomPl().map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);saveCustomPl(c);CFG.playlists=CFG.playlists.map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);all.forEach(ch=>{if(ch.source===p.name)ch.source=newName.trim()});_catCache=null;renderMyPlList();renderGrid();showToast('Playlist updated')});del.addEventListener('click',()=>{if(!confirm('Delete "'+p.name+'"?'))return;let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted')});row.append(b,viewBtn,editBtn,del);wrap.appendChild(row)})}
-async function getNotifs(){try{const r=await fetch(cloudUrl(),{cache:'no-store'});const d=await r.json();return d.notis||[]}catch(e){return[]}}
+async function getNotifs(){try{const r=await fetch('/data/notifications.json?t='+Date.now(),{cache:'no-store'});const d=await r.json();return d.notifications||[]}catch(e){return[]}}
 function getSeenNotif(){try{return JSON.parse(localStorage.getItem('rslive_seen_notif')||'[]')}catch(e){return[]}}
 async function updateNotifBadge(){const list=await getNotifs();const seen=getSeenNotif();const unread=list.filter(n=>!seen.includes(n.id)).length;const badge=document.getElementById('notifBadge');if(badge){badge.style.display=unread>0?'flex':'none';badge.textContent=unread>99?'99+':unread}}
 async function openNotif(){const list=await getNotifs();const seen=getSeenNotif();const box=document.getElementById('notifList');if(!list.length){box.innerHTML='<div style="text-align:center;color:#888;padding:30px">No notifications</div>'}else{box.innerHTML='';[...list].reverse().forEach(n=>{const d=document.createElement('div');d.className='notif-item'+(!seen.includes(n.id)?' unread':'');d.innerHTML='<b>'+n.title+'</b><p>'+n.message+'</p><span>'+(n.time||'')+'</span>';if(n.link){d.style.cursor='pointer';d.onclick=()=>window.open(n.link,'_blank')}box.appendChild(d)})}localStorage.setItem('rslive_seen_notif',JSON.stringify(list.map(n=>n.id)));updateNotifBadge();document.getElementById('notifOverlay').classList.add('open')}
@@ -376,11 +253,12 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v62'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v60'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
 document.getElementById('addPlBtn')?.addEventListener('click',async()=>{const name=document.getElementById('newPlName').value.trim();const url=document.getElementById('newPlUrl').value.trim();if(!name||!url||!url.startsWith('http')){showToast('Enter name + valid M3U URL');return}if(getCustomPl().some(x=>x.url===url)){showToast('This playlist already exists');return}const np={name,url,useProxy:false};let c=getCustomPl();c.push(np);saveCustomPl(c);CFG.playlists.push(np);document.getElementById('newPlName').value='';document.getElementById('newPlUrl').value='';showToast('Adding playlist...');closeSettings();const list=await loadOne(np);for(const ch of list){ch.source=np.name;const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch)}_catCache=null;renderGrid();showToast(name+' added - '+list.length+' channels')});
+// --- Mobile Back Button Fix ---
 let _backStack=[];
 function pushBackState(name){try{history.pushState({rslive:name},'');_backStack.push(name);}catch(e){}}
 function closeTopLayer(){
@@ -401,8 +279,7 @@ try{history.pushState({rslive:'home'},'');}catch(e){}
 const _oldOpenSettings=openSettings;openSettings=function(){_oldOpenSettings();pushBackState('settings');};
 const _oldOpenAbout=openAbout;openAbout=function(){_oldOpenAbout();pushBackState('about');};
 const _oldOpenNotif=openNotif;openNotif=async function(){await _oldOpenNotif();pushBackState('notif');};
-try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;document.getElementById('aboutLogoImg').src=ABOUT_LOGO_URL;if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}}catch(e){}
-applyView();applyModes();loadAll();updateNotifBadge();setInterval(()=>loadMatches(true),60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
+applyView();applyModes();loadAll();updateNotifBadge();setInterval(loadMatches,60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>{})}
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex'}});
