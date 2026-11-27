@@ -1,16 +1,16 @@
 {
-  "name": "Bangladesh A vs Pakistan A",
-  "matchType": "Cricket | Asia Cup | ODI",
+  "name": "Sri Lanka A vs Pakistan A",
+  "matchType": "Cricket | Asia Cup | Final",
   "status": "upcoming",
-  "startTime": "2026-11-27T16:00:00+06:00",
-  "endTime": "2026-11-27T24:00:00+06:00",
-  "teamA": "Bangladesh A",
+  "startTime": "2026-11-29T16:00:00+06:00",
+  "endTime": "2026-11-29T24:00:00+06:00",
+  "teamA": "Sri Lanka A",
   "teamB": "Pakistan A",
-  "teamALogo": "https://flagcdn.com/bd.svg",
+  "teamALogo": "https://flagcdn.com/cl.svg",
   "teamBLogo": "https://flagcdn.com/pk.svg",
   "streams": [
     {
-      "name": "Live Stream 2",
+      "name": "Live Stream 1",
       "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
       "show": true
     }
