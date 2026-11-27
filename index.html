@@ -5,16 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>RsLive Go</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>html,body{margin:0;padding:0;background:#0D1117;color:#fff}#app{min-height:100vh}</style>
+<style>html,body{margin:0;padding:0;background:#1E1E24}#app{min-height:100vh}</style>
 </head>
 <body>
-<div id="app"><div style="padding:40px;text-align:center">Loading RsLive Go...</div></div>
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.getRegistrations().then(regs=>{regs.forEach(r=>r.unregister());});
-  if(window.caches){caches.keys().then(keys=>keys.forEach(k=>caches.delete(k)));}
-}
-</script>
-<script src="app.js?v=56"></script>
+<div id="app"></div>
+<script src="app.js"></script>
 </body>
 </html>
