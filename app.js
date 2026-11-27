@@ -1,4 +1,4 @@
-/* RsLive Go v61 - GitHub Cloud + No Header Icon + Slim Match Cards + Bigger Header Icons + Mobile Back Fix */
+/* RsLive Go v61 - GitHub Cloud + Home Load Fix + No Header Icon + Slim Match Cards + Bigger Header Icons + Mobile Back Fix */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -150,7 +150,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="header-top"><div class="logo" onclick="location.href=location.origin+'/?t='+Date.now()"><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="top-actions"><button class="icon-btn" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button><button class="icon-btn" id="viewBtn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button><button class="icon-btn" id="headerBellBtn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span id="notifBadge">0</span></button><button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search channels..." autocomplete="off"></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home')">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap below to see all channels</span><br><button onclick="switchTab('home');document.getElementById('scrollArea').scrollTop=0;">All TV</button></div><div id="featured"><div style="font-size:11px;color:#fff;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#C8CBD6">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
 <div id="toast"></div>
 <div id="notifOverlay"><div class="notif-sheet"><div class="notif-head"><h3>🔔 Notifications</h3><button onclick="document.getElementById('notifOverlay').classList.remove('open')">✕</button></div><div class="notif-list" id="notifList"></div></div></div>
 <div id="settingsOverlay"><div class="set-head"><button class="set-back" id="settingsBackBtn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2>Settings</h2></div><div class="set-body">
@@ -202,7 +202,7 @@ function getRecent(){try{return JSON.parse(localStorage.getItem('rslive_recent')
 function saveRecent(ch){try{let r=getRecent().filter(x=>x.url!==ch.url);r.unshift({url:ch.url,name:ch.name,logo:ch.logo||'',source:ch.source||'',group:ch.group||''});localStorage.setItem('rslive_recent',JSON.stringify(r.slice(0,50)))}catch(e){}}
 function getCustomPl(){try{return JSON.parse(localStorage.getItem('rslive_custom_playlists')||'[]')}catch(e){return[]}}
 function saveCustomPl(l){localStorage.setItem('rslive_custom_playlists',JSON.stringify(l))}
-function switchTab(tab){if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}
+function switchTab(tab){if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});if(tab==='home'&&all.length===0&&!isPlaylistLoading){loadAll();}}
 function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ')}
 function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
@@ -219,7 +219,7 @@ function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_spor
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
-// ===== GITHUB CLOUD LOAD - সবার জন্য =====
+// ===== GITHUB CLOUD LOAD - FIXED: MERGE, NOT OVERWRITE =====
 async function loadGitHubConfig(){
   try{
     const r=await fetch(CLOUD_URL,{cache:'no-store'});
@@ -232,7 +232,10 @@ async function loadGitHubConfig(){
       document.getElementById('teleBtn').href=CFG.telegram;
       if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
       if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}
-      if(Array.isArray(cloud.playlists)) CFG.playlists=cloud.playlists;
+      // FIX: Playlist মার্জ করো, ওভাররাইট করবা না
+      if(Array.isArray(cloud.playlists) && cloud.playlists.length){
+        cloud.playlists.forEach(p=>{ if(!CFG.playlists.some(x=>x.url===p.url)) CFG.playlists.push(p); });
+      }
       if(Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);
       if(typeof cloud.eventsMode!=='undefined') eventsMode=!!cloud.eventsMode;
       if(typeof cloud.tvMode!=='undefined') tvMode=!!cloud.tvMode;
@@ -243,10 +246,49 @@ async function loadGitHubConfig(){
 }
 async function loadMatches(force=false){if(matchesLoadingPromise&&!force)return matchesLoadingPromise;matchesLoadingPromise=(async()=>{matchesLoading=true;renderMatches();try{const cloud=await loadGitHubConfig();if(cloud&&Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);}catch(e){}matchesLoading=false;renderMatches();matchesLoadingPromise=null})();return matchesLoadingPromise}
 function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
-async function getPlaylistsFromSW(){try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}return Array.isArray(CFG.playlists)?CFG.playlists:[]}
+// ===== FIXED: GitHub আগে, তারপর /api, তারপর Local =====
+async function getPlaylistsFromSW(){
+  try{
+    const r=await fetch(CLOUD_URL,{cache:'no-store'});
+    const j=await r.json();
+    if(j.playlists && j.playlists.length) return j.playlists;
+  }catch(e){}
+  try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}
+  return Array.isArray(CFG.playlists)?CFG.playlists:[];
+}
 async function loadOne(p){if(!p||!p.url)return[];const tf=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return parse(await r.text())};const up=isProxyOn(p.name);try{let u=p.url;if(up&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const l=await tf(u);if(l.length)return l;throw new Error('Empty')}catch(e1){try{return await tf((CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(p.url))}catch(e2){return[]}}}
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'}}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null}}return out}
-async function loadAll(){isPlaylistLoading=true;loadMatches();renderGrid();let base=await getPlaylistsFromSW();let custom=getCustomPl();CFG.playlists=[...base,...custom];for(const p of CFG.playlists){const list=await loadOne(p);for(const ch of list){ch.source=p.name||'TV';const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch);else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo}}_catCache=null;renderGrid();renderMatches()}isPlaylistLoading=false;renderGrid();renderMatches();switchTab(eventsMode?'events':'home')}
+// ===== FIXED loadAll: GitHub আগে লোড, তারপর মার্জ, খালি হলে Default =====
+async function loadAll(){
+  isPlaylistLoading=true;
+  loadMatches();
+  renderGrid();
+  try{ await loadGitHubConfig(); }catch(e){}
+  let base=await getPlaylistsFromSW();
+  let custom=getCustomPl();
+  let merged=[...base,...custom];
+  (CFG.playlists||[]).forEach(p=>{ if(!merged.some(x=>x.url===p.url)) merged.push(p); });
+  CFG.playlists=merged;
+  if(!CFG.playlists.length){
+    CFG.playlists=[
+      {name:'Jago BD',url:'https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u',useProxy:false},
+      {name:'Bangladesh',url:'https://iptv-org.github.io/iptv/countries/bd.m3u',useProxy:false}
+    ];
+  }
+  for(const p of CFG.playlists){
+    const list=await loadOne(p);
+    for(const ch of list){
+      ch.source=p.name||'TV';
+      const ex=all.find(y=>y.url===ch.url);
+      if(!ex) all.push(ch);
+      else{ if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group; if(!ex.logo&&ch.logo)ex.logo=ch.logo; }
+    }
+    _catCache=null; renderGrid(); renderMatches();
+  }
+  isPlaylistLoading=false;
+  renderGrid(); renderMatches();
+  switchTab(eventsMode?'events':'home');
+}
 function getGroupCounts(){const map=new Map();all.forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++});return [...map.values()].sort((a,b)=>b.count-a.count)}
 function getGroupCountByName(name){return all.filter(c=>normName(cleanGroupName(c.group))===normName(name)).length}
 function matchesCat(c,category){return normName(category)==='all'?true:normName(c.source)===normName(category)}
@@ -305,7 +347,6 @@ try{history.pushState({rslive:'home'},'');}catch(e){}
 const _oldOpenSettings=openSettings;openSettings=function(){_oldOpenSettings();pushBackState('settings');};
 const _oldOpenAbout=openAbout;openAbout=function(){_oldOpenAbout();pushBackState('about');};
 const _oldOpenNotif=openNotif;openNotif=async function(){await _oldOpenNotif();pushBackState('notif');};
-// Initial local config apply
 try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;document.getElementById('aboutLogoImg').src=ABOUT_LOGO_URL;if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}}catch(e){}
 applyView();applyModes();loadAll();updateNotifBadge();setInterval(loadMatches,60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>{})}
