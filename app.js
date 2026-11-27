@@ -1,4 +1,4 @@
-/* RsLive Go v51 - Loading Fix + Bottom Nav Bigger + About Back = Settings Back + Card Slightly Smaller */
+/* RsLive Go v52 - GitHub Theme + Bottom Nav Smaller + Highlight Medium + Cards Same */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -9,30 +9,30 @@ let _d=false;setInterval(()=>{if(window.innerWidth>768&&(Math.abs(window.outerWi
 document.getElementById('app').innerHTML=`
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none}
-html,body{height:100%;width:100%;background:#1E1E24;color:#fff;font-family:Poppins,sans-serif;overflow-x:hidden}
+html,body{height:100%;width:100%;background:#0D1117;color:#fff;font-family:Poppins,sans-serif;overflow-x:hidden}
 body{display:flex;flex-direction:column}#app{display:flex;flex-direction:column;flex:1;min-height:0}
 .sticky{flex-shrink:0;z-index:100}
-header{background:#1E1E24;padding:14px 14px 10px}
+header{background:#0D1117;padding:14px 14px 10px}
 .header-top{display:flex;align-items:center;gap:8px;min-height:42px}
 .logo{display:flex;align-items:center;cursor:pointer}
 .logo-text .name{font-size:24px;font-weight:900;line-height:1;white-space:nowrap}
 .logo-text .name i{font-style:normal;color:#FFC107}
 .logo-text .tag{font-size:9px;letter-spacing:2px;color:#9a9ab5;font-weight:600;margin-top:3px;white-space:nowrap}
 .top-actions{margin-left:auto;display:flex;gap:6px}
-.icon-btn{width:38px;height:38px;border-radius:50%;border:0;background:#1E1E24;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:0;background:#0D1117;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
 .icon-btn:active{transform:scale(.92)}
 .icon-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #notifBadge{position:absolute;top:1px;right:1px;background:#FF3B30;color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px}
 #searchWrap{display:none;margin-top:8px;position:relative}#searchWrap.open{display:flex}
-#search{width:100%;padding:11px 12px 11px 30px;border-radius:99px;border:1px solid #444;background:#34343C;color:#fff;font-size:14px;outline:none;user-select:text;-webkit-user-select:text}
+#search{width:100%;padding:11px 12px 11px 30px;border-radius:99px;border:1px solid #30363D;background:#161B22;color:#fff;font-size:14px;outline:none;user-select:text;-webkit-user-select:text}
 #searchWrap .s-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;opacity:.7}
 .desktop-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 #mainCol{flex:1;min-height:0;display:flex;flex-direction:column}
-#scrollArea{flex:1;overflow-y:auto;padding-bottom:80px;background:#1E1E24}
+#scrollArea{flex:1;overflow-y:auto;padding-bottom:80px;background:#0D1117}
 #matchesSection{display:none;padding:12px 12px 4px}
 .matches-head{display:flex;justify-content:space-between;margin-bottom:8px}.matches-head strong{font-size:14px}.matches-head span{font-size:10px;color:#8e91a8}
 #matchesGrid{display:grid;grid-template-columns:1fr;gap:10px}
-.match-card{background:#34343C;border-radius:14px;padding:12px 14px 12px;cursor:pointer}
+.match-card{background:#161B22;border-radius:14px;padding:12px 14px 12px;cursor:pointer}
 .match-top{display:flex;justify-content:space-between;margin-bottom:10px}
 .sport-badge{display:flex;gap:5px;font-size:12px;font-weight:800;max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-badge{display:inline-flex;border-radius:99px;padding:5px 11px;font-size:10px;font-weight:800;flex-shrink:0}
@@ -43,18 +43,18 @@ header{background:#1E1E24;padding:14px 14px 10px}
 .match-badge.tomorrow{background:#1a2a2a;color:#8adfe8;border:1px solid #1a4a4a}
 .match-teams{display:flex;justify-content:center;gap:18px}
 .match-team{flex:0 1 110px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
-.match-team img,.team-fallback{width:54px;height:54px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;border:2px solid #444}
+.match-team img,.team-fallback{width:54px;height:54px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;border:2px solid #30363D}
 .team-fallback{display:flex;align-items:center;justify-content:center;background:#25283a;color:#fff;font-weight:900;font-size:13px}
 .match-team b{font-size:15px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.match-vs{padding-top:14px}.match-vs .vs-txt{font-size:11px;font-weight:900;background:#222;border:1px solid #333;padding:4px 8px;border-radius:99px}
-.match-bottom{display:flex;justify-content:space-between;gap:8px;margin-top:10px;padding-top:9px;border-top:1px solid #444}
+.match-vs{padding-top:14px}.match-vs .vs-txt{font-size:11px;font-weight:900;background:#21262D;border:1px solid #30363D;padding:4px 8px;border-radius:99px}
+.match-bottom{display:flex;justify-content:space-between;gap:8px;margin-top:10px;padding-top:9px;border-top:1px solid #30363D}
 .match-time{font-size:11px;color:#c9cce0}
 .match-action{border:0;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:900;color:#000;background:#FFC107;cursor:pointer}
 .match-countdown{color:#fff2cc;font-size:12px;font-weight:700;text-align:right;white-space:nowrap}
 .match-countdown small{display:block;font-size:8px;color:#b8bccf;letter-spacing:1.5px}
-#grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;background:#1E1E24}
-/* CHANNEL CARD + CATEGORY CARD - দুইটা সেম, সামান্য ছোট */
-.card{background:#34343C;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:68px;padding:9px 7px;position:relative}
+#grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;background:#0D1117}
+/* CHANNEL + CATEGORY CARD - যেমন ছিল তেমনই, হাত দেওয়া হয় নাই */
+.card{background:#161B22;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:68px;padding:9px 7px;position:relative}
 .card:active{transform:scale(.97)}
 .card img{width:44px;height:44px;min-width:44px;object-fit:contain;background:#fff;border-radius:7px;padding:3px}
 .card .c-txt{flex:1;min-width:0;display:flex;justify-content:center}
@@ -69,26 +69,26 @@ body.view-compact .card{min-height:68px;padding:8px 6px;flex-direction:column;ga
 body.view-compact .card img{width:36px;height:36px;min-width:36px}
 body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .fav-pop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none;z-index:5}
-.cat-box{background:#34343C!important;border:0!important;border-radius:10px!important;min-height:68px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:9px 7px!important;cursor:pointer}
+.cat-box{background:#161B22!important;border:0!important;border-radius:10px!important;min-height:68px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:9px 7px!important;cursor:pointer}
 .cat-box:active{transform:scale(.97)}
 .cat-box .cat-name{font-size:12.5px!important;line-height:1.35!important;font-weight:600!important;flex:1;min-width:0;white-space:normal!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;word-break:break-word!important;color:#fff!important}
 .cat-box .cat-name.fav{color:#FFE45C!important}
 .cat-box .cat-count{font-size:12.5px!important;color:#C8CBD6;flex-shrink:0;font-weight:600}
 .cat-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
 .cat-head b{font-size:15px;font-weight:900}
-.cat-head .back-btn{display:inline-flex;align-items:center;gap:5px;border:0;cursor:pointer;padding:6px 10px 6px 6px;border-radius:99px;font-weight:700;font-size:12px;color:#E8E8EE;background:#34343C;border:1px solid #444}
+.cat-head .back-btn{display:inline-flex;align-items:center;gap:5px;border:0;cursor:pointer;padding:6px 10px 6px 6px;border-radius:99px;font-weight:700;font-size:12px;color:#E8E8EE;background:#161B22;border:1px solid #30363D}
 .cat-head .back-btn svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#1e1e2e;border:1px solid #444;padding:9px 16px;border-radius:99px;font-size:12px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#161B22;border:1px solid #30363D;padding:9px 16px;border-radius:99px;font-size:12px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1}
-#settingsOverlay{display:none;position:fixed;inset:0;background:#1E1E24;z-index:2000;flex-direction:column;overflow-y:auto}
+#settingsOverlay{display:none;position:fixed;inset:0;background:#0D1117;z-index:2000;flex-direction:column;overflow-y:auto}
 #settingsOverlay.open{display:flex}
-.set-head{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;position:sticky;top:0;background:#1E1E24;z-index:2}
-.set-back{width:38px;height:38px;min-width:38px;border-radius:50%;border:1px solid #444;background:#34343C;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.set-head{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;position:sticky;top:0;background:#0D1117;z-index:2}
+.set-back{width:38px;height:38px;min-width:38px;border-radius:50%;border:1px solid #30363D;background:#161B22;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .set-back svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .set-head h2{font-size:20px;font-weight:800}
 .set-body{padding:4px 12px 20px;display:flex;flex-direction:column;gap:8px}
 .set-label{font-size:11px;letter-spacing:1.5px;color:#8e8e9a;font-weight:700;padding:12px 4px 2px}
-.set-row{display:flex;align-items:center;gap:11px;background:#34343C;border:0;border-radius:12px;padding:14px 14px;cursor:pointer}
+.set-row{display:flex;align-items:center;gap:11px;background:#161B22;border:0;border-radius:12px;padding:14px 14px;cursor:pointer}
 .set-row .ico{width:32px;height:32px;min-width:32px;display:flex;align-items:center;justify-content:center;color:#FFC107;flex-shrink:0}
 .set-row .ico svg{width:20px;height:20px;fill:none;stroke:#FFC107;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .set-row .ico.fill svg{fill:#FFC107;stroke:none}
@@ -98,21 +98,21 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 .toggle:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#8e8e9a}
 .toggle.on{border-color:#FFC107;background:#2a2410}.toggle.on:after{left:22px;background:#FFC107}
 .set-expand{display:none;padding:2px 0 3px}.set-expand.open{display:block}
-.set-input{width:100%;padding:12px 13px;border-radius:10px;border:1px solid #444;background:#34343C;color:#fff;font-size:14px;outline:none;margin:4px 0;user-select:text;-webkit-user-select:text}
+.set-input{width:100%;padding:12px 13px;border-radius:10px;border:1px solid #30363D;background:#161B22;color:#fff;font-size:14px;outline:none;margin:4px 0;user-select:text;-webkit-user-select:text}
 .set-input:focus{border-color:#FFC107}
 .set-btn{width:100%;padding:12px;border:0;border-radius:10px;background:#FFC107;color:#000;font-weight:800;font-size:14px;cursor:pointer;margin-top:3px}
-.pl-item{display:flex;align-items:center;gap:5px;background:#34343C;border:0;border-radius:10px;padding:11px;margin-top:6px}
+.pl-item{display:flex;align-items:center;gap:5px;background:#161B22;border:0;border-radius:10px;padding:11px;margin-top:6px}
 .pl-item b{flex:1;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
 .pl-item button{border:0;padding:6px 10px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0}
 .pl-item .view{background:#FFC107;color:#000}.pl-item .edit{background:#1e3a5f;color:#6db3ff}.pl-item .del{background:#3a1a1a;color:#ff6b6b}
-#aboutOverlay{display:none;position:fixed;inset:0;background:#1E1E24;z-index:3000;flex-direction:column;overflow-y:auto}
+#aboutOverlay{display:none;position:fixed;inset:0;background:#0D1117;z-index:3000;flex-direction:column;overflow-y:auto}
 #aboutOverlay.open{display:flex}
 .about-head{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.about-head button{width:38px;height:38px;min-width:38px;border-radius:50%;border:1px solid #444;background:#34343C;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer}
+.about-head button{width:38px;height:38px;min-width:38px;border-radius:50%;border:1px solid #30363D;background:#161B22;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer}
 .about-head button svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .about-head h2{font-size:20px;font-weight:700}
 .about-body{padding:6px 18px 20px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.about-logo{width:100px;height:100px;border-radius:20px;background:#000;display:flex;align-items:center;justify-content:center;border:1px solid #444;margin:8px 0 12px;overflow:hidden}
+.about-logo{width:100px;height:100px;border-radius:20px;background:#000;display:flex;align-items:center;justify-content:center;border:1px solid #30363D;margin:8px 0 12px;overflow:hidden}
 .about-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .about-body h1{font-size:26px;font-weight:800}.about-body .ver{color:#9a9ab5;font-size:14px;margin-top:3px}
 .about-info{margin-top:18px;width:100%;text-align:center}.about-info b{font-size:15px;display:block;line-height:1.6}.about-info span{font-size:14px;color:#e8e8e8;display:block;line-height:1.6}
@@ -124,29 +124,29 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 #homeEmpty b{color:#fff;font-size:13px;display:block;margin-bottom:5px}
 #homeEmpty button{margin-top:10px;padding:10px 20px;border-radius:30px;border:0;background:#fff;color:#000;font-weight:800;font-size:13px;cursor:pointer}
 #loadMoreWrap{text-align:center;padding:5px 10px 16px;display:none}
-#loadMoreBtn{width:100%;max-width:300px;padding:11px;border-radius:11px;background:#34343C;color:#fff;font-size:12px;font-weight:700;border:1px solid #444}
+#loadMoreBtn{width:100%;max-width:300px;padding:11px;border-radius:11px;background:#161B22;color:#fff;font-size:12px;font-weight:700;border:1px solid #30363D}
 #noticeBar{display:none;background:#fff;color:#000;font-size:11px;font-weight:700;padding:7px;text-align:center}
-#featured{display:none;margin:10px;background:#34343C;border:1px solid #444;border-radius:11px;padding:10px;cursor:pointer}
-#bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:#1E1E24;border-top:1px solid #34343C;display:flex;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
-.bnav{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 6px;border-radius:11px;cursor:pointer;border:1px solid transparent;background:transparent;color:#7a7a8e;min-height:58px}
-.bnav .b-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.bnav .b-txt{font-size:12px;font-weight:700}.bnav.active{color:#fff;background:#34343C;border-color:#444}
+#featured{display:none;margin:10px;background:#161B22;border:1px solid #30363D;border-radius:11px;padding:10px;cursor:pointer}
+#bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:#0D1117;border-top:1px solid #21262D;display:flex;gap:4px;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.bnav{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border-radius:10px;cursor:pointer;border:1px solid transparent;background:transparent;color:#8B949E;min-height:50px}
+.bnav .b-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.bnav .b-txt{font-size:11px;font-weight:700}.bnav.active{color:#E6EDF3;background:#21262D;border-color:#30363D}
 .tele{display:none!important}
-#installBar{display:none;position:fixed;left:10px;right:10px;bottom:64px;z-index:998;background:#34343C;border:1px solid #444;border-radius:100px;padding:6px;align-items:center;gap:5px}
+#installBar{display:none;position:fixed;left:10px;right:10px;bottom:64px;z-index:998;background:#161B22;border:1px solid #30363D;border-radius:100px;padding:6px;align-items:center;gap:5px}
 #installBar .ib-txt{flex:1;text-align:center}#installBar .ib-txt b{font-size:11px;display:block}#installBar .ib-txt span{font-size:9px;color:#b8b8d0}
 #installBar button{background:#fff;color:#000;border:0;padding:6px 10px;border-radius:100px;font-weight:800;font-size:11px}
 #notifOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:flex-end;justify-content:center}
 #notifOverlay.open{display:flex}
-.notif-sheet{background:#1E1E24;width:100%;max-width:480px;max-height:85vh;border-radius:16px 16px 0 0;overflow:hidden;display:flex;flex-direction:column}
-.notif-head{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #444}
-.notif-head button{background:#34343C;color:#fff;border:0;width:30px;height:30px;border-radius:50%;cursor:pointer}
+.notif-sheet{background:#0D1117;width:100%;max-width:480px;max-height:85vh;border-radius:16px 16px 0 0;overflow:hidden;display:flex;flex-direction:column}
+.notif-head{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #30363D}
+.notif-head button{background:#161B22;color:#fff;border:0;width:30px;height:30px;border-radius:50%;cursor:pointer}
 .notif-list{overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
-.notif-item{background:#34343C;border-radius:11px;padding:11px}
+.notif-item{background:#161B22;border-radius:11px;padding:11px}
 .notif-item b{font-size:13px;display:block;margin-bottom:3px}.notif-item p{font-size:12px;color:#ccc;line-height:1.5}.notif-item span{font-size:10px;color:#888;display:block;margin-top:5px}
 .notif-item.unread{border:1px solid #FFC107}
 @media(min-width:768px){#grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:10px}#matchesGrid{grid-template-columns:repeat(2,1fr)}.logo-text .name{font-size:26px}.card{min-height:76px}.card p{font-size:13.5px}.set-body,.about-body{max-width:640px;margin:0 auto;width:100%}}
 @media(min-width:1024px){body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}header{max-width:1200px;margin:auto}.desktop-wrap{flex-direction:row;max-width:1200px;margin:auto;gap:16px;padding:14px 22px 36px}#mainCol{order:1}#scrollArea{overflow:visible}#grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px 0}#matchesGrid{grid-template-columns:repeat(2,1fr)}#bottomNav{max-width:480px;left:50%;transform:translateX(-50%);border-radius:14px 14px 0 0}.card{min-height:80px;padding:11px 10px}.card img{width:52px;height:52px;min-width:52px}}
-@media(min-width:1440px){header{max-width:1600px}.desktop-wrap{max-width:1600px;padding:18px 30px 44px}.logo-text .name{font-size:30px}.logo-text .tag{font-size:10px}#grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}#matchesGrid{grid-template-columns:repeat(3,1fr)}.card{min-height:88px;padding:13px 12px;border-radius:12px}.card img{width:56px;height:56px;min-width:56px}.card p{font-size:14.5px}.bnav{min-height:64px}.bnav .b-txt{font-size:13px}}
+@media(min-width:1440px){header{max-width:1600px}.desktop-wrap{max-width:1600px;padding:18px 30px 44px}.logo-text .name{font-size:30px}.logo-text .tag{font-size:10px}#grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}#matchesGrid{grid-template-columns:repeat(3,1fr)}.card{min-height:88px;padding:13px 12px;border-radius:12px}.card img{width:56px;height:56px;min-width:56px}.card p{font-size:14.5px}.bnav{min-height:56px}.bnav .b-txt{font-size:12px}}
 @media(min-width:1920px){#grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.card{min-height:96px}.card img{width:60px;height:60px;min-width:60px}.card p{font-size:15.5px}.logo-text .name{font-size:32px}}
 </style>
 <div id="noticeBar"></div>
@@ -168,7 +168,7 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <div class="set-label">APP</div>
 <div class="set-row" id="checkUpdateRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div><span>Check for Update</span></div>
 <div class="set-row" id="teleRow"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><span>Telegram</span></div>
-<div class="set-row" id="aboutRow"><div class="ico" style="background:#34343C;border-radius:50%"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#FFC107;stroke-width:2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1" fill="#FFC107" stroke="none"/></svg></div><span>About</span><span class="arrow">›</span></div>
+<div class="set-row" id="aboutRow"><div class="ico" style="background:#161B22;border-radius:50%"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#FFC107;stroke-width:2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1" fill="#FFC107" stroke="none"/></svg></div><span>About</span><span class="arrow">›</span></div>
 </div></div>
 <div id="aboutOverlay"><div class="about-head"><button class="set-back" id="aboutBackBtn"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2>About</h2></div><div class="about-body"><div class="about-logo"><img id="aboutLogoImg" src="" alt="RsLive Go"></div><h1>RsLive <span style="color:#FFC107">Go</span></h1><div class="ver">Version 1.0</div><div class="about-info"><b>Developed By : RsLive Team</b><span>App : RsLive Go</span><span>Dhaka, Bangladesh</span></div><div class="about-thanks"><b>Thanks for using RsLive Go.</b><p>Join Telegram for updates & support.</p></div><button class="about-btn" id="aboutTeleBtn">Join our Telegram</button><button class="about-btn" id="aboutShareBtn">Share this app</button><div class="about-copy">© 2026 RsLive Go. All rights reserved.</div></div></div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank" rel="noopener"></a>
@@ -254,7 +254,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v51'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v52'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
@@ -265,4 +265,4 @@ let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex'}});
 document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share -> Add to Home Screen');return}if(!deferredPrompt){alert('Browser Menu -> Add to Home Screen');return}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null});
 document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1')});
-(function(){const TELEGRAM_LINK="https://t.me/RsLiveGo";const style=document.createElement("style");style.textContent=`.telegram-popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}.popup-box{background:#34343C;width:100%;max-width:360px;border-radius:14px;padding:14px;position:relative}.popup-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:15px;cursor:pointer}.popup-content{display:flex;align-items:center;gap:11px}.telegram-icon{background:#229ED9;width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.telegram-icon svg{width:24px;height:24px;fill:#fff}.popup-text h3{font-size:16px;margin-bottom:3px;color:#fff;text-align:left}.popup-text p{font-size:13px;color:#ddd;line-height:1.4;text-align:left}.join-btn{background:#1a7dff;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:auto;flex-shrink:0}.dont-show{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:#bbb;cursor:pointer}`;document.head.appendChild(style);function showTelegramPopup(){if(localStorage.getItem("hideTelegramPopup")==="true")return;if(document.getElementById("telegramPopup"))return;const popup=document.createElement("div");popup.id="telegramPopup";popup.className="telegram-popup";popup.innerHTML=`<div class="popup-box"><button class="popup-close" id="popupClose">✕</button><div class="popup-content"><div class="telegram-icon"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><div class="popup-text"><h3>Welcome</h3><p>সর্বশেষ আপডেট পেতে আমাদের টেলিগ্রামে জয়েন করুন</p></div><button class="join-btn" id="joinBtn">Join</button></div><label class="dont-show"><input type="checkbox" id="dontShowAgain" /><span>আর দেখাবেন না</span></label></div>`;document.body.appendChild(popup);function saveDontShow(){if(document.getElementById("dontShowAgain").checked)localStorage.setItem("hideTelegramPopup","true")}document.getElementById("popupClose").addEventListener("click",()=>{saveDontShow();popup.remove()});document.getElementById("joinBtn").addEventListener("click",()=>{saveDontShow();window.open(TELEGRAM_LINK,"_blank");popup.remove()})}setTimeout(showTelegramPopup,3000)})();
+(function(){const TELEGRAM_LINK="https://t.me/RsLiveGo";const style=document.createElement("style");style.textContent=`.telegram-popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}.popup-box{background:#161B22;width:100%;max-width:360px;border-radius:14px;padding:14px;position:relative}.popup-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:15px;cursor:pointer}.popup-content{display:flex;align-items:center;gap:11px}.telegram-icon{background:#229ED9;width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.telegram-icon svg{width:24px;height:24px;fill:#fff}.popup-text h3{font-size:16px;margin-bottom:3px;color:#fff;text-align:left}.popup-text p{font-size:13px;color:#ddd;line-height:1.4;text-align:left}.join-btn{background:#1a7dff;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:auto;flex-shrink:0}.dont-show{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:#bbb;cursor:pointer}`;document.head.appendChild(style);function showTelegramPopup(){if(localStorage.getItem("hideTelegramPopup")==="true")return;if(document.getElementById("telegramPopup"))return;const popup=document.createElement("div");popup.id="telegramPopup";popup.className="telegram-popup";popup.innerHTML=`<div class="popup-box"><button class="popup-close" id="popupClose">✕</button><div class="popup-content"><div class="telegram-icon"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><div class="popup-text"><h3>Welcome</h3><p>সর্বশেষ আপডেট পেতে আমাদের টেলিগ্রামে জয়েন করুন</p></div><button class="join-btn" id="joinBtn">Join</button></div><label class="dont-show"><input type="checkbox" id="dontShowAgain" /><span>আর দেখাবেন না</span></label></div>`;document.body.appendChild(popup);function saveDontShow(){if(document.getElementById("dontShowAgain").checked)localStorage.setItem("hideTelegramPopup","true")}document.getElementById("popupClose").addEventListener("click",()=>{saveDontShow();popup.remove()});document.getElementById("joinBtn").addEventListener("click",()=>{saveDontShow();window.open(TELEGRAM_LINK,"_blank");popup.remove()})}setTimeout(showTelegramPopup,3000)})();
