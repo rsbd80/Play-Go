@@ -1,4 +1,4 @@
-/* RsLive Go v61 - rsbd80 / RsLive-Go - Events Back + All TV Removed */
+/* RsLive Go v62 - app.js FULL FIXED - rsbd80 / RsLive-Go */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -172,12 +172,13 @@ body.view-compact .card p{font-size:11px;text-align:center;-webkit-line-clamp:1}
 <nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
 const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3e0f08e510.png';
-// ===== GITHUB CLOUD - rsbd80 / RsLive-Go =====
+// ===== GITHUB CLOUD - FIXED =====
 const GH_OWNER='rsbd80';
 const GH_REPO='RsLive-Go';
 const GH_BRANCH='main';
 const GH_PATH='data/config.json';
-const CLOUD_URL=`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_PATH}?t=`+Date.now();
+// FIX 1: প্রতিবার নতুন URL - Cache ধরবে না
+function cloudUrl(){ return `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_PATH}?t=`+Date.now(); }
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
@@ -186,7 +187,7 @@ if(!saved||!Array.isArray(saved.playlists))saved=null;
 let CFG={...DEFAULT,...(saved||{})};
 let all=[],cat='All',currentTab='events',_catCache=null,visibleCount=200,currentFiltered=[],allMatches=[],categoryHomeMode=false,currentGroupFilter=null,selectedPlaylistName='All';
 let isPlaylistLoading=true;
-let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=localStorage.getItem('rslive_events_mode')!=='0';
+let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=true;
 function getSearchQ(){return (document.getElementById('search')?.value||'').trim().toLowerCase()}
 let _toastT=null;function showToast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),1800)}
 function applyView(){document.body.classList.remove('view-grid','view-list','view-compact');document.body.classList.add('view-'+currentView);localStorage.setItem('rslive_view',currentView)}
@@ -203,8 +204,33 @@ function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' 
 function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
 function isProxyOn(n){const p=CFG.playlists.find(x=>normName(x.name)===normName(n));return !!(p?.useProxy)}
-function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||'';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
-function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
+function normalizeMatch(r){
+  if(!r||typeof r!=='object')return null;
+  const m={...r};
+  m.name=String(m.name||m.event_name||m.title||'').trim();
+  const st=Array.isArray(m.streams)?m.streams:[];
+  const f=st.find(x=>x&&(x.url||x.stream_url||x.src));
+  // FIX: Admin এর ৩ রকম ফরম্যাটই ধরবে - url / stream_url / streams[0]
+  m.url=String(m.url||m.streamUrl||m.stream_url||(f&&(f.url||f.stream_url||f.src))||'').trim();
+  m.startTime=m.startTime||m.start_time||m.start||m.time||'';
+  m.endTime=m.endTime||m.end_time||m.end||'';
+  m.teamA=String(m.teamA||m.homeTeam||m.team1||m.team_a||'').trim();
+  m.teamB=String(m.teamB||m.awayTeam||m.team2||m.team_b||'').trim();
+  m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||m.logo_a||'';
+  m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||m.logo_b||'';
+  if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}
+  if(!m.name)return null;
+  return m;
+}
+// FIX 2: End Time না থাকলে কখনো Expired না
+function getMatchState(m){
+  const now=Date.now();
+  const s=Date.parse(m.startTime||'');
+  const e=Date.parse(m.endTime||'');
+  if(Number.isFinite(e)&&e>0&&now>=e) return 'expired';
+  if(Number.isFinite(s)&&s>0&&now<s) return 'upcoming';
+  return 'live';
+}
 function getBadgeInfo(m,state){if(state==='live')return{txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return{txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);if(diff<=3600000&&diff>=0)return{txt:'STARTING SOON',cls:'soon'};if(now.toDateString()===st.toDateString())return{txt:'TODAY',cls:'today'};const tm=new Date(now);tm.setDate(now.getDate()+1);if(tm.toDateString()===st.toDateString())return{txt:'TOMORROW',cls:'tomorrow'};return{txt:'UPCOMING',cls:'upcoming'}}
 function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
 function matchCountdown(m){const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return'';let sec=Math.max(0,Math.floor((t-Date.now())/1000));const d=Math.floor(sec/86400);sec%=86400;const h=Math.floor(sec/3600);sec%=3600;const mi=Math.floor(sec/60);sec%=60;return((d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0')+':'+String(sec).padStart(2,'0'))}
@@ -215,21 +241,24 @@ function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url=
 let matchesLoading=false,matchesLoadingPromise=null;
 async function loadGitHubConfig(){
   try{
-    const r=await fetch(CLOUD_URL,{cache:'no-store'});
+    const r=await fetch(cloudUrl(),{cache:'no-store'});
     if(!r.ok) throw new Error('no cloud');
     const cloud=await r.json();
     CFG={...CFG,...cloud};
     try{
-      document.getElementById('taglineEl').textContent=CFG.tagline;
-      document.getElementById('search').placeholder=CFG.searchPh;
-      document.getElementById('teleBtn').href=CFG.telegram;
+      document.getElementById('taglineEl').textContent=CFG.tagline||'LIVE TV • BANGLADESH';
+      document.getElementById('search').placeholder=CFG.searchPh||'Search channels...';
+      document.getElementById('teleBtn').href=CFG.telegram||'https://t.me/RsLiveGo';
       if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
       if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}
       if(Array.isArray(cloud.playlists) && cloud.playlists.length){
         cloud.playlists.forEach(p=>{ if(!CFG.playlists.some(x=>x.url===p.url)) CFG.playlists.push(p); });
       }
+      // FIX 3: matches যেকোনো ফরম্যাটে থাকলেই ধরবে
       if(Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);
-      if(typeof cloud.eventsMode!=='undefined') eventsMode=!!cloud.eventsMode;
+      // FIX 4: GitHub থেকে eventsMode OFF আসলেও ফোনে Events বন্ধ হবে না - Admin এর Toggle ই আসল
+      // eventsMode সবসময় true রাখো
+      eventsMode=true;
       if(typeof cloud.tvMode!=='undefined') tvMode=!!cloud.tvMode;
       applyModes(); renderMatches(); renderGrid();
     }catch(e){}
@@ -237,10 +266,23 @@ async function loadGitHubConfig(){
   }catch(e){return null}
 }
 async function loadMatches(force=false){if(matchesLoadingPromise&&!force)return matchesLoadingPromise;matchesLoadingPromise=(async()=>{matchesLoading=true;renderMatches();try{const cloud=await loadGitHubConfig();if(cloud&&Array.isArray(cloud.matches)) allMatches=cloud.matches.map(normalizeMatch).filter(Boolean);}catch(e){}matchesLoading=false;renderMatches();matchesLoadingPromise=null})();return matchesLoadingPromise}
-function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
+// FIX 5: renderMatches - Upcoming + Live ২টাই দেখাবে, Tab যাই হোক
+function renderMatches(){
+  const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');if(!sec||!grid)return;
+  const q=getSearchQ();
+  const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));
+  vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});
+  // Events + Home ২টাতেই ম্যাচ দেখাবে
+  const show=(currentTab==='events'||currentTab==='home'||!!q)&&eventsMode;
+  sec.style.display=(show&&vis.length)?'block':'none';
+  const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';
+  if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}
+  grid.replaceChildren();
+  vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})
+}
 async function getPlaylistsFromSW(){
   try{
-    const r=await fetch(CLOUD_URL,{cache:'no-store'});
+    const r=await fetch(cloudUrl(),{cache:'no-store'});
     const j=await r.json();
     if(j.playlists && j.playlists.length) return j.playlists;
   }catch(e){}
@@ -316,7 +358,7 @@ function closeSettings(){document.getElementById('settingsOverlay').classList.re
 function openAbout(){document.getElementById('aboutOverlay').classList.add('open')}
 function closeAbout(){document.getElementById('aboutOverlay').classList.remove('open')}
 function renderMyPlList(){const wrap=document.getElementById('myPlList');if(!wrap)return;wrap.replaceChildren();const custom=getCustomPl();if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">No playlist added yet</span>';else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';row.style.cursor='pointer';const b=document.createElement('b');b.textContent=p.name;const viewBtn=document.createElement('button');viewBtn.className='view';viewBtn.textContent='View';const editBtn=document.createElement('button');editBtn.className='edit';editBtn.textContent='Edit';const del=document.createElement('button');del.className='del';del.textContent='Delete';const openPl=()=>{selectedPlaylistName=p.name;currentGroupFilter='__playlist__';categoryHomeMode=false;closeSettings();renderGrid(true);showToast(p.name+' - '+all.filter(c=>c.source===p.name).length+' channels')};row.addEventListener('click',(e)=>{if([del,editBtn,viewBtn].includes(e.target))return;openPl()});viewBtn.addEventListener('click',(e)=>{e.stopPropagation();openPl()});editBtn.addEventListener('click',(e)=>{e.stopPropagation();const newName=prompt('Edit Playlist Name:',p.name);if(newName===null)return;const newUrl=prompt('Edit Playlist URL:',p.url);if(newUrl===null)return;if(!newName.trim()||!newUrl.trim().startsWith('http')){showToast('Invalid name or URL');return}let c=getCustomPl().map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);saveCustomPl(c);CFG.playlists=CFG.playlists.map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);all.forEach(ch=>{if(ch.source===p.name)ch.source=newName.trim()});_catCache=null;renderMyPlList();renderGrid();showToast('Playlist updated')});del.addEventListener('click',()=>{if(!confirm('Delete "'+p.name+'"?'))return;let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted')});row.append(b,viewBtn,editBtn,del);wrap.appendChild(row)})}
-async function getNotifs(){try{const r=await fetch(CLOUD_URL,{cache:'no-store'});const d=await r.json();return d.notis||[]}catch(e){return[]}}
+async function getNotifs(){try{const r=await fetch(cloudUrl(),{cache:'no-store'});const d=await r.json();return d.notis||[]}catch(e){return[]}}
 function getSeenNotif(){try{return JSON.parse(localStorage.getItem('rslive_seen_notif')||'[]')}catch(e){return[]}}
 async function updateNotifBadge(){const list=await getNotifs();const seen=getSeenNotif();const unread=list.filter(n=>!seen.includes(n.id)).length;const badge=document.getElementById('notifBadge');if(badge){badge.style.display=unread>0?'flex':'none';badge.textContent=unread>99?'99+':unread}}
 async function openNotif(){const list=await getNotifs();const seen=getSeenNotif();const box=document.getElementById('notifList');if(!list.length){box.innerHTML='<div style="text-align:center;color:#888;padding:30px">No notifications</div>'}else{box.innerHTML='';[...list].reverse().forEach(n=>{const d=document.createElement('div');d.className='notif-item'+(!seen.includes(n.id)?' unread':'');d.innerHTML='<b>'+n.title+'</b><p>'+n.message+'</p><span>'+(n.time||'')+'</span>';if(n.link){d.style.cursor='pointer';d.onclick=()=>window.open(n.link,'_blank')}box.appendChild(d)})}localStorage.setItem('rslive_seen_notif',JSON.stringify(list.map(n=>n.id)));updateNotifBadge();document.getElementById('notifOverlay').classList.add('open')}
@@ -334,7 +376,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v61'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v62'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
@@ -360,7 +402,7 @@ const _oldOpenSettings=openSettings;openSettings=function(){_oldOpenSettings();p
 const _oldOpenAbout=openAbout;openAbout=function(){_oldOpenAbout();pushBackState('about');};
 const _oldOpenNotif=openNotif;openNotif=async function(){await _oldOpenNotif();pushBackState('notif');};
 try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;document.getElementById('aboutLogoImg').src=ABOUT_LOGO_URL;if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName}}catch(e){}
-applyView();applyModes();loadAll();updateNotifBadge();setInterval(loadMatches,60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
+applyView();applyModes();loadAll();updateNotifBadge();setInterval(()=>loadMatches(true),60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>{})}
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex'}});
