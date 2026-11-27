@@ -1,203 +1,182 @@
-// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
+/* RsLive Go - FINAL v29 - SAFE KICK OUT */
 (function(){
-  function kick(){
-    try{ window.top.location.href = 'about:blank'; }catch(e){}
-    try{ window.parent.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.replace('about:blank'); }catch(e){}
-    try{ window.close(); }catch(e){}
-    document.documentElement.innerHTML = '';
-    setInterval(function(){
-      try{ window.top.location.href = 'about:blank'; }catch(e){}
-      try{ window.location.href = 'about:blank'; }catch(e){}
-      document.documentElement.innerHTML = '';
-    }, 100);
+  function kickOut(){
+    try{ document.body.innerHTML=""; }catch(e){}
+    try{ window.location.replace("about:blank"); setTimeout(()=>{ window.location.href="https://www.google.com"; },200); }catch(e){}
   }
-  var h = window.location.hostname || '';
-  var p = window.location.protocol || '';
-  if(p === 'blob:' || p === 'data:' || p === 'file:' || p === 'about:' || h === '' || h === 'null'){ kick(); throw new Error('Blocked'); }
-  if(h !== 'rslivego.pages.dev' && h !== 'www.rslivego.pages.dev' && h !== 'localhost' && h !== '127.0.0.1'){ kick(); throw new Error('Blocked'); }
-  if(window.top !== window.self){ kick(); throw new Error('Blocked'); }
+  const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  if(!isDesktop) return;
+  try{ if(window.top !== window.self) kickOut(); }catch(e){ kickOut(); }
+  document.addEventListener('keydown', function(e){
+    var k = e.key.toUpperCase();
+    if(e.key==='F12' || (e.ctrlKey && ['U'].indexOf(k)!==-1) || (e.ctrlKey && e.shiftKey && ['I','J','C'].indexOf(k)!==-1)){
+      e.preventDefault(); kickOut();
+    }
+  }, true);
 })();
-
-// --- UI বানানো ---
+// ============ RsLive Go - APP START ============
 document.getElementById('app').innerHTML = `
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
-html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;max-width:100%;overscroll-behavior-x:none}
-body{background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column;touch-action:pan-y}
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none}
+html,body{height:100%;width:100%;background:#000;color:#fff;font-family:Poppins,'Hind Siliguri',sans-serif;overflow-x:hidden}
+body{display:flex;flex-direction:column;touch-action:pan-y}
 #app{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
-.sticky{flex-shrink:0;z-index:100;overflow-x:hidden;max-width:100vw}
-header{background:rgba(10,10,20,.92);backdrop-filter:blur(16px);padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
-.top-row{display:flex;flex-direction:column;position:relative;z-index:2}
-.header-top{display:flex;align-items:center;justify-content:space-between}
-.search-wrap{position:relative;margin-top:12px}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .play-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 5px 18px rgba(167,139,250,.55), inset 0 1px 0 rgba(255,255,255,.45);animation:logoFloat 3s ease-in-out infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.logo-text .name{font-family:'Poppins',sans-serif;font-size:21px;font-weight:900;line-height:1;color:#fff}
-/* ✅ FIX - আগে এখানে animation ছিল না, তাই Color আটকে থাকতো */
-.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#fb923c,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineFlow 3s linear infinite}
-@keyframes shineFlow{0%{background-position:0% center}100%{background-position:300% center}}
-.logo-text .tag{font-size:8.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:2px}
-.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.35);color:#ff6b81;font-size:10px;font-weight:800;padding:5px 9px;border-radius:20px}
-.live-pill i{width:7px;height:7px;background:#ff2d55;border-radius:50%;box-shadow:0 0 0 0 rgba(255,45,85,.7);animation:pulseDot 1.4s infinite}
-@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,45,85,.7)}70%{box-shadow:0 0 0 7px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
-/* ✅ FIX - Header এর পিছনের Color Glow এখন ঘুরবে, আটকে থাকবে না */
-header::before{content:"";position:absolute;top:-50px;left:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove 4s ease-in-out infinite alternate}
-header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;height:110px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 70%);filter:blur(10px);pointer-events:none;animation:glowMove2 4s ease-in-out infinite alternate}
-@keyframes glowMove{0%{transform:translateX(0) scale(1);opacity:.6}100%{transform:translateX(50px) scale(1.2);opacity:1}}
-@keyframes glowMove2{0%{transform:translateX(0) scale(1.2);opacity:1}100%{transform:translateX(-50px) scale(1);opacity:.6}}
-.search-wrap .s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px}
-#search{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#1d1d2e;color:#fff;font-size:13.5px;font-family:'Hind Siliguri',sans-serif;outline:none;user-select:text;-webkit-user-select:text}
-#cats{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:12px 12px;white-space:nowrap;scrollbar-width:none;background:#07070f;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
-#cats::-webkit-scrollbar{display:none}
-.cat{padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
-.cat .cat-count{font-size:10.5px;background:rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
-.cat.active{background:#2a2a3a;border:1px solid rgba(255,255,255,.28)}
-#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;max-width:100vw}
-#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px}
-.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0}
-.card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
-.card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
-.card small{font-size:8.5px;color:#22d3ee}
-#loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
-#loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
-#noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
-#featured{display:none;margin:12px 12px 0;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
-#status{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,.92);padding:10px;text-align:center;font-size:11.5px;color:#c8c8dd;border-top:1px solid rgba(255,255,255,.08);z-index:200}
-#status b{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f,#22d3ee);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shineFlow 3s linear infinite}
-.tele{position:fixed;right:14px;bottom:110px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 8px 25px rgba(42,171,238,.6)}
-.tele svg{width:26px;height:26px;fill:#fff}
-.tele::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;background:#2AABEE;z-index:-1;animation:telePulse 2s infinite}
-@keyframes telePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
-#installBar{display:none;position:fixed;left:10px;right:10px;bottom:36px;z-index:998;background:#1a1a2e;border:1px solid rgba(167,139,250,.45);border-radius:100px;padding:4px 4px 4px 8px;align-items:center;gap:6px}
-#installBar .ib-ico{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a78bfa,#ff5d8f);display:flex;align-items:center;justify-content:center;font-size:11px}
-#installBar .ib-txt{flex:1;text-align:center}
-#installBar .ib-txt b{font-size:12px;display:block}
-#installBar .ib-txt span{font-size:10px;color:#b8b8d0;display:block}
-#installBar .ib-btn{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;border:none;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
-#installBar .ib-close{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+.sticky{flex-shrink:0;z-index:100}
+header{background:#000;border-bottom:1px solid #ffffff14;padding:14px 14px 13px;position:relative;overflow:hidden}
+header:before{content:"";position:absolute;inset:0;background:radial-gradient(220px 70px at 20% 0%,rgba(139,124,255,.22),transparent 70%),radial-gradient(220px 70px at 85% 0%,rgba(34,211,238,.14),transparent 70%);pointer-events:none}
+.header-top{display:flex;align-items:center;gap:10px;position:relative;z-index:2;min-height:42px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.play-ico{width:42px;height:42px;min-width:42px;border-radius:13px;background:linear-gradient(135deg,#22d3ee 0%,#8b7cff 48%,#ff5d8f 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.28);box-shadow:0 6px 18px rgba(139,124,255,.45), inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 6px rgba(0,0,0,.18);position:relative;overflow:hidden}
+.play-ico:before{content:"";position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),transparent);border-radius:13px 13px 0 0}
+.play-ico svg{width:17px;height:17px;fill:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4));position:relative;z-index:1;margin-left:2px}
+.logo-text .name{font-family:Poppins,sans-serif;font-size:22px;font-weight:900;line-height:1;letter-spacing:.2px}
+.logo-text .name i{font-style:normal;background:linear-gradient(90deg,#a78bfa,#22d3ee,#ff5d8f,#fb923c,#a78bfa);background-size:300%;background-clip:text;color:transparent;-webkit-background-clip:text}
+.logo-text .tag{font-size:7.5px;letter-spacing:3px;color:#9a9ab5;font-weight:700;margin-top:3px}
+#searchWrap{display:flex;position:relative;flex:1;min-width:0;max-width:170px;margin-left:auto}
+#searchWrap .s-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;opacity:.7;z-index:1}
+#search{width:100%;padding:9px 12px 9px 32px;border-radius:99px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;font-size:12px;outline:none;user-select:text;-webkit-user-select:text;transition:.2s}
+#search:focus{background:rgba(255,255,255,.10);border-color:rgba(139,124,255,.60);box-shadow:0 0 0 3px rgba(139,124,255,.18)}
+#search::placeholder{color:#8e91a8}
+#pageTitle{display:none !important}
+#cats{display:none !important}
 .desktop-wrap{display:flex;flex-direction:column;flex:1;min-height:0;overflow-x:hidden}
 #mainCol{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden}
-@media(min-width:900px){
-body{display:block;overflow-y:auto}
-#app{display:block}
-.sticky{position:sticky;top:0}
-header{max-width:1440px;margin:0 auto;padding:16px 24px}
-.top-row{flex-direction:row;align-items:center;gap:20px}
-.search-wrap{flex:1;margin-top:0;max-width:720px;margin-left:auto}
-.desktop-wrap{flex-direction:row;max-width:1440px;margin:0 auto;gap:18px;padding:16px 24px 40px}
-#mainCol{order:1}
-#cats{order:2;flex-direction:column;overflow-x:hidden;width:260px;position:sticky;top:120px;max-height:calc(100vh - 160px);padding:0 0 20px;white-space:normal;border:none;background:transparent}
-.cat{width:100%;padding:11px 12px;font-size:13.5px}
-#scrollArea{overflow:visible}
-#grid{grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 0}
-.card{border-radius:16px;padding:14px 8px}
-.card img{width:60px;height:60px;border-radius:12px;padding:6px}
-.card p{font-size:12px}
-}
-@media(min-width:1300px){ #grid{grid-template-columns:repeat(6,1fr)} }
+#scrollArea{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:82px}
+#matchesSection{display:none;padding:8px 10px 2px}
+.matches-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.matches-head strong{font-family:Poppins,sans-serif;font-size:12px}
+.matches-head span{font-size:9px;color:#8e91a8}
+#matchesGrid{display:grid;grid-template-columns:1fr;gap:8px}
+.match-card{background:linear-gradient(135deg,#1a1d2e 0%,#10121d 55%,#171321 100%);border:1px solid #ffffff1f;border-radius:14px;padding:6px 11px 9px;box-shadow:0 6px 16px rgba(0,0,0,.5);cursor:pointer;position:relative;overflow:hidden}
+.match-card:active{transform:scale(.98)}
+.match-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.sport-badge{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#fff;background:none !important;border:none !important;box-shadow:none !important;padding:0;max-width:72%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.sport-badge .sport-ico{font-size:12px;line-height:1;flex-shrink:0}
+.sport-badge .sport-sep{color:#8e91a8;font-weight:400}
+.sport-badge .sport-type{font-weight:600;color:#c7cadb;font-size:10px;overflow:hidden;text-overflow:ellipsis}
+.match-badge{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:4px 10px 4px 8px;font-size:8.5px;font-weight:800;letter-spacing:.5px;flex-shrink:0}
+.match-badge:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.match-badge.live{background:rgba(255,48,78,.14);color:#ff8fa0;border:1px solid rgba(255,48,78,.35)}
+.match-badge.upcoming{background:rgba(245,164,59,.13);color:#e8b26a;border:1px solid rgba(245,164,59,.35)}
+.match-badge.soon{background:rgba(255,80,80,.14);color:#ff9a9a;border:1px solid rgba(255,80,80,.4)}
+.match-badge.today{background:rgba(250,204,21,.13);color:#e8d27a;border:1px solid rgba(250,204,21,.35)}
+.match-badge.tomorrow{background:rgba(34,211,238,.12);color:#8adfe8;border:1px solid rgba(34,211,238,.35)}
+.match-teams{display:flex;justify-content:center;align-items:start;gap:16px;padding:2px 8px 0}
+.match-team{flex:0 1 115px;min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
+.match-team img,.team-fallback{width:42px;height:42px;min-width:42px;object-fit:contain;border-radius:50%;background:#fff;padding:4px;flex-shrink:0;border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.team-fallback{display:flex;align-items:center;justify-content:center;background:#25283a;color:#fff;font-weight:900;font-size:13px;border:1px solid #41445a}
+.match-team b{font-size:12.5px;line-height:1.25;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.match-team img.svg-logo{background:#fff !important;padding:5px !important}
+.card img[src$=".svg"]{background:#fff !important;padding:3px !important}
+.match-vs{text-align:center;padding-top:10px;flex-shrink:0}
+.match-vs .vs-txt{font-family:Poppins,sans-serif;font-size:11px;font-weight:900;color:#fff;display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 8px;border-radius:99px}
+.match-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:7px;border-top:1px solid #ffffff14}
+.match-time{font-size:9.5px;color:#c9cce0;line-height:1.4;text-align:left}
+.match-action{border:0;border-radius:20px;padding:6px 11px;font-family:inherit;font-size:9px;font-weight:900;color:#fff;background:linear-gradient(90deg,#e93658,#f07836);cursor:pointer;flex-shrink:0}
+.match-action.upcoming{background:#292c3d;border:1px solid #f5a43b55;color:#ffd08a}
+.match-action:disabled{opacity:.45;cursor:not-allowed}
+.match-countdown{display:block;color:#fff2cc;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;line-height:1.3;white-space:nowrap;text-shadow:0 1px 6px rgba(255,220,140,.35)}
+.match-countdown small{display:block;font-size:7.5px;font-weight:700;color:#b8bccf;letter-spacing:1.5px}
+#grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px 12px}
+.card{background:#15151f;border:1px solid #262633;border-radius:12px;padding:8px 10px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:8px;overflow:hidden;min-width:0;min-height:56px;box-shadow:0 5px 14px rgba(0,0,0,.35)}
+.card:active{transform:scale(.97);border-color:#a78bfa}
+.card .serial{flex-shrink:0;font-size:10px;background:rgba(255,255,255,.12);padding:3px 6px;border-radius:99px;color:#aaa;font-weight:800;order:-1;min-width:20px;text-align:center}
+.card img{width:38px;height:38px;min-width:38px;object-fit:contain;background:#fff;border-radius:10px;padding:3px}
+.card .c-txt{flex:1;min-width:0}
+.card p{font-size:12px;margin:0;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;font-weight:600}
+.card small{font-size:9px;color:#22d3ee;display:block;margin-top:2px}
+.cat-box{flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;padding:12px 6px 10px !important;background:#15151f !important;border:1px solid #262633 !important;border-radius:14px !important;box-shadow:0 5px 14px rgba(0,0,0,.35) !important;min-height:105px !important;width:100% !important;overflow:hidden !important;text-align:center !important}
+.cat-box:active{transform:scale(.96);border-color:#a78bfa}
+.cat-wrap{position:relative;width:46px;height:46px;flex-shrink:0}
+.cat-photo{width:46px;height:46px;min-width:46px;min-height:46px;border-radius:12px;overflow:hidden;position:relative;background:#fff;display:flex;align-items:center;justify-content:center}
+.cat-photo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.cat-photo .cat-emoji{font-size:20px;line-height:1}
+.cat-num{display:none !important}
+.cat-info{padding:0;flex:none;width:100%;min-width:0;text-align:center}
+.cat-info b{font-size:12px;display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-info small{display:none !important}
+#homeEmpty{display:none;text-align:center;padding:30px 16px;color:#9a9ab5}
+#homeEmpty b{color:#fff;font-size:14px;display:block;margin-bottom:6px}
+#homeEmpty button{margin-top:12px;padding:10px 18px;border-radius:20px;border:0;background:linear-gradient(90deg,#22d3ee,#a78bfa);color:#fff;font-family:inherit;font-weight:800}
+#loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
+#loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:inherit;font-size:13px;font-weight:700;border:1px solid #ffffff33}
+#noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
+#featured{display:none;margin:12px;background:#221a3a;border:1px solid #a78bfa;border-radius:12px;padding:12px;cursor:pointer}
+#bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);border-top:1px solid #ffffff10;display:flex;gap:6px;padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
+.bnav{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px 5px;border-radius:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:#7a7a8e;font-family:inherit;position:relative;min-height:46px}
+.bnav .b-ico{line-height:1;display:flex}
+.bnav .b-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bnav .b-txt{font-size:11px;font-weight:600;letter-spacing:.2px;line-height:1}
+.bnav.active{color:#fff;background:linear-gradient(180deg,rgba(139,124,255,.22),rgba(139,124,255,.06));border-color:rgba(139,124,255,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.bnav.active .b-ico svg{stroke:#c4b5fd}
+.bnav.active .b-txt{color:#fff}
+#status{display:none !important}
+.tele{position:fixed;right:14px;bottom:108px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;z-index:999;border:1px solid rgba(255,255,255,.3);box-shadow:0 8px 22px rgba(42,171,238,.55), inset 0 1px 0 rgba(255,255,255,.4);animation:telePulse 2s infinite}
+.tele svg{width:23px;height:23px;fill:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+@keyframes telePulse{0%{box-shadow:0 8px 22px rgba(42,171,238,.55), 0 0 0 0 rgba(42,171,238,.5)}70%{box-shadow:0 8px 22px rgba(42,171,238,.55), 0 0 0 14px rgba(42,171,238,0)}100%{box-shadow:0 8px 22px rgba(42,171,238,.55), 0 0 0 0 rgba(42,171,238,0)}}
+#installBar{display:none;position:fixed;left:10px;right:10px;bottom:70px;z-index:998;background:#1a1a2e;border:1px solid #a78bfa77;border-radius:100px;padding:7px;align-items:center;gap:6px}
+#installBar .ib-txt{flex:1;text-align:center}
+#installBar .ib-txt b{font-size:12px;display:block}
+#installBar .ib-txt span{font-size:10px;color:#b8b8d0}
+#installBar button{background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#fff;border:0;padding:7px 11px;border-radius:100px;font-weight:800;font-size:11px}
+#closeInstall{cursor:pointer;padding:5px}
+@media(max-width:480px){.logo-text .name{font-size:19px}.logo-text .tag{font-size:7.5px;letter-spacing:3px}#searchWrap{max-width:148px}#search{padding:9px 10px 9px 30px;font-size:12px}.header-top{gap:8px}}
+@media(min-width:900px){body{display:block;overflow-y:auto}#app{display:block}.sticky{position:sticky;top:0}header{max-width:1440px;margin:auto;padding:18px 24px}.logo-text .name{font-size:26px}#searchWrap{max-width:300px;margin-left:auto}.desktop-wrap{flex-direction:row;max-width:1440px;margin:auto;gap:18px;padding:16px 24px 40px}#mainCol{order:1}#scrollArea{overflow:visible}#grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 0}.card{min-height:62px;padding:10px 12px}.card img{width:44px;height:44px;min-width:44px}.card p{font-size:13px}#matchesSection{padding:8px 0 4px}#matchesGrid{grid-template-columns:repeat(2,1fr)}.match-card{padding:8px 14px 12px}.match-team img,.team-fallback{width:48px;height:48px;min-width:48px}.match-team b{font-size:13px}#bottomNav{max-width:480px;left:50%;transform:translateX(-50%);border-radius:16px 16px 0 0;padding:6px 8px}}
+@media(min-width:1300px){#grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 </style>
 <div id="noticeBar"></div>
-<div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
-<div id="status">Loading...</div>
-<a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
-<div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
+<div class="sticky"><header><div class="header-top"><div class="logo" onclick="switchTab('events')"><div class="play-ico"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg></div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div id="searchWrap"><span class="s-ico">🔍</span><input id="search" placeholder="Search..." autocomplete="off"></div></div></header></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="homeEmpty"><b>No Live / Upcoming Match Right Now</b><span>Tap Home to see all channels</span><br><button onclick="switchTab('home')">View All Channels →</button></div><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">Watch Now →</span></div><div id="grid"></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">Load More ↓</button></div></div></div></div>
+<a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
+<div id="installBar"><div class="ib-txt"><b>Add To Home Screen</b><span>App এর মতো চালাও, ১ ক্লিকে</span></div><button id="installBtn">Add</button><span id="closeInstall">✕</span></div>
+<nav id="bottomNav"><button class="bnav active" id="navEvents" onclick="switchTab('events')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 5M16 6h3a3 3 0 01-3 5"/><path d="M12 13v4M8 20h8M10 17h4"/></svg></span><span class="b-txt">Events</span></button><button class="bnav" id="navHome" onclick="switchTab('home')"><span class="b-ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="b-txt">Home</span></button><button class="bnav" id="navCategory" onclick="switchTab('category')"><span class="b-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="b-txt">Categories</span></button></nav>
 `;
-
-const CONFIG_VERSION='v4-pwa-secure';
-const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'চ্যানেল খুঁজো...',statusText:'✅ মোট {count} টা চ্যানেল - RsLive Go',showLive:true,showTele:true,proxyUrl:'https://stream-through-spark.lovable.app/api/proxy?u=',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
-let saved=null; try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null')}catch(e){}
-if(!saved || saved.version!==CONFIG_VERSION || !saved.playlists){ saved=null; localStorage.removeItem('rslive_config'); }
-const CFG={...DEFAULT,...(saved||{})}; if(saved&&saved.playlists) CFG.playlists=saved.playlists;
-try{
-document.getElementById('taglineEl').textContent=CFG.tagline;
-document.getElementById('search').placeholder=CFG.searchPh;
-document.getElementById('teleBtn').href=CFG.telegram;
-if(!CFG.showLive) document.getElementById('livePill').style.display='none';
-if(!CFG.showTele) document.getElementById('teleBtn').style.display='none';
-if(CFG.showNotice&&CFG.notice){let n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block'}
-if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;window._fn=CFG.featName}
-}catch(e){}
-function goHome(){ window.location.href=window.location.origin+'/?t='+Date.now(); }
-let all=[]; let cat="All"; let _catCache=null; let visibleCount=200; let currentFiltered=[];
-async function getPlaylistsFromSW(){ try{ await navigator.serviceWorker.ready; let r=await fetch('/api/playlists'); let data=await r.json(); if(data&&data.length) return data; }catch(e){} return CFG.playlists; }
-async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
-function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
-async function loadAll(){
-  CFG.playlists=await getPlaylistsFromSW();
-  for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
-function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
-function catIcon(c){ if(c==='All') return '🏠'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
-function catCount(c){
-  if(!all.length) return 0; let n=0;
-  if(c==='All') n=all.length;
-  else if(CFG.playlists.find(p=>p.name===c)) n=all.filter(x=>x.source===c).length;
-  else if(c==='Sports') n=all.filter(x=>x.group.toLowerCase().includes('sport')||x.group.toLowerCase().includes('cricket')||x.group.toLowerCase().includes('football')).length;
-  else if(c==='News') n=all.filter(x=>x.group.toLowerCase().includes('news')).length;
-  else if(c==='Movies') n=all.filter(x=>x.group.toLowerCase().includes('movie')).length;
-  else if(c==='Kids') n=all.filter(x=>x.group.toLowerCase().includes('kid')).length;
-  else if(c==='Music') n=all.filter(x=>x.group.toLowerCase().includes('music')).length;
-  else if(c==='Entertainment') n=all.filter(x=>x.group.toLowerCase().includes('entertainment')||x.group.toLowerCase().includes('general')).length;
-  else if(c==='Bangladesh') n=all.filter(x=>x.name.toLowerCase().includes('bangla')||x.name.toLowerCase().includes('btv')||x.name.toLowerCase().includes('t sports')||x.name.toLowerCase().includes('somoy')||x.name.toLowerCase().includes('jamuna')).length;
-  else if(c==='India') n=all.filter(x=>x.name.toLowerCase().includes('star')||x.name.toLowerCase().includes('sony')||x.name.toLowerCase().includes('zee')||x.name.toLowerCase().includes('colors')).length;
-  else n=all.filter(x=>x.group.toLowerCase().includes(c.toLowerCase())).length;
-  return n;
-}
-function matchesCat(c,catName){
-  if(catName==="All") return true;
-  if(CFG.playlists.find(p=>p.name===catName)) return c.source===catName;
-  if(catName==="Sports") return c.group.toLowerCase().includes("sport")||c.group.toLowerCase().includes("cricket")||c.group.toLowerCase().includes("football");
-  if(catName==="News") return c.group.toLowerCase().includes("news");
-  if(catName==="Movies") return c.group.toLowerCase().includes("movie");
-  if(catName==="Kids") return c.group.toLowerCase().includes("kid");
-  if(catName==="Music") return c.group.toLowerCase().includes("music");
-  if(catName==="Entertainment") return c.group.toLowerCase().includes("entertainment")||c.group.toLowerCase().includes("general");
-  if(catName==="Bangladesh") return c.name.toLowerCase().includes("bangla")||c.name.toLowerCase().includes("btv")||c.name.toLowerCase().includes("t sports")||c.name.toLowerCase().includes("somoy")||c.name.toLowerCase().includes("jamuna");
-  if(catName==="India") return c.name.toLowerCase().includes("star")||c.name.toLowerCase().includes("sony")||c.name.toLowerCase().includes("zee")||c.name.toLowerCase().includes("colors");
-  return c.group.toLowerCase().includes(catName.toLowerCase());
-}
-function renderCats(){
-  let isDesktop=window.innerWidth>=900; let catsEl=document.getElementById("cats"); if(!catsEl) return;
-  if(isDesktop){ catsEl.innerHTML=`<div style="font-family:Poppins;font-size:13px;font-weight:800;padding:2px 6px 12px">✨ ক্যাটাগরি <span style="font-size:11px;background:#2a2a3a;padding:4px 10px;border-radius:20px;float:right">${getCats().length} টা</span></div>`+getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
-  else { catsEl.innerHTML=getCats().map(c=>`<div class="cat ${c===cat?'active':''}" data-cat="${c}">${catIcon(c)} ${c} <span class="cat-count">${catCount(c)}</span></div>`).join(""); }
-  catsEl.querySelectorAll('.cat').forEach(el=>{ el.onclick=()=>setCat(el.dataset.cat); });
-}
-function renderGrid(reset=true){
-  if(reset) visibleCount=200;
-  let q=document.getElementById("search").value.toLowerCase(); currentFiltered=[];
-  for(let i=0;i<all.length;i++){ let c=all[i]; if(q && !c.name.toLowerCase().includes(q)) continue; if(!matchesCat(c,cat)) continue; currentFiltered.push(c); }
-  let show=currentFiltered.slice(0,visibleCount); let html='';
-  for(let i=0;i<show.length;i++){ let c=show[i]; html+=`<div class="card" onclick="openCh('${encodeURIComponent(c.url)}','${encodeURIComponent(c.name)}','${c.source}','${encodeURIComponent(c.group)}')"><img loading="lazy" src="${c.logo||'https://cdn-icons-png.flaticon.com/512/1179/1179069.png'}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'"><p>${c.name}</p><small>${c.group}</small></div>`; }
-  document.getElementById("grid").innerHTML=html;
-  let wrap=document.getElementById("loadMoreWrap"); let btn=document.getElementById("loadMoreBtn");
-  if(currentFiltered.length>visibleCount){ wrap.style.display='block'; btn.textContent=`আরো দেখো ↓  (${visibleCount}/${currentFiltered.length})`; } else { wrap.style.display='none'; }
-  if(reset){ let sa=document.getElementById('scrollArea'); if(sa) sa.scrollTop=0; window.scrollTo({top:0}); }
-}
-function loadMore(){ visibleCount+=200; renderGrid(false); }
-function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
-function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
-let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
-let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
-loadAll();
-(function(){
-  function kill(){ try{ document.documentElement.innerHTML=''; }catch(e){} }
-  document.addEventListener('contextmenu',e=>{ e.preventDefault(); return false; });
-  document.addEventListener('copy',e=>{ e.preventDefault(); return false; });
-  document.addEventListener('keydown',e=>{
-    let k=(e.key||'').toUpperCase();
-    if(e.key==='F12' || (e.ctrlKey && ['U','S','P','C','A'].includes(k)) || (e.ctrlKey && e.shiftKey && ['I','J','C','K'].includes(k))){ e.preventDefault(); kill(); return false; }
-  },true);
-  var isMobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  if(!isMobile && window.innerWidth>768){
-    setInterval(()=>{ let w=window.outerWidth-window.innerWidth>200; let h=window.outerHeight-window.innerHeight>200; if(w||h) kill(); },600);
-  }
-})();
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
+const CONFIG_VERSION='nova-v23-clean';
+const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search...',statusText:'Total {count} Channels - RsLive Go',showLive:false,showTele:true,proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[]};
+const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
+const CATEGORY_IMAGES={Tapmad:'',Sports:'',Toffee:'',AynaOTT:'',JagoBD:'',Bangladesh:'https://flagcdn.com/w320/bd.png',India:'https://flagcdn.com/w320/in.png',News:'',Entertainment:'',Movies:'',Kids:'',Music:''};
+const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
+function isProxyOn(catName){const pl=CFG.playlists.find(p=>normName(p.name)===normName(catName));return !!(pl?.useProxy);}
+let saved=null;try{saved=JSON.parse(localStorage.getItem('rslive_config')||'null');}catch(e){}
+if(!saved||!Array.isArray(saved.playlists))saved=null;
+const CFG={...DEFAULT,...(saved||{})};
+try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getElementById('search').placeholder=CFG.searchPh;document.getElementById('teleBtn').href=CFG.telegram;if(!CFG.showTele)document.getElementById('teleBtn').style.display='none';if(CFG.showNotice&&CFG.notice){const n=document.getElementById('noticeBar');n.textContent=CFG.notice;n.style.display='block';}if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display='block';document.getElementById('featName').textContent=CFG.featName;window._f=CFG.featUrl;}}catch(e){}
+let all=[];let cat='All';let currentTab='events';let _catCache=null;let visibleCount=200;let currentFiltered=[];let allMatches=[];let categoryHomeMode=false;
+const MATCH_INDEX_URL='/data/matches/index.json';
+function goHome(){switchTab('events');}
+function getSearchQ(){return (document.getElementById('search')?.value||'').trim().toLowerCase();}
+function switchTab(tab){currentTab=tab;categoryHomeMode=(tab==='category');document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});}
+function unwrapMatchFile(data){if(!data||typeof data!=='object')return[];if(Array.isArray(data.matches))return data.matches;if(data.match)return Array.isArray(data.match)?data.match:[data.match];if(Array.isArray(data.liveSports))return data.liveSports;if(data.name||data.event_name||data.title)return[data];return[];}
+function normalizeMatch(raw){if(!raw||typeof raw!=='object')return null;const m={...raw};m.name=String(m.name||m.event_name||m.title||'').trim();const streams=Array.isArray(m.streams)?m.streams:[];const first=streams.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(first&&(first.url||first.stream_url||first.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.teamA_logo||m.homeLogo||m.teamAFlag||m.flagA||m.teamAImage||'';m.teamBLogo=m.teamBLogo||m.logoB||m.teamB_logo||m.awayLogo||m.teamBFlag||m.flagB||m.teamBImage||'';if(!m.teamA||!m.teamB){const parts=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(parts.length>=2){if(!m.teamA)m.teamA=parts[0].trim();if(!m.teamB)m.teamB=parts.slice(1).join(' vs ').trim();}}if(!m.name)return null;if(m.enabled===false||String(m.enabled).toLowerCase()==='off'||String(m.show).toLowerCase()==='no')return null;return m;}
+function getMatchState(m){const now=Date.now();const start=Date.parse(m.startTime||'');const end=Date.parse(m.endTime||'');if(Number.isFinite(end)&&end>0&&now>=end)return 'expired';const manual=String(m.status||'').toLowerCase();if(manual==='ended'||manual==='finished'||manual==='expired')return 'expired';if(Number.isFinite(start)&&start>0&&now<start)return 'upcoming';if(manual==='upcoming'&&!(Number.isFinite(start)&&start>0))return 'upcoming';return 'live';}
+function getBadgeInfo(m,state){if(state==='live')return {txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return {txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);const isToday=now.toDateString()===st.toDateString();const tm=new Date(now);tm.setDate(now.getDate()+1);const isTomorrow=tm.toDateString()===st.toDateString();if(diff<=3600000&&diff>=0)return {txt:'STARTING SOON',cls:'soon'};if(isToday)return {txt:'TODAY',cls:'today'};if(isTomorrow)return {txt:'TOMORROW',cls:'tomorrow'};return {txt:'UPCOMING',cls:'upcoming'};}
+function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});}
+function matchCountdown(m){const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return'';let sec=Math.max(0,Math.floor((t-Date.now())/1000));const days=Math.floor(sec/86400);sec%=86400;const hours=Math.floor(sec/3600);sec%=3600;const mins=Math.floor(sec/60);sec%=60;return ((days?days+'d ':'')+String(hours).padStart(2,'0')+':'+String(mins).padStart(2,'0')+':'+String(sec).padStart(2,'0'));}
+function getSportInfo(m){const txt=String((m.matchType||'')+' '+(m.category||'')+' '+(m.name||'')).toLowerCase();if(txt.includes('football')||txt.includes('soccer'))return {ico:'⚽',label:'Football'};if(txt.includes('tennis'))return {ico:'🎾',label:'Tennis'};if(txt.includes('basketball'))return {ico:'🏀',label:'Basketball'};if(txt.includes('hockey'))return {ico:'🏑',label:'Hockey'};if(txt.includes('volleyball'))return {ico:'🏐',label:'Volleyball'};if(txt.includes('badminton'))return {ico:'🏸',label:'Badminton'};return {ico:'🏏',label:'Cricket'};}
+function teamNode(name,logo,side){const wrap=document.createElement('div');wrap.className='match-team '+(side||'left');const labelName=name||'Team';let logoEl;if(logo){const img=document.createElement('img');img.src=logo;img.alt=labelName;img.loading='lazy';if(String(logo).toLowerCase().split('?')[0].includes('.svg'))img.classList.add('svg-logo');img.onerror=function(){this.remove();const fb=document.createElement('div');fb.className='team-fallback';fb.textContent=labelName.trim().slice(0,2).toUpperCase();wrap.appendChild(fb);};logoEl=img;}else{logoEl=document.createElement('div');logoEl.className='team-fallback';logoEl.textContent=labelName.trim().slice(0,2).toUpperCase();}const label=document.createElement('b');label.textContent=labelName;wrap.append(logoEl,label);return wrap;}
+function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}));}catch(e){}const params=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});window.location.href='player.html?'+params.toString();}
+function openCh(u,n,s,g,serial){const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1'});window.location.href='player.html?'+params.toString();}
+function renderMatches(){const section=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const homeEmpty=document.getElementById('homeEmpty');if(!section||!grid)return;const q=getSearchQ();const visible=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));visible.sort((a,b)=>{const sa=getMatchState(a);const sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return ((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0));});const showMatches=(currentTab==='events'||!!q);section.style.display=(showMatches&&visible.length)?'block':'none';if(homeEmpty)homeEmpty.style.display=(currentTab==='events'&&!q&&visible.length===0)?'block':'none';const count=document.getElementById('matchesCount');if(count)count.textContent=visible.length?visible.length+' Matches':'';grid.replaceChildren();visible.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card '+state;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx);});const top=document.createElement('div');top.className='match-top';const sport=getSportInfo(m);let typeTxt=m.matchType||m.category||'LIVE SPORTS';typeTxt=typeTxt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'').replace(/soccer\s*\|\s*/i,'');const sportEl=document.createElement('span');sportEl.className='sport-badge';sportEl.innerHTML=`<span class="sport-ico">${sport.ico}</span>${sport.label} <span class="sport-sep">|</span> <span class="sport-type">${typeTxt}</span>`;const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(sportEl,badge);const teams=document.createElement('div');teams.className='match-teams';const a=teamNode(m.teamA||m.name,m.teamALogo,'left');const vs=document.createElement('div');vs.className='match-vs';vs.innerHTML=`<span class="vs-txt">VS</span>`;const b=teamNode(m.teamB||'',m.teamBLogo,'right');teams.append(a,vs,b);const bottom=document.createElement('div');bottom.className='match-bottom';const time=document.createElement('div');time.className='match-time';time.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const btn=document.createElement('button');btn.className='match-action live';btn.type='button';btn.textContent='Watch Live';btn.disabled=!m.url;if(!btn.disabled){btn.addEventListener('click',(e)=>{e.stopPropagation();openMatch(m,idx);});}bottom.append(time,btn);}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML=`<small>STARTS IN</small>${matchCountdown(m)}`;bottom.append(time,cd);}card.append(top,teams,bottom);grid.appendChild(card);});}
+async function loadMatches(){try{const indexResponse=await fetch(MATCH_INDEX_URL+'?t='+Date.now(),{cache:'no-store'});if(!indexResponse.ok)throw new Error('Index HTTP '+indexResponse.status);const indexData=await indexResponse.json();if(!Array.isArray(indexData.files))throw new Error('No files in index.json');const files=indexData.files.filter(file=>typeof file==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(file));const results=await Promise.all(files.map(async file=>{try{const response=await fetch('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);const data=await response.json();return unwrapMatchFile(data).map(normalizeMatch).filter(Boolean);}catch(error){console.warn('Match file failed:',file,error);return[];}}));allMatches=results.flat();renderMatches();}catch(error){console.error('Match index load failed:',error);renderMatches();}}
+async function getPlaylistsFromSW(){try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API error');const data=await r.json();if(Array.isArray(data)&&data.length)return data;}catch(e){console.warn('SW playlist unavailable:',e);}return Array.isArray(CFG.playlists)?CFG.playlists:[];}
+async function loadOne(p){if(!p||!p.url)return[];const tryFetch=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('Playlist HTTP '+r.status);return parse(await r.text());};const useProxy=isProxyOn(p.name);try{let u=p.url;if(useProxy&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const list=await tryFetch(u);if(list.length)return list;throw new Error('Empty playlist');}catch(e1){try{const proxyBase=CFG.proxyUrl||PROXY_BASE_FALLBACK;return await tryFetch(proxyBase+encodeURIComponent(p.url));}catch(e2){console.warn('Playlist proxy failed:',p.name,e2);return[];}}}
+function parse(t){const lines=t.split(/\r?\n/);const output=[];let channel=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo="([^"]+)"/);const group=x.match(/group-title="([^"]+)"/);channel={name:name,logo:logo?logo[1]:'',group:group?group[1]:'General'};}else if(x.startsWith('#EXTVLCOPT')||x.startsWith('#EXTGRP')||x.startsWith('#EXT-X-')){continue;}else if(/^https?:\/\//i.test(x)&&channel){channel.url=x;output.push(channel);channel=null;}}return output;}
+async function loadAll(){loadMatches();CFG.playlists=await getPlaylistsFromSW();for(const p of CFG.playlists){const list=await loadOne(p);for(const ch of list){ch.source=p.name||'TV';if(!all.some(y=>y.url===ch.url))all.push(ch);}_catCache=null;renderGrid();renderMatches();}renderGrid();renderMatches();switchTab('events');}
+function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ');}
+function getCats(){if(_catCache)return _catCache;const seen=new Set();const out=[];const push=(c)=>{const k=normName(c);if(!k||seen.has(k))return;seen.add(k);out.push(c.trim());};CFG.playlists.forEach(p=>{if(p.name)push(p.name);});_catCache=['All',...out.filter(c=>normName(c)!=='all')];return _catCache;}
+function catIcon(c){const n=normName(c);const icons={Tapmad:'📺',Toffee:'🍬',Aynaott:'📺',Jagobd:'🇧🇩',All:'📺',Sports:'🏆',News:'📰',Entertainment:'🎭',Movies:'🎬',Kids:'🧒',Music:'🎵',Bangladesh:'🇧🇩',India:'🇮🇳'};for(const k in icons){if(normName(k)===n)return icons[k];}return '📺';}
+function getCategoryImage(c){for(const k in CATEGORY_IMAGES){if(normName(k)===normName(c)&&CATEGORY_IMAGES[k])return CATEGORY_IMAGES[k];}const firstCh=all.find(x=>matchesCat(x,c)&&x.logo);return firstCh?.logo||DEFAULT_CAT_LOGO;}
+function catCount(c){if(!all.length)return 0;if(normName(c)==='all')return all.length;return all.filter(x=>normName(x.source)===normName(c)).length;}
+function matchesCat(c,category){const catN=normName(category);if(catN==='all')return true;return normName(c.source)===catN;}
+function renderCategoryHome(){const grid=document.getElementById('grid');grid.style.display='grid';grid.style.gridTemplateColumns='repeat(3,minmax(0,1fr))';grid.replaceChildren();const cats=getCats().filter(c=>normName(c)!=='all');cats.forEach((c)=>{const photo=getCategoryImage(c);const box=document.createElement('div');box.className='card cat-box';box.innerHTML=`<div class="cat-wrap"><div class="cat-photo"><img src="${photo}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_CAT_LOGO}'"></div></div><div class="cat-info"><b>${c}</b></div>`;box.onclick=()=>{cat=c;categoryHomeMode=false;renderGrid(true);};grid.appendChild(box);});document.getElementById('loadMoreWrap').style.display='none';}
+function renderGrid(reset=true){const grid=document.getElementById('grid');const wrap=document.getElementById('loadMoreWrap');const feat=document.getElementById('featured');const q=getSearchQ();if(q){grid.style.display='grid';grid.style.gridTemplateColumns='';if(reset)visibleCount=200;currentFiltered=all.filter(c=>String(c.name).toLowerCase().includes(q)||String(c.group).toLowerCase().includes(q)||String(c.source).toLowerCase().includes(q));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>{const card=document.createElement('div');card.className='card';const serial=document.createElement('span');serial.className='serial';serial.textContent=String(i+1);const img=document.createElement('img');img.loading='lazy';img.src=c.logo||DEFAULT_CAT_LOGO;img.onerror=function(){this.onerror=null;this.src=DEFAULT_CAT_LOGO;};const txt=document.createElement('div');txt.className='c-txt';const name=document.createElement('p');name.textContent=c.name;const group=document.createElement('small');group.textContent=c.group||'General';txt.append(name,group);card.append(serial,img,txt);card.addEventListener('click',()=>{openCh(c.url,c.name,c.source||'',c.group||'',i+1);});grid.appendChild(card);});const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓';}else{wrap.style.display='none';}if(feat)feat.style.display='none';return;}if(currentTab==='events'){grid.replaceChildren();grid.style.display='none';if(wrap)wrap.style.display='none';if(feat)feat.style.display='none';if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});}return;}if(currentTab==='category'&&categoryHomeMode){renderCategoryHome();return;}grid.style.display='grid';grid.style.gridTemplateColumns='';if(reset)visibleCount=200;const effCat=currentTab==='home'?'All':cat;currentFiltered=all.filter(c=>matchesCat(c,effCat));const show=currentFiltered.slice(0,visibleCount);grid.replaceChildren();show.forEach((c,i)=>{const card=document.createElement('div');card.className='card';const serial=document.createElement('span');serial.className='serial';serial.textContent=String(i+1);const img=document.createElement('img');img.loading='lazy';img.src=c.logo||DEFAULT_CAT_LOGO;img.onerror=function(){this.onerror=null;this.src=DEFAULT_CAT_LOGO;};const txt=document.createElement('div');txt.className='c-txt';const name=document.createElement('p');name.textContent=c.name;const group=document.createElement('small');group.textContent=c.group||'General';txt.append(name,group);card.append(serial,img,txt);card.addEventListener('click',()=>{openCh(c.url,c.name,c.source||'',c.group||'',i+1);});grid.appendChild(card);});const btn=document.getElementById('loadMoreBtn');if(currentFiltered.length>visibleCount){wrap.style.display='block';btn.textContent='Load More ('+visibleCount+'/'+currentFiltered.length+') ↓';}else{wrap.style.display='none';}if(reset){const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});}}
+function loadMore(){visibleCount+=200;renderGrid(false);}
+let _searchT=null;document.getElementById('search').addEventListener('input',()=>{clearTimeout(_searchT);_searchT=setTimeout(()=>{renderGrid(true);renderMatches();},100);});
+let _rszT=null;window.addEventListener('resize',()=>{clearTimeout(_rszT);_rszT=setTimeout(()=>{switchTab(currentTab);},150);});
+loadAll();setInterval(loadMatches,60000);setInterval(renderMatches,1000);
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>console.warn('Service Worker:',e));}
 let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; if(!window.matchMedia('(display-mode: standalone)').matches){ let bar=document.getElementById('installBar'); if(bar && !localStorage.getItem('rslive_install_closed')){ bar.style.display='flex'; } } });
-document.getElementById('installBtn')?.addEventListener('click',async()=>{ if(!deferredPrompt){ alert('ব্রাউজারের Menu (⋮) -> Add to Home Screen এ চাপ দাও'); return; } deferredPrompt.prompt(); let choice=await deferredPrompt.userChoice; if(choice.outcome==='accepted'){ document.getElementById('installBar').style.display='none'; } deferredPrompt=null; });
-document.getElementById('closeInstall')?.addEventListener('click',()=>{ document.getElementById('installBar').style.display='none'; localStorage.setItem('rslive_install_closed','1'); });
-window.addEventListener('appinstalled',()=>{ document.getElementById('installBar').style.display='none'; });
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches){const bar=document.getElementById('installBar');if(bar&&!localStorage.getItem('rslive_install_closed'))bar.style.display='flex';}});
+document.getElementById('installBtn')?.addEventListener('click',async()=>{const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);if(isIOS){alert('iPhone: Share বাটন → Add to Home Screen → Add');return;}if(!deferredPrompt){alert('Browser Menu → Add to Home Screen');return;}deferredPrompt.prompt();const choice=await deferredPrompt.userChoice;if(choice.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null;});
+document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1');});
+window.addEventListener('appinstalled',()=>{const b=document.getElementById('installBar');if(b)b.style.display='none';});

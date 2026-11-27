@@ -7,41 +7,14 @@
 <meta name="theme-color" content="#07070f">
 <title>RsLive Go - Live TV</title>
 <link rel="manifest" href="/manifest.json">
-<script>
-// KICK-OUT LOCK - Open হবে না, সরাসরি বের করে দিবে
-(function(){
-  function kick(){
-    try{ window.top.location.href = 'about:blank'; }catch(e){}
-    try{ window.parent.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.href = 'about:blank'; }catch(e){}
-    try{ window.location.replace('about:blank'); }catch(e){}
-    try{ window.close(); }catch(e){}
-    document.documentElement.innerHTML = '';
-    document.write('');
-    setInterval(function(){
-      try{ window.top.location.href = 'about:blank'; }catch(e){}
-      try{ window.location.href = 'about:blank'; }catch(e){}
-      document.documentElement.innerHTML = '';
-    }, 100);
-  }
-  var h = window.location.hostname || '';
-  var p = window.location.protocol || '';
-  var ref = document.referrer || '';
-  if(p === 'blob:' || p === 'data:' || p === 'file:' || p === 'about:' || h === '' || h === 'null'){
-    kick(); throw new Error('Blocked');
-  }
-  if(h !== 'rslivego.pages.dev' && h !== 'www.rslivego.pages.dev' && h !== 'localhost' && h !== '127.0.0.1'){
-    kick(); throw new Error('Blocked');
-  }
-  if(window.top !== window.self){
-    kick(); throw new Error('Blocked');
-  }
-  if(ref.indexOf('codebeautify') !== -1 || ref.indexOf('html-viewer') !== -1 || ref.indexOf('htmlpreview') !== -1 || ref.indexOf('online-tool') !== -1){
-    kick(); throw new Error('Blocked');
-  }
-})();
-</script>
-<!-- Google Analytics -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RsLive Go">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/bJQ17GyN/20261123-224246.png">
+<link rel="icon" href="https://i.postimg.cc/bJQ17GyN/20261123-224246.png">
+<meta name="description" content="RsLive Go - Live TV">
+<meta name="author" content="RsLive Go">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFG156QL5T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -49,12 +22,35 @@
   gtag('js', new Date());
   gtag('config', 'G-WFG156QL5T');
 </script>
-<!-- Google Analytics End -->
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;overflow-x:hidden;width:100%;background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif}
+html,body{height:100%;overflow-x:hidden;width:100%;background:#07070f;color:#fff;font-family:'Hind Siliguri',sans-serif}
+#app{min-height:100vh}
 </style>
+<script>
+// RsLive Go - SAFE KICK OUT
+(function(){
+  function kickOut(){
+    try{ document.body.innerHTML=""; }catch(e){}
+    try{ window.location.replace("about:blank"); setTimeout(()=>{ window.location.href="https://www.google.com"; },200); }catch(e){}
+  }
+  const isDesktop = window.innerWidth > 768 && !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  if(!isDesktop) return;
+  try{ if(window.top !== window.self) kickOut(); }catch(e){ kickOut(); }
+  document.addEventListener('keydown', function(e){
+    var k = e.key.toUpperCase();
+    if(e.key==='F12' || (e.ctrlKey && ['U'].indexOf(k)!==-1) || (e.ctrlKey && e.shiftKey && ['I','J','C'].indexOf(k)!==-1)){
+      e.preventDefault(); kickOut();
+    }
+  }, true);
+  setInterval(function(){
+    var wDiff = Math.abs(window.outerWidth - window.innerWidth);
+    var hDiff = Math.abs(window.outerHeight - window.innerHeight);
+    if(wDiff > 200 || hDiff > 200) kickOut();
+  }, 1000);
+})();
+</script>
 </head>
 <body>
 <div id="app"></div>
