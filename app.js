@@ -61,35 +61,6 @@ header::after{content:"";position:absolute;top:-50px;right:-20px;width:200px;hei
 .card img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
 .card p{font-size:10.5px;margin-top:6px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:26px;word-break:break-word}
 .card small{font-size:8.5px;color:#22d3ee}
-
-/* GitHub JSON driven live / upcoming match cards */
-#matchesSection{display:none;padding:12px 12px 4px}
-.matches-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
-.matches-head strong{font-family:Poppins,sans-serif;font-size:13px;letter-spacing:.3px}
-.matches-head span{font-size:10px;color:#8e91a8}
-#matchesGrid{display:grid;grid-template-columns:1fr;gap:10px}
-.match-card{position:relative;overflow:hidden;background:linear-gradient(115deg,#171a29,#10121d 58%,#171321);border:1px solid rgba(255,255,255,.10);border-radius:15px;padding:12px;box-shadow:0 7px 20px rgba(0,0,0,.22)}
-.match-card.live{border-left:3px solid #ff3d5a}
-.match-card.upcoming{border-left:3px solid #f3a43b}
-.match-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.match-badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 9px;font-size:9px;font-weight:900;letter-spacing:.5px}
-.match-badge.live{background:rgba(255,48,78,.16);color:#ff6176;border:1px solid rgba(255,48,78,.28)}
-.match-badge.upcoming{background:rgba(245,164,59,.14);color:#ffc36b;border:1px solid rgba(245,164,59,.26)}
-.match-type{font-size:9px;color:#9b9db1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
-.match-teams{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);align-items:center;gap:5px;text-align:center}
-.match-team{min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px}
-.match-team img{width:48px;height:48px;object-fit:contain;border-radius:50%;background:#fff;padding:4px}
-.match-team .team-fallback{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#25283a;color:#fff;font-weight:900;font-size:16px;border:1px solid #41445a}
-.match-team b{font-size:11px;line-height:1.25;max-width:100%;overflow-wrap:anywhere}
-.match-vs{font-family:Poppins,sans-serif;font-size:13px;font-weight:900;color:#9ea4ba}
-.match-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
-.match-time{font-size:10px;color:#aeb2c5;min-width:0;line-height:1.4}
-.match-action{flex-shrink:0;border:0;border-radius:20px;padding:7px 11px;font-family:inherit;font-size:10px;font-weight:900;color:#fff;background:linear-gradient(90deg,#e93658,#f07836);cursor:pointer}
-.match-action.upcoming{background:#292c3d;border:1px solid rgba(245,164,59,.35);color:#ffd08a}
-.match-action:disabled{opacity:.45;cursor:not-allowed}
-.match-countdown{display:block;color:#ffc36b;font-size:9px;margin-top:2px;font-variant-numeric:tabular-nums}
-@media(min-width:900px){#matchesSection{padding:8px 0 4px}.match-card{padding:14px 16px}.match-team img,.match-team .team-fallback{width:56px;height:56px}.match-team b{font-size:12px}}
-
 #loadMoreWrap{text-align:center;padding:6px 12px 18px;display:none}
 #loadMoreBtn{width:100%;max-width:320px;padding:12px;border-radius:12px;background:#2a2a3a;color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 #noticeBar{display:none;background:linear-gradient(90deg,#22d3ee,#a78bfa,#ff5d8f);color:#000;font-size:12px;font-weight:700;padding:8px;text-align:center}
@@ -130,7 +101,7 @@ header{max-width:1440px;margin:0 auto;padding:16px 24px}
 </style>
 <div id="noticeBar"></div>
 <div class="sticky"><header><div class="top-row"><div class="header-top"><div class="logo" onclick="goHome()"><div class="play-ico">▶</div><div class="logo-text"><div class="name">RsLive <i>Go</i></div><div class="tag" id="taglineEl">LIVE TV • BANGLADESH</div></div></div><div class="live-pill" id="livePill"><i></i> LIVE</div></div><div class="search-wrap"><span class="s-ico">🔍</span><input id="search" placeholder="চ্যানেল খুঁজো..." autocomplete="off"></div></div></header></div>
-<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><section id="matchesSection"><div class="matches-head"><strong>⚽ LIVE & UPCOMING MATCHES</strong><span id="matchesCount"></span></div><div id="matchesGrid"></div></section><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
+<div class="desktop-wrap"><div id="cats"></div><div id="mainCol"><div id="scrollArea"><div id="featured"><div style="font-size:11px;color:#ff5d8f;font-weight:800">⭐ FEATURED LIVE</div><b id="featName"></b><br><span style="font-size:11px;color:#22d3ee">এখনই দেখো →</span></div><div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">⏳ চ্যানেল লোড হচ্ছে...</div></div><div id="loadMoreWrap"><button id="loadMoreBtn" onclick="loadMore()">আরো দেখো ↓</button></div></div></div></div>
 <div id="status">Loading...</div>
 <a class="tele" id="teleBtn" href="https://t.me/RsLiveGo" target="_blank"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></a>
 <div id="installBar"><div class="ib-ico">📲</div><div class="ib-txt"><b>RsLive Go অ্যাপ নাও</b><span>১ ক্লিকেই ফোনে সেভ হবে ✨</span></div><button class="ib-btn" id="installBtn">ইন্সটল করো</button><span class="ib-close" id="closeInstall">✕</span></div>
@@ -152,123 +123,12 @@ if(CFG.showFeat&&CFG.featName){document.getElementById('featured').style.display
 }catch(e){}
 function goHome(){ window.location.href=window.location.origin+'/?t='+Date.now(); }
 let all=[]; let cat="All"; let _catCache=null; let visibleCount=200; let currentFiltered=[];
-let allMatches=[];
-const MATCH_INDEX_URL='/data/matches/index.json';
-function unwrapMatchFile(data){
-  if(!data || typeof data!=='object') return [];
-  if(Array.isArray(data.matches)) return data.matches;
-  if(data.match) return Array.isArray(data.match)?data.match:[data.match];
-  if(Array.isArray(data.liveSports)) return data.liveSports;
-  if(data.name || data.event_name) return [data];
-  return [];
-}
-function normalizeMatch(raw){
-  if(!raw || typeof raw!=='object') return null;
-  const m={...raw};
-  m.name=String(m.name||m.event_name||m.title||'').trim();
-  const streams=Array.isArray(m.streams)?m.streams:[];
-  const first=streams.find(x=>x && (x.url||x.stream_url||x.src));
-  m.url=String(m.url||(first&&(first.url||first.stream_url||first.src))||'').trim();
-  m.startTime=m.startTime||m.start_time||m.start||'';
-  m.endTime=m.endTime||m.end_time||m.end||'';
-  m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();
-  m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();
-  if(!m.teamA || !m.teamB){
-    const parts=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);
-    if(parts.length>=2){if(!m.teamA)m.teamA=parts[0].trim();if(!m.teamB)m.teamB=parts.slice(1).join(' vs ').trim();}
-  }
-  if(!m.name) return null;
-  if(m.enabled===false || String(m.enabled).toLowerCase()==='off' || String(m.show).toLowerCase()==='no') return null;
-  return m;
-}
-function getMatchState(m){
-  const now=Date.now(),start=Date.parse(m.startTime||''),end=Date.parse(m.endTime||'');
-  if(Number.isFinite(end) && end>0 && now>=end) return 'expired';
-  if(Number.isFinite(start) && start>0 && now<start) return 'upcoming';
-  const manual=String(m.status||'').toLowerCase();
-  if(manual==='ended'||manual==='finished'||manual==='expired') return 'expired';
-  if(manual==='upcoming' && !(Number.isFinite(start)&&start>0)) return 'upcoming';
-  return 'live';
-}
-function fmtMatchTime(value){
-  const d=new Date(value);if(!Number.isFinite(d.getTime()))return 'সময় নির্ধারিত নয়';
-  return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
-}
-function matchCountdown(m){
-  const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return '';
-  let sec=Math.max(0,Math.floor((t-Date.now())/1000));
-  const days=Math.floor(sec/86400);sec%=86400;const hours=Math.floor(sec/3600);sec%=3600;const mins=Math.floor(sec/60);sec%=60;
-  return (days?days+'d ':'')+String(hours).padStart(2,'0')+':'+String(mins).padStart(2,'0')+':'+String(sec).padStart(2,'0');
-}
-function teamNode(name,logo){
-  const wrap=document.createElement('div');wrap.className='match-team';
-  if(logo){const img=document.createElement('img');img.src=logo;img.alt=name||'Team';img.loading='lazy';img.onerror=function(){this.remove();const f=document.createElement('div');f.className='team-fallback';f.textContent=(name||'?').trim().slice(0,2).toUpperCase();wrap.insertBefore(f,wrap.firstChild)};wrap.appendChild(img)}
-  else {const f=document.createElement('div');f.className='team-fallback';f.textContent=(name||'?').trim().slice(0,2).toUpperCase();wrap.appendChild(f)}
-  const label=document.createElement('b');label.textContent=name||'Team';wrap.appendChild(label);return wrap;
-}
-function openMatch(m){
-  if(!m.url)return;
-  const params=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports'});
-  window.location.href='player.html?'+params.toString();
-}
-function renderMatches(){
-  const section=document.getElementById('matchesSection'),grid=document.getElementById('matchesGrid');
-  if(!section||!grid)return;
-  const q=(document.getElementById('search')?.value||'').trim().toLowerCase();
-  const visible=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));
-  visible.sort((a,b)=>{
-    const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;
-    return (Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0);
-  });
-  section.style.display=visible.length?'block':'none';
-  const count=document.getElementById('matchesCount');if(count)count.textContent=visible.length?visible.length+' ম্যাচ':'';
-  grid.replaceChildren();
-  visible.forEach(m=>{
-    const state=getMatchState(m),card=document.createElement('article');card.className='match-card '+state;
-    const top=document.createElement('div');top.className='match-top';
-    const badge=document.createElement('span');badge.className='match-badge '+state;badge.textContent=state==='live'?'● LIVE':'◷ UPCOMING';
-    const type=document.createElement('span');type.className='match-type';type.textContent=m.matchType||m.category||'LIVE SPORTS';top.append(badge,type);
-    const teams=document.createElement('div');teams.className='match-teams';
-    const a=teamNode(m.teamA||m.name,m.teamALogo||m.teamAFlag||m.homeLogo||m.logoA||'');
-    const vs=document.createElement('div');vs.className='match-vs';vs.textContent='VS';
-    const b=teamNode(m.teamB||'',m.teamBLogo||m.teamBFlag||m.awayLogo||m.logoB||'');
-    teams.append(a,vs,b);
-    const bottom=document.createElement('div');bottom.className='match-bottom';
-    const time=document.createElement('div');time.className='match-time';
-    time.textContent=state==='live'?'শুরু: '+fmtMatchTime(m.startTime):'শুরু: '+fmtMatchTime(m.startTime);
-    if(state==='upcoming'){const cd=document.createElement('span');cd.className='match-countdown';cd.textContent='শুরু হতে বাকি '+matchCountdown(m);time.appendChild(cd)}
-    const btn=document.createElement('button');btn.className='match-action '+state;btn.type='button';btn.textContent=state==='live'?'▶ Watch Live':'UPCOMING';btn.disabled=state!=='live'||!m.url;if(!btn.disabled)btn.addEventListener('click',()=>openMatch(m));
-    bottom.append(time,btn);card.append(top,teams,bottom);grid.appendChild(card);
-  });
-}
-async function loadMatches(){
-  try{
-    const response=await fetch(MATCH_INDEX_URL+'?t='+Date.now(),{cache:'no-store'});
-    if(!response.ok)throw new Error('HTTP '+response.status);
-    const data=await response.json();
-    allMatches=unwrapMatchFile(data).map(normalizeMatch).filter(Boolean);
-    renderMatches();
-  }catch(error){
-    console.warn('Match index load failed:',error);
-    // Keep previously loaded cards visible during a temporary network failure.
-    renderMatches();
-  }
-}
 async function getPlaylistsFromSW(){ try{ await navigator.serviceWorker.ready; let r=await fetch('/api/playlists'); let data=await r.json(); if(data&&data.length) return data; }catch(e){} return CFG.playlists; }
 async function loadOne(p){let u=p.useProxy?CFG.proxyUrl+encodeURIComponent(p.url):p.url; try{let r=await fetch(u);let t=await r.text();return parse(t)}catch(e){return[]}}
 function parse(t){let l=t.split("\n"),o=[],c=null;for(let x of l){x=x.trim();if(x.startsWith("#EXTINF")){let n=x.split(",").pop().trim();let lg=x.match(/tvg-logo="([^"]+)"/);let g=x.match(/group-title="([^"]+)"/);c={name:n,logo:lg?lg[1]:"",group:g?g[1]:"General"}}else if(x.startsWith("http")&&c){c.url=x;o.push(c);c=null}}return o}
 async function loadAll(){
-  loadMatches();
   CFG.playlists=await getPlaylistsFromSW();
-  for(let p of CFG.playlists){
-    let list=await loadOne(p);
-    for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}
-    document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;
-    _catCache=null;renderCats();renderGrid();
-  }
-  document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`);
-}
-
+  for(let p of CFG.playlists){let list=await loadOne(p);for(let ch of list){ch.source=p.name;if(!all.find(y=>y.url===ch.url))all.push(ch)}document.getElementById("status").innerHTML=`✅ মোট <b>${all.length}</b> টা চ্যানেল লোড হইছে...`;_catCache=null;renderCats();renderGrid();}document.getElementById("status").innerHTML=CFG.statusText.replace('{count}',`<b>${all.length}</b>`)}
 function getCats(){if(_catCache) return _catCache; let sources=[...new Set(CFG.playlists.map(p=>p.name))]; _catCache=["All",...sources,"Sports","News","Entertainment","Movies","Kids","Music","Bangladesh","India"]; return _catCache;}
 function catIcon(c){ if(c==='All') return '🏠'; if(c==='Sports') return '🏆'; if(c==='News') return '📰'; if(c==='Entertainment') return '🎭'; if(c==='Movies') return '🎬'; if(c==='Kids') return '🧒'; if(c==='Music') return '🎵'; if(c==='Bangladesh') return '🇧🇩'; if(c==='India') return '🇮🇳'; return '📺'; }
 function catCount(c){
@@ -319,11 +179,9 @@ function renderGrid(reset=true){
 function loadMore(){ visibleCount+=200; renderGrid(false); }
 function setCat(c){ if(cat===c) return; cat=c; document.querySelectorAll('#cats .cat').forEach(el=>{ el.classList.toggle('active', el.dataset.cat===c); }); renderGrid(true); }
 function openCh(u,n,s,g){ window.location.href=`player.html?url=${u}&name=${n}&src=${encodeURIComponent(s)}&group=${g}` }
-let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>{renderGrid(true);renderMatches();},80); });
+let _searchT=null; document.getElementById("search").addEventListener("input",()=>{ clearTimeout(_searchT); _searchT=setTimeout(()=>renderGrid(true),80); });
 let _rszT=null; window.addEventListener("resize",()=>{ clearTimeout(_rszT); _rszT=setTimeout(renderCats,150); });
 loadAll();
-setInterval(loadMatches,60000);
-setInterval(renderMatches,1000);
 (function(){
   function kill(){ try{ document.documentElement.innerHTML=''; }catch(e){} }
   document.addEventListener('contextmenu',e=>{ e.preventDefault(); return false; });
