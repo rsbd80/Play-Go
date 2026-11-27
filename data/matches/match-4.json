@@ -1,4 +1,3 @@
-
 {
   "name": "New Zealand vs India",
   "matchType": "Cricket | India tour of New Zealand | 2nd Test",
@@ -8,7 +7,7 @@
   "teamA": "New Zealand",
   "teamB": "India",
   "teamALogo": "https://flagcdn.com/nz.svg",
-  "teamBLogo": "https://flagcdn.com/pk.svg",
+  "teamBLogo": "https://flagcdn.com/in.svg",
   "streams": [
     {
       "name": "Server 1",
