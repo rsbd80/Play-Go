@@ -1,4 +1,4 @@
-/* RsLive Go v63 - app.js ONLY - NO <script> TAG - config.json ONLY Matches - data/matches folder BAD */
+/* RsLive Go v64 - app.js ONLY - config.json matches + resilient playlist loading */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -180,23 +180,28 @@ const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png'
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
 let _cloudLoaded=false, _cloudPromise=null;
-async function loadCloudConfig(){
-  if(_cloudLoaded) return true;
-  if(_cloudPromise) return _cloudPromise;
+async function loadCloudConfig(force=false){
+  if(_cloudLoaded&&!force) return true;
+  if(_cloudPromise&&!force) return _cloudPromise;
   _cloudPromise=(async()=>{
     try{
-      const r=await fetch(CONFIG_URL+'?t='+Date.now(),{cache:'no-store'});
-      if(!r.ok) return false;
+      const r=await fetchWithTimeout(CONFIG_URL+'?t='+Date.now(),12000);
       const cloud=await r.json();
-      if(!cloud||typeof cloud!=='object') return false;
-      if(Array.isArray(cloud.playlists) && cloud.playlists.length) CFG.playlists=cloud.playlists;
-      if(Array.isArray(cloud.matches) && cloud.matches.length) window._cloudMatches=cloud.matches;
-      if(Array.isArray(cloud.notis) && cloud.notis.length) window._cloudNotis=cloud.notis;
-      if(Array.isArray(cloud.notifications) && cloud.notifications.length) window._cloudNotis=cloud.notifications;
-      ['siteName','tagline','telegram','searchPh','proxyUrl','notice','showNotice','featName','featUrl','showFeat','quality'].forEach(k=>{ if(cloud[k]!==undefined && cloud[k]!=='' && cloud[k]!==false) CFG[k]=cloud[k]; else if(cloud[k]!==undefined && (k==='showNotice'||k==='showFeat')) CFG[k]=cloud[k]; });
-      try{ localStorage.setItem('rslive_config', JSON.stringify(CFG)); }catch(e){}
-      _cloudLoaded=true; return true;
-    }catch(e){ return false; }
+      if(!cloud||typeof cloud!=='object'||Array.isArray(cloud)) throw new Error('Invalid config.json');
+      // Empty remote arrays never erase a working local configuration.
+      if(Array.isArray(cloud.playlists)&&cloud.playlists.length) CFG.playlists=cloud.playlists.filter(p=>p&&typeof p.url==='string'&&p.url.trim());
+      if(Array.isArray(cloud.matches)&&cloud.matches.length) window._cloudMatches=cloud.matches;
+      else if(Array.isArray(cloud.matches)&&cloud.matches.length===0&&!Array.isArray(window._cloudMatches)) window._cloudMatches=[];
+      if(Array.isArray(cloud.notis)&&cloud.notis.length) window._cloudNotis=cloud.notis;
+      if(Array.isArray(cloud.notifications)&&cloud.notifications.length) window._cloudNotis=cloud.notifications;
+      ['siteName','tagline','telegram','searchPh','proxyUrl','notice','showNotice','featName','featUrl','showFeat','quality'].forEach(k=>{
+        if(cloud[k]!==undefined && cloud[k]!==null && cloud[k]!=='' ) CFG[k]=cloud[k];
+      });
+      try{localStorage.setItem('rslive_config',JSON.stringify(CFG));}catch(e){}
+      _cloudLoaded=true;
+      return true;
+    }catch(e){console.warn('[RsLive Go] config.json load failed:',e);return false;}
+    finally{_cloudPromise=null;}
   })();
   return _cloudPromise;
 }
@@ -247,22 +252,86 @@ async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const
 async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
-    matchesLoading=true; renderMatches();
-    await loadCloudConfig(); applyCloudUI();
-    if(window._cloudMatches && window._cloudMatches.length){
-      allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
-    }
-    matchesLoading=false; renderMatches(); matchesLoadingPromise=null;
-  })(); return matchesLoadingPromise;
+    matchesLoading=true;renderMatches();
+    try{
+      await loadCloudConfig();applyCloudUI();
+      const raw=Array.isArray(window._cloudMatches)?window._cloudMatches:[];
+      allMatches=raw.map(normalizeMatch).filter(Boolean);
+    }catch(e){console.warn('[RsLive Go] matches load failed:',e)}
+    finally{matchesLoading=false;renderMatches();matchesLoadingPromise=null;}
+  })();
+  return matchesLoadingPromise;
 }
 function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
 async function getPlaylistsFromSW(){
+  // config.json is the primary source. The service-worker API is only a fallback.
   await loadCloudConfig();
-  if(CFG.playlists && CFG.playlists.length) return CFG.playlists;
-  try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}return Array.isArray(CFG.playlists)?CFG.playlists:[]}
-async function loadOne(p){if(!p||!p.url)return[];const tf=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return parse(await r.text())};const up=isProxyOn(p.name);try{let u=p.url;if(up&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const l=await tf(u);if(l.length)return l;throw new Error('Empty')}catch(e1){try{return await tf((CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(p.url))}catch(e2){return[]}}}
+  const remote=Array.isArray(CFG.playlists)?CFG.playlists.filter(p=>p&&typeof p.url==='string'&&p.url.trim()):[];
+  if(remote.length)return remote;
+  try{
+    const r=await fetchWithTimeout('/api/playlists?t='+Date.now(),7000);
+    const d=await r.json();
+    if(Array.isArray(d)&&d.length)return d.filter(p=>p&&typeof p.url==='string'&&p.url.trim());
+  }catch(e){console.warn('[RsLive Go] playlist API fallback unavailable:',e)}
+  return remote;
+}
+async function loadOne(p){
+  if(!p||typeof p.url!=='string'||!p.url.trim())return[];
+  const playlistUrl=p.url.trim();
+  const tf=async(u)=>{
+    const r=await fetchWithTimeout(u,11000);
+    const body=await r.text();
+    const parsed=parse(body);
+    if(!parsed.length)throw new Error('Playlist is empty or invalid');
+    return parsed;
+  };
+  const candidates=[];
+  if(isProxyOn(p.name)&&CFG.proxyUrl)candidates.push(CFG.proxyUrl+encodeURIComponent(playlistUrl));
+  candidates.push(playlistUrl);
+  const proxy=(CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(playlistUrl);
+  if(!candidates.includes(proxy))candidates.push(proxy);
+  for(const url of candidates){try{return await tf(url)}catch(e){console.warn('[RsLive Go] playlist failed:',p.name||playlistUrl,e)}}
+  return[];
+}
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'}}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null}}return out}
-async function loadAll(){isPlaylistLoading=true;loadMatches();renderGrid();let base=await getPlaylistsFromSW();let custom=getCustomPl();CFG.playlists=[...base,...custom];for(const p of CFG.playlists){const list=await loadOne(p);for(const ch of list){ch.source=p.name||'TV';const ex=all.find(y=>y.url===ch.url);if(!ex)all.push(ch);else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo}}_catCache=null;renderGrid();renderMatches()}isPlaylistLoading=false;renderGrid();renderMatches();switchTab(eventsMode?'events':'home')}
+async function loadAll(){
+  if(window._rsliveLoadAllPromise)return window._rsliveLoadAllPromise;
+  window._rsliveLoadAllPromise=(async()=>{
+    isPlaylistLoading=true;renderGrid();
+    try{
+      await loadCloudConfig();
+      applyCloudUI();
+      await loadMatches();
+      const base=await getPlaylistsFromSW();
+      const custom=getCustomPl();
+      // Keep remote and user-added playlists; de-duplicate by URL.
+      const combined=[...base,...custom];
+      const seen=new Set();
+      CFG.playlists=combined.filter(p=>{const u=String(p?.url||'').trim();if(!u||seen.has(u))return false;seen.add(u);return true});
+      try{localStorage.setItem('rslive_config',JSON.stringify(CFG))}catch(e){}
+      // Load independently so one slow/broken playlist cannot block the rest.
+      const results=await Promise.all(CFG.playlists.map(async p=>({p,list:await loadOne(p)})));
+      for(const result of results){
+        const p=result.p,list=result.list||[];
+        for(const ch of list){
+          ch.source=p.name||'TV';
+          const ex=all.find(y=>y.url===ch.url);
+          if(!ex)all.push(ch);
+          else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo;}
+        }
+      }
+      _catCache=null;
+    }catch(e){console.error('[RsLive Go] loadAll failed:',e)}
+    finally{
+      isPlaylistLoading=false;
+      renderGrid();renderMatches();
+      if(currentTab==='events'&&!eventsMode)switchTab('home');
+      else switchTab(currentTab||'home');
+      window._rsliveLoadAllPromise=null;
+    }
+  })();
+  return window._rsliveLoadAllPromise;
+}
 function getGroupCounts(){const map=new Map();all.forEach(c=>{const g=cleanGroupName(c.group);const k=normName(g);if(!map.has(k))map.set(k,{name:g,count:0});map.get(k).count++});return [...map.values()].sort((a,b)=>b.count-a.count)}
 function getGroupCountByName(name){return all.filter(c=>normName(cleanGroupName(c.group))===normName(name)).length}
 function matchesCat(c,category){return normName(category)==='all'?true:normName(c.source)===normName(category)}
@@ -299,7 +368,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v63'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v64'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
