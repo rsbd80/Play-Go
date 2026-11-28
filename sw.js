@@ -1,134 +1,97 @@
-{
-  "siteName": "RsLive Go",
-  "tagline": "LIVE TV • BANGLADESH",
-  "telegram": "https://t.me/RsLiveGo",
-  "searchPh": "Search channels...",
-  "proxyUrl": "",
-  "notice": "",
-  "showNotice": false,
-  "featName": "",
-  "featUrl": "",
-  "showFeat": false,
-  "playlists": [
-    {
-      "name": "Tapmad",
-      "url": "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
-      "useProxy": false
-    },
-    {
-      "name": "Sports",
-      "url": "https://raw.githubusercontent.com/jannatulbusra000/Sports-Playlist/refs/heads/main/sports.m3u",
-      "useProxy": true
-    },
-    {
-      "name": "Toffee",
-      "url": "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
-      "useProxy": true
-    },
-    {
-      "name": "AynaOTT",
-      "url": "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u",
-      "useProxy": false
-    },
-    {
-      "name": "JagoBD",
-      "url": "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
-      "useProxy": false
-    },
-    {
-      "name": "Bangladesh",
-      "url": "https://iptv-org.github.io/iptv/countries/bd.m3u",
-      "useProxy": false
-    },
-    {
-      "name": "India",
-      "url": "https://iptv-org.github.io/iptv/countries/in.m3u",
-      "useProxy": false
-    }
-  ],
-  "notis": [],
-  "matches": [
-    {
-      "name": "Bangladesh vs South Africa",
-      "teamA": "Bangladesh",
-      "teamALogo": "https://flagcdn.com/bd.svg",
-      "teamB": "South Africa",
-      "teamBLogo": "https://flagcdn.com/za.svg",
-      "matchType": "ODI",
-      "startTime": "2026-12-04T10:30:00.000Z",
-      "endTime": "2026-12-04T17:50:00.000Z",
-      "start": "2026-12-04T10:30:00.000Z",
-      "end": "2026-12-04T17:50:00.000Z",
-      "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
-      "streams": [
-        {
-          "stream_url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8"
+/* RsLive Go - sw.js v65 - MATCHES app.js v65 */
+const CACHE_NAME = 'rslive-go-v65';
+const CORE = [
+  '/',
+  '/index.html',
+  '/app.js',
+  '/player.html',
+  '/manifest.json'
+];
+
+// Install - Core file cache করো
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(CORE).catch(()=>{}))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate - পুরানো Cache মুছে ফেলো, নাহলে পুরানো app.js চলবে
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((k) => {
+          if (k !== CACHE_NAME && k.startsWith('rslive')) {
+            return caches.delete(k);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch - আসল লজিক
+self.addEventListener('fetch', (e) => {
+  const url = new URL(e.request.url);
+
+  // 1. শুধু GET request handle করবো
+  if (e.request.method !== 'GET') return;
+
+  // 2. config.json / playlists / matches - কখনোই Cache থেকে দিবো না, সবসময় Fresh
+  // এটাই Home / Categories না চলার আসল কারণ ছিলো
+  if (
+    url.pathname.includes('/config.json') ||
+    url.pathname.includes('/notifications.json') ||
+    url.pathname.includes('/matches') ||
+    url.hostname === 'raw.githubusercontent.com' ||
+    url.pathname.includes('/api/playlists')
+  ) {
+    e.respondWith(
+      fetch(e.request, { cache: 'no-store' })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // 3. /api/playlists - GitHub config.json থেকে Playlist বানাও
+  // app.js এ getPlaylistsFromSW() এইটা খোঁজে
+  if (url.pathname === '/api/playlists') {
+    e.respondWith(
+      (async () => {
+        try {
+          const r = await fetch('https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json?t=' + Date.now(), { cache: 'no-store' });
+          const cfg = await r.json();
+          const list = Array.isArray(cfg.playlists) ? cfg.playlists : [];
+          return new Response(JSON.stringify(list), {
+            headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
+          });
+        } catch (err) {
+          return new Response(JSON.stringify([]), {
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
-      ]
-    },
-    {
-      "name": "New Zealand vs India",
-      "teamA": "New Zealand",
-      "teamALogo": "https://flagcdn.com/nz.svg",
-      "teamB": "India",
-      "teamBLogo": "https://flagcdn.com/in.svg",
-      "matchType": "2nd Test",
-      "startTime": "2026-11-27T22:00:00.000Z",
-      "endTime": "2026-11-28T08:00:00.000Z",
-      "start": "2026-11-27T22:00:00.000Z",
-      "end": "2026-11-28T08:00:00.000Z",
-      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F15.m3u8",
-      "streams": [
-        {
-          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F15.m3u8"
-        }
-      ]
-    },
-    {
-      "name": "Sri Lanka A vs India A",
-      "teamA": "Sri Lanka A",
-      "teamALogo": "https://flagcdn.com/lk.svg",
-      "teamB": "India A",
-      "teamBLogo": "https://flagcdn.com/in.svg",
-      "matchType": "Cricket | Asia Cup 2026 | Final",
-      "startTime": "2026-11-29T10:00:00.000Z",
-      "endTime": "2026-11-29T17:30:00.000Z",
-      "start": "2026-11-29T10:00:00.000Z",
-      "end": "2026-11-29T17:30:00.000Z",
-      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F12.m3u8",
-      "streams": [
-        {
-          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F12.m3u8"
-        }
-      ]
-    },
-    {
-      "name": "Manchester United vs Brentford",
-      "teamA": "Manchester United",
-      "teamALogo": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
-      "teamB": "Brentford",
-      "teamBLogo": "https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg",
-      "matchType": "Football | Premier League",
-      "startTime": "2026-11-28T15:00:00.000Z",
-      "endTime": "2026-11-28T17:00:00.000Z",
-      "start": "2026-11-28T15:00:00.000Z",
-      "end": "2026-11-28T17:00:00.000Z",
-      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8",
-      "streams": [
-        {
-          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8"
-        }
-      ]
-    }
-  ],
-  "reports": [],
-  "eventsMode": true,
-  "tvMode": false,
-  "autoQuality": true,
-  "telePopup": true,
-  "themeColor": "#FFC107",
-  "logoUrl": "",
-  "aboutText": "",
-  "footerText": "",
-  "quality": "auto"
-}
+      })()
+    );
+    return;
+  }
+
+  // 4. .m3u / .m3u8 / ভিডিও - কখনোই SW দিয়ে আটকাবো না, সরাসরি Network
+  if (
+    url.pathname.endsWith('.m3u') ||
+    url.pathname.endsWith('.m3u8') ||
+    url.pathname.endsWith('.ts') ||
+    url.pathname.includes('.m3u')
+  ) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
+
+  // 5. app.js / index.html / player.html - Network First, না পেলে Cache
+  // যাতে নতুন Update সাথে সাথে আসে
+  if (
+    url.pathname.endsWith('/app.js') ||
+    url.pathname.endsWith('/index.html') ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('/
