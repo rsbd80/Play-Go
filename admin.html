@@ -65,7 +65,7 @@ textarea{min-height:70px;resize:vertical}
 .sw{width:46px;height:26px;min-width:46px;border-radius:99px;border:1.5px solid #6e6e7a;position:relative;cursor:pointer;background:transparent;flex-shrink:0}
 .sw:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#8e8e9a;transition:.2s}
 .sw.on{border-color:var(--yellow);background:#2a2410} .sw.on:after{left:22px;background:var(--yellow)}
-.item{background:#34343C;border-radius:11px;padding:11px 12px;margin-top:8px;display:flex;gap:8px;align-items:center}
+.item{background:#34343C;border-radius:11px;padding:11px 12px;margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .item .thumb{width:36px;height:36px;border-radius:8px;background:#fff;padding:3px;object-fit:contain;flex-shrink:0}
 .item b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item small{display:block;font-size:11px;color:var(--dim);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -86,13 +86,18 @@ textarea{min-height:70px;resize:vertical}
 .match-badge.expired{background:#222;color:#888;border:1px solid #333}
 @media(max-width:900px){
   .sidebar{display:none}
-  .main{padding:14px 12px 110px}
+  .main{padding:14px 12px 130px}
   .stats{grid-template-columns:1fr 1fr}
   .grid2{grid-template-columns:1fr}
   .topbar h1{font-size:19px}
-  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#16161C;border-top:1px solid #2A2A32;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:100;gap:4px;overflow-x:auto}
-  .bottom-nav button{flex:1;min-width:64px;background:transparent;border:0;color:#8e8e9a;padding:7px 4px;border-radius:10px;font-size:10px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center}
-  .bottom-nav button.active{background:var(--yellow);color:#000}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(22,22,28,.95);backdrop-filter:blur(20px);border-top:1px solid #2A2A32;padding:6px 8px calc(8px + env(safe-area-inset-bottom));z-index:100;gap:4px;box-shadow:0 -10px 30px rgba(0,0,0,.5)}
+  .bottom-nav button{flex:1;min-width:56px;background:transparent;border:0;color:#8e8e9a;padding:8px 2px 6px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;transition:.2s}
+  .bottom-nav button svg{transition:.2s}
+  .bottom-nav button.active{background:transparent;color:#FFC107}
+  .bottom-nav button.active svg{stroke:#FFC107;transform:scale(1.15);filter:drop-shadow(0 0 6px rgba(255,193,7,.6))}
+  .bottom-nav .center-btn{position:relative;top:-14px}
+  .bottom-nav .center-ico{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#FFC107,#FF8A00);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(255,193,7,.45),0 0 0 4px #16161C;border:2px solid rgba(255,255,255,.2)}
+  .bottom-nav .center-btn span{color:#FFC107;font-weight:800}
 }
 </style>
 </head>
@@ -107,7 +112,7 @@ textarea{min-height:70px;resize:vertical}
 </div></div>
 <div class="admin">
 <aside class="sidebar">
-<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v63 FIXED</small></div>
+<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v64 PREMIUM</small></div>
 <div class="menu-label">MAIN MENU</div>
 <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
 <button class="nav-btn" data-tab="general" onclick="showTab('general',this)"><span class="ico">🌐</span>Website</button>
@@ -205,14 +210,17 @@ textarea{min-height:70px;resize:vertical}
 </div>
 <div class="tab" id="tab-match">
 <div class="grid2">
-<div class="card"><h2>🏏 Add Match</h2><p class="desc">সবার Events ট্যাবে দেখাবে</p>
+<div class="card"><h2>🏏 Add / Edit Match</h2><p class="desc" id="matchFormTitle">নতুন Match দিলে সবার Events ট্যাবে দেখাবে</p>
+<input id="matchSearch" oninput="renderMatch()" placeholder="🔍 Search match..." style="margin-bottom:2px">
 <div class="row"><div><label>Team A</label><input id="mTeamA" placeholder="Bangladesh"></div><div><label>Team B</label><input id="mTeamB" placeholder="India"></div></div>
 <div class="row"><div><label>Team A Logo</label><input id="mLogoA" placeholder="https://.../ban.png"></div><div><label>Team B Logo</label><input id="mLogoB" placeholder="https://.../ind.png"></div></div>
 <label>Category / Type</label><input id="mType" placeholder="Cricket | Asia Cup">
 <label>Start Time</label><input id="mStart" type="datetime-local">
 <label>End Time - না দিলে অটো Start + 2 ঘণ্টা</label><input id="mEnd" type="datetime-local">
 <label>Stream URL (m3u8)</label><input id="mUrl" placeholder="https://.../live.m3u8">
-<button class="btn btn-block" onclick="addMatch()">+ Add Match to All ☁️</button>
+<button class="btn btn-block" id="addMatchBtn" onclick="addMatch()">+ Add Match to All ☁️</button>
+<button class="btn btn-block btn2" id="cancelEditBtn" onclick="cancelEditMatch()" style="display:none;margin-top:8px">✕ Cancel Edit</button>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn2" style="flex:1" onclick="quickAddToday()">⚡ Today 4 PM</button><button class="btn btn2" style="flex:1" onclick="quickAddTomorrow()">📅 Tomorrow 4 PM</button></div>
 </div>
 <div class="card"><h2>📋 All Matches <span class="tag" id="matchCount">0</span></h2><div id="matchList"></div></div>
 </div>
@@ -282,12 +290,12 @@ textarea{min-height:70px;resize:vertical}
 </main>
 </div>
 <nav class="bottom-nav">
-<button class="active" onclick="showTab('dashboard',this)">📊<span>Home</span></button>
-<button onclick="showTab('playlist',this)">📺<span>Playlist</span></button>
-<button onclick="showTab('match',this)">🏏<span>Match</span></button>
-<button onclick="showTab('noti',this)">🔔<span>Noti</span></button>
-<button onclick="showTab('reports',this)">🚨<span>Reports</span></button>
-<button onclick="showTab('settings',this)">⚙️<span>Settings</span></button>
+<button onclick="showTab('dashboard',this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></button>
+<button onclick="showTab('playlist',this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="17 2 12 7 7 2"/></svg><span>Playlist</span></button>
+<button class="active center-btn" onclick="showTab('match',this)"><div class="center-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><span>Match</span></button>
+<button onclick="showTab('noti',this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span>Noti</span></button>
+<button onclick="showTab('reports',this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Reports</span></button>
+<button onclick="showTab('settings',this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
 </nav>
 <div class="toast" id="toast"></div>
 <script>
@@ -302,7 +310,7 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   if(btn) btn.classList.add('active');
   document.querySelector(`.nav-btn[data-tab="${id}"]`)?.classList.add('active');
-  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Delete',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',reports:'User Reports - Broken Link',featured:'Featured Live Card',settings:'Security / Backup / Reset'}[id]||'';
+  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Edit / Live',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',reports:'User Reports - Broken Link',featured:'Featured Live Card',settings:'Security / Backup / Reset'}[id]||'';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function doLogin(){if(document.getElementById('passInput').value===(localStorage.getItem('rslive_admin_pass')||'rslive123')){sessionStorage.setItem('rslive_admin','1');document.getElementById('login').style.display='none';if(GH.token) loadFromGitHub();else fillUI();}else toast('❌ Wrong Password')}
@@ -328,7 +336,6 @@ function fillUI(){
   document.getElementById('badgePl').textContent=(CLOUD.playlists||[]).length;document.getElementById('badgeMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('badgeNoti').textContent=(CLOUD.notis||[]).length;document.getElementById('badgeReport').textContent=(CLOUD.reports||[]).length;document.getElementById('reportCount').textContent=(CLOUD.reports||[]).length;
   document.getElementById('plCount').textContent=(CLOUD.playlists||[]).length;document.getElementById('matchCount').textContent=(CLOUD.matches||[]).length;
   renderPl();renderNoti();renderMatch();renderRecent();renderReports();
-  document.querySelectorAll('.color-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()!=='Custom'&&CLOUD.themeColor===el.getAttribute('onclick')?.match(/'(#[^']+)'/)?.[1]));
 }
 function renderRecent(){const w=document.getElementById('recentList');w.innerHTML='';const items=[...(CLOUD.matches||[]).slice(-3).map(m=>({t:'🏏 Match',s:m.teamA+' vs '+m.teamB})),...(CLOUD.notis||[]).slice(-2).map(n=>({t:'🔔 Noti',s:n.title}))].reverse();if(!items.length) w.innerHTML='<div class="empty">No activity yet - Match বা Notification পাঠাও</div>';else items.forEach(it=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${it.t}</b><small>${it.s}</small>`;w.appendChild(d)});}
 function pickColor(el,c){document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('customColor').value=c;CLOUD.themeColor=c;}
@@ -344,31 +351,31 @@ function renderPl(){const w=document.getElementById('plList');w.innerHTML='';(CL
 async function sendNoti(){const t=document.getElementById('notiTitle').value.trim(),m=document.getElementById('notiMsg').value.trim(),l=document.getElementById('notiLink').value.trim();if(!t||!m) return toast('Title + Message দাও');CLOUD.notis=CLOUD.notis||[];CLOUD.notis.push({id:Date.now(),title:t,message:m,link:l,time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});document.getElementById('notiTitle').value='';document.getElementById('notiMsg').value='';document.getElementById('notiLink').value='';await pushToGitHub('Send notification: '+t);fillUI();}
 async function delNoti(i){CLOUD.notis.splice(i,1);await pushToGitHub('Delete notification');fillUI();}
 function renderNoti(){const w=document.getElementById('notiList');w.innerHTML='';(CLOUD.notis||[]).slice().reverse().forEach((n,ri)=>{const idx=CLOUD.notis.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${n.title}</b><small>${n.message.slice(0,40)}</small><button class="del" onclick="delNoti(${idx})">Delete</button>`;w.appendChild(d);});if(!CLOUD.notis?.length) w.innerHTML='<div class="empty">No notification</div>';}
-// --- v63 FIX: End Time + ISO Time + Upcoming Fix ---
+// --- MATCH SUPER POWER v64 ---
 function toISO(v){ if(!v) return ''; try{ const d=new Date(v); if(isNaN(d.getTime())) return ''; return d.toISOString(); }catch(e){ return ''; } }
 function fmtAdminTime(iso){ if(!iso) return ''; try{ return new Date(iso).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return iso; } }
 function getMatchStatus(m){ const now=Date.now(); const s=Date.parse(m.startTime||m.start||''); const e=Date.parse(m.endTime||m.end||''); if(Number.isFinite(e)&&e>0&&now>=e) return 'expired'; if(Number.isFinite(s)&&s>0&&now<s) return 'upcoming'; return 'live'; }
+function toLocalInput(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); }
+let editingMatchIdx=null;
+function quickAddToday(){ const t=new Date(); t.setHours(16,0,0,0); document.getElementById('mStart').value=toLocalInput(t.toISOString()); document.getElementById('mEnd').value=toLocalInput(new Date(t.getTime()+8*3600000).toISOString()); toast('Today 4 PM সেট হইছে'); }
+function quickAddTomorrow(){ const t=new Date(); t.setDate(t.getDate()+1); t.setHours(16,0,0,0); document.getElementById('mStart').value=toLocalInput(t.toISOString()); document.getElementById('mEnd').value=toLocalInput(new Date(t.getTime()+8*3600000).toISOString()); toast('Tomorrow 4 PM সেট হইছে'); }
+function startEditMatch(i){ const m=CLOUD.matches[i]; if(!m) return; editingMatchIdx=i; document.getElementById('mTeamA').value=m.teamA||''; document.getElementById('mTeamB').value=m.teamB||''; document.getElementById('mLogoA').value=m.teamALogo||''; document.getElementById('mLogoB').value=m.teamBLogo||''; document.getElementById('mType').value=m.matchType||''; document.getElementById('mStart').value=toLocalInput(m.startTime||m.start); document.getElementById('mEnd').value=toLocalInput(m.endTime||m.end); document.getElementById('mUrl').value=m.url||''; document.getElementById('addMatchBtn').textContent='✅ Update Match ☁️'; document.getElementById('cancelEditBtn').style.display='block'; document.getElementById('matchFormTitle').textContent='Edit Mode: '+m.name+' - ঠিক করে Update চাপো'; window.scrollTo({top:0,behavior:'smooth'}); }
+function cancelEditMatch(){ editingMatchIdx=null; document.getElementById('addMatchBtn').textContent='+ Add Match to All ☁️'; document.getElementById('cancelEditBtn').style.display='none'; document.getElementById('matchFormTitle').textContent='নতুন Match দিলে সবার Events ট্যাবে দেখাবে'; ['mTeamA','mTeamB','mLogoA','mLogoB','mType','mStart','mEnd','mUrl'].forEach(id=>document.getElementById(id).value=''); }
+async function duplicateMatch(i){ const m=JSON.parse(JSON.stringify(CLOUD.matches[i])); m.name=m.name+' (Copy)'; CLOUD.matches.push(m); await pushToGitHub('Duplicate match'); fillUI(); toast('Copy হইছে, Edit করো'); }
+async function makeLiveNow(i){ const now=new Date(); CLOUD.matches[i].startTime=CLOUD.matches[i].start=now.toISOString(); CLOUD.matches[i].endTime=CLOUD.matches[i].end=new Date(now.getTime()+8*3600000).toISOString(); await pushToGitHub('Make live'); fillUI(); toast('🔴 এখন LIVE'); }
+async function extendMatch(i){ const e=new Date(CLOUD.matches[i].endTime||CLOUD.matches[i].end); e.setHours(e.getHours()+2); CLOUD.matches[i].endTime=CLOUD.matches[i].end=e.toISOString(); await pushToGitHub('Extend +2H'); fillUI(); toast('+2 Hours বাড়ছে'); }
 async function addMatch(){
-  const teamA=document.getElementById('mTeamA').value.trim();
-  const teamB=document.getElementById('mTeamB').value.trim();
-  const startRaw=document.getElementById('mStart').value;
-  const endRaw=document.getElementById('mEnd').value;
-  const url=document.getElementById('mUrl').value.trim();
-  if(!teamA||!teamB) return toast('Team A/B দাও');
-  if(!startRaw) return toast('Start Time দাও');
-  if(!url) return toast('Stream URL দাও');
-  const startISO=toISO(startRaw);
-  let endISO=toISO(endRaw);
-  if(!endISO){ endISO=new Date(new Date(startRaw).getTime()+2*60*60*1000).toISOString(); }
+  const teamA=document.getElementById('mTeamA').value.trim(); const teamB=document.getElementById('mTeamB').value.trim(); const startRaw=document.getElementById('mStart').value; const endRaw=document.getElementById('mEnd').value; const url=document.getElementById('mUrl').value.trim();
+  if(!teamA||!teamB) return toast('Team A/B দাও'); if(!startRaw) return toast('Start Time দাও'); if(!url) return toast('Stream URL দাও');
+  const startISO=toISO(startRaw); let endISO=toISO(endRaw); if(!endISO){ endISO=new Date(new Date(startRaw).getTime()+2*60*60*1000).toISOString(); }
   if(Date.parse(endISO)<=Date.parse(startISO)) return toast('End Time Start এর পরে হতে হবে');
-  const m={name:teamA+' vs '+teamB,teamA:teamA,teamALogo:document.getElementById('mLogoA').value.trim(),teamB:teamB,teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:startISO,endTime:endISO,start:startISO,end:endISO,url:url,streams:[{stream_url:url}]};
-  CLOUD.matches=CLOUD.matches||[];CLOUD.matches.push(m);
-  // Form clear
-  document.getElementById('mTeamA').value='';document.getElementById('mTeamB').value='';document.getElementById('mLogoA').value='';document.getElementById('mLogoB').value='';document.getElementById('mType').value='';document.getElementById('mStart').value='';document.getElementById('mEnd').value='';document.getElementById('mUrl').value='';
-  await pushToGitHub('Add match: '+m.name);fillUI();toast('Match Published ✅ - Website এ Upcoming এ দেখাবে');
+  const data={name:teamA+' vs '+teamB,teamA:teamA,teamALogo:document.getElementById('mLogoA').value.trim(),teamB:teamB,teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:startISO,endTime:endISO,start:startISO,end:endISO,url:url,streams:[{stream_url:url}]};
+  CLOUD.matches=CLOUD.matches||[];
+  if(editingMatchIdx!==null){ CLOUD.matches[editingMatchIdx]={...CLOUD.matches[editingMatchIdx],...data}; } else { CLOUD.matches.push(data); }
+  cancelEditMatch(); await pushToGitHub('Add/Update match: '+data.name); fillUI(); toast('Match Published ✅');
 }
-async function delMatch(i){if(!confirm('Delete this match?'))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
-function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';(CLOUD.matches||[]).forEach((m,i)=>{const st=getMatchStatus(m);const badge=st==='live'?'<span class="match-badge live">LIVE</span>':st==='upcoming'?'<span class="match-badge upcoming">UPCOMING</span>':'<span class="match-badge expired">EXPIRED</span>';const d=document.createElement('div');d.className='item';if(m.teamALogo) d.innerHTML+=`<img class="thumb" src="${m.teamALogo}">`;d.innerHTML+=`<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''} • ${fmtAdminTime(m.startTime||m.start)} - ${fmtAdminTime(m.endTime||m.end)}</small>${badge}<button class="del" onclick="delMatch(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.matches?.length) w.innerHTML='<div class="empty">No match yet</div>';}
+async function delMatch(i){if(!confirm('Delete?\n'+CLOUD.matches[i].name))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
+function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';const q=(document.getElementById('matchSearch')?.value||'').toLowerCase();(CLOUD.matches||[]).forEach((m,i)=>{ if(q && !m.name.toLowerCase().includes(q)) return; const st=getMatchStatus(m); const badge=st==='live'?'<span class="match-badge live">● LIVE</span>':st==='upcoming'?'<span class="match-badge upcoming">UPCOMING</span>':'<span class="match-badge expired">EXPIRED</span>'; const d=document.createElement('div'); d.className='item'; d.innerHTML=`${m.teamALogo?`<img class="thumb" src="${m.teamALogo}">`:''}<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''} • ${fmtAdminTime(m.startTime||m.start)} - ${fmtAdminTime(m.endTime||m.end)}</small>${badge}<div style="display:flex;gap:6px;width:100%;flex-wrap:wrap"><button class="edit" style="flex:1" onclick="startEditMatch(${i})">✏️ Edit</button><button style="flex:1;background:#34343C;color:#fff" onclick="duplicateMatch(${i})">📋 Copy</button><button style="flex:1;background:#3a1a1a;color:#ff8fa0" onclick="makeLiveNow(${i})">🔴 Live</button><button style="flex:1;background:#1e3a5f;color:#6db3ff" onclick="extendMatch(${i})">+2H</button><button class="del" style="flex:1" onclick="delMatch(${i})">🗑️</button></div>`; w.appendChild(d);});if(!w.innerHTML) w.innerHTML='<div class="empty">No match yet</div>';}
 function renderReports(){const w=document.getElementById('reportList');if(!w) return;w.innerHTML='';(CLOUD.reports||[]).slice().reverse().forEach((r,ri)=>{const idx=CLOUD.reports.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.channel||r.title||'Report'}</b><small>${(r.reason||r.message||'')+' • '+(r.time||'')}</small><button class="del" onclick="delReport(${idx})">Done</button>`;w.appendChild(d);});if(!CLOUD.reports?.length) w.innerHTML='<div class="empty">কোনো Report নাই ✅ সব ঠিক আছে</div>';}
 async function delReport(i){CLOUD.reports.splice(i,1);await pushToGitHub('Resolve report');fillUI();}
 async function clearReports(){if(!confirm('সব Report মুছে ফেলবো?')) return;CLOUD.reports=[];await pushToGitHub('Clear reports');fillUI();}
