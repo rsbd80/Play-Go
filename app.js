@@ -1,4 +1,4 @@
-/* RsLive Go v64 - app.js ONLY - config.json matches + resilient playlist loading */
+/* RsLive Go v65 FAST - app.js ONLY - config.json matches + Sports_data + FAST playlist loading */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -179,6 +179,7 @@ const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'h
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
+const SPORTS_DATA_URL='https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/refs/heads/main/Sports_data.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(force=false){
   if(_cloudLoaded&&!force) return true;
@@ -188,7 +189,6 @@ async function loadCloudConfig(force=false){
       const r=await fetchWithTimeout(CONFIG_URL+'?t='+Date.now(),12000);
       const cloud=await r.json();
       if(!cloud||typeof cloud!=='object'||Array.isArray(cloud)) throw new Error('Invalid config.json');
-      // Empty remote arrays never erase a working local configuration.
       if(Array.isArray(cloud.playlists)&&cloud.playlists.length) CFG.playlists=cloud.playlists.filter(p=>p&&typeof p.url==='string'&&p.url.trim());
       if(Array.isArray(cloud.matches)&&cloud.matches.length) window._cloudMatches=cloud.matches;
       else if(Array.isArray(cloud.matches)&&cloud.matches.length===0&&!Array.isArray(window._cloudMatches)) window._cloudMatches=[];
@@ -200,7 +200,7 @@ async function loadCloudConfig(force=false){
       try{localStorage.setItem('rslive_config',JSON.stringify(CFG));}catch(e){}
       _cloudLoaded=true;
       return true;
-    }catch(e){console.warn('[RsLive Go] config.json load failed:',e);return false;}
+    }catch(e){return false;}
     finally{_cloudPromise=null;}
   })();
   return _cloudPromise;
@@ -238,33 +238,92 @@ function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
 function isProxyOn(n){const p=CFG.playlists.find(x=>normName(x.name)===normName(n));return !!(p?.useProxy)}
 function unwrapMatchFile(d){if(!d||typeof d!=='object')return[];if(Array.isArray(d.matches))return d.matches;if(d.match)return Array.isArray(d.match)?d.match:[d.match];if(Array.isArray(d.liveSports))return d.liveSports;if(d.name||d.event_name||d.title)return[d];return[]}
-function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||'';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
-function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
+function parseSportsTime(s){
+  if(!s) return '';
+  s=String(s).trim();
+  try{
+    const mm=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+    if(mm){
+      let d=parseInt(mm[1]),mo=parseInt(mm[2])-1,y=parseInt(mm[3]);
+      let h=parseInt(mm[4]),mi=parseInt(mm[5]),sec=parseInt(mm[6]||'0');
+      const ap=(mm[7]||'').toUpperCase();
+      if(ap==='PM'&&h<12) h+=12;
+      if(ap==='AM'&&h===12) h=0;
+      return new Date(y,mo,d,h,mi,sec).toISOString();
+    }
+    if(s.includes(' ')&&!s.includes('T')) s=s.replace(' ','T');
+    const dt=new Date(s);
+    if(!isNaN(dt.getTime())) return dt.toISOString();
+  }catch(e){}
+  return '';
+}
+function normalizeMatch(r){
+  if(!r||typeof r!=='object')return null;
+  try{
+    const m={...r};
+    const info=r.eventInfo||r.eventinfo||r.info||{};
+    m.name=String(r.event_name||info.eventName||info.event_name||r.name||r.title||r.match||'').trim();
+    if(!m.name) return null;
+    m.teamA=String(info.teamA||r.teamA||r.homeTeam||r.team1||'').trim();
+    m.teamB=String(info.teamB||r.teamB||r.awayTeam||r.team2||'').trim();
+    m.teamALogo=info.teamAFlag||r.teamALogo||r.logoA||r.homeLogo||'';
+    m.teamBLogo=info.teamBFlag||r.teamBLogo||r.logoB||r.awayLogo||'';
+    m.matchType=r.Category||r.category||r.matchType||info.category||'Cricket';
+    m.category=m.matchType;
+    let rawStart=info.startTime||r.startTime||r.start_time||r.start||r.date||r.time||'';
+    m.startTime=parseSportsTime(rawStart);
+    let rawEnd=r.endTime||r.end_time||r.end||'';
+    if(rawEnd) m.endTime=parseSportsTime(rawEnd);
+    else if(m.startTime) m.endTime=new Date(new Date(m.startTime).getTime()+4*3600000).toISOString();
+    else m.endTime='';
+    const st=Array.isArray(r.streams)?r.streams:[];
+    const good=st.find(x=>x&&(x.stream_url||x.url||x.src)&&String(x.stream_url||x.url||x.src).trim().startsWith('http'));
+    m.streams=st.filter(x=>x&&(x.stream_url||x.url||x.src));
+    m.url=String(r.url||(good&&(good.stream_url||good.url||good.src))||'').trim();
+    m.status=String(r.status||'').toUpperCase();
+    if(!m.teamA||!m.teamB){
+      const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);
+      if(p.length>=2){ if(!m.teamA) m.teamA=p[0].trim(); if(!m.teamB) m.teamB=p.slice(1).join(' vs ').trim(); }
+    }
+    if(!m.teamA) m.teamA=m.name;
+    return m;
+  }catch(e){ return null; }
+}
+function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(m.status==='LIVE')return 'live';if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
 function getBadgeInfo(m,state){if(state==='live')return{txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return{txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);if(diff<=3600000&&diff>=0)return{txt:'STARTING SOON',cls:'soon'};if(now.toDateString()===st.toDateString())return{txt:'TODAY',cls:'today'};const tm=new Date(now);tm.setDate(now.getDate()+1);if(tm.toDateString()===st.toDateString())return{txt:'TOMORROW',cls:'tomorrow'};return{txt:'UPCOMING',cls:'upcoming'}}
 function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
 function matchCountdown(m){const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return'';let sec=Math.max(0,Math.floor((t-Date.now())/1000));const d=Math.floor(sec/86400);sec%=86400;const h=Math.floor(sec/3600);sec%=3600;const mi=Math.floor(sec/60);sec%=60;return((d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0')+':'+String(sec).padStart(2,'0'))}
-function getSportInfo(m){const t=String((m.matchType||'')+' '+(m.category||'')+' '+(m.name||'')).toLowerCase();if(t.includes('football')||t.includes('soccer'))return{ico:'⚽',label:'Football'};if(t.includes('tennis'))return{ico:'🎾',label:'Tennis'};if(t.includes('basketball'))return{ico:'🏀',label:'Basketball'};if(t.includes('hockey'))return{ico:'🏑',label:'Hockey'};return{ico:'🏏',label:'Cricket'}}
+function getSportInfo(m){const t=String((m.matchType||'')+' '+(m.category||'')+' '+(m.name||'')).toLowerCase();if(t.includes('football')||t.includes('soccer'))return{ico:'⚽',label:'Football'};if(t.includes('tennis'))return{ico:'🎾',label:'Tennis'};if(t.includes('basketball'))return{ico:'🏀',label:'Basketball'};if(t.includes('hockey'))return{ico:'🏑',label:'Hockey'};if(t.includes('boxing')||t.includes('wwe')||t.includes('smack'))return{ico:'🥊',label:'Boxing'};return{ico:'🏏',label:'Cricket'}}
 function teamNode(name,logo){const w=document.createElement('div');w.className='match-team';const ln=name||'Team';let el;if(logo){const img=document.createElement('img');img.src=logo;img.alt=ln;img.loading='lazy';img.onerror=function(){this.remove();const fb=document.createElement('div');fb.className='team-fallback';fb.textContent=ln.trim().slice(0,2).toUpperCase();w.appendChild(fb)};el=img}else{el=document.createElement('div');el.className='team-fallback';el.textContent=ln.trim().slice(0,2).toUpperCase()}const lb=document.createElement('b');lb.textContent=ln;w.append(el,lb);return w}
-function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
+function openMatch(m,idx){if(!m.url){document.getElementById('search').value=m.teamA||m.name;switchTab('home');renderGrid(true);showToast('Search: '+(m.teamA||m.name));return;}try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
 async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
-    matchesLoading=true;renderMatches();
     try{
+      matchesLoading=true;renderMatches();
       await loadCloudConfig();applyCloudUI();
-      const raw=Array.isArray(window._cloudMatches)?window._cloudMatches:[];
-      allMatches=raw.map(normalizeMatch).filter(Boolean);
-    }catch(e){console.warn('[RsLive Go] matches load failed:',e)}
+      let manual=[];
+      if(Array.isArray(window._cloudMatches)&&window._cloudMatches.length) manual=window._cloudMatches.map(normalizeMatch).filter(Boolean);
+      let auto=[];
+      try{
+        const r2=await fetchWithTimeout(SPORTS_DATA_URL+'?t='+Date.now(),8000);
+        const d=await r2.json();
+        const raw=Array.isArray(d)?d:(d.matches||d.data||[]);
+        auto=raw.map(normalizeMatch).filter(Boolean);
+      }catch(e){ auto=[]; }
+      let merged=[...manual];
+      auto.forEach(am=>{ if(!merged.some(x=> normName(x.name)===normName(am.name))) merged.push(am); });
+      allMatches=merged;
+    }catch(e){}
     finally{matchesLoading=false;renderMatches();matchesLoadingPromise=null;}
   })();
   return matchesLoadingPromise;
 }
 function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
 async function getPlaylistsFromSW(){
-  // config.json is the primary source. The service-worker API is only a fallback.
   await loadCloudConfig();
   const remote=Array.isArray(CFG.playlists)?CFG.playlists.filter(p=>p&&typeof p.url==='string'&&p.url.trim()):[];
   if(remote.length)return remote;
@@ -272,26 +331,24 @@ async function getPlaylistsFromSW(){
     const r=await fetchWithTimeout('/api/playlists?t='+Date.now(),7000);
     const d=await r.json();
     if(Array.isArray(d)&&d.length)return d.filter(p=>p&&typeof p.url==='string'&&p.url.trim());
-  }catch(e){console.warn('[RsLive Go] playlist API fallback unavailable:',e)}
+  }catch(e){}
   return remote;
 }
 async function loadOne(p){
   if(!p||typeof p.url!=='string'||!p.url.trim())return[];
   const playlistUrl=p.url.trim();
   const tf=async(u)=>{
-    const r=await fetchWithTimeout(u,11000);
+    const r=await fetchWithTimeout(u,6000);
     const body=await r.text();
     const parsed=parse(body);
-    if(!parsed.length)throw new Error('Playlist is empty or invalid');
+    if(!parsed.length)throw new Error('Empty');
     return parsed;
   };
-  const candidates=[];
-  if(isProxyOn(p.name)&&CFG.proxyUrl)candidates.push(CFG.proxyUrl+encodeURIComponent(playlistUrl));
-  candidates.push(playlistUrl);
-  const proxy=(CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(playlistUrl);
-  if(!candidates.includes(proxy))candidates.push(proxy);
-  for(const url of candidates){try{return await tf(url)}catch(e){console.warn('[RsLive Go] playlist failed:',p.name||playlistUrl,e)}}
-  return[];
+  try{ return await tf(playlistUrl); }catch(e){}
+  try{
+    const proxy=(CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(playlistUrl);
+    return await tf(proxy);
+  }catch(e){ return []; }
 }
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'}}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null}}return out}
 async function loadAll(){
@@ -299,29 +356,25 @@ async function loadAll(){
   window._rsliveLoadAllPromise=(async()=>{
     isPlaylistLoading=true;renderGrid();
     try{
-      await loadCloudConfig();
-      applyCloudUI();
-      await loadMatches();
+      loadCloudConfig().then(()=>{ applyCloudUI(); });
+      loadMatches().catch(()=>{});
       const base=await getPlaylistsFromSW();
       const custom=getCustomPl();
-      // Keep remote and user-added playlists; de-duplicate by URL.
       const combined=[...base,...custom];
       const seen=new Set();
       CFG.playlists=combined.filter(p=>{const u=String(p?.url||'').trim();if(!u||seen.has(u))return false;seen.add(u);return true});
       try{localStorage.setItem('rslive_config',JSON.stringify(CFG))}catch(e){}
-      // Load independently so one slow/broken playlist cannot block the rest.
-      const results=await Promise.all(CFG.playlists.map(async p=>({p,list:await loadOne(p)})));
-      for(const result of results){
-        const p=result.p,list=result.list||[];
+      await Promise.all(CFG.playlists.map(async p=>{
+        const list=await loadOne(p);
         for(const ch of list){
           ch.source=p.name||'TV';
           const ex=all.find(y=>y.url===ch.url);
           if(!ex)all.push(ch);
           else{if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group))ex.group=ch.group;if(!ex.logo&&ch.logo)ex.logo=ch.logo;}
         }
-      }
-      _catCache=null;
-    }catch(e){console.error('[RsLive Go] loadAll failed:',e)}
+        _catCache=null; renderGrid(); renderMatches();
+      }));
+    }catch(e){}
     finally{
       isPlaylistLoading=false;
       renderGrid();renderMatches();
@@ -368,7 +421,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v64'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v65'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
