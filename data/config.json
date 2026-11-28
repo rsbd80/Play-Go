@@ -16,11 +16,6 @@
       "useProxy": false
     },
     {
-      "name": "Sports",
-      "url": "https://raw.githubusercontent.com/jannatulbusra000/Sports-Playlist/refs/heads/main/sports.m3u",
-      "useProxy": false
-    },
-    {
       "name": "Toffee",
       "url": "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
       "useProxy": true
