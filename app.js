@@ -1,4 +1,4 @@
-/* RsLive Go v63 - app.js ONLY - NO <script> TAG - config.json ONLY Matches - data/matches folder BAD - + Sports_data FIX */
+/* RsLive Go v63 - app.js ONLY - NO <script> TAG - config.json ONLY Matches - data/matches folder BAD */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -179,7 +179,6 @@ const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'h
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
-const SPORTS_DATA_URL='https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/refs/heads/main/Sports_data.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(){
   if(_cloudLoaded) return true;
@@ -234,84 +233,25 @@ function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
 function isProxyOn(n){const p=CFG.playlists.find(x=>normName(x.name)===normName(n));return !!(p?.useProxy)}
 function unwrapMatchFile(d){if(!d||typeof d!=='object')return[];if(Array.isArray(d.matches))return d.matches;if(d.match)return Array.isArray(d.match)?d.match:[d.match];if(Array.isArray(d.liveSports))return d.liveSports;if(d.name||d.event_name||d.title)return[d];return[]}
-function parseSportsTime(s){
-  if(!s) return '';
-  s=String(s).trim();
-  try{
-    const mm=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?$/i);
-    if(mm){
-      let d=parseInt(mm[1]),mo=parseInt(mm[2])-1,y=parseInt(mm[3]);
-      let h=parseInt(mm[4]),mi=parseInt(mm[5]),sec=parseInt(mm[6]||'0');
-      const ap=(mm[7]||'').toUpperCase();
-      if(ap==='PM'&&h<12) h+=12;
-      if(ap==='AM'&&h===12) h=0;
-      return new Date(y,mo,d,h,mi,sec).toISOString();
-    }
-    if(s.includes(' ')&&!s.includes('T')) s=s.replace(' ','T');
-    const dt=new Date(s);
-    if(!isNaN(dt.getTime())) return dt.toISOString();
-  }catch(e){}
-  return '';
-}
-function normalizeMatch(r){
-  if(!r||typeof r!=='object')return null;
-  try{
-    const m={...r};
-    const info=r.eventInfo||r.eventinfo||r.info||{};
-    m.name=String(r.event_name||info.eventName||info.event_name||r.name||r.title||r.match||'').trim();
-    if(!m.name) return null;
-    m.teamA=String(info.teamA||r.teamA||r.homeTeam||r.team1||'').trim();
-    m.teamB=String(info.teamB||r.teamB||r.awayTeam||r.team2||'').trim();
-    m.teamALogo=info.teamAFlag||r.teamALogo||r.logoA||r.homeLogo||'';
-    m.teamBLogo=info.teamBFlag||r.teamBLogo||r.logoB||r.awayLogo||'';
-    m.matchType=r.Category||r.category||r.matchType||info.category||'Cricket';
-    m.category=m.matchType;
-    let rawStart=info.startTime||r.startTime||r.start_time||r.start||r.date||r.time||'';
-    m.startTime=parseSportsTime(rawStart);
-    let rawEnd=r.endTime||r.end_time||r.end||'';
-    if(rawEnd) m.endTime=parseSportsTime(rawEnd);
-    else if(m.startTime) m.endTime=new Date(new Date(m.startTime).getTime()+4*3600000).toISOString();
-    else m.endTime='';
-    const st=Array.isArray(r.streams)?r.streams:[];
-    const good=st.find(x=>x&&(x.stream_url||x.url||x.src)&&String(x.stream_url||x.url||x.src).trim().startsWith('http'));
-    m.streams=st.filter(x=>x&&(x.stream_url||x.url||x.src));
-    m.url=String(r.url||(good&&(good.stream_url||good.url||good.src))||'').trim();
-    m.status=String(r.status||'').toUpperCase();
-    if(!m.teamA||!m.teamB){
-      const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);
-      if(p.length>=2){ if(!m.teamA) m.teamA=p[0].trim(); if(!m.teamB) m.teamB=p.slice(1).join(' vs ').trim(); }
-    }
-    if(!m.teamA) m.teamA=m.name;
-    return m;
-  }catch(e){ return null; }
-}
-function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(m.status==='LIVE')return 'live';if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
+function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||'';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
+function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
 function getBadgeInfo(m,state){if(state==='live')return{txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return{txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);if(diff<=3600000&&diff>=0)return{txt:'STARTING SOON',cls:'soon'};if(now.toDateString()===st.toDateString())return{txt:'TODAY',cls:'today'};const tm=new Date(now);tm.setDate(now.getDate()+1);if(tm.toDateString()===st.toDateString())return{txt:'TOMORROW',cls:'tomorrow'};return{txt:'UPCOMING',cls:'upcoming'}}
 function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
 function matchCountdown(m){const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return'';let sec=Math.max(0,Math.floor((t-Date.now())/1000));const d=Math.floor(sec/86400);sec%=86400;const h=Math.floor(sec/3600);sec%=3600;const mi=Math.floor(sec/60);sec%=60;return((d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0')+':'+String(sec).padStart(2,'0'))}
-function getSportInfo(m){const t=String((m.matchType||'')+' '+(m.category||'')+' '+(m.name||'')).toLowerCase();if(t.includes('football')||t.includes('soccer'))return{ico:'⚽',label:'Football'};if(t.includes('tennis'))return{ico:'🎾',label:'Tennis'};if(t.includes('basketball'))return{ico:'🏀',label:'Basketball'};if(t.includes('hockey'))return{ico:'🏑',label:'Hockey'};if(t.includes('boxing')||t.includes('wwe')||t.includes('smack'))return{ico:'🥊',label:'Boxing'};return{ico:'🏏',label:'Cricket'}}
+function getSportInfo(m){const t=String((m.matchType||'')+' '+(m.category||'')+' '+(m.name||'')).toLowerCase();if(t.includes('football')||t.includes('soccer'))return{ico:'⚽',label:'Football'};if(t.includes('tennis'))return{ico:'🎾',label:'Tennis'};if(t.includes('basketball'))return{ico:'🏀',label:'Basketball'};if(t.includes('hockey'))return{ico:'🏑',label:'Hockey'};return{ico:'🏏',label:'Cricket'}}
 function teamNode(name,logo){const w=document.createElement('div');w.className='match-team';const ln=name||'Team';let el;if(logo){const img=document.createElement('img');img.src=logo;img.alt=ln;img.loading='lazy';img.onerror=function(){this.remove();const fb=document.createElement('div');fb.className='team-fallback';fb.textContent=ln.trim().slice(0,2).toUpperCase();w.appendChild(fb)};el=img}else{el=document.createElement('div');el.className='team-fallback';el.textContent=ln.trim().slice(0,2).toUpperCase()}const lb=document.createElement('b');lb.textContent=ln;w.append(el,lb);return w}
-function openMatch(m,idx){if(!m.url){document.getElementById('search').value=m.teamA||m.name;switchTab('home');renderGrid(true);showToast('Search: '+(m.teamA||m.name));return;}try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
+function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
 async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
-    try{
-      matchesLoading=true; renderMatches();
-      await loadCloudConfig(); applyCloudUI();
-      let manual=[];
-      if(window._cloudMatches && window._cloudMatches.length){ manual=window._cloudMatches.map(normalizeMatch).filter(Boolean); }
-      let auto=[];
-      try{
-        const r2=await fetch(SPORTS_DATA_URL+'?t='+Date.now(),{cache:'no-store'});
-        if(r2.ok){ const d=await r2.json(); const raw=Array.isArray(d)?d:(d.matches||d.data||[]); auto=raw.map(normalizeMatch).filter(Boolean); }
-      }catch(e){ auto=[]; }
-      let merged=[...manual];
-      auto.forEach(am=>{ if(!merged.some(x=> normName(x.name)===normName(am.name))) merged.push(am); });
-      allMatches=merged;
-    }catch(e){}
+    matchesLoading=true; renderMatches();
+    await loadCloudConfig(); applyCloudUI();
+    if(window._cloudMatches && window._cloudMatches.length){
+      allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
+    }
     matchesLoading=false; renderMatches(); matchesLoadingPromise=null;
   })(); return matchesLoadingPromise;
 }
