@@ -1,4 +1,4 @@
-/* RsLive Go v64 - app.js ONLY - SUPER FAST - NO <script> TAG - config.json ONLY Matches */
+/* RsLive Go v65 - app.js ONLY - SUPER FAST - ALL 3 PAGES FIXED - NO <script> TAG */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -179,10 +179,10 @@ const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'h
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
-// --- SUPER FAST CACHE ---
+// --- SUPER FAST CACHE v65 ---
 const PL_CACHE_KEY='rslive_pl_cache_v2';
 function getPlCache(){ try{return JSON.parse(localStorage.getItem(PL_CACHE_KEY)||'{}')}catch(e){return{}} }
-function setPlCache(url,list){ try{const c=getPlCache(); c[url]={t:Date.now(),data:list.slice(0,2000)}; localStorage.setItem(PL_CACHE_KEY,JSON.stringify(c));}catch(e){} }
+function setPlCache(url,list){ try{const c=getPlCache(); c[url]={t:Date.now(),data:list.slice(0,[STRIPPED] localStorage.setItem(PL_CACHE_KEY,JSON.stringify(c));}catch(e){} }
 let _groupCache=null,_groupCacheLen=-1;
 let _allIndex=new Map();
 let _cloudLoaded=false, _cloudPromise=null;
@@ -233,7 +233,20 @@ function getRecent(){try{return JSON.parse(localStorage.getItem('rslive_recent')
 function saveRecent(ch){try{let r=getRecent().filter(x=>x.url!==ch.url);r.unshift({url:ch.url,name:ch.name,logo:ch.logo||'',source:ch.source||'',group:ch.group||''});localStorage.setItem('rslive_recent',JSON.stringify(r.slice(0,50)))}catch(e){}}
 function getCustomPl(){try{return JSON.parse(localStorage.getItem('rslive_custom_playlists')||'[]')}catch(e){return[]}}
 function saveCustomPl(l){localStorage.setItem('rslive_custom_playlists',JSON.stringify(l))}
-function switchTab(tab){if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}currentTab=tab;categoryHomeMode=(tab==='category');if(tab!=='category')currentGroupFilter=null;document.getElementById('search').value='';document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');if(btn)btn.classList.add('active');if(tab==='home')cat='All';renderGrid(true);renderMatches();const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0})}
+function switchTab(tab){
+  if(tab==='events'&&!eventsMode){showToast('Events Mode OFF');tab='home'}
+  currentTab=tab;categoryHomeMode=(tab==='category');
+  if(tab!=='category')currentGroupFilter=null;
+  document.getElementById('search').value='';
+  // FIX v65: Home/Category te gele grid obossoi dekhate hobe
+  const gridEl=document.getElementById('grid'); if(gridEl) gridEl.style.display='grid';
+  document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));
+  const btn=tab==='events'?document.getElementById('navEvents'):tab==='home'?document.getElementById('navHome'):document.getElementById('navCategory');
+  if(btn)btn.classList.add('active');
+  if(tab==='home')cat='All';
+  renderGrid(true);renderMatches();
+  const sa=document.getElementById('scrollArea');if(sa)sa.scrollTop=0;window.scrollTo({top:0});
+}
 function normName(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ')}
 function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
@@ -270,32 +283,55 @@ async function loadOne(p){
   if(!p||!p.url) return [];
   const cache=getPlCache()[p.url];
   if(cache && (Date.now()-cache.t) < 3600000 && cache.data.length) return cache.data;
-  const tf=async(u)=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return parse(await r.text())};
+  const tf=async(u)=>{
+    const c=new AbortController(); const t=setTimeout(()=>c.abort(),8000);
+    try{ const r=await fetch(u,{signal:c.signal}); clearTimeout(t); if(!r.ok) throw new Error('HTTP '+r.status); return parse(await r.text()); }catch(e){ clearTimeout(t); throw e; }
+  };
   const up=isProxyOn(p.name);
   try{let u=p.url;if(up&&CFG.proxyUrl)u=CFG.proxyUrl+encodeURIComponent(p.url);const l=await tf(u);if(l.length){setPlCache(p.url,l);return l;}throw new Error('Empty')}catch(e1){try{const l=await tf((CFG.proxyUrl||PROXY_BASE_FALLBACK)+encodeURIComponent(p.url));if(l.length)setPlCache(p.url,l);return l;}catch(e2){return cache?cache.data:[]}}
 }
 function parse(t){const lines=t.split(/\r?\n/);const out=[];let ch=null;for(const line of lines){const x=line.trim();if(x.startsWith('#EXTINF')){const name=x.split(',').pop().trim();const logo=x.match(/tvg-logo=["']([^"']+)["']/);const group=x.match(/group-title=["']([^"']+)["']/);ch={name,logo:logo?logo[1]:'',group:group?group[1]:'General'}}else if(/^https?:\/\//i.test(x)&&ch){ch.url=x;out.push(ch);ch=null}}return out}
 async function loadAll(){
-  isPlaylistLoading=true; loadMatches(); renderGrid();
+  isPlaylistLoading=true; loadMatches();
   let base=await getPlaylistsFromSW();
   let custom=getCustomPl();
   CFG.playlists=[...base,...custom];
-  const results=await Promise.all(CFG.playlists.map(p=>loadOne(p).catch(()=>[])));
-  results.forEach((list)=>{
+  // 1. Cache theke sathe sathe dekhao
+  let hasCache=false;
+  CFG.playlists.forEach((p)=>{
+    const cache=getPlCache()[p.url];
+    if(cache && cache.data.length){
+      hasCache=true;
+      cache.data.forEach((ch)=>{
+        if(!_allIndex.has(ch.url)){
+          const c={name:ch.name,url:ch.url,logo:ch.logo||'',group:ch.group||'General',source:p.name||'TV'};
+          all.push(c); _allIndex.set(c.url,c);
+        }
+      });
+    }
+  });
+  if(hasCache){ _groupCache=null; isPlaylistLoading=false; renderGrid(); renderMatches(); }
+  else { renderGrid(); }
+  // 2. Fresh load - index diye source FIXED
+  const jobs=CFG.playlists.map(async(p,pIdx)=>{
+    const list=await loadOne(p).catch(()=>[]);
+    let added=false;
     for(const ch of list){
-      if(_allIndex.has(ch.url)){
+      if(!_allIndex.has(ch.url)){
+        const c={name:ch.name,url:ch.url,logo:ch.logo||'',group:ch.group||'General',source:CFG.playlists[pIdx].name||'TV'};
+        all.push(c); _allIndex.set(c.url,c); added=true;
+      } else {
         const ex=_allIndex.get(ch.url);
         if(isGenericGroup(ex.group)&&!isGenericGroup(ch.group)) ex.group=ch.group;
         if(!ex.logo&&ch.logo) ex.logo=ch.logo;
-      } else {
-        ch.source=CFG.playlists.find(pp=>pp.url===ch._src)?.name||ch.source||'TV';
-        all.push(ch); _allIndex.set(ch.url,ch);
       }
     }
+    if(added){ _groupCache=null; isPlaylistLoading=false; renderGrid(); renderMatches(); }
   });
-  // source fix - use playlist name from results order
-  _groupCache=null;
-  isPlaylistLoading=false; renderGrid(); renderMatches(); switchTab(eventsMode?'events':'home');
+  await Promise.all(jobs);
+  _groupCache=null; isPlaylistLoading=false;
+  renderGrid(); renderMatches();
+  if(!hasCache) switchTab(eventsMode?'events':'home');
 }
 function getGroupCounts(){
   if(_groupCache && _groupCacheLen===all.length) return _groupCache;
@@ -336,11 +372,11 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v64'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v65'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
-document.getElementById('addPlBtn')?.addEventListener('click',async()=>{const name=document.getElementById('newPlName').value.trim();const url=document.getElementById('newPlUrl').value.trim();if(!name||!url||!url.startsWith('http')){showToast('Enter name + valid M3U URL');return}if(getCustomPl().some(x=>x.url===url)){showToast('This playlist already exists');return}const np={name,url,useProxy:false};let c=getCustomPl();c.push(np);saveCustomPl(c);CFG.playlists.push(np);document.getElementById('newPlName').value='';document.getElementById('newPlUrl').value='';showToast('Adding playlist...');closeSettings();const list=await loadOne(np);for(const ch of list){ch.source=np.name;if(!_allIndex.has(ch.url)){all.push(ch);_allIndex.set(ch.url,ch)}}_groupCache=null;renderGrid();showToast(name+' added - '+list.length+' channels')});
+document.getElementById('addPlBtn')?.addEventListener('click',async()=>{const name=document.getElementById('newPlName').value.trim();const url=document.getElementById('newPlUrl').value.trim();if(!name||!url||!url.startsWith('http')){showToast('Enter name + valid M3U URL');return}if(getCustomPl().some(x=>x.url===url)){showToast('This playlist already exists');return}const np={name,url,useProxy:false};let c=getCustomPl();c.push(np);saveCustomPl(c);CFG.playlists.push(np);document.getElementById('newPlName').value='';document.getElementById('newPlUrl').value='';showToast('Adding playlist...');closeSettings();const list=await loadOne(np);for(const ch of list){const cc={name:ch.name,url:ch.url,logo:ch.logo||'',group:ch.group||'General',source:np.name};if(!_allIndex.has(cc.url)){all.push(cc);_allIndex.set(cc.url,cc)}}_groupCache=null;renderGrid();showToast(name+' added - '+list.length+' channels')});
 let _backStack=[];
 function pushBackState(name){try{history.pushState({rslive:name},'');_backStack.push(name);}catch(e){}}
 function closeTopLayer(){
