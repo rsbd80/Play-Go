@@ -9,7 +9,43 @@
   "featName": "",
   "featUrl": "",
   "showFeat": false,
-  "playlists": [],
+  "playlists": [
+    {
+      "name": "Tapmad",
+      "url": "https://raw.githubusercontent.com/sm-monirulislam/Tapmad_Auto_Update_Playlist/refs/heads/main/tapmad_sm.m3u",
+      "useProxy": false
+    },
+    {
+      "name": "Sports",
+      "url": "https://raw.githubusercontent.com/jannatulbusra000/Sports-Playlist/refs/heads/main/sports.m3u",
+      "useProxy": true
+    },
+    {
+      "name": "Toffee",
+      "url": "https://raw.githubusercontent.com/sm-monirulislam/Toffee-Auto-Update/refs/heads/main/toffee_playlist.m3u",
+      "useProxy": true
+    },
+    {
+      "name": "AynaOTT",
+      "url": "https://raw.githubusercontent.com/sm-monirulislam/AynaOTT_Auto_Update_Playlist/refs/heads/main/aynaott.m3u",
+      "useProxy": false
+    },
+    {
+      "name": "JagoBD",
+      "url": "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
+      "useProxy": false
+    },
+    {
+      "name": "Bangladesh",
+      "url": "https://iptv-org.github.io/iptv/countries/bd.m3u",
+      "useProxy": false
+    },
+    {
+      "name": "India",
+      "url": "https://iptv-org.github.io/iptv/countries/in.m3u",
+      "useProxy": false
+    }
+  ],
   "notis": [
     {
       "id": 1795828994076,
