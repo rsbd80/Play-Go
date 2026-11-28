@@ -8,7 +8,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#1E1E24;--card:#2E2E36;--card2:#34343C;--border:#3A3A44;--yellow:#FFC107;--text:#fff;--dim:#9a9ab5;--green:#B8FFC9;--red:#ff6b6b;--blue:#6db3ff}
-body{background:var(--bg);color:var(--text);font-family:'Poppins','Hind Siliguri',sans-serif;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:'Poppins','Hind	Siliguri',sans-serif;min-height:100vh}
 button,input,textarea,select{font-family:inherit}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#444;border-radius:99px}
 #login{position:fixed;inset:0;background:#0f0f13;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -67,8 +67,8 @@ textarea{min-height:70px;resize:vertical}
 .sw.on{border-color:var(--yellow);background:#2a2410} .sw.on:after{left:22px;background:var(--yellow)}
 .item{background:#34343C;border-radius:11px;padding:11px 12px;margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .item .thumb{width:36px;height:36px;border-radius:8px;background:#fff;padding:3px;object-fit:contain;flex-shrink:0}
-.item b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item small{display:block;font-size:11px;color:var(--dim);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item b{flex:1;min-width:140px;font-size:13px;white-space:normal;word-break:break-word;line-height:1.4}
+.item small{display:block;font-size:11px;color:var(--dim);font-weight:500;word-break:break-all;white-space:normal}
 .item button{border:0;padding:7px 11px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0}
 .item .edit{background:#1e3a5f;color:#6db3ff} .item .del{background:#3a1a1a;color:#ff6b6b} .item .view{background:var(--yellow);color:#000}
 .color-row{display:flex;gap:8px;margin-top:8px} .color-opt{flex:1;height:38px;border-radius:10px;border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000}
@@ -88,6 +88,9 @@ textarea{min-height:70px;resize:vertical}
 .server-row{display:flex;gap:8px;margin-bottom:8px} .server-row input{flex:1}
 .server-row .sname{max-width:110px}
 .server-row .sdel{background:#3a1a1a;color:#ff6b6b;border:0;border-radius:10px;padding:0 12px;font-weight:800;cursor:pointer}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.filter-row button{border:1px solid #444;background:#34343C;color:#fff;padding:7px 12px;border-radius:99px;font-size:11px;font-weight:800;cursor:pointer}
+.filter-row button.on{background:var(--yellow);color:#000;border-color:var(--yellow)}
 @media(max-width:900px){
   .ham{display:flex}
   .sidebar{position:fixed;left:-280px;top:0;bottom:0;height:100dvh;box-shadow:20px 0 60px rgba(0,0,0,.6)}
@@ -111,7 +114,7 @@ textarea{min-height:70px;resize:vertical}
 </div></div>
 <div class="admin">
 <aside class="sidebar" id="sidebar">
-<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v66 PREMIUM</small></div>
+<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v67 FINAL</small></div>
 <div class="menu-label">MAIN MENU</div>
 <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
 <button class="nav-btn" data-tab="general" onclick="showTab('general',this)"><span class="ico">🌐</span>Website</button>
@@ -133,6 +136,7 @@ textarea{min-height:70px;resize:vertical}
 </aside>
 <main class="main">
 <div class="topbar"><button class="ham" onclick="toggleSidebar()">☰</button><div><h1>RsLive <span>Go</span> Admin</h1><p id="topSub">সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud</p></div><div class="actions"><button class="btn btn2" onclick="loadFromGitHub()">↻ Refresh</button><button class="btn" onclick="pushToGitHub('Manual sync')">☁️ Publish All</button></div></div>
+
 <div class="tab active" id="tab-dashboard">
 <div class="stats">
 <div class="stat"><div class="ico" style="background:#2a2410">📺</div><div><b id="stPl">0</b><span>Playlists</span><br><small>Active</small></div></div>
@@ -141,13 +145,14 @@ textarea{min-height:70px;resize:vertical}
 <div class="stat"><div class="ico" style="background:#3a1a1a">📢</div><div><b id="stNotice">OFF</b><span>Notice Bar</span><br><small id="stNoticeSub">Hidden</small></div></div>
 </div>
 <div class="card"><h2>⚡ Quick Actions</h2><p class="desc">এক ক্লিকে সবচেয়ে বেশি ব্যবহৃত কাজ</p>
-<button class="btn btn-block" style="margin-bottom:8px" onclick="showTab('match',document.querySelector('[data-tab=match]'))">🏏 + New Match Add করো</button>
+<button class="btn btn-block" style="margin-bottom:8px" onclick="showTab('match',document.querySelector('[data-tab=match]'))">🏏 + New Match Add করো / Edit করো</button>
 <button class="btn btn-block btn2" style="margin-bottom:8px" onclick="showTab('noti',document.querySelector('[data-tab=noti]'))">🔔 Notification পাঠাও</button>
 <button class="btn btn-block btn2" onclick="showTab('notice',document.querySelector('[data-tab=notice]'))">📢 Notice Bar ON করো</button>
 <button class="btn btn-block btn2" style="margin-top:8px" onclick="showTab('reports',document.querySelector('[data-tab=reports]'))">🚨 Reports দেখো</button>
 </div>
-<div class="card"><h2>📋 Recent Activity</h2><p class="desc">শেষ ৫টা Match / Notification</p><div id="recentList"></div></div>
+<div class="card"><h2>📋 Recent Activity</h2><p class="desc" id="recentDesc">সব Match / Notification - এখান থেকেই Edit / Delete করতে পারবা</p><div id="recentList"></div></div>
 </div>
+
 <div class="tab" id="tab-github">
 <div class="grid2">
 <div class="card"><h2>🔑 GitHub Setup <span class="tag">১ বারই</span></h2><p class="desc">Token শুধু তোমার ব্রাউজারে থাকবে • Auto Connected to rsbd80/RsLive-Go</p>
@@ -164,6 +169,7 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
+
 <div class="tab" id="tab-general">
 <div class="grid2">
 <div class="card"><h2>🌐 Website Settings</h2><p class="desc">সাইটের নাম, লিংক, সার্চ - সব সবার ফোনে যাবে</p>
@@ -184,6 +190,7 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
+
 <div class="tab" id="tab-appearance">
 <div class="grid2">
 <div class="card"><h2>🎨 Theme Color</h2><p class="desc">ওয়েবসাইটের মেইন কালার বদলাও</p>
@@ -205,20 +212,29 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
+
 <div class="tab" id="tab-playlist">
 <div class="grid2">
-<div class="card"><h2>📺 Add New Playlist</h2><p class="desc">M3U লিংক দিলেই সবার ফোনে চ্যানেল চলে যাবে</p>
-<label>Playlist Name</label><input id="plName" placeholder="Ex: Jago BD">
+<div class="card"><h2>📺 Add / Edit Playlist</h2><p class="desc" id="plFormTitle">M3U লিংক দিলেই সবার ফোনে চ্যানেল চলে যাবে • Edit করলে উপরে ডাটা আসবে</p>
+<label>Playlist Name</label><input id="plName" placeholder="Ex: T Sports HD">
 <label>M3U URL</label><input id="plUrl" placeholder="https://.../playlist.m3u">
 <label><input type="checkbox" id="plProxy" style="width:auto"> Use Proxy (ব্লক হলে ON করো)</label>
-<button class="btn btn-block" onclick="addPlaylist()">+ Add & Publish ☁️</button>
+<button class="btn btn-block" id="addPlBtn" onclick="addPlaylist()">+ Add & Publish ☁️</button>
+<button class="btn btn-block btn2" id="cancelPlBtn" onclick="cancelEditPl()" style="display:none;margin-top:8px">✕ Cancel Edit</button>
 </div>
-<div class="card"><h2>📋 All Playlists <span class="tag" id="plCount">0</span></h2><p class="desc">Delete করলে সবার ফোন থেকে চ্যানেল চলে যাবে</p><div id="plList"></div></div>
+<div class="card"><h2>📋 All Playlists <span class="tag" id="plCount">0</span></h2><p class="desc">Edit / Delete করলে সবার ফোনে আপডেট হবে</p><div id="plList"></div></div>
 </div>
 </div>
+
 <div class="tab" id="tab-match">
 <div class="grid2">
-<div class="card"><h2>🏏 Add / Edit Match</h2><p class="desc" id="matchFormTitle">নতুন Match দিলে সবার Events ট্যাবে দেখাবে</p>
+<div class="card"><h2>🏏 Add / Edit Match</h2><p class="desc" id="matchFormTitle">নতুন Match দিলে সবার Events ট্যাবে দেখাবে • Live / Upcoming যেকোনো ম্যাচ Edit করা যাবে</p>
+<div class="filter-row">
+<button class="on" id="fAll" onclick="setMatchFilter('all',this)">All</button>
+<button id="fLive" onclick="setMatchFilter('live',this)">🔴 Live</button>
+<button id="fUp" onclick="setMatchFilter('upcoming',this)">🕐 Upcoming</button>
+<button id="fExp" onclick="setMatchFilter('expired',this)">Expired</button>
+</div>
 <input id="matchSearch" oninput="renderMatch()" placeholder="🔍 Search match..." style="margin-bottom:2px">
 <div class="row"><div><label>Team A</label><input id="mTeamA" placeholder="Bangladesh"></div><div><label>Team B</label><input id="mTeamB" placeholder="India"></div></div>
 <div class="row"><div><label>Team A Logo</label><input id="mLogoA" placeholder="https://.../ban.png"></div><div><label>Team B Logo</label><input id="mLogoB" placeholder="https://.../ind.png"></div></div>
@@ -232,9 +248,10 @@ textarea{min-height:70px;resize:vertical}
 <button class="btn btn-block btn2" id="cancelEditBtn" onclick="cancelEditMatch()" style="display:none;margin-top:8px">✕ Cancel Edit</button>
 <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn2" style="flex:1" onclick="quickAddToday()">⚡ Today 4 PM</button><button class="btn btn2" style="flex:1" onclick="quickAddTomorrow()">📅 Tomorrow 4 PM</button></div>
 </div>
-<div class="card"><h2>📋 All Matches <span class="tag" id="matchCount">0</span></h2><div id="matchList"></div></div>
+<div class="card"><h2>📋 All Matches <span class="tag" id="matchCount">0</span></h2><p class="desc">প্রতিটা ম্যাচে Edit / Copy / Live / +2H / Delete আছে • Unlimited</p><div id="matchList"></div></div>
 </div>
 </div>
+
 <div class="tab" id="tab-notice">
 <div class="grid2">
 <div class="card"><h2>📢 Notice Bar</h2><p class="desc">সবার ফোনের উপরে সাদা বার দেখাবে</p>
@@ -248,6 +265,7 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
+
 <div class="tab" id="tab-noti">
 <div class="grid2">
 <div class="card"><h2>🔔 Send Notification to All</h2><p class="desc">সবার ফোনে বেল আইকনে যাবে</p>
@@ -259,6 +277,7 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>📋 All Notifications</h2><div id="notiList"></div></div>
 </div>
 </div>
+
 <div class="tab" id="tab-reports">
 <div class="grid2">
 <div class="card"><h2>🚨 User Reports</h2><p class="desc">ইউজাররা যেই চ্যানেল / ম্যাচ নষ্ট রিপোর্ট করছে - এখানে আসবে</p>
@@ -268,6 +287,7 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>📋 All Reports <span class="tag" id="reportCount">0</span></h2><div id="reportList"></div></div>
 </div>
 </div>
+
 <div class="tab" id="tab-featured">
 <div class="grid2">
 <div class="card"><h2>⭐ Featured Live</h2><p class="desc">Home এর উপরে বড় কার্ড দেখাবে</p>
@@ -279,6 +299,7 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>👀 Preview</h2><div class="preview"><div class="p-body"><b style="color:#fff" id="featPreview">FEATURED LIVE</b><br><span id="featPreview2">No featured set</span><br><br><span style="color:#FFC107">Watch Now →</span></div></div></div>
 </div>
 </div>
+
 <div class="tab" id="tab-settings">
 <div class="grid2">
 <div class="card"><h2>🔐 Security</h2><p class="desc">Admin Password + GitHub Token</p>
@@ -304,6 +325,7 @@ textarea{min-height:70px;resize:vertical}
 let GH={token:localStorage.getItem('rslive_gh_token')||'',owner:localStorage.getItem('rslive_gh_owner')||'rsbd80',repo:localStorage.getItem('rslive_gh_repo')||'RsLive-Go',branch:localStorage.getItem('rslive_gh_branch')||'main',path:localStorage.getItem('rslive_gh_path')||'data/config.json'};
 let CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],reports:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};
 let FILE_SHA='';
+let matchFilter='all';
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 function toggleSidebar(force){const s=document.getElementById('sidebar'),o=document.getElementById('overlay');const open=force!==undefined?force:!s.classList.contains('open');s.classList.toggle('open',open);o.classList.toggle('show',open)}
 function showTab(id,btn){
@@ -312,7 +334,7 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   if(btn) btn.classList.add('active');
   document.querySelector(`.nav-btn[data-tab="${id}"]`)?.classList.add('active');
-  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Edit / Live',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',reports:'User Reports - Broken Link',featured:'Featured Live Card',github:'GitHub Token / Repo Connection',settings:'Security / Backup / Reset'}[id]||'';
+  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Edit / Delete',match:'Match Add / Edit / Live / Upcoming',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',reports:'User Reports - Broken Link',featured:'Featured Live Card',github:'GitHub Token / Repo Connection',settings:'Security / Backup / Reset'}[id]||'';
   toggleSidebar(false); window.scrollTo({top:0,behavior:'smooth'});
 }
 function doLogin(){if(document.getElementById('passInput').value===(localStorage.getItem('rslive_admin_pass')||'rslive123')){sessionStorage.setItem('rslive_admin','1');document.getElementById('login').style.display='none';if(GH.token) loadFromGitHub();else fillUI();}else toast('❌ Wrong Password')}
@@ -339,7 +361,17 @@ function fillUI(){
   document.getElementById('plCount').textContent=(CLOUD.playlists||[]).length;document.getElementById('matchCount').textContent=(CLOUD.matches||[]).length;
   renderPl();renderNoti();renderMatch();renderRecent();renderReports();
 }
-function renderRecent(){const w=document.getElementById('recentList');w.innerHTML='';const items=[...(CLOUD.matches||[]).slice(-3).map(m=>({t:'🏏 Match',s:m.teamA+' vs '+m.teamB})),...(CLOUD.notis||[]).slice(-2).map(n=>({t:'🔔 Noti',s:n.title}))].reverse();if(!items.length) w.innerHTML='<div class="empty">No activity yet - Match বা Notification পাঠাও</div>';else items.forEach(it=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${it.t}</b><small>${it.s}</small>`;w.appendChild(d)});}
+function renderRecent(){
+  const w=document.getElementById('recentList');w.innerHTML='';
+  const items=[...(CLOUD.matches||[]).map((m,i)=>({type:'match',idx:i,t:'🏏 Match',s:m.teamA+' vs '+m.teamB})),...(CLOUD.notis||[]).map((n,i)=>({type:'noti',idx:i,t:'🔔 Noti',s:n.title}))].reverse();
+  if(!items.length) w.innerHTML='<div class="empty">No activity yet - Match বা Notification পাঠাও</div>';
+  else items.forEach(it=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<b>${it.t}</b><small>${it.s}</small><button class="edit" onclick="${it.type==='match'?`startEditMatch(${it.idx});showTab('match',document.querySelector('[data-tab=match]'))`:`showTab('noti',document.querySelector('[data-tab=noti]'))`}">Edit</button><button class="del" onclick="${it.type==='match'?`delMatch(${it.idx})`:`delNoti(${it.idx})`}">🗑️ Delete</button>`;
+    w.appendChild(d);
+  });
+  const rd=document.getElementById('recentDesc'); if(rd) rd.textContent='সব Match / Notification - এখান থেকেই Edit / Delete করতে পারবা • Total: '+(CLOUD.matches||[]).length+' Match';
+}
 function pickColor(el,c){document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('customColor').value=c;CLOUD.themeColor=c;}
 async function saveGeneral(){CLOUD.siteName=document.getElementById('siteName').value.trim();CLOUD.tagline=document.getElementById('tagline').value.trim();CLOUD.telegram=document.getElementById('telegram').value.trim();CLOUD.searchPh=document.getElementById('searchPh').value.trim();CLOUD.proxyUrl=document.getElementById('proxyUrl').value.trim();await pushToGitHub('Update general');fillUI();}
 async function saveModes(){CLOUD.eventsMode=document.getElementById('swEvents').classList.contains('on');CLOUD.tvMode=document.getElementById('swTv').classList.contains('on');CLOUD.autoQuality=document.getElementById('swAutoQ').classList.contains('on');CLOUD.telePopup=document.getElementById('swTelePop').classList.contains('on');await pushToGitHub('Update modes');fillUI();}
@@ -347,17 +379,44 @@ async function saveAppearance(){CLOUD.themeColor=document.getElementById('custom
 async function saveFeatured(){CLOUD.featName=document.getElementById('featName').value.trim();CLOUD.featUrl=document.getElementById('featUrl').value.trim();CLOUD.showFeat=document.getElementById('swFeat').classList.contains('on');await pushToGitHub('Update featured');fillUI();}
 async function saveNotice(){CLOUD.notice=document.getElementById('noticeText').value.trim();CLOUD.showNotice=document.getElementById('swNotice').classList.contains('on');await pushToGitHub('Update notice');fillUI();}
 async function clearNotice(){document.getElementById('noticeText').value='';CLOUD.notice='';CLOUD.showNotice=false;await pushToGitHub('Clear notice');fillUI();}
-async function addPlaylist(){const n=document.getElementById('plName').value.trim(),u=document.getElementById('plUrl').value.trim();if(!n||!u.startsWith('http')) return toast('Name + URL দাও');CLOUD.playlists=CLOUD.playlists||[];if(CLOUD.playlists.some(x=>x.url===u)) return toast('এই Playlist আগেই আছে');CLOUD.playlists.push({name:n,url:u,useProxy:document.getElementById('plProxy').checked});document.getElementById('plName').value='';document.getElementById('plUrl').value='';await pushToGitHub('Add playlist: '+n);fillUI();}
-async function delPl(i){if(!confirm('Delete this playlist?'))return;CLOUD.playlists.splice(i,1);await pushToGitHub('Delete playlist');fillUI();}
-function renderPl(){const w=document.getElementById('plList');w.innerHTML='';(CLOUD.playlists||[]).forEach((p,i)=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${p.name}</b><small>${p.url.slice(0,40)}...</small><button class="del" onclick="delPl(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.playlists?.length) w.innerHTML='<div class="empty">No playlist yet</div>';}
+
+// --- PLAYLIST : Add / Edit / Delete (GitHub সহ) ---
+let editingPlIdx=null;
+async function addPlaylist(){
+  const n=document.getElementById('plName').value.trim(),u=document.getElementById('plUrl').value.trim();
+  if(!n||!u.startsWith('http')) return toast('Name + URL দাও');
+  CLOUD.playlists=CLOUD.playlists||[];
+  if(editingPlIdx!==null){
+    CLOUD.playlists[editingPlIdx]={name:n,url:u,useProxy:document.getElementById('plProxy').checked};
+    await pushToGitHub('Update playlist: '+n); cancelEditPl(); fillUI(); toast('Playlist Updated ✅'); return;
+  }
+  if(CLOUD.playlists.some(x=>x.url===u)) return toast('এই Playlist আগেই আছে');
+  CLOUD.playlists.push({name:n,url:u,useProxy:document.getElementById('plProxy').checked});
+  document.getElementById('plName').value='';document.getElementById('plUrl').value='';
+  await pushToGitHub('Add playlist: '+n);fillUI();
+}
+function startEditPl(i){
+  const p=CLOUD.playlists[i]; if(!p) return; editingPlIdx=i;
+  document.getElementById('plName').value=p.name||''; document.getElementById('plUrl').value=p.url||''; document.getElementById('plProxy').checked=!!p.useProxy;
+  document.getElementById('addPlBtn').textContent='✅ Update Playlist ☁️'; document.getElementById('cancelPlBtn').style.display='block';
+  document.getElementById('plFormTitle').textContent='Edit Mode: '+p.name+' - ঠিক করে Update চাপো';
+  showTab('playlist',document.querySelector('[data-tab=playlist]')); window.scrollTo({top:0,behavior:'smooth'}); toast('Edit Mode: '+p.name);
+}
+function cancelEditPl(){editingPlIdx=null;document.getElementById('plName').value='';document.getElementById('plUrl').value='';document.getElementById('addPlBtn').textContent='+ Add & Publish ☁️';document.getElementById('cancelPlBtn').style.display='none';document.getElementById('plFormTitle').textContent='M3U লিংক দিলেই সবার ফোনে চ্যানেল চলে যাবে • Edit করলে উপরে ডাটা আসবে';}
+async function delPl(i){if(!confirm('Delete this playlist?\n'+CLOUD.playlists[i].name))return;CLOUD.playlists.splice(i,1);await pushToGitHub('Delete playlist');fillUI();}
+function renderPl(){const w=document.getElementById('plList');w.innerHTML='';(CLOUD.playlists||[]).forEach((p,i)=>{const d=document.createElement('div');d.className='item';d.style.alignItems='flex-start';d.innerHTML=`<div style="flex:1;min-width:0"><b style="display:block">${p.name}</b><small style="display:block;margin-top:2px">${p.url}</small></div><button class="edit" onclick="startEditPl(${i})">✏️ Edit</button><button class="del" onclick="delPl(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.playlists?.length) w.innerHTML='<div class="empty">No playlist yet</div>';}
+
 async function sendNoti(){const t=document.getElementById('notiTitle').value.trim(),m=document.getElementById('notiMsg').value.trim(),l=document.getElementById('notiLink').value.trim();if(!t||!m) return toast('Title + Message দাও');CLOUD.notis=CLOUD.notis||[];CLOUD.notis.push({id:Date.now(),title:t,message:m,link:l,time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});document.getElementById('notiTitle').value='';document.getElementById('notiMsg').value='';document.getElementById('notiLink').value='';await pushToGitHub('Send notification: '+t);fillUI();}
 async function delNoti(i){CLOUD.notis.splice(i,1);await pushToGitHub('Delete notification');fillUI();}
-function renderNoti(){const w=document.getElementById('notiList');w.innerHTML='';(CLOUD.notis||[]).slice().reverse().forEach((n,ri)=>{const idx=CLOUD.notis.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${n.title}</b><small>${n.message.slice(0,40)}</small><button class="del" onclick="delNoti(${idx})">Delete</button>`;w.appendChild(d);});if(!CLOUD.notis?.length) w.innerHTML='<div class="empty">No notification</div>';}
+function renderNoti(){const w=document.getElementById('notiList');w.innerHTML='';(CLOUD.notis||[]).slice().reverse().forEach((n,ri)=>{const idx=CLOUD.notis.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${n.title}</b><small>${n.message.slice(0,80)}</small><button class="del" onclick="delNoti(${idx})">Delete</button>`;w.appendChild(d);});if(!CLOUD.notis?.length) w.innerHTML='<div class="empty">No notification</div>';}
+
+// --- MATCH : Add / Edit / Delete / Live / Upcoming ---
 function toISO(v){ if(!v) return ''; try{ const d=new Date(v); if(isNaN(d.getTime())) return ''; return d.toISOString(); }catch(e){ return ''; } }
 function fmtAdminTime(iso){ if(!iso) return ''; try{ return new Date(iso).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return iso; } }
 function getMatchStatus(m){ const now=Date.now(); const s=Date.parse(m.startTime||m.start||''); const e=Date.parse(m.endTime||m.end||''); if(Number.isFinite(e)&&e>0&&now>=e) return 'expired'; if(Number.isFinite(s)&&s>0&&now<s) return 'upcoming'; return 'live'; }
 function toLocalInput(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); }
 let editingMatchIdx=null;
+function setMatchFilter(f,btn){matchFilter=f; document.querySelectorAll('.filter-row button').forEach(b=>b.classList.remove('on')); if(btn) btn.classList.add('on'); renderMatch();}
 function normalizeServers(m){ if(Array.isArray(m.streams)&&m.streams.length) return m.streams.map((s,i)=>({name:s.name||s.label||('Server '+(i+1)),stream_url:s.stream_url||s.url||''})).filter(s=>s.stream_url); if(m.url) return [{name:'Server 1',stream_url:m.url}]; return [{name:'Server 1',stream_url:''}]; }
 function renderServerRows(servers){ const box=document.getElementById('serverBox'); box.innerHTML=''; servers.forEach((s,i)=>{ const row=document.createElement('div'); row.className='server-row'; row.innerHTML=`<input class="sname" placeholder="Server ${i+1}" value="${(s.name||'').replace(/"/g,'&quot;')}"><input class="surl" placeholder="https://.../live.m3u8" value="${(s.stream_url||'').replace(/"/g,'&quot;')}"><button type="button" class="sdel" onclick="this.parentElement.remove();renumberServers()">✕</button>`; box.appendChild(row); }); }
 function renumberServers(){ document.querySelectorAll('#serverBox .server-row').forEach((r,i)=>{ r.querySelector('.sname').placeholder='Server '+(i+1); }); }
@@ -365,8 +424,14 @@ function addServerRow(){ const box=document.getElementById('serverBox'); const i
 function getServersFromForm(){ const rows=[...document.querySelectorAll('#serverBox .server-row')]; const list=rows.map((r,i)=>({name:r.querySelector('.sname').value.trim()||('Server '+(i+1)),stream_url:r.querySelector('.surl').value.trim()})).filter(s=>s.stream_url); return list; }
 function quickAddToday(){ const t=new Date(); t.setHours(16,0,0,0); document.getElementById('mStart').value=toLocalInput(t.toISOString()); document.getElementById('mEnd').value=toLocalInput(new Date(t.getTime()+8*3600000).toISOString()); toast('Today 4 PM সেট হইছে'); }
 function quickAddTomorrow(){ const t=new Date(); t.setDate(t.getDate()+1); t.setHours(16,0,0,0); document.getElementById('mStart').value=toLocalInput(t.toISOString()); document.getElementById('mEnd').value=toLocalInput(new Date(t.getTime()+8*3600000).toISOString()); toast('Tomorrow 4 PM সেট হইছে'); }
-function startEditMatch(i){ const m=CLOUD.matches[i]; if(!m) return; editingMatchIdx=i; document.getElementById('mTeamA').value=m.teamA||''; document.getElementById('mTeamB').value=m.teamB||''; document.getElementById('mLogoA').value=m.teamALogo||''; document.getElementById('mLogoB').value=m.teamBLogo||''; document.getElementById('mType').value=m.matchType||''; document.getElementById('mStart').value=toLocalInput(m.startTime||m.start); document.getElementById('mEnd').value=toLocalInput(m.endTime||m.end); renderServerRows(normalizeServers(m)); document.getElementById('addMatchBtn').textContent='✅ Update Match ☁️'; document.getElementById('cancelEditBtn').style.display='block'; document.getElementById('matchFormTitle').textContent='Edit Mode: '+m.name+' - ঠিক করে Update চাপো'; window.scrollTo({top:0,behavior:'smooth'}); }
-function cancelEditMatch(){ editingMatchIdx=null; document.getElementById('addMatchBtn').textContent='+ Add Match to All ☁️'; document.getElementById('cancelEditBtn').style.display='none'; document.getElementById('matchFormTitle').textContent='নতুন Match দিলে সবার Events ট্যাবে দেখাবে'; ['mTeamA','mTeamB','mLogoA','mLogoB','mType','mStart','mEnd'].forEach(id=>document.getElementById(id).value=''); renderServerRows([{name:'Server 1',stream_url:''}]); }
+function startEditMatch(i){
+  const m=CLOUD.matches[i]; if(!m) return; editingMatchIdx=i;
+  document.getElementById('mTeamA').value=m.teamA||''; document.getElementById('mTeamB').value=m.teamB||''; document.getElementById('mLogoA').value=m.teamALogo||''; document.getElementById('mLogoB').value=m.teamBLogo||''; document.getElementById('mType').value=m.matchType||''; document.getElementById('mStart').value=toLocalInput(m.startTime||m.start); document.getElementById('mEnd').value=toLocalInput(m.endTime||m.end);
+  renderServerRows(normalizeServers(m));
+  document.getElementById('addMatchBtn').textContent='✅ Update Match ☁️'; document.getElementById('cancelEditBtn').style.display='block'; document.getElementById('matchFormTitle').textContent='Edit Mode: '+m.name+' - Live / Upcoming যাই হোক, ঠিক করে Update চাপো';
+  showTab('match',document.querySelector('[data-tab=match]')); window.scrollTo({top:0,behavior:'smooth'}); toast('Edit Mode: '+m.name);
+}
+function cancelEditMatch(){ editingMatchIdx=null; document.getElementById('addMatchBtn').textContent='+ Add Match to All ☁️'; document.getElementById('cancelEditBtn').style.display='none'; document.getElementById('matchFormTitle').textContent='নতুন Match দিলে সবার Events ট্যাবে দেখাবে • Live / Upcoming যেকোনো ম্যাচ Edit করা যাবে'; ['mTeamA','mTeamB','mLogoA','mLogoB','mType','mStart','mEnd'].forEach(id=>document.getElementById(id).value=''); renderServerRows([{name:'Server 1',stream_url:''}]); }
 async function duplicateMatch(i){ const m=JSON.parse(JSON.stringify(CLOUD.matches[i])); m.name=m.name+' (Copy)'; CLOUD.matches.push(m); await pushToGitHub('Duplicate match'); fillUI(); toast('Copy হইছে, Edit করো'); }
 async function makeLiveNow(i){ const now=new Date(); CLOUD.matches[i].startTime=CLOUD.matches[i].start=now.toISOString(); CLOUD.matches[i].endTime=CLOUD.matches[i].end=new Date(now.getTime()+8*3600000).toISOString(); await pushToGitHub('Make live'); fillUI(); toast('🔴 এখন LIVE'); }
 async function extendMatch(i){ const e=new Date(CLOUD.matches[i].endTime||CLOUD.matches[i].end); e.setHours(e.getHours()+2); CLOUD.matches[i].endTime=CLOUD.matches[i].end=e.toISOString(); await pushToGitHub('Extend +2H'); fillUI(); toast('+2 Hours বাড়ছে'); }
@@ -382,7 +447,20 @@ async function addMatch(){
   cancelEditMatch(); await pushToGitHub('Add/Update match: '+data.name); fillUI(); toast('Match Published ✅ '+servers.length+' Server');
 }
 async function delMatch(i){if(!confirm('Delete?\n'+CLOUD.matches[i].name))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
-function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';const q=(document.getElementById('matchSearch')?.value||'').toLowerCase();(CLOUD.matches||[]).forEach((m,i)=>{ if(q && !m.name.toLowerCase().includes(q)) return; const st=getMatchStatus(m); const badge=st==='live'?'<span class="match-badge live">● LIVE</span>':st==='upcoming'?'<span class="match-badge upcoming">UPCOMING</span>':'<span class="match-badge expired">EXPIRED</span>'; const srv=normalizeServers(m).length; const d=document.createElement('div'); d.className='item'; d.innerHTML=`${m.teamALogo?`<img class="thumb" src="${m.teamALogo}">`:''}<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''} • ${fmtAdminTime(m.startTime||m.start)} - ${fmtAdminTime(m.endTime||m.end)} • 📡 ${srv} Server</small>${badge}<div style="display:flex;gap:6px;width:100%;flex-wrap:wrap"><button class="edit" style="flex:1" onclick="startEditMatch(${i})">✏️ Edit</button><button style="flex:1;background:#34343C;color:#fff" onclick="duplicateMatch(${i})">📋 Copy</button><button style="flex:1;background:#3a1a1a;color:#ff8fa0" onclick="makeLiveNow(${i})">🔴 Live</button><button style="flex:1;background:#1e3a5f;color:#6db3ff" onclick="extendMatch(${i})">+2H</button><button class="del" style="flex:1" onclick="delMatch(${i})">🗑️</button></div>`; w.appendChild(d);});if(!w.innerHTML) w.innerHTML='<div class="empty">No match yet</div>';}
+function renderMatch(){
+  const w=document.getElementById('matchList');w.innerHTML='';
+  const q=(document.getElementById('matchSearch')?.value||'').toLowerCase();
+  (CLOUD.matches||[]).forEach((m,i)=>{
+    if(q && !m.name.toLowerCase().includes(q)) return;
+    const st=getMatchStatus(m); if(matchFilter!=='all' && st!==matchFilter) return;
+    const badge=st==='live'?'<span class="match-badge live">● LIVE</span>':st==='upcoming'?'<span class="match-badge upcoming">UPCOMING</span>':'<span class="match-badge expired">EXPIRED</span>';
+    const srv=normalizeServers(m).length;
+    const d=document.createElement('div'); d.className='item';
+    d.innerHTML=`${m.teamALogo?`<img class="thumb" src="${m.teamALogo}">`:''}<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''} • ${fmtAdminTime(m.startTime||m.start)} - ${fmtAdminTime(m.endTime||m.end)} • 📡 ${srv} Server</small>${badge}<div style="display:flex;gap:6px;width:100%;flex-wrap:wrap"><button class="edit" style="flex:1" onclick="startEditMatch(${i})">✏️ Edit</button><button style="flex:1;background:#34343C;color:#fff" onclick="duplicateMatch(${i})">📋 Copy</button><button style="flex:1;background:#3a1a1a;color:#ff8fa0" onclick="makeLiveNow(${i})">🔴 Live</button><button style="flex:1;background:#1e3a5f;color:#6db3ff" onclick="extendMatch(${i})">+2H</button><button class="del" style="flex:1" onclick="delMatch(${i})">🗑️</button></div>`;
+    w.appendChild(d);
+  });
+  if(!w.innerHTML) w.innerHTML='<div class="empty">No match yet - এই ফিল্টারে কোনো ম্যাচ নাই</div>';
+}
 function renderReports(){const w=document.getElementById('reportList');if(!w) return;w.innerHTML='';(CLOUD.reports||[]).slice().reverse().forEach((r,ri)=>{const idx=CLOUD.reports.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.channel||r.title||'Report'}</b><small>${(r.reason||r.message||'')+' • '+(r.time||'')}</small><button class="del" onclick="delReport(${idx})">Done</button>`;w.appendChild(d);});if(!CLOUD.reports?.length) w.innerHTML='<div class="empty">কোনো Report নাই ✅ সব ঠিক আছে</div>';}
 async function delReport(i){CLOUD.reports.splice(i,1);await pushToGitHub('Resolve report');fillUI();}
 async function clearReports(){if(!confirm('সব Report মুছে ফেলবো?')) return;CLOUD.reports=[];await pushToGitHub('Clear reports');fillUI();}
