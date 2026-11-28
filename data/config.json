@@ -6,9 +6,9 @@
   "proxyUrl": "",
   "notice": "",
   "showNotice": false,
-  "featName": "",
-  "featUrl": "",
-  "showFeat": false,
+  "featName": "T",
+  "featUrl": "https://rslivetv.vercel.app",
+  "showFeat": true,
   "playlists": [
     {
       "name": "Tapmad",
