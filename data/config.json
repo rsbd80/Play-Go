@@ -98,6 +98,24 @@
           "stream_url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8"
         }
       ]
+    },
+    {
+      "name": "Bangladesh vs South Africa (Copy)",
+      "teamA": "Bangladesh",
+      "teamALogo": "https://flagcdn.com/bd.svg",
+      "teamB": "South Africa",
+      "teamBLogo": "https://flagcdn.com/za.svg",
+      "matchType": "ODI",
+      "startTime": "2026-11-04T10:30:00.000Z",
+      "endTime": "2026-11-04T18:30:00.000Z",
+      "start": "2026-11-04T10:30:00.000Z",
+      "end": "2026-11-04T18:30:00.000Z",
+      "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
+      "streams": [
+        {
+          "stream_url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8"
+        }
+      ]
     }
   ],
   "reports": [],
