@@ -85,20 +85,38 @@
       ]
     },
     {
-      "name": "Bangladesh vs South Africa (Copy)",
-      "teamA": "Bangladesh",
-      "teamALogo": "https://flagcdn.com/bd.svg",
-      "teamB": "South Africa",
-      "teamBLogo": "https://flagcdn.com/za.svg",
-      "matchType": "ODI",
-      "startTime": "2026-11-04T10:30:00.000Z",
-      "endTime": "2026-11-04T18:30:00.000Z",
-      "start": "2026-11-04T10:30:00.000Z",
-      "end": "2026-11-04T18:30:00.000Z",
-      "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
+      "name": "Sri Lanka A vs India A",
+      "teamA": "Sri Lanka A",
+      "teamALogo": "https://flagcdn.com/lk.svg",
+      "teamB": "India A",
+      "teamBLogo": "https://flagcdn.com/in.svg",
+      "matchType": "Cricket | Asia Cup 2026 | Final",
+      "startTime": "2026-11-29T10:00:00.000Z",
+      "endTime": "2026-11-29T17:30:00.000Z",
+      "start": "2026-11-29T10:00:00.000Z",
+      "end": "2026-11-29T17:30:00.000Z",
+      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F12.m3u8",
       "streams": [
         {
-          "stream_url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8"
+          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F12.m3u8"
+        }
+      ]
+    },
+    {
+      "name": "Manchester United vs Brentford",
+      "teamA": "Manchester United",
+      "teamALogo": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+      "teamB": "Brentford",
+      "teamBLogo": "https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg",
+      "matchType": "Football | Premier League",
+      "startTime": "2026-11-28T15:00:00.000Z",
+      "endTime": "2026-11-28T17:00:00.000Z",
+      "start": "2026-11-28T15:00:00.000Z",
+      "end": "2026-11-28T17:00:00.000Z",
+      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8",
+      "streams": [
+        {
+          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8"
         }
       ]
     }
