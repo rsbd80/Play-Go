@@ -103,23 +103,24 @@
       ]
     },
     {
-  "name": "Ipswich Town vs Aston Villa",
-  "teamA": "Ipswich Town",
-  "teamALogo": "https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town_FC.svg",
-  "teamB": "Aston Villa",
-  "teamBLogo": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_crest.svg",
-  "matchType": "Football | Premier League",
-  "venue": "Portman Road",
-  "startTime": "2026-11-28T17:30:00.000Z",
-  "endTime": "2026-11-28T19:30:00.000Z",
-  "start": "2026-11-28T17:30:00.000Z",
-  "end": "2026-11-28T19:30:00.000Z",
-  "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8",
-  "streams": [
-    {
-      "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8"
-    }
-  ]
+      "name": "Ipswich Town vs Aston Villa",
+      "teamA": "Ipswich Town",
+      "teamALogo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMY2L6HkeZATtq3s5xo8V6WuXjoFfSyH8fRJJSs6qfG7N3wlmAT1pH_GQ&s=10",
+      "teamB": "Aston Villa",
+      "teamBLogo": "https://static.vecteezy.com/system/resources/previews/066/118/576/non_2x/aston-villa-fc-logo-transparent-background-football-club-icon-digital-download-free-png.png",
+      "matchType": "Football | Premier League",
+      "venue": "Portman Road",
+      "startTime": "2026-11-28T17:30:00.000Z",
+      "endTime": "2026-11-28T19:30:00.000Z",
+      "start": "2026-11-28T17:30:00.000Z",
+      "end": "2026-11-28T19:30:00.000Z",
+      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8",
+      "streams": [
+        {
+          "name": "Server 1",
+          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8"
+        }
+      ]
     },
     {
       "name": "Manchester United vs Brentford",
