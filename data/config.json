@@ -46,7 +46,15 @@
       "useProxy": false
     }
   ],
-  "notis": [],
+  "notis": [
+    {
+      "id": 1795866273275,
+      "title": "⚽ Manchester United vs Brentford",
+      "message": "আজ রাত ৯টায় শুরু হচ্ছে ম্যানচেস্টার ইউনাইটেড বনাম ব্রেন্টফোর্ডের জমজমাট লড়াই!\n\nসরাসরি খেলা দেখতে ভিজিট করুন:",
+      "link": "https://rslivego.pages.dev",
+      "time": "28 Nov, 17:44"
+    }
+  ],
   "matches": [
     {
       "name": "New Zealand vs India",
