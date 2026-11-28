@@ -18,7 +18,7 @@
     {
       "name": "Sports",
       "url": "https://raw.githubusercontent.com/jannatulbusra000/Sports-Playlist/refs/heads/main/sports.m3u",
-      "useProxy": true
+      "useProxy": false
     },
     {
       "name": "Toffee",
