@@ -1,4 +1,4 @@
-/* RsLive Go v63 - app.js ONLY - NO <script> TAG - config.json ONLY Matches - data/matches folder BAD */
+/* RsLive Go v66 - app.js ONLY - NO <script> TAG - config.json + Sports_data.json Auto Matches - data/matches folder BAD */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -179,6 +179,7 @@ const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'h
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
+const SPORTS_DATA_URL='https://raw.githubusercontent.com/sm-monirulislam/Upcoming-and-Live-Sports-Data/refs/heads/main/Sports_data.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(){
   if(_cloudLoaded) return true;
@@ -233,7 +234,7 @@ function cleanGroupName(g){return String(g||'General').trim()||'General'}
 function isGenericGroup(g){const n=normName(g);return !n||['general','all','undefined','live tv','tv'].includes(n)}
 function isProxyOn(n){const p=CFG.playlists.find(x=>normName(x.name)===normName(n));return !!(p?.useProxy)}
 function unwrapMatchFile(d){if(!d||typeof d!=='object')return[];if(Array.isArray(d.matches))return d.matches;if(d.match)return Array.isArray(d.match)?d.match:[d.match];if(Array.isArray(d.liveSports))return d.liveSports;if(d.name||d.event_name||d.title)return[d];return[]}
-function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.homeTeam||m.team1||'').trim();m.teamB=String(m.teamB||m.awayTeam||m.team2||'').trim();m.teamALogo=m.teamALogo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.logoB||m.awayLogo||m.teamBFlag||'';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
+function normalizeMatch(r){if(!r||typeof r!=='object')return null;const m={...r};m.name=String(m.name||m.event_name||m.title||m.match||'').trim();const st=Array.isArray(m.streams)?m.streams:[];const f=st.find(x=>x&&(x.url||x.stream_url||x.src));m.url=String(m.url||m.stream_url||m.link||m.live_url||(f&&(f.url||f.stream_url||f.src))||'').trim();m.startTime=m.startTime||m.start_time||m.start||m.date||m.time||'';m.endTime=m.endTime||m.end_time||m.end||'';m.teamA=String(m.teamA||m.team1||m.homeTeam||m.home||'').trim();m.teamB=String(m.teamB||m.team2||m.awayTeam||m.away||'').trim();m.teamALogo=m.teamALogo||m.team1_logo||m.teamA_logo||m.logoA||m.homeLogo||m.teamAFlag||'';m.teamBLogo=m.teamBLogo||m.team2_logo||m.teamB_logo||m.logoB||m.awayLogo||m.teamBFlag||'';m.matchType=m.matchType||m.tournament||m.category||m.sport||m.league||'Cricket';m.category=m.category||m.sport||m.matchType||'Cricket';if(!m.teamA||!m.teamB){const p=m.name.split(/\s+(?:vs\.?|v\.?|versus)\s+/i);if(p.length>=2){if(!m.teamA)m.teamA=p[0].trim();if(!m.teamB)m.teamB=p.slice(1).join(' vs ').trim()}}if(!m.name)return null;return m}
 function getMatchState(m){const now=Date.now();const s=Date.parse(m.startTime||'');const e=Date.parse(m.endTime||'');if(Number.isFinite(e)&&e>0&&now>=e)return 'expired';if(Number.isFinite(s)&&s>0&&now<s)return 'upcoming';return 'live'}
 function getBadgeInfo(m,state){if(state==='live')return{txt:'LIVE',cls:'live'};const t=Date.parse(m.startTime||'');if(!Number.isFinite(t))return{txt:'UPCOMING',cls:'upcoming'};const diff=t-Date.now();const now=new Date();const st=new Date(t);if(diff<=3600000&&diff>=0)return{txt:'STARTING SOON',cls:'soon'};if(now.toDateString()===st.toDateString())return{txt:'TODAY',cls:'today'};const tm=new Date(now);tm.setDate(now.getDate()+1);if(tm.toDateString()===st.toDateString())return{txt:'TOMORROW',cls:'tomorrow'};return{txt:'UPCOMING',cls:'upcoming'}}
 function fmtMatchTime(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return 'Time Not Set';return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
@@ -242,6 +243,25 @@ function getSportInfo(m){const t=String((m.matchType||'')+' '+(m.category||'')+'
 function teamNode(name,logo){const w=document.createElement('div');w.className='match-team';const ln=name||'Team';let el;if(logo){const img=document.createElement('img');img.src=logo;img.alt=ln;img.loading='lazy';img.onerror=function(){this.remove();const fb=document.createElement('div');fb.className='team-fallback';fb.textContent=ln.trim().slice(0,2).toUpperCase();w.appendChild(fb)};el=img}else{el=document.createElement('div');el.className='team-fallback';el.textContent=ln.trim().slice(0,2).toUpperCase()}const lb=document.createElement('b');lb.textContent=ln;w.append(el,lb);return w}
 function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_sports_match',JSON.stringify({name:m.name,streams:m.streams||[{stream_url:m.url}],savedAt:Date.now()}))}catch(e){}const p=new URLSearchParams({url:m.url,name:m.name,src:'Live Sports',group:m.matchType||m.category||'Sports',serial:String((idx||0)+1),fs:'1'});location.href='player.html?'+p.toString()}
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
+let _autoMatchesCache=[];
+async function fetchAutoMatches(){
+  try{
+    const r=await fetch('/api/sports_data',{cache:'no-store'});
+    if(!r.ok) throw new Error('SW fail');
+    const d=await r.json();
+    if(!Array.isArray(d)) return _autoMatchesCache;
+    _autoMatchesCache=d.map(normalizeMatch).filter(Boolean);
+    return _autoMatchesCache;
+  }catch(e){
+    try{
+      const r2=await fetch(SPORTS_DATA_URL+'?t='+Date.now(),{cache:'no-store'});
+      const d2=await r2.json();
+      const arr=Array.isArray(d2)?d2:(d2.matches||d2.data||d2.events||d2.upcoming||d2.live||[]);
+      _autoMatchesCache=arr.map(normalizeMatch).filter(Boolean);
+      return _autoMatchesCache;
+    }catch(e2){ return _autoMatchesCache; }
+  }
+}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
 async function loadMatches(force=false){
@@ -249,9 +269,18 @@ async function loadMatches(force=false){
   matchesLoadingPromise=(async()=>{
     matchesLoading=true; renderMatches();
     await loadCloudConfig(); applyCloudUI();
+    let manual=[];
     if(window._cloudMatches && window._cloudMatches.length){
-      allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
+      manual=window._cloudMatches.map(normalizeMatch).filter(Boolean);
     }
+    const auto=await fetchAutoMatches();
+    let merged=[...manual];
+    auto.forEach(am=>{
+      if(!merged.some(x=> normName(x.name)===normName(am.name))){
+        merged.push(am);
+      }
+    });
+    allMatches=merged;
     matchesLoading=false; renderMatches(); matchesLoadingPromise=null;
   })(); return matchesLoadingPromise;
 }
@@ -299,7 +328,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v63'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v66'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
