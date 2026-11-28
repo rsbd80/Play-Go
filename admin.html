@@ -80,6 +80,10 @@ textarea{min-height:70px;resize:vertical}
 .preview .p-head b{font-size:16px} .preview .p-head b i{font-style:normal;color:var(--yellow)}
 .preview .p-body{padding:12px;background:#2E2E36;font-size:12px;color:var(--dim)}
 .bottom-nav{display:none}
+.match-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;flex-shrink:0}
+.match-badge.live{background:#3a1a1a;color:#ff8fa0;border:1px solid #5a2a2a}
+.match-badge.upcoming{background:#2a2a1a;color:#e8b26a;border:1px solid #4a3a1a}
+.match-badge.expired{background:#222;color:#888;border:1px solid #333}
 @media(max-width:900px){
   .sidebar{display:none}
   .main{padding:14px 12px 110px}
@@ -103,7 +107,7 @@ textarea{min-height:70px;resize:vertical}
 </div></div>
 <div class="admin">
 <aside class="sidebar">
-<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v62 FIXED</small></div>
+<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v63 FIXED</small></div>
 <div class="menu-label">MAIN MENU</div>
 <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
 <button class="nav-btn" data-tab="general" onclick="showTab('general',this)"><span class="ico">🌐</span>Website</button>
@@ -206,6 +210,7 @@ textarea{min-height:70px;resize:vertical}
 <div class="row"><div><label>Team A Logo</label><input id="mLogoA" placeholder="https://.../ban.png"></div><div><label>Team B Logo</label><input id="mLogoB" placeholder="https://.../ind.png"></div></div>
 <label>Category / Type</label><input id="mType" placeholder="Cricket | Asia Cup">
 <label>Start Time</label><input id="mStart" type="datetime-local">
+<label>End Time - না দিলে অটো Start + 2 ঘণ্টা</label><input id="mEnd" type="datetime-local">
 <label>Stream URL (m3u8)</label><input id="mUrl" placeholder="https://.../live.m3u8">
 <button class="btn btn-block" onclick="addMatch()">+ Add Match to All ☁️</button>
 </div>
@@ -339,9 +344,31 @@ function renderPl(){const w=document.getElementById('plList');w.innerHTML='';(CL
 async function sendNoti(){const t=document.getElementById('notiTitle').value.trim(),m=document.getElementById('notiMsg').value.trim(),l=document.getElementById('notiLink').value.trim();if(!t||!m) return toast('Title + Message দাও');CLOUD.notis=CLOUD.notis||[];CLOUD.notis.push({id:Date.now(),title:t,message:m,link:l,time:new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})});document.getElementById('notiTitle').value='';document.getElementById('notiMsg').value='';document.getElementById('notiLink').value='';await pushToGitHub('Send notification: '+t);fillUI();}
 async function delNoti(i){CLOUD.notis.splice(i,1);await pushToGitHub('Delete notification');fillUI();}
 function renderNoti(){const w=document.getElementById('notiList');w.innerHTML='';(CLOUD.notis||[]).slice().reverse().forEach((n,ri)=>{const idx=CLOUD.notis.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${n.title}</b><small>${n.message.slice(0,40)}</small><button class="del" onclick="delNoti(${idx})">Delete</button>`;w.appendChild(d);});if(!CLOUD.notis?.length) w.innerHTML='<div class="empty">No notification</div>';}
-async function addMatch(){const m={name:document.getElementById('mTeamA').value.trim()+' vs '+document.getElementById('mTeamB').value.trim(),teamA:document.getElementById('mTeamA').value.trim(),teamALogo:document.getElementById('mLogoA').value.trim(),teamB:document.getElementById('mTeamB').value.trim(),teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:document.getElementById('mStart').value,url:document.getElementById('mUrl').value.trim(),streams:[{stream_url:document.getElementById('mUrl').value.trim()}]};if(!m.teamA||!m.teamB) return toast('Team A/B দাও');CLOUD.matches=CLOUD.matches||[];CLOUD.matches.push(m);await pushToGitHub('Add match: '+m.name);fillUI();toast('Match Published ✅');}
+// --- v63 FIX: End Time + ISO Time + Upcoming Fix ---
+function toISO(v){ if(!v) return ''; try{ const d=new Date(v); if(isNaN(d.getTime())) return ''; return d.toISOString(); }catch(e){ return ''; } }
+function fmtAdminTime(iso){ if(!iso) return ''; try{ return new Date(iso).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}); }catch(e){ return iso; } }
+function getMatchStatus(m){ const now=Date.now(); const s=Date.parse(m.startTime||m.start||''); const e=Date.parse(m.endTime||m.end||''); if(Number.isFinite(e)&&e>0&&now>=e) return 'expired'; if(Number.isFinite(s)&&s>0&&now<s) return 'upcoming'; return 'live'; }
+async function addMatch(){
+  const teamA=document.getElementById('mTeamA').value.trim();
+  const teamB=document.getElementById('mTeamB').value.trim();
+  const startRaw=document.getElementById('mStart').value;
+  const endRaw=document.getElementById('mEnd').value;
+  const url=document.getElementById('mUrl').value.trim();
+  if(!teamA||!teamB) return toast('Team A/B দাও');
+  if(!startRaw) return toast('Start Time দাও');
+  if(!url) return toast('Stream URL দাও');
+  const startISO=toISO(startRaw);
+  let endISO=toISO(endRaw);
+  if(!endISO){ endISO=new Date(new Date(startRaw).getTime()+2*60*60*1000).toISOString(); }
+  if(Date.parse(endISO)<=Date.parse(startISO)) return toast('End Time Start এর পরে হতে হবে');
+  const m={name:teamA+' vs '+teamB,teamA:teamA,teamALogo:document.getElementById('mLogoA').value.trim(),teamB:teamB,teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:startISO,endTime:endISO,start:startISO,end:endISO,url:url,streams:[{stream_url:url}]};
+  CLOUD.matches=CLOUD.matches||[];CLOUD.matches.push(m);
+  // Form clear
+  document.getElementById('mTeamA').value='';document.getElementById('mTeamB').value='';document.getElementById('mLogoA').value='';document.getElementById('mLogoB').value='';document.getElementById('mType').value='';document.getElementById('mStart').value='';document.getElementById('mEnd').value='';document.getElementById('mUrl').value='';
+  await pushToGitHub('Add match: '+m.name);fillUI();toast('Match Published ✅ - Website এ Upcoming এ দেখাবে');
+}
 async function delMatch(i){if(!confirm('Delete this match?'))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
-function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';(CLOUD.matches||[]).forEach((m,i)=>{const d=document.createElement('div');d.className='item';if(m.teamALogo) d.innerHTML+=`<img class="thumb" src="${m.teamALogo}">`;d.innerHTML+=`<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''}</small><button class="del" onclick="delMatch(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.matches?.length) w.innerHTML='<div class="empty">No match yet</div>';}
+function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';(CLOUD.matches||[]).forEach((m,i)=>{const st=getMatchStatus(m);const badge=st==='live'?'<span class="match-badge live">LIVE</span>':st==='upcoming'?'<span class="match-badge upcoming">UPCOMING</span>':'<span class="match-badge expired">EXPIRED</span>';const d=document.createElement('div');d.className='item';if(m.teamALogo) d.innerHTML+=`<img class="thumb" src="${m.teamALogo}">`;d.innerHTML+=`<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''} • ${fmtAdminTime(m.startTime||m.start)} - ${fmtAdminTime(m.endTime||m.end)}</small>${badge}<button class="del" onclick="delMatch(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.matches?.length) w.innerHTML='<div class="empty">No match yet</div>';}
 function renderReports(){const w=document.getElementById('reportList');if(!w) return;w.innerHTML='';(CLOUD.reports||[]).slice().reverse().forEach((r,ri)=>{const idx=CLOUD.reports.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.channel||r.title||'Report'}</b><small>${(r.reason||r.message||'')+' • '+(r.time||'')}</small><button class="del" onclick="delReport(${idx})">Done</button>`;w.appendChild(d);});if(!CLOUD.reports?.length) w.innerHTML='<div class="empty">কোনো Report নাই ✅ সব ঠিক আছে</div>';}
 async function delReport(i){CLOUD.reports.splice(i,1);await pushToGitHub('Resolve report');fillUI();}
 async function clearReports(){if(!confirm('সব Report মুছে ফেলবো?')) return;CLOUD.reports=[];await pushToGitHub('Clear reports');fillUI();}
