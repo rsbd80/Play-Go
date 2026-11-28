@@ -1,4 +1,4 @@
-/* RsLive Go v61 - v60 SAME + Cloud Config Sync Fix - Admin config.json now works */
+/* RsLive Go v62 - v60 SAME + Cloud Sync + Empty Protection - Khali config purono data muchbe na */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -178,7 +178,7 @@ const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
-// --- v61 CLOUD SYNC - ONLY ADDITION, NOTHING ELSE CHANGED ---
+// --- v62 CLOUD SYNC + EMPTY PROTECTION ---
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(){
@@ -190,13 +190,12 @@ async function loadCloudConfig(){
       if(!r.ok) return false;
       const cloud=await r.json();
       if(!cloud||typeof cloud!=='object') return false;
-      // Admin er playlists/matches/notis alada kore rakhi, CFG er baki field merge kori
-      if(Array.isArray(cloud.playlists)) CFG.playlists=cloud.playlists;
-      if(Array.isArray(cloud.matches)) window._cloudMatches=cloud.matches;
-      if(Array.isArray(cloud.notis)) window._cloudNotis=cloud.notis;
-      // notifications.json format er sathe milanor jonno notis -> notifications
-      if(Array.isArray(cloud.notifications)) window._cloudNotis=cloud.notifications;
-      ['siteName','tagline','telegram','searchPh','proxyUrl','notice','showNotice','featName','featUrl','showFeat','quality'].forEach(k=>{ if(cloud[k]!==undefined) CFG[k]=cloud[k]; });
+      // v62 FIX: Khali array asle overwrite korbo na - purono data thakbe
+      if(Array.isArray(cloud.playlists) && cloud.playlists.length) CFG.playlists=cloud.playlists;
+      if(Array.isArray(cloud.matches) && cloud.matches.length) window._cloudMatches=cloud.matches;
+      if(Array.isArray(cloud.notis) && cloud.notis.length) window._cloudNotis=cloud.notis;
+      if(Array.isArray(cloud.notifications) && cloud.notifications.length) window._cloudNotis=cloud.notifications;
+      ['siteName','tagline','telegram','searchPh','proxyUrl','notice','showNotice','featName','featUrl','showFeat','quality'].forEach(k=>{ if(cloud[k]!==undefined && cloud[k]!=='' && cloud[k]!==false) CFG[k]=cloud[k]; else if(cloud[k]!==undefined && (k==='showNotice'||k==='showFeat')) CFG[k]=cloud[k]; });
       try{ localStorage.setItem('rslive_config', JSON.stringify(CFG)); }catch(e){}
       _cloudLoaded=true; return true;
     }catch(e){ return false; }
@@ -252,18 +251,15 @@ async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
     matchesLoading=true;renderMatches();
-    // v61: Age Admin er config.json er matches dekho
     await loadCloudConfig(); applyCloudUI();
     if(window._cloudMatches && window._cloudMatches.length){
       allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
       matchesLoading=false; renderMatches(); matchesLoadingPromise=null; return;
     }
-    // Na thakle ager system - /data/matches/
     try{const ir=await fetchWithTimeout(MATCH_INDEX_URL+'?t='+Date.now(),9000);const id=await ir.json();if(!Array.isArray(id.files))throw new Error('No files');const files=id.files.filter(f=>typeof f==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(f));const res=await Promise.all(files.map(async file=>{try{const r=await fetchWithTimeout('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),9000);const d=await r.json();return unwrapMatchFile(d).map(normalizeMatch).filter(Boolean)}catch(e){return[]}}));allMatches=res.flat();matchesLoading=false;renderMatches()}catch(e){matchesLoading=false;renderMatches()}matchesLoadingPromise=null
   })();return matchesLoadingPromise}
 function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
 async function getPlaylistsFromSW(){
-  // v61: Age Admin er config.json er playlists dekho
   await loadCloudConfig();
   if(CFG.playlists && CFG.playlists.length) return CFG.playlists;
   try{if('serviceWorker' in navigator)await navigator.serviceWorker.ready;const r=await fetch('/api/playlists',{cache:'no-store'});if(!r.ok)throw new Error('Playlist API');const d=await r.json();if(Array.isArray(d)&&d.length)return d}catch(e){}return Array.isArray(CFG.playlists)?CFG.playlists:[]}
@@ -286,7 +282,6 @@ function openAbout(){document.getElementById('aboutOverlay').classList.add('open
 function closeAbout(){document.getElementById('aboutOverlay').classList.remove('open')}
 function renderMyPlList(){const wrap=document.getElementById('myPlList');if(!wrap)return;wrap.replaceChildren();const custom=getCustomPl();if(!custom.length)wrap.innerHTML='<span style="font-size:11px;color:#9a9ab5">No playlist added yet</span>';else custom.forEach(p=>{const row=document.createElement('div');row.className='pl-item';row.style.cursor='pointer';const b=document.createElement('b');b.textContent=p.name;const viewBtn=document.createElement('button');viewBtn.className='view';viewBtn.textContent='View';const editBtn=document.createElement('button');editBtn.className='edit';editBtn.textContent='Edit';const del=document.createElement('button');del.className='del';del.textContent='Delete';const openPl=()=>{selectedPlaylistName=p.name;currentGroupFilter='__playlist__';categoryHomeMode=false;closeSettings();renderGrid(true);showToast(p.name+' - '+all.filter(c=>c.source===p.name).length+' channels')};row.addEventListener('click',(e)=>{if([del,editBtn,viewBtn].includes(e.target))return;openPl()});viewBtn.addEventListener('click',(e)=>{e.stopPropagation();openPl()});editBtn.addEventListener('click',(e)=>{e.stopPropagation();const newName=prompt('Edit Playlist Name:',p.name);if(newName===null)return;const newUrl=prompt('Edit Playlist URL:',p.url);if(newUrl===null)return;if(!newName.trim()||!newUrl.trim().startsWith('http')){showToast('Invalid name or URL');return}let c=getCustomPl().map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);saveCustomPl(c);CFG.playlists=CFG.playlists.map(x=>x.url===p.url&&x.name===p.name?{name:newName.trim(),url:newUrl.trim(),useProxy:false}:x);all.forEach(ch=>{if(ch.source===p.name)ch.source=newName.trim()});_catCache=null;renderMyPlList();renderGrid();showToast('Playlist updated')});del.addEventListener('click',()=>{if(!confirm('Delete "'+p.name+'"?'))return;let c=getCustomPl().filter(x=>!(x.url===p.url&&x.name===p.name));saveCustomPl(c);CFG.playlists=CFG.playlists.filter(x=>!(x.url===p.url&&x.name===p.name));all=all.filter(ch=>ch.source!==p.name);_catCache=null;renderMyPlList();renderGrid();showToast('Playlist deleted')});row.append(b,viewBtn,editBtn,del);wrap.appendChild(row)})}
 async function getNotifs(){
-  // v61: Age Admin er config.json er notis dekho
   await loadCloudConfig();
   if(window._cloudNotis && window._cloudNotis.length) return window._cloudNotis.map(n=>({id:n.id||Date.now(), title:n.title||'Notification', message:n.message||n.text||'', time:n.time||'', link:n.link||''}));
   try{const r=await fetch('/data/notifications.json?t='+Date.now(),{cache:'no-store'});const d=await r.json();return d.notifications||[]}catch(e){return[]}}
@@ -307,7 +302,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v61'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v62'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
@@ -333,7 +328,6 @@ const _oldOpenSettings=openSettings;openSettings=function(){_oldOpenSettings();p
 const _oldOpenAbout=openAbout;openAbout=function(){_oldOpenAbout();pushBackState('about');};
 const _oldOpenNotif=openNotif;openNotif=async function(){await _oldOpenNotif();pushBackState('notif');};
 applyView();applyModes();
-// v61: Age Cloud Config load kore tarpor shuru
 loadCloudConfig().then(()=>{ applyCloudUI(); loadAll(); updateNotifBadge(); });
 setInterval(loadMatches,60000);setInterval(renderMatches,1000);setInterval(updateNotifBadge,60000);
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(e=>{})}
