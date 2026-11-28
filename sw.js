@@ -1,5 +1,10 @@
-/* RsLive Go - sw.js v65 - MATCHES app.js v65 */
-const CACHE_NAME = 'rslive-go-v65';
+
+/* RsLive Go - Service Worker v66
+   Fixed API Order + Fresh Config + Network First
+*/
+
+const CACHE_NAME = 'rslive-go-v66';
+
 const CORE = [
   '/',
   '/index.html',
@@ -8,90 +13,145 @@ const CORE = [
   '/manifest.json'
 ];
 
-// Install - Core file cache করো
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// INSTALL
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(CORE).catch(()=>{}))
+      .then(cache => cache.addAll(CORE).catch(err => {
+        console.warn('Core cache error:', err);
+      }))
       .then(() => self.skipWaiting())
   );
 });
 
-// Activate - পুরানো Cache মুছে ফেলো, নাহলে পুরানো app.js চলবে
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((k) => {
-          if (k !== CACHE_NAME && k.startsWith('rslive')) {
-            return caches.delete(k);
+// ACTIVATE
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.map(key => {
+          if (key.startsWith('rslive') && key !== CACHE_NAME) {
+            return caches.delete(key);
           }
         })
-      );
-    }).then(() => self.clients.claim())
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch - আসল লজিক
-self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
+// FETCH
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
 
-  // 1. শুধু GET request handle করবো
-  if (e.request.method !== 'GET') return;
+  if (request.method !== 'GET') return;
 
-  // 2. config.json / playlists / matches - কখনোই Cache থেকে দিবো না, সবসময় Fresh
-  // এটাই Home / Categories না চলার আসল কারণ ছিলো
+  const url = new URL(request.url);
+  const path = url.pathname;
+
+  // 1. Playlist API - MUST CHECK BEFORE GENERAL CONFIG RULE
+  if (path === '/api/playlists') {
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(
+          'https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json?t=' + Date.now(),
+          { cache: 'no-store' }
+        );
+
+        if (!response.ok) throw new Error('Config HTTP ' + response.status);
+
+        const config = await response.json();
+        const playlists = Array.isArray(config.playlists)
+          ? config.playlists
+          : [];
+
+        return new Response(JSON.stringify(playlists), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store'
+          }
+        });
+      } catch (error) {
+        console.error('Playlist API error:', error);
+
+        return new Response(JSON.stringify([]), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store'
+          }
+        });
+      }
+    })());
+
+    return;
+  }
+
+  // 2. Always fresh: config, notifications, matches and GitHub raw
   if (
-    url.pathname.includes('/config.json') ||
-    url.pathname.includes('/notifications.json') ||
-    url.pathname.includes('/matches') ||
-    url.hostname === 'raw.githubusercontent.com' ||
-    url.pathname.includes('/api/playlists')
+    path.includes('/config.json') ||
+    path.includes('/notifications.json') ||
+    path.includes('/matches') ||
+    url.hostname === 'raw.githubusercontent.com'
   ) {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-store' })
-        .catch(() => caches.match(e.request))
+    event.respondWith(
+      fetch(request, { cache: 'no-store' })
+        .catch(() => caches.match(request))
     );
     return;
   }
 
-  // 3. /api/playlists - GitHub config.json থেকে Playlist বানাও
-  // app.js এ getPlaylistsFromSW() এইটা খোঁজে
-  if (url.pathname === '/api/playlists') {
-    e.respondWith(
-      (async () => {
-        try {
-          const r = await fetch('https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json?t=' + Date.now(), { cache: 'no-store' });
-          const cfg = await r.json();
-          const list = Array.isArray(cfg.playlists) ? cfg.playlists : [];
-          return new Response(JSON.stringify(list), {
-            headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
-          });
-        } catch (err) {
-          return new Response(JSON.stringify([]), {
-            headers: { 'Content-Type': 'application/json' }
-          });
+  // 3. M3U / M3U8 / video - direct network
+  if (
+    path.endsWith('.m3u') ||
+    path.endsWith('.m3u8') ||
+    path.endsWith('.ts') ||
+    path.includes('.m3u')
+  ) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // 4. Main app files - Network First
+  if (
+    path.endsWith('/app.js') ||
+    path.endsWith('/index.html') ||
+    path === '/' ||
+    path.endsWith('/player.html') ||
+    path.endsWith('/manifest.json')
+  ) {
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(request, { cache: 'no-store' });
+
+        if (response && response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(request, response.clone());
         }
-      })()
-    );
+
+        return response;
+      } catch (error) {
+        const cached = await caches.match(request);
+        if (cached) return cached;
+
+        return new Response('Offline - Please connect to the internet.', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain' }
+        });
+      }
+    })());
+
     return;
   }
 
-  // 4. .m3u / .m3u8 / ভিডিও - কখনোই SW দিয়ে আটকাবো না, সরাসরি Network
-  if (
-    url.pathname.endsWith('.m3u') ||
-    url.pathname.endsWith('.m3u8') ||
-    url.pathname.endsWith('.ts') ||
-    url.pathname.includes('.m3u')
-  ) {
-    e.respondWith(fetch(e.request));
-    return;
-  }
-
-  // 5. app.js / index.html / player.html - Network First, না পেলে Cache
-  // যাতে নতুন Update সাথে সাথে আসে
-  if (
-    url.pathname.endsWith('/app.js') ||
-    url.pathname.endsWith('/index.html') ||
-    url.pathname === '/' ||
-    url.pathname.endsWith('/
+  // 5. Other requests - Network First, fallback to cache
+  event.respondWith((async () => {
+    try {
+      return await fetch(request);
+    } catch (error) {
+      const cached = await caches.match(request);
+      if (cached) return cached;
+      throw error;
+    }
+  })());
+});
