@@ -11,8 +11,6 @@
 body{background:var(--bg);color:var(--text);font-family:'Poppins','Hind Siliguri',sans-serif;min-height:100vh}
 button,input,textarea,select{font-family:inherit}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#444;border-radius:99px}
-
-/* ===== LOGIN ===== */
 #login{position:fixed;inset:0;background:#0f0f13;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
 #login .box{background:#2E2E36;border:1px solid #444;border-radius:20px;padding:28px 22px;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 #login .logo{font-size:32px;font-weight:900;line-height:1} #login .logo i{font-style:normal;color:var(--yellow)}
@@ -22,8 +20,6 @@ button,input,textarea,select{font-family:inherit}
 #login input:focus{border-color:var(--yellow)}
 #login .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--yellow);color:#000;font-weight:800;font-size:15px;cursor:pointer}
 #login .hint{margin-top:14px;font-size:11px;color:var(--dim)} #login .hint b{color:var(--yellow)}
-
-/* ===== LAYOUT ===== */
 .admin{display:flex;min-height:100vh}
 .sidebar{width:260px;flex-shrink:0;background:#16161C;border-right:1px solid #2A2A32;padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto}
 .sidebar .logo{font-size:24px;font-weight:900;line-height:1;padding:4px 8px 12px} .sidebar .logo i{font-style:normal;color:var(--yellow)}
@@ -40,7 +36,6 @@ button,input,textarea,select{font-family:inherit}
 .sidebar .user{display:flex;align-items:center;gap:10px;padding:8px}
 .sidebar .user .av{width:38px;height:38px;border-radius:50%;background:var(--yellow);color:#000;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px}
 .sidebar .user b{font-size:13px;display:block} .sidebar .user span{font-size:11px;color:var(--green)}
-
 .main{flex:1;min-width:0;padding:18px 20px 110px;max-width:1200px;margin:0 auto;width:100%}
 .topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .topbar h1{font-size:22px;font-weight:900} .topbar h1 span{color:var(--yellow)}
@@ -50,15 +45,11 @@ button,input,textarea,select{font-family:inherit}
 .btn:active{transform:scale(.97)} .btn2{background:#34343C;color:#fff;border:1px solid #444} .btn-red{background:#3a1a1a;color:#ff6b6b} .btn-green{background:#1a3a1a;color:var(--green)} .btn-block{width:100%;padding:13px}
 .sync{position:fixed;top:0;left:0;right:0;background:var(--yellow);color:#000;text-align:center;font-size:12px;font-weight:800;padding:8px;z-index:9999;display:none}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1e1e2e;border:1px solid #444;padding:11px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;display:none;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-
-/* Stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center}
 .stat .ico{width:44px;height:44px;min-width:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .stat b{font-size:22px;display:block;line-height:1} .stat span{font-size:11px;color:var(--dim)}
 .stat small{font-size:10px;color:var(--green);font-weight:700}
-
-/* Cards */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
 .card h2{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -103,7 +94,6 @@ textarea{min-height:70px;resize:vertical}
 </head>
 <body>
 <div class="sync" id="syncBar">☁️ GitHub এ আপলোড হচ্ছে...</div>
-
 <div id="login"><div class="box">
 <div class="logo">RsLive <i>Go</i></div><div class="tag">ADMIN PANEL • GITHUB CLOUD</div>
 <h2>Welcome Back, Admin 👋</h2><p>Login করে পুরো ওয়েবসাইট কন্ট্রোল করো</p>
@@ -111,11 +101,9 @@ textarea{min-height:70px;resize:vertical}
 <button class="btn" onclick="doLogin()">Login →</button>
 <div class="hint">Default Password: <b>rslive123</b><br>পরে Settings থেকে বদলাতে পারবা</div>
 </div></div>
-
 <div class="admin">
-<!-- SIDEBAR DESKTOP -->
 <aside class="sidebar">
-<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v61</small></div>
+<div class="logo">RsLive <i>Go</i><small>ADMIN PANEL • v62 FIXED</small></div>
 <div class="menu-label">MAIN MENU</div>
 <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
 <button class="nav-btn" data-tab="general" onclick="showTab('general',this)"><span class="ico">🌐</span>Website</button>
@@ -124,6 +112,7 @@ textarea{min-height:70px;resize:vertical}
 <button class="nav-btn" data-tab="match" onclick="showTab('match',this)"><span class="ico">🏏</span>Matches <span class="badge" id="badgeMatch">0</span></button>
 <button class="nav-btn" data-tab="notice" onclick="showTab('notice',this)"><span class="ico">📢</span>Notice Bar</button>
 <button class="nav-btn" data-tab="noti" onclick="showTab('noti',this)"><span class="ico">🔔</span>Notifications <span class="badge" id="badgeNoti">0</span></button>
+<button class="nav-btn" data-tab="reports" onclick="showTab('reports',this)"><span class="ico">🚨</span>Reports <span class="badge" id="badgeReport">0</span></button>
 <div class="menu-label">SYSTEM</div>
 <button class="nav-btn" data-tab="featured" onclick="showTab('featured',this)"><span class="ico">⭐</span>Featured Live</button>
 <button class="nav-btn" data-tab="settings" onclick="showTab('settings',this)"><span class="ico">⚙️</span>Settings & Security</button>
@@ -133,11 +122,8 @@ textarea{min-height:70px;resize:vertical}
 <button class="nav-btn" style="color:#ff6b6b" onclick="logout()"><span class="ico">🚪</span>Logout</button>
 </div>
 </aside>
-
 <main class="main">
 <div class="topbar"><div><h1>RsLive <span>Go</span> Admin</h1><p id="topSub">সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud</p></div><div class="actions"><button class="btn btn2" onclick="loadFromGitHub()">↻ Refresh</button><button class="btn" onclick="pushToGitHub('Manual sync')">☁️ Publish All</button></div></div>
-
-<!-- DASHBOARD -->
 <div class="tab active" id="tab-dashboard">
 <div class="stats">
 <div class="stat"><div class="ico" style="background:#2a2410">📺</div><div><b id="stPl">0</b><span>Playlists</span><br><small id="stPlSub">Active</small></div></div>
@@ -150,18 +136,17 @@ textarea{min-height:70px;resize:vertical}
 <button class="btn btn-block" style="margin-bottom:8px" onclick="showTab('match',document.querySelector('[data-tab=match]'))">🏏 + New Match Add করো</button>
 <button class="btn btn-block btn2" style="margin-bottom:8px" onclick="showTab('noti',document.querySelector('[data-tab=noti]'))">🔔 Notification পাঠাও</button>
 <button class="btn btn-block btn2" onclick="showTab('notice',document.querySelector('[data-tab=notice]'))">📢 Notice Bar ON করো</button>
+<button class="btn btn-block btn2" style="margin-top:8px" onclick="showTab('reports',document.querySelector('[data-tab=reports]'))">🚨 Reports দেখো</button>
 </div>
-<div class="card"><h2>🔑 GitHub Setup <span class="tag">১ বারই</span></h2><p class="desc">Token শুধু তোমার ব্রাউজারে থাকবে</p>
+<div class="card"><h2>🔑 GitHub Setup <span class="tag">১ বারই</span></h2><p class="desc">Token শুধু তোমার ব্রাউজারে থাকবে • Auto Connected to rsbd80/RsLive-Go</p>
 <label>GitHub Token (ghp_...)</label><input id="ghToken" type="password" placeholder="ghp_xxxxxxxxxxxx">
-<div class="row"><div><label>Owner</label><input id="ghOwner" placeholder="rslivego"></div><div><label>Repo</label><input id="ghRepo" placeholder="rslive-go"></div></div>
+<div class="row"><div><label>Owner</label><input id="ghOwner" placeholder="rsbd80"></div><div><label>Repo</label><input id="ghRepo" placeholder="RsLive-Go"></div></div>
 <div class="row"><div><label>Branch</label><input id="ghBranch" value="main"></div><div><label>File Path</label><input id="ghPath" value="data/config.json"></div></div>
 <button class="btn btn-block" onclick="saveKeys()">🔑 Save & Load from GitHub</button>
 </div>
 </div>
 <div class="card"><h2>📋 Recent Activity</h2><p class="desc">শেষ ৫টা Match / Notification</p><div id="recentList"></div></div>
 </div>
-
-<!-- GENERAL -->
 <div class="tab" id="tab-general">
 <div class="grid2">
 <div class="card"><h2>🌐 Website Settings</h2><p class="desc">সাইটের নাম, লিংক, সার্চ - সব সবার ফোনে যাবে</p>
@@ -182,8 +167,6 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
-
-<!-- APPEARANCE -->
 <div class="tab" id="tab-appearance">
 <div class="grid2">
 <div class="card"><h2>🎨 Theme Color</h2><p class="desc">ওয়েবসাইটের মেইন কালার বদলাও</p>
@@ -205,8 +188,6 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
-
-<!-- PLAYLIST -->
 <div class="tab" id="tab-playlist">
 <div class="grid2">
 <div class="card"><h2>📺 Add New Playlist</h2><p class="desc">M3U লিংক দিলেই সবার ফোনে চ্যানেল চলে যাবে</p>
@@ -218,8 +199,6 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>📋 All Playlists <span class="tag" id="plCount">0</span></h2><p class="desc">Delete করলে সবার ফোন থেকে চ্যানেল চলে যাবে</p><div id="plList"></div></div>
 </div>
 </div>
-
-<!-- MATCH -->
 <div class="tab" id="tab-match">
 <div class="grid2">
 <div class="card"><h2>🏏 Add Match</h2><p class="desc">সবার Events ট্যাবে দেখাবে</p>
@@ -233,8 +212,6 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>📋 All Matches <span class="tag" id="matchCount">0</span></h2><div id="matchList"></div></div>
 </div>
 </div>
-
-<!-- NOTICE -->
 <div class="tab" id="tab-notice">
 <div class="grid2">
 <div class="card"><h2>📢 Notice Bar</h2><p class="desc">সবার ফোনের উপরে সাদা বার দেখাবে</p>
@@ -248,8 +225,6 @@ textarea{min-height:70px;resize:vertical}
 </div>
 </div>
 </div>
-
-<!-- NOTI -->
 <div class="tab" id="tab-noti">
 <div class="grid2">
 <div class="card"><h2>🔔 Send Notification to All</h2><p class="desc">সবার ফোনে বেল আইকনে যাবে</p>
@@ -261,8 +236,15 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>📋 All Notifications</h2><div id="notiList"></div></div>
 </div>
 </div>
-
-<!-- FEATURED -->
+<div class="tab" id="tab-reports">
+<div class="grid2">
+<div class="card"><h2>🚨 User Reports</h2><p class="desc">ইউজাররা যেই চ্যানেল / ম্যাচ নষ্ট রিপোর্ট করছে - এখানে আসবে</p>
+<button class="btn btn-block btn2" onclick="loadFromGitHub()">↻ Refresh Reports</button>
+<button class="btn btn-block btn-red" style="margin-top:8px" onclick="clearReports()">🗑 All Reports Clear করো</button>
+</div>
+<div class="card"><h2>📋 All Reports <span class="tag" id="reportCount">0</span></h2><div id="reportList"></div></div>
+</div>
+</div>
 <div class="tab" id="tab-featured">
 <div class="grid2">
 <div class="card"><h2>⭐ Featured Live</h2><p class="desc">Home এর উপরে বড় কার্ড দেখাবে</p>
@@ -274,8 +256,6 @@ textarea{min-height:70px;resize:vertical}
 <div class="card"><h2>👀 Preview</h2><div class="preview"><div class="p-body"><b style="color:#fff" id="featPreview">FEATURED LIVE</b><br><span id="featPreview2">No featured set</span><br><br><span style="color:#FFC107">Watch Now →</span></div></div></div>
 </div>
 </div>
-
-<!-- SETTINGS -->
 <div class="tab" id="tab-settings">
 <div class="grid2">
 <div class="card"><h2>🔐 Security</h2><p class="desc">Admin Password + GitHub Token</p>
@@ -294,23 +274,20 @@ textarea{min-height:70px;resize:vertical}
 </div>
 <div class="card"><h2>🔗 Quick Links</h2><div class="row"><button class="btn btn2" onclick="window.open('index.html','_blank')">🏠 Website</button><button class="btn btn2" onclick="window.open('player.html','_blank')">▶ Player</button><button class="btn btn2" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button></div></div>
 </div>
-
 </main>
 </div>
-
-<!-- MOBILE BOTTOM NAV -->
 <nav class="bottom-nav">
 <button class="active" onclick="showTab('dashboard',this)">📊<span>Home</span></button>
 <button onclick="showTab('playlist',this)">📺<span>Playlist</span></button>
 <button onclick="showTab('match',this)">🏏<span>Match</span></button>
 <button onclick="showTab('noti',this)">🔔<span>Noti</span></button>
+<button onclick="showTab('reports',this)">🚨<span>Reports</span></button>
 <button onclick="showTab('settings',this)">⚙️<span>Settings</span></button>
 </nav>
-
 <div class="toast" id="toast"></div>
 <script>
-let GH={token:localStorage.getItem('rslive_gh_token')||'',owner:localStorage.getItem('rslive_gh_owner')||'',repo:localStorage.getItem('rslive_gh_repo')||'',branch:localStorage.getItem('rslive_gh_branch')||'main',path:localStorage.getItem('rslive_gh_path')||'data/config.json'};
-let CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};
+let GH={token:localStorage.getItem('rslive_gh_token')||'',owner:localStorage.getItem('rslive_gh_owner')||'rsbd80',repo:localStorage.getItem('rslive_gh_repo')||'RsLive-Go',branch:localStorage.getItem('rslive_gh_branch')||'main',path:localStorage.getItem('rslive_gh_path')||'data/config.json'};
+let CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],reports:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};
 let FILE_SHA='';
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 function showTab(id,btn){
@@ -320,7 +297,7 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   if(btn) btn.classList.add('active');
   document.querySelector(`.nav-btn[data-tab="${id}"]`)?.classList.add('active');
-  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Delete',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',featured:'Featured Live Card',settings:'Security / Backup / Reset'}[id]||'';
+  document.getElementById('topSub').textContent={dashboard:'সবকিছু এক জায়গা থেকে কন্ট্রোল করো • GitHub Cloud',general:'Website Name / Telegram / Modes',appearance:'Theme / Logo / About',playlist:'Playlist Add / Delete',match:'Match Add / Delete',notice:'Notice Bar ON/OFF',noti:'Notification পাঠাও',reports:'User Reports - Broken Link',featured:'Featured Live Card',settings:'Security / Backup / Reset'}[id]||'';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function doLogin(){if(document.getElementById('passInput').value===(localStorage.getItem('rslive_admin_pass')||'rslive123')){sessionStorage.setItem('rslive_admin','1');document.getElementById('login').style.display='none';if(GH.token) loadFromGitHub();else fillUI();}else toast('❌ Wrong Password')}
@@ -331,8 +308,8 @@ function toggleTokenView(){const el=document.getElementById('ghToken');el.type=e
 function toB64(s){return btoa(unescape(encodeURIComponent(s)))} function fromB64(b){return decodeURIComponent(escape(atob(b)))}
 function fillKeysUI(){document.getElementById('ghToken').value=GH.token;document.getElementById('ghOwner').value=GH.owner;document.getElementById('ghRepo').value=GH.repo;document.getElementById('ghBranch').value=GH.branch;document.getElementById('ghPath').value=GH.path;}
 fillKeysUI();
-function saveKeys(){GH.token=document.getElementById('ghToken').value.trim();GH.owner=document.getElementById('ghOwner').value.trim();GH.repo=document.getElementById('ghRepo').value.trim();GH.branch=document.getElementById('ghBranch').value.trim()||'main';GH.path=document.getElementById('ghPath').value.trim()||'data/config.json';if(!GH.token||!GH.owner||!GH.repo) return toast('Token + Owner + Repo দাও');localStorage.setItem('rslive_gh_token',GH.token);localStorage.setItem('rslive_gh_owner',GH.owner);localStorage.setItem('rslive_gh_repo',GH.repo);localStorage.setItem('rslive_gh_branch',GH.branch);localStorage.setItem('rslive_gh_path',GH.path);toast('Keys Saved ✅');loadFromGitHub();}
-async function loadFromGitHub(){if(!GH.token) return;document.getElementById('syncBar').style.display='block';document.getElementById('syncBar').textContent='☁️ GitHub থেকে লোড হচ্ছে...';try{const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}?ref=${GH.branch}`;const r=await fetch(url,{headers:{'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github.v3+json'}});if(!r.ok) throw new Error('GitHub Load Failed '+r.status);const j=await r.json();FILE_SHA=j.sha;CLOUD={...CLOUD,...JSON.parse(fromB64(j.content.replace(/\n/g,'')))};fillUI();toast('GitHub Loaded ✅');}catch(e){toast('❌ '+e.message)}document.getElementById('syncBar').style.display='none';}
+function saveKeys(){GH.token=document.getElementById('ghToken').value.trim();GH.owner=document.getElementById('ghOwner').value.trim()||'rsbd80';GH.repo=document.getElementById('ghRepo').value.trim()||'RsLive-Go';GH.branch=document.getElementById('ghBranch').value.trim()||'main';GH.path=document.getElementById('ghPath').value.trim()||'data/config.json';if(!GH.token||!GH.owner||!GH.repo) return toast('Token + Owner + Repo দাও');localStorage.setItem('rslive_gh_token',GH.token);localStorage.setItem('rslive_gh_owner',GH.owner);localStorage.setItem('rslive_gh_repo',GH.repo);localStorage.setItem('rslive_gh_branch',GH.branch);localStorage.setItem('rslive_gh_path',GH.path);toast('Keys Saved ✅');loadFromGitHub();}
+async function loadFromGitHub(){if(!GH.token) return;document.getElementById('syncBar').style.display='block';document.getElementById('syncBar').textContent='☁️ GitHub থেকে লোড হচ্ছে...';try{const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}?ref=${GH.branch}`;const r=await fetch(url,{headers:{'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github.v3+json'}});if(!r.ok) throw new Error('GitHub Load Failed '+r.status);const j=await r.json();FILE_SHA=j.sha;CLOUD={...CLOUD,...JSON.parse(fromB64(j.content.replace(/\n/g,'')))};if(!CLOUD.reports) CLOUD.reports=[];fillUI();toast('GitHub Loaded ✅');}catch(e){toast('❌ '+e.message)}document.getElementById('syncBar').style.display='none';}
 async function pushToGitHub(msg){if(!GH.token) return toast('আগে GitHub Keys দাও');document.getElementById('syncBar').style.display='block';document.getElementById('syncBar').textContent='☁️ GitHub এ আপলোড হচ্ছে - সবার ফোনে যাচ্ছে...';try{if(!FILE_SHA) await loadFromGitHub();const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}`;const body={message:msg||'Update RsLive Go Admin',content:toB64(JSON.stringify(CLOUD,null,2)),branch:GH.branch,sha:FILE_SHA};const r=await fetch(url,{method:'PUT',headers:{'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!r.ok) throw new Error(j.message||'Push Failed');FILE_SHA=j.content.sha;toast('✅ Published! সবার ফোনে আপডেট হবে');}catch(e){toast('❌ '+e.message)}document.getElementById('syncBar').style.display='none';}
 function fillUI(){
   document.getElementById('siteName').value=CLOUD.siteName||'';document.getElementById('tagline').value=CLOUD.tagline||'';document.getElementById('telegram').value=CLOUD.telegram||'';document.getElementById('searchPh').value=CLOUD.searchPh||'';document.getElementById('proxyUrl').value=CLOUD.proxyUrl||'';
@@ -343,9 +320,9 @@ function fillUI(){
   document.getElementById('noticePreview').textContent=CLOUD.showNotice&&CLOUD.notice?CLOUD.notice:'Notice OFF - কিছু দেখাবে না';
   document.getElementById('featPreview2').textContent=CLOUD.featName||'No featured set';
   document.getElementById('stPl').textContent=(CLOUD.playlists||[]).length;document.getElementById('stMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('stNoti').textContent=(CLOUD.notis||[]).length;document.getElementById('stNotice').textContent=CLOUD.showNotice?'ON':'OFF';document.getElementById('stNoticeSub').textContent=CLOUD.showNotice?'Visible to all':'Hidden';
-  document.getElementById('badgePl').textContent=(CLOUD.playlists||[]).length;document.getElementById('badgeMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('badgeNoti').textContent=(CLOUD.notis||[]).length;
+  document.getElementById('badgePl').textContent=(CLOUD.playlists||[]).length;document.getElementById('badgeMatch').textContent=(CLOUD.matches||[]).length;document.getElementById('badgeNoti').textContent=(CLOUD.notis||[]).length;document.getElementById('badgeReport').textContent=(CLOUD.reports||[]).length;document.getElementById('reportCount').textContent=(CLOUD.reports||[]).length;
   document.getElementById('plCount').textContent=(CLOUD.playlists||[]).length;document.getElementById('matchCount').textContent=(CLOUD.matches||[]).length;
-  renderPl();renderNoti();renderMatch();renderRecent();
+  renderPl();renderNoti();renderMatch();renderRecent();renderReports();
   document.querySelectorAll('.color-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()!=='Custom'&&CLOUD.themeColor===el.getAttribute('onclick')?.match(/'(#[^']+)'/)?.[1]));
 }
 function renderRecent(){const w=document.getElementById('recentList');w.innerHTML='';const items=[...(CLOUD.matches||[]).slice(-3).map(m=>({t:'🏏 Match',s:m.teamA+' vs '+m.teamB})),...(CLOUD.notis||[]).slice(-2).map(n=>({t:'🔔 Noti',s:n.title}))].reverse();if(!items.length) w.innerHTML='<div class="empty">No activity yet - Match বা Notification পাঠাও</div>';else items.forEach(it=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${it.t}</b><small>${it.s}</small>`;w.appendChild(d)});}
@@ -365,10 +342,12 @@ function renderNoti(){const w=document.getElementById('notiList');w.innerHTML=''
 async function addMatch(){const m={name:document.getElementById('mTeamA').value.trim()+' vs '+document.getElementById('mTeamB').value.trim(),teamA:document.getElementById('mTeamA').value.trim(),teamALogo:document.getElementById('mLogoA').value.trim(),teamB:document.getElementById('mTeamB').value.trim(),teamBLogo:document.getElementById('mLogoB').value.trim(),matchType:document.getElementById('mType').value.trim()||'Cricket',startTime:document.getElementById('mStart').value,url:document.getElementById('mUrl').value.trim(),streams:[{stream_url:document.getElementById('mUrl').value.trim()}]};if(!m.teamA||!m.teamB) return toast('Team A/B দাও');CLOUD.matches=CLOUD.matches||[];CLOUD.matches.push(m);await pushToGitHub('Add match: '+m.name);fillUI();toast('Match Published ✅');}
 async function delMatch(i){if(!confirm('Delete this match?'))return;CLOUD.matches.splice(i,1);await pushToGitHub('Delete match');fillUI();}
 function renderMatch(){const w=document.getElementById('matchList');w.innerHTML='';(CLOUD.matches||[]).forEach((m,i)=>{const d=document.createElement('div');d.className='item';if(m.teamALogo) d.innerHTML+=`<img class="thumb" src="${m.teamALogo}">`;d.innerHTML+=`<b>${m.teamA} vs ${m.teamB}</b><small>${m.matchType||''}</small><button class="del" onclick="delMatch(${i})">Delete</button>`;w.appendChild(d);});if(!CLOUD.matches?.length) w.innerHTML='<div class="empty">No match yet</div>';}
+function renderReports(){const w=document.getElementById('reportList');if(!w) return;w.innerHTML='';(CLOUD.reports||[]).slice().reverse().forEach((r,ri)=>{const idx=CLOUD.reports.length-1-ri;const d=document.createElement('div');d.className='item';d.innerHTML=`<b>${r.channel||r.title||'Report'}</b><small>${(r.reason||r.message||'')+' • '+(r.time||'')}</small><button class="del" onclick="delReport(${idx})">Done</button>`;w.appendChild(d);});if(!CLOUD.reports?.length) w.innerHTML='<div class="empty">কোনো Report নাই ✅ সব ঠিক আছে</div>';}
+async function delReport(i){CLOUD.reports.splice(i,1);await pushToGitHub('Resolve report');fillUI();}
+async function clearReports(){if(!confirm('সব Report মুছে ফেলবো?')) return;CLOUD.reports=[];await pushToGitHub('Clear reports');fillUI();}
 function exportData(){const blob=new Blob([JSON.stringify(CLOUD,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rslive-backup-'+Date.now()+'.json';a.click();toast('Backup Downloaded ✅');}
 function importData(e){const f=e.target.files[0];if(!f) return;const r=new FileReader();r.onload=async()=>{try{CLOUD={...CLOUD,...JSON.parse(r.result)};await pushToGitHub('Import backup');fillUI();toast('Backup Restored ✅');}catch(err){toast('Invalid Backup')}};r.readAsText(f);}
-async function resetAll(){if(!confirm('সব ডাটা ডিলিট হবে! Sure?')) return;CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};await pushToGitHub('Reset all');fillUI();toast('Reset Done');}
-// Live preview for notice
+async function resetAll(){if(!confirm('সব ডাটা ডিলিট হবে! Sure?')) return;CLOUD={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],notis:[],matches:[],reports:[],eventsMode:true,tvMode:false,autoQuality:true,telePopup:true,themeColor:'#FFC107',logoUrl:'',aboutText:'',footerText:''};await pushToGitHub('Reset all');fillUI();toast('Reset Done');}
 document.getElementById('noticeText')?.addEventListener('input',e=>{document.getElementById('noticePreview').textContent=e.target.value||'Notice OFF';});
 document.getElementById('siteName')?.addEventListener('input',e=>{document.getElementById('previewName').innerHTML=e.target.value.replace(' Go',' <i>Go</i>');});
 document.getElementById('tagline')?.addEventListener('input',e=>{document.getElementById('previewTag').textContent=e.target.value;});
