@@ -6,9 +6,9 @@
   "proxyUrl": "",
   "notice": "",
   "showNotice": false,
-  "featName": "T",
+  "featName": "",
   "featUrl": "https://rslivetv.pages.dev",
-  "showFeat": true,
+  "showFeat": false,
   "playlists": [
     {
       "name": "Tapmad",
