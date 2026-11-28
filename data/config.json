@@ -67,20 +67,20 @@
       ]
     },
     {
-      "name": "Bangladesh vs India",
-      "teamA": "Bangladesh",
-      "teamALogo": "https://flagcdn.com/bd.svg",
+      "name": "New Zealand vs India",
+      "teamA": "New Zealand",
+      "teamALogo": "https://flagcdn.com/nz.svg",
       "teamB": "India",
       "teamBLogo": "https://flagcdn.com/in.svg",
-      "matchType": "ODI",
-      "startTime": "2026-11-29T10:00:00.000Z",
-      "endTime": "2026-11-29T18:00:00.000Z",
-      "start": "2026-11-29T10:00:00.000Z",
-      "end": "2026-11-29T18:00:00.000Z",
-      "url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8",
+      "matchType": "2nd Test",
+      "startTime": "2026-11-27T22:00:00.000Z",
+      "endTime": "2026-11-28T08:00:00.000Z",
+      "start": "2026-11-27T22:00:00.000Z",
+      "end": "2026-11-28T08:00:00.000Z",
+      "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F15.m3u8",
       "streams": [
         {
-          "stream_url": "https://tvsen5.aynaott.com/kP9vX2mZ7qL5wN3t/index.m3u8"
+          "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F15.m3u8"
         }
       ]
     },
