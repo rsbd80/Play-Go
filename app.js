@@ -1,5 +1,4 @@
-<script>
-/* RsLive Go v63 - v62 SAME + config.json ONLY Matches - data/matches folder BAD - Khali config purono data muchbe na */
+/* RsLive Go v63 - app.js ONLY - NO <script> TAG - config.json ONLY Matches - data/matches folder BAD */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -179,7 +178,6 @@ const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
-// --- v63 CLOUD SYNC + EMPTY PROTECTION - config.json ONLY ---
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(){
@@ -246,7 +244,6 @@ function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_spor
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
-// --- v63 FIX: data/matches FOLDER BAD - SHUDHU config.json THEKE MATCH LOAD HOBE ---
 async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
@@ -254,8 +251,6 @@ async function loadMatches(force=false){
     await loadCloudConfig(); applyCloudUI();
     if(window._cloudMatches && window._cloudMatches.length){
       allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
-    } else {
-      console.log('Config matches khali, purono data rakha holo');
     }
     matchesLoading=false; renderMatches(); matchesLoadingPromise=null;
   })(); return matchesLoadingPromise;
@@ -338,4 +333,3 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share -> Add to Home Screen');return}if(!deferredPrompt){alert('Browser Menu -> Add to Home Screen');return}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null});
 document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1')});
 (function(){const TELEGRAM_LINK="https://t.me/RsLiveGo";const style=document.createElement("style");style.textContent='.telegram-popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}.popup-box{background:#34343C;width:100%;max-width:360px;border-radius:14px;padding:14px;position:relative}.popup-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:15px;cursor:pointer}.popup-content{display:flex;align-items:center;gap:11px}.telegram-icon{background:#229ED9;width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.telegram-icon svg{width:24px;height:24px;fill:#fff}.popup-text h3{font-size:16px;margin-bottom:3px;color:#fff;text-align:left}.popup-text p{font-size:13px;color:#ddd;line-height:1.4;text-align:left}.join-btn{background:#1a7dff;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:auto;flex-shrink:0}.dont-show{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:#bbb;cursor:pointer}';document.head.appendChild(style);function showTelegramPopup(){if(localStorage.getItem("hideTelegramPopup")==="true")return;if(document.getElementById("telegramPopup"))return;const popup=document.createElement("div");popup.id="telegramPopup";popup.className="telegram-popup";popup.innerHTML='<div class="popup-box"><button class="popup-close" id="popupClose">✕</button><div class="popup-content"><div class="telegram-icon"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><div class="popup-text"><h3>Welcome</h3><p>Join our Telegram for latest updates</p></div><button class="join-btn" id="joinBtn">Join</button></div><label class="dont-show"><input type="checkbox" id="dontShowAgain" /><span>Don\'t show again</span></label></div>';document.body.appendChild(popup);function saveDontShow(){if(document.getElementById("dontShowAgain").checked)localStorage.setItem("hideTelegramPopup","true")}document.getElementById("popupClose").addEventListener("click",()=>{saveDontShow();popup.remove()});document.getElementById("joinBtn").addEventListener("click",()=>{saveDontShow();window.open(TELEGRAM_LINK,"_blank");popup.remove()})}setTimeout(showTelegramPopup,3000)})();
-</script>
