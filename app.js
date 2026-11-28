@@ -1,4 +1,5 @@
-/* RsLive Go v62 - v60 SAME + Cloud Sync + Empty Protection - Khali config purono data muchbe na */
+<script>
+/* RsLive Go v63 - v62 SAME + config.json ONLY Matches - data/matches folder BAD - Khali config purono data muchbe na */
 (function(){try{if(window.top!==window.self){document.documentElement.innerHTML='';location.replace("about:blank");return;}}catch(e){location.replace("about:blank");return;}
 document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
 document.addEventListener('copy',e=>e.preventDefault(),true);
@@ -178,7 +179,7 @@ const ABOUT_LOGO_URL='https://i.postimg.cc/nzmk1p7T/file-00000000183482118a868b3
 const DEFAULT={siteName:'RsLive Go',tagline:'LIVE TV • BANGLADESH',telegram:'https://t.me/RsLiveGo',searchPh:'Search channels...',proxyUrl:'',notice:'',showNotice:false,featName:'',featUrl:'',showFeat:false,playlists:[],quality:'auto'};
 const DEFAULT_CAT_LOGO='https://cdn-icons-png.flaticon.com/512/1179/1179069.png';
 const PROXY_BASE_FALLBACK='https://api.allorigins.win/raw?url=';
-// --- v62 CLOUD SYNC + EMPTY PROTECTION ---
+// --- v63 CLOUD SYNC + EMPTY PROTECTION - config.json ONLY ---
 const CONFIG_URL='https://raw.githubusercontent.com/rsbd80/RsLive-Go/main/data/config.json';
 let _cloudLoaded=false, _cloudPromise=null;
 async function loadCloudConfig(){
@@ -190,7 +191,6 @@ async function loadCloudConfig(){
       if(!r.ok) return false;
       const cloud=await r.json();
       if(!cloud||typeof cloud!=='object') return false;
-      // v62 FIX: Khali array asle overwrite korbo na - purono data thakbe
       if(Array.isArray(cloud.playlists) && cloud.playlists.length) CFG.playlists=cloud.playlists;
       if(Array.isArray(cloud.matches) && cloud.matches.length) window._cloudMatches=cloud.matches;
       if(Array.isArray(cloud.notis) && cloud.notis.length) window._cloudNotis=cloud.notis;
@@ -218,7 +218,6 @@ try{document.getElementById('taglineEl').textContent=CFG.tagline;document.getEle
 let all=[],cat='All',currentTab='events',_catCache=null,visibleCount=200,currentFiltered=[],allMatches=[],categoryHomeMode=false,currentGroupFilter=null,selectedPlaylistName='All';
 let isPlaylistLoading=true;
 let currentView=localStorage.getItem('rslive_view')||'grid',tvMode=localStorage.getItem('rslive_tv_mode')==='1',eventsMode=localStorage.getItem('rslive_events_mode')!=='0';
-const MATCH_INDEX_URL='/data/matches/index.json';
 function getSearchQ(){return (document.getElementById('search')?.value||'').trim().toLowerCase()}
 let _toastT=null;function showToast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),1800)}
 function applyView(){document.body.classList.remove('view-grid','view-list','view-compact');document.body.classList.add('view-'+currentView);localStorage.setItem('rslive_view',currentView)}
@@ -247,17 +246,20 @@ function openMatch(m,idx){if(!m.url)return;try{localStorage.setItem('rslive_spor
 function openCh(u,n,s,g,serial){saveRecent({url:u,name:n,logo:all.find(x=>x.url===u)?.logo||'',source:s,group:g});const params=new URLSearchParams({url:u,name:n,src:s,group:g,serial:String(serial||1),fs:'1',quality:CFG.quality||'auto'});location.href='player.html?'+params.toString()}
 let matchesLoading=false,matchesLoadingPromise=null;
 async function fetchWithTimeout(url,ms=9000){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r}catch(e){clearTimeout(t);throw e}}
+// --- v63 FIX: data/matches FOLDER BAD - SHUDHU config.json THEKE MATCH LOAD HOBE ---
 async function loadMatches(force=false){
   if(matchesLoadingPromise&&!force)return matchesLoadingPromise;
   matchesLoadingPromise=(async()=>{
-    matchesLoading=true;renderMatches();
+    matchesLoading=true; renderMatches();
     await loadCloudConfig(); applyCloudUI();
     if(window._cloudMatches && window._cloudMatches.length){
       allMatches=window._cloudMatches.map(normalizeMatch).filter(Boolean);
-      matchesLoading=false; renderMatches(); matchesLoadingPromise=null; return;
+    } else {
+      console.log('Config matches khali, purono data rakha holo');
     }
-    try{const ir=await fetchWithTimeout(MATCH_INDEX_URL+'?t='+Date.now(),9000);const id=await ir.json();if(!Array.isArray(id.files))throw new Error('No files');const files=id.files.filter(f=>typeof f==='string'&&/^[a-zA-Z0-9_-]+\.json$/.test(f));const res=await Promise.all(files.map(async file=>{try{const r=await fetchWithTimeout('/data/matches/'+encodeURIComponent(file)+'?t='+Date.now(),9000);const d=await r.json();return unwrapMatchFile(d).map(normalizeMatch).filter(Boolean)}catch(e){return[]}}));allMatches=res.flat();matchesLoading=false;renderMatches()}catch(e){matchesLoading=false;renderMatches()}matchesLoadingPromise=null
-  })();return matchesLoadingPromise}
+    matchesLoading=false; renderMatches(); matchesLoadingPromise=null;
+  })(); return matchesLoadingPromise;
+}
 function renderMatches(){const sec=document.getElementById('matchesSection');const grid=document.getElementById('matchesGrid');const he=document.getElementById('homeEmpty');if(!sec||!grid)return;const q=getSearchQ();const vis=allMatches.map(normalizeMatch).filter(Boolean).filter(m=>getMatchState(m)!=='expired').filter(m=>!q||m.name.toLowerCase().includes(q));vis.sort((a,b)=>{const sa=getMatchState(a),sb=getMatchState(b);if(sa!==sb)return sa==='live'?-1:1;return((Date.parse(a.startTime||'')||0)-(Date.parse(b.startTime||'')||0))});const show=(currentTab==='events'||!!q)&&eventsMode;sec.style.display=(show&&vis.length)?'block':'none';if(he)he.style.display=(currentTab==='events'&&!q&&vis.length===0&&!matchesLoading&&eventsMode)?'block':'none';const cnt=document.getElementById('matchesCount');if(cnt)cnt.textContent=vis.length?vis.length+' Matches':'';if(matchesLoading&&!vis.length){sec.style.display=show?'block':'none';grid.innerHTML='<div style="padding:20px;text-align:center;color:#9a9ab5">Loading matches...</div>';return}grid.replaceChildren();vis.forEach((m,idx)=>{const state=getMatchState(m);const card=document.createElement('article');card.className='match-card';card.tabIndex=0;card.addEventListener('click',()=>{if(state==='live'&&m.url)openMatch(m,idx)});const top=document.createElement('div');top.className='match-top';const sp=getSportInfo(m);let tt=m.matchType||m.category||'LIVE SPORTS';tt=tt.replace(/cricket\s*\|\s*/i,'').replace(/football\s*\|\s*/i,'');const se=document.createElement('span');se.className='sport-badge';se.innerHTML='<span>'+sp.ico+'</span>'+sp.label+' | <span style="color:#c7cadb">'+tt+'</span>';const bi=getBadgeInfo(m,state);const badge=document.createElement('span');badge.className='match-badge '+bi.cls;badge.textContent=bi.txt;top.append(se,badge);const teams=document.createElement('div');teams.className='match-teams';teams.append(teamNode(m.teamA||m.name,m.teamALogo),(()=>{const v=document.createElement('div');v.className='match-vs';v.innerHTML='<span class="vs-txt">VS</span>';return v})(),teamNode(m.teamB||'',m.teamBLogo));const bot=document.createElement('div');bot.className='match-bottom';const tm=document.createElement('div');tm.className='match-time';tm.textContent='Start: '+fmtMatchTime(m.startTime);if(state==='live'){const b=document.createElement('button');b.className='match-action';b.textContent='Watch Live';b.disabled=!m.url;if(!b.disabled)b.addEventListener('click',e=>{e.stopPropagation();openMatch(m,idx)});bot.append(tm,b)}else{const cd=document.createElement('div');cd.className='match-countdown';cd.innerHTML='<small>STARTS IN</small>'+matchCountdown(m);bot.append(tm,cd)}card.append(top,teams,bot);grid.appendChild(card)})}
 async function getPlaylistsFromSW(){
   await loadCloudConfig();
@@ -302,7 +304,7 @@ document.getElementById('myPlRow')?.addEventListener('click',()=>{document.getEl
 document.getElementById('networkStreamRow')?.addEventListener('click',()=>{document.getElementById('networkStreamBox').classList.toggle('open')});
 document.getElementById('tvModeToggle')?.addEventListener('click',()=>{tvMode=!tvMode;localStorage.setItem('rslive_tv_mode',tvMode?'1':'0');applyModes();showToast(tvMode?'TV Mode ON':'TV Mode OFF');renderGrid()});
 document.getElementById('eventsModeToggle')?.addEventListener('click',()=>{eventsMode=!eventsMode;localStorage.setItem('rslive_events_mode',eventsMode?'1':'0');applyModes();showToast(eventsMode?'Events Mode ON':'Events Mode OFF');renderMatches();if(!eventsMode&&currentTab==='events')switchTab('home')});
-document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v62'),800)});
+document.getElementById('checkUpdateRow')?.addEventListener('click',()=>{showToast('Checking...');setTimeout(()=>showToast('You are on the latest version - v63'),800)});
 document.getElementById('aboutRow')?.addEventListener('click',()=>{closeSettings();openAbout()});
 document.getElementById('teleRow')?.addEventListener('click',()=>{window.open(CFG.telegram,'_blank')});
 document.getElementById('playDirectBtn')?.addEventListener('click',async()=>{const url=document.getElementById('directUrl').value.trim();if(!url||!url.startsWith('http')){showToast('Paste a valid link');return}closeSettings();showToast('Loading...');if(url.toLowerCase().includes('.m3u')&&!url.toLowerCase().includes('.m3u8')){try{const r=await fetch(url);const txt=await r.text();const list=parse(txt);if(!list.length){showToast('No channels found');return}const f=list[0];openCh(f.url,f.name,'Direct',f.group||'',1)}catch(e){showToast('Link failed to open')}}else openCh(url,'Live Channel','Direct','Direct',1)});
@@ -336,3 +338,4 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 document.getElementById('installBtn')?.addEventListener('click',async()=>{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){alert('iPhone: Share -> Add to Home Screen');return}if(!deferredPrompt){alert('Browser Menu -> Add to Home Screen');return}deferredPrompt.prompt();const ch=await deferredPrompt.userChoice;if(ch.outcome==='accepted')document.getElementById('installBar').style.display='none';deferredPrompt=null});
 document.getElementById('closeInstall')?.addEventListener('click',()=>{document.getElementById('installBar').style.display='none';localStorage.setItem('rslive_install_closed','1')});
 (function(){const TELEGRAM_LINK="https://t.me/RsLiveGo";const style=document.createElement("style");style.textContent='.telegram-popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}.popup-box{background:#34343C;width:100%;max-width:360px;border-radius:14px;padding:14px;position:relative}.popup-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:15px;cursor:pointer}.popup-content{display:flex;align-items:center;gap:11px}.telegram-icon{background:#229ED9;width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.telegram-icon svg{width:24px;height:24px;fill:#fff}.popup-text h3{font-size:16px;margin-bottom:3px;color:#fff;text-align:left}.popup-text p{font-size:13px;color:#ddd;line-height:1.4;text-align:left}.join-btn{background:#1a7dff;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:auto;flex-shrink:0}.dont-show{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:#bbb;cursor:pointer}';document.head.appendChild(style);function showTelegramPopup(){if(localStorage.getItem("hideTelegramPopup")==="true")return;if(document.getElementById("telegramPopup"))return;const popup=document.createElement("div");popup.id="telegramPopup";popup.className="telegram-popup";popup.innerHTML='<div class="popup-box"><button class="popup-close" id="popupClose">✕</button><div class="popup-content"><div class="telegram-icon"><svg viewBox="0 0 24 24"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.5l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L24 3.6c.1-.9-.32-1.38-1.1-1.12L1.5 10.2c-.9.35-.88 1.45.14 1.72l5.48 1.71 12.66-8.04c.6-.36 1.14-.17.7.23L9.04 15.31z"/></svg></div><div class="popup-text"><h3>Welcome</h3><p>Join our Telegram for latest updates</p></div><button class="join-btn" id="joinBtn">Join</button></div><label class="dont-show"><input type="checkbox" id="dontShowAgain" /><span>Don\'t show again</span></label></div>';document.body.appendChild(popup);function saveDontShow(){if(document.getElementById("dontShowAgain").checked)localStorage.setItem("hideTelegramPopup","true")}document.getElementById("popupClose").addEventListener("click",()=>{saveDontShow();popup.remove()});document.getElementById("joinBtn").addEventListener("click",()=>{saveDontShow();window.open(TELEGRAM_LINK,"_blank");popup.remove()})}setTimeout(showTelegramPopup,3000)})();
+</script>
