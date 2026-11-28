@@ -10,9 +10,23 @@
   "featUrl": "",
   "showFeat": false,
   "playlists": [],
-  "notis": [],
+  "notis": [
+    {
+      "id": 1795828994076,
+      "title": "হায়",
+      "message": "কি অবস্থা সবার",
+      "link": "",
+      "time": "28 Nov, 07:23"
+    }
+  ],
   "matches": [],
   "eventsMode": true,
   "tvMode": false,
+  "autoQuality": true,
+  "telePopup": true,
+  "themeColor": "#FFC107",
+  "logoUrl": "",
+  "aboutText": "",
+  "footerText": "",
   "quality": "auto"
 }
