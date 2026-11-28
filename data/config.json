@@ -26,11 +26,6 @@
       "useProxy": false
     },
     {
-      "name": "JagoBD",
-      "url": "https://raw.githubusercontent.com/sm-monirulislam/jago_bd_auto_update_playlist-/refs/heads/main/jago_bd_main.m3u",
-      "useProxy": false
-    },
-    {
       "name": "Bangladesh",
       "url": "https://iptv-org.github.io/iptv/countries/bd.m3u",
       "useProxy": false
