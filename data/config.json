@@ -103,6 +103,25 @@
       ]
     },
     {
+  "name": "Ipswich Town vs Aston Villa",
+  "teamA": "Ipswich Town",
+  "teamALogo": "https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town_FC.svg",
+  "teamB": "Aston Villa",
+  "teamBLogo": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_crest.svg",
+  "matchType": "Football | Premier League",
+  "venue": "Portman Road",
+  "startTime": "2026-11-28T17:30:00.000Z",
+  "endTime": "2026-11-28T19:30:00.000Z",
+  "start": "2026-11-28T17:30:00.000Z",
+  "end": "2026-11-28T19:30:00.000Z",
+  "url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8",
+  "streams": [
+    {
+      "stream_url": "https://stream-through-spark.lovable.app/api/proxy?u=http%3A%2F%2Flive.ftpbdlive.com%3A8080%2Flive%2FFTPBD-LIVETV%2FFTPBD-2026%2F7.m3u8"
+    }
+  ]
+    },
+    {
       "name": "Manchester United vs Brentford",
       "teamA": "Manchester United",
       "teamALogo": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
